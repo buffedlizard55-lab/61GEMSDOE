@@ -183,9 +183,18 @@ Both legs of the drift gate, against every raster in the family registry
 * **dot leg** — fraction of the candidate's dots within 3 px of a registry
   raster's positives, limit 0.70.
 
-The gate fails closed: a missing registry file or an incomplete scan is an error,
-never evidence of uniqueness. Results are in `evidence/uniqueness.json` and on
-the site. The submission is written **only after** the gate passes.
+The dot leg only applies to **sparse** rasters (positives covering at most 5 %
+of the scored footprint). Eight of the 708 registry rasters are continuous
+probability maps that are positive almost everywhere, and against those the 3 px
+overlap test is vacuous — any candidate scores 1.0. They are compared on the
+surface leg alone (correlation 0.05–0.11, plainly not copies) and the exclusion
+is recorded per raster.
+
+The gate fails closed twice over: a missing registry file or an incomplete scan
+is an error, never evidence of uniqueness, and if *no* raster is sparse enough
+for the dot leg the gate reports failure rather than a vacuous pass. Results are
+in `evidence/uniqueness.json` and on the site. The submission is written **only
+after** the gate passes.
 
 ---
 
