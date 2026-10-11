@@ -1,0 +1,183 @@
+{
+  "evidence_class": "MEASURED",
+  "inversion_grids": {
+    "coarse_px": 4,
+    "fine_px": 2
+  },
+  "calibration_coarse": {
+    "best": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.5,
+      "stats": {
+        "n": 321284,
+        "p50": 462.2573547363281,
+        "p90": 1343.3979248046876,
+        "p99": 2125.57255859375,
+        "mean": 508.8574333212868,
+        "vmax": 2589.3759765625,
+        "fraction_gt_1km": 0.20323763399360067,
+        "fraction_gt_2km": 0.016664384158563764
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.01605853866907435,
+      "penalty": 0.01605853866907435,
+      "rms_residual_mgal": 2.425341944786814
+    },
+    "anchors": {
+      "deep_fraction_gt_1km": 0.2,
+      "median_depth_m_range": [
+        250.0,
+        700.0
+      ],
+      "p90_depth_m_range": [
+        900.0,
+        2000.0
+      ]
+    },
+    "source": "USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "n_combinations": 72
+  },
+  "calibration_fine": {
+    "best": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.5,
+      "stats": {
+        "n": 1288826,
+        "p50": 458.2720031738281,
+        "p90": 1329.8111572265625,
+        "p99": 2116.5751342773438,
+        "mean": 503.04065170863225,
+        "vmax": 2590.43994140625,
+        "fraction_gt_1km": 0.1975154132520604,
+        "fraction_gt_2km": 0.01636683307133779
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.01250074346937735,
+      "penalty": 0.01250074346937735,
+      "rms_residual_mgal": 2.4222457730397124
+    },
+    "anchors": {
+      "deep_fraction_gt_1km": 0.2,
+      "median_depth_m_range": [
+        250.0,
+        700.0
+      ],
+      "p90_depth_m_range": [
+        900.0,
+        2000.0
+      ]
+    },
+    "source": "USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "n_combinations": 72
+  },
+  "inversion_coarse": {
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
+    "rms_residual_mgal": 2.425341944786814,
+    "delta_rho": -300.0,
+    "z0_m": 500.0,
+    "regional_sigma_km": 15.0,
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "inversion_fine": {
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
+    "rms_residual_mgal": 2.4222457730397124,
+    "delta_rho": -300.0,
+    "z0_m": 500.0,
+    "regional_sigma_km": 15.0,
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "depth_stats_coarse": {
+    "n": 321284,
+    "p50": 462.2573547363281,
+    "p90": 1343.3979248046876,
+    "p99": 2125.57255859375,
+    "mean": 569.2534968347006,
+    "vmax": 2589.3759765625,
+    "fraction_gt_1km": 0.20323763399360067,
+    "fraction_gt_2km": 0.016664384158563764
+  },
+  "depth_stats_fine": {
+    "n": 1288826,
+    "p50": 458.2720031738281,
+    "p90": 1329.8111572265625,
+    "p99": 2116.5751342773438,
+    "mean": 563.5719984136542,
+    "vmax": 2590.43994140625,
+    "fraction_gt_1km": 0.1975154132520604,
+    "fraction_gt_2km": 0.01636683307133779
+  },
+  "steps_fine": {
+    "n_hgm_maxima": 12572,
+    "n_steps": 5579,
+    "min_throw_m": 80.0
+  },
+  "rank_correlation_fine_vs_coarse": 0.9990145847793543,
+  "cross_check_vs_supplied_band15": {
+    "n": 5116737,
+    "pearson_r": 0.7449860917393396,
+    "slope_published_on_inverted": 0.9540991703107782,
+    "published_p50": 315.8936462402344,
+    "inverted_p50": 456.8017840189794,
+    "published_p90": 1276.1223632812503,
+    "inverted_p90": 1332.5468257233867,
+    "note": "a high r with a slope near 1 says the inversion reproduces the supplied product; it is a check, not an input",
+    "corr_depth_vs_gravity": -0.8333186821780683
+  },
+  "support": {
+    "valid_px": 5164312,
+    "fine_grid_finite_px": 5140038,
+    "coarse_grid_finite_px": 5117455,
+    "common_finite_px": 5116737,
+    "footprint_cells_lost_at_200m": 24274,
+    "footprint_cells_lost_at_400m": 46940
+  },
+  "corridor_px": 10,
+  "basin_floor_m": 100.0,
+  "corridor_fraction_of_valid": 0.0780146513223833,
+  "basin_fraction_of_valid": 0.7321060385197486,
+  "n_features": 28,
+  "feature_names": [
+    "band01",
+    "band02",
+    "band03",
+    "band04",
+    "band05",
+    "band06",
+    "band07",
+    "band08",
+    "band09",
+    "band10",
+    "band11",
+    "band12",
+    "band13",
+    "band14",
+    "band15",
+    "band16",
+    "band17",
+    "band18",
+    "band19",
+    "inv_depth",
+    "inv_depth_hgm",
+    "step_throw",
+    "step_indicator",
+    "corridor_indicator",
+    "basin_indicator",
+    "euler_depth",
+    "depth_grad_x",
+    "depth_grad_y"
+  ],
+  "euler_note": "Euler SI=0 contact depth from band 18 (HG) and band 11 (VG); doi:10.1190/1.1442789 (Reid et al. 1990)",
+  "sources": {
+    "parker": "Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb02307.x",
+    "oldenburg": "Oldenburg (1974) Geophysics 39(4):526-536, doi:10.1190/1.1440444",
+    "blakely_simpson": "Blakely & Simpson (1986) Geophysics 51(7):1494-1498, doi:10.1190/1.1442197",
+    "blakely_jachens": "Blakely & Jachens (1991) GSA Bulletin 103:795-803",
+    "gp1012": "Saltus & Jachens (1995) USGS GP-1012, doi:10.3133/gp1012",
+    "euler": "Reid et al. (1990) Geophysics 55(1):80-91, doi:10.1190/1.1442789"
+  },
+  "elapsed_s": 313.1
+}

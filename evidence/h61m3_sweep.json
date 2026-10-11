@@ -1,0 +1,384 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31, min_samples_leaf=40, l2=1.0) over 28 catalogue-independent features",
+  "model_receipts": [
+    {
+      "n_pos": 58250,
+      "n_neg": 233672,
+      "train_auc": 0.9090510471961946,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw20_foldNW_all"
+    },
+    {
+      "n_pos": 57815,
+      "n_neg": 231971,
+      "train_auc": 0.9080249429959636,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw20_foldNE_all"
+    },
+    {
+      "n_pos": 56395,
+      "n_neg": 226330,
+      "train_auc": 0.9081549177558688,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw20_foldSW_all"
+    },
+    {
+      "n_pos": 56922,
+      "n_neg": 228450,
+      "train_auc": 0.9082264586738051,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw20_foldSE_all"
+    },
+    {
+      "n_pos": 58256,
+      "n_neg": 233686,
+      "train_auc": 0.9068091524655407,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw21_foldNW_all"
+    },
+    {
+      "n_pos": 57810,
+      "n_neg": 231956,
+      "train_auc": 0.9074778593208193,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw21_foldNE_all"
+    },
+    {
+      "n_pos": 56389,
+      "n_neg": 226374,
+      "train_auc": 0.908814180091952,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw21_foldSW_all"
+    },
+    {
+      "n_pos": 56922,
+      "n_neg": 228355,
+      "train_auc": 0.9078701470217005,
+      "model": "HistGradientBoostingClassifier(max_iter=200, lr=0.08, leaves=31)",
+      "cell": "draw21_foldSE_all"
+    }
+  ],
+  "results": [
+    {
+      "pooled_dti": 0.15994510335791962,
+      "tp": 5508.222645199787,
+      "fp": 76118.814453125,
+      "fn": 17132.777354800215,
+      "n_emitted": 80000,
+      "coverage": 0.24328530741574075,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1519,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1040,
+      "basin_recovery_rate": 0.5247225025227044,
+      "basin_recovery_ci95": [
+        0.502710483015638,
+        0.5466388744391656
+      ],
+      "name": "S gbm prune2 tile3 @ 40000",
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.1516596737292535,
+        0.16811122812410936
+      ]
+    },
+    {
+      "pooled_dti": 0.16511262118364767,
+      "tp": 7018.902676823707,
+      "fp": 114966.0419921875,
+      "fn": 15622.097323176295,
+      "n_emitted": 120000,
+      "coverage": 0.31000851008452396,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1870,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1250,
+      "basin_recovery_rate": 0.6306760847628657,
+      "basin_recovery_ci95": [
+        0.6091950860170742,
+        0.6516515176726018
+      ],
+      "name": "S gbm prune2 tile3 @ 60000",
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.15749010166580263,
+        0.1731468526930628
+      ]
+    },
+    {
+      "pooled_dti": 0.1669531106119553,
+      "tp": 5773.925542968803,
+      "fp": 76582.6484375,
+      "fn": 16867.074457031198,
+      "n_emitted": 80000,
+      "coverage": 0.2550207827820681,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1792,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1200,
+      "basin_recovery_rate": 0.6054490413723511,
+      "basin_recovery_ci95": [
+        0.5837476697069,
+        0.6267424467839968
+      ],
+      "name": "S gbm prune2 tile4 @ 40000",
+      "prune_px": 2.0,
+      "tile_px": 4,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.15792944405965492,
+        0.17525047665476445
+      ]
+    },
+    {
+      "pooled_dti": 0.1692553581456323,
+      "tp": 7226.56965811209,
+      "fp": 115690.697265625,
+      "fn": 15414.43034188791,
+      "n_emitted": 120000,
+      "coverage": 0.31918067479846696,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2173,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1438,
+      "basin_recovery_rate": 0.7255297679112008,
+      "basin_recovery_ci95": [
+        0.7054617795676223,
+        0.7447252159894633
+      ],
+      "name": "S gbm prune2 tile4 @ 60000",
+      "prune_px": 2.0,
+      "tile_px": 4,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.16014614337298141,
+        0.17928863437409917
+      ]
+    },
+    {
+      "pooled_dti": 0.16168827514650133,
+      "tp": 5601.0604633916,
+      "fp": 77040.462890625,
+      "fn": 17039.9395366084,
+      "n_emitted": 80000,
+      "coverage": 0.24738573664553687,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1944,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1278,
+      "basin_recovery_rate": 0.644803229061554,
+      "basin_recovery_ci95": [
+        0.6234726207931687,
+        0.6655736157278236
+      ],
+      "name": "S gbm prune2 tile5 @ 40000",
+      "prune_px": 2.0,
+      "tile_px": 5,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.1538526474109502,
+        0.17088913380691126
+      ]
+    },
+    {
+      "pooled_dti": 0.15779627551934572,
+      "tp": 6745.247281742013,
+      "fp": 116423.53125,
+      "fn": 15895.752718257989,
+      "n_emitted": 120000,
+      "coverage": 0.29792179151724807,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2285,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1472,
+      "basin_recovery_rate": 0.7426841574167508,
+      "basin_recovery_ci95": [
+        0.7229819898646379,
+        0.7614474169876175
+      ],
+      "name": "S gbm prune2 tile5 @ 60000",
+      "prune_px": 2.0,
+      "tile_px": 5,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.1473472086792472,
+        0.16873913129249496
+      ]
+    },
+    {
+      "pooled_dti": 0.14578654072012046,
+      "tp": 5022.162394509995,
+      "fp": 76657.529296875,
+      "fn": 17618.837605490007,
+      "n_emitted": 80000,
+      "coverage": 0.2218171633103659,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1395,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 952,
+      "basin_recovery_rate": 0.4803229061553986,
+      "basin_recovery_ci95": [
+        0.4583869309188167,
+        0.5023350090661356
+      ],
+      "name": "S gbm prune3 tile3 @ 40000",
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.13684989262169872,
+        0.15417729273124364
+      ]
+    },
+    {
+      "pooled_dti": 0.14976358497614153,
+      "tp": 6369.3529666323775,
+      "fp": 115713.5654296875,
+      "fn": 16271.64703336762,
+      "n_emitted": 120000,
+      "coverage": 0.28131941904652524,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1716,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1134,
+      "basin_recovery_rate": 0.5721493440968718,
+      "basin_recovery_ci95": [
+        0.5502484414283982,
+        0.59377111196011
+      ],
+      "name": "S gbm prune3 tile3 @ 60000",
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.1432923418864261,
+        0.1562159064914041
+      ]
+    },
+    {
+      "pooled_dti": 0.15204150760614824,
+      "tp": 5256.772529219454,
+      "fp": 77052.1689453125,
+      "fn": 17384.227470780545,
+      "n_emitted": 80000,
+      "coverage": 0.23217934407576757,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1611,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1068,
+      "basin_recovery_rate": 0.5388496468213926,
+      "basin_recovery_ci95": [
+        0.5168498067379131,
+        0.5606991835482068
+      ],
+      "name": "S gbm prune3 tile4 @ 40000",
+      "prune_px": 3.0,
+      "tile_px": 4,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.14369670101750082,
+        0.15940581826857908
+      ]
+    },
+    {
+      "pooled_dti": 0.15322856550476108,
+      "tp": 6539.614511475892,
+      "fp": 116290.490234375,
+      "fn": 16101.385488524107,
+      "n_emitted": 120000,
+      "coverage": 0.28883947314499764,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1971,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1287,
+      "basin_recovery_rate": 0.6493440968718466,
+      "basin_recovery_ci95": [
+        0.6280660462727257,
+        0.6700443579440469
+      ],
+      "name": "S gbm prune3 tile4 @ 60000",
+      "prune_px": 3.0,
+      "tile_px": 4,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.14668493954862696,
+        0.16065728977460686
+      ]
+    },
+    {
+      "pooled_dti": 0.14590351826962505,
+      "tp": 5049.009831545125,
+      "fp": 77412.626953125,
+      "fn": 17591.99016845488,
+      "n_emitted": 80000,
+      "coverage": 0.22300295179299165,
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1739,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1130,
+      "basin_recovery_rate": 0.5701311806256307,
+      "basin_recovery_ci95": [
+        0.5482214477922623,
+        0.5917695866203437
+      ],
+      "name": "S gbm prune3 tile5 @ 40000",
+      "prune_px": 3.0,
+      "tile_px": 5,
+      "budget": 40000,
+      "ci95_bootstrap_cells": [
+        0.13945426258192045,
+        0.15332680789490774
+      ]
+    },
+    {
+      "pooled_dti": 0.14147096324298036,
+      "tp": 6040.563581610596,
+      "fp": 116886.72265625,
+      "fn": 16600.436418389403,
+      "n_emitted": 120000,
+      "coverage": 0.2667975611329268,
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2057,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 1316,
+      "basin_recovery_rate": 0.6639757820383451,
+      "basin_recovery_ci95": [
+        0.6428813446576144,
+        0.6844358221344501
+      ],
+      "name": "S gbm prune3 tile5 @ 60000",
+      "prune_px": 3.0,
+      "tile_px": 5,
+      "budget": 60000,
+      "ci95_bootstrap_cells": [
+        0.13434541543135553,
+        0.14922095333655716
+      ]
+    }
+  ],
+  "best_candidate": "S gbm prune2 tile4 @ 60000",
+  "note": "HOLDOUT-DTI is an evaluator-version index on withheld catalogue traces, not a competition score. Prune 2 px wins on this instrument because the withheld truth is adjacent to visible traces; the group's organizer-scored pair says 3 px wins live (IR-61-PRUNE-01)."
+}

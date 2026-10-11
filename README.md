@@ -7,28 +7,51 @@
 
 ## Status of the newest file (read this first)
 
+**Newest file: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`**
+(this session, `arena/2a87ed28-61gemsdoe`, H61-MH).
+
 | question | answer |
 |---|---|
-| Is the file safe to download and upload? | **YES — FORMAT-VALID and UNIQUE.** 19 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside the footprint, zero dots on the mapped catalogue). Uniqueness verdict **UNIQUE** against 28 earlier rasters (worst Spearman +0.0445; worst overlap gate 0.002 vs limit 0.50). |
-| Should it be given a weekly slot? | **NOT RECOMMENDED.** HOLDOUT-DTI 0.0085 (95 % CI 0.0050–0.0117; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0352 (this run) / 0.0314 (H61-G draw). The unpruned base of our ORGANIZER-CONFIRMED 0.2778 scores 0.1011 on the same evaluator. Run-card verdict: **negative** — "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result". |
-| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI. |
+| Is the file safe to download and submit? | **YES — FORMAT-VALID and UNIQUE.** 19 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside the footprint, zero dots on the mapped catalogue). Uniqueness verdict **UNIQUE** against 28 earlier rasters (worst Spearman +0.1961 vs h61g, limit 0.90; worst one-sided 3 px overlap 0.431 vs h61g, limit 0.70; worst Jaccard 0.008 against the one dense reference, limit 0.50). |
+| Should it be given a weekly slot? | **NOT RECOMMENDED.** HOLDOUT-DTI 0.0606 (95 % CI 0.0494–0.0727; 22,641 withheld positive px; `gems61.holdout_segmented v2`, seeds 20+21, α 0.2 / β 0.8 / R 300 m) beats random lines (0.0314) and the previous session's best lane construction (H61-G X2, 0.0465). But the spatially blocked leave-one-quadrant-out retest puts **every** locator we have at the random baseline (LOQO-DTI 0.0140–0.0718, blocked canary AUC 0.518–0.618). Run-card verdict: **negative** — a valid, unique, honest negative result. |
+| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI or LOQO-DTI. |
 
-**[↓ Download the GeoTIFF](docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif)** · [zip](docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.zip) · [format receipt](docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.json) · [run card](evidence/h61x_run_card.json)
+**[↓ Download the GeoTIFF](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif)** ·
+[zip](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip) ·
+[format receipt](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json) ·
+[run card](evidence/h61m_run_card.json)
 
-- Submission name: `gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros`
-- Note (134/140 chars): `H61-X: coarse (800 m) basement-step corridor from GP-1012-calibrated gravity inversion x in-corridor slope ridge; 10128 dots; UNSCORED`
-- sha256 `f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c` (77,055 bytes); 10,128 single-pixel dots (value 1.0) at ≥ 3 px spacing, none within 2 px of a mapped fault; median distance to the catalogue 23.7 px.
-- Earlier files in `docs/downloads/` are **SUPERSEDED** or uniqueness references (their own holdouts were 0.0000–0.0465); the H61-G file (`gems61-h61g-x2-…`, 0.0465) remains the lane's best in-protocol file and is also not recommended for a slot. Do not upload the superseded files.
+- Submission name: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros`
+- Note (140/140 chars): `H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED`
+- sha256 `4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179` (130,225 bytes); 40,000 single-pixel dots (value 1.0) at 3 px spacing, every dot more than 3 px from a mapped fault; median distance to the catalogue 19.8 px (1985 m).
+- Withheld basin-interior segments recovered: **353 of 1982** (95 % CI 16.2–19.6 %) versus **213 of 1982** for random lines at the same budget — a 1.6× recovery rate on the segments the lane is asked to find.
 
-## What this session found (H61-X)
+### Naming: two parallel sessions both used "H61-M" (IR-61-NAME-01)
 
-1. **The two-scale corridor sub-hypothesis is refuted on the instrument.** Coarse (800 m) HGM maxima of the GP-1012-calibrated inverted basement: 7,766 with throw ≥ 80 m, of which only **489** are new lines (≥ 1.2 km from a base-scale step). The union corridor (X3) scores 0.0463 — statistically tied with the base-only X2 (0.0465); the coarse corridor alone (X3c) scores 0.0085 vs 0.0352 random lines. The screen's coarse-scale "enrichment" was the same fault lines blurred, not additional structure.
-2. **The uniqueness gate did its job.** X3 (the better-scoring construction) failed the protocol rule-1 pre-check: 91.7 % of its dots within 3 px of the H61-G file's dots (gate 0.70). It was logged as a duplicate and not shipped.
-3. **The competing explanation was measured, not asserted.** Intrabasement density contrasts (igneous contacts) should sit on strong magnetic edges: 0.181 of base steps and 0.129 of coarse steps do (RTP HGM top-50 %) — neither population is dominated by the mimic; the coarse steps are simply not faults at 300 m.
-4. **Answer to the lane's explicit question** (withheld basin-interior segments recovered vs random lines): the coarse new steps recover **51/1999** vs **255/1999** by random lines — below random; the base-scale X2 corridor recovered 351/1999.
-5. **The shipped file is the unique coarse-corridor construction (X3c)** with a negative verdict — a diagnostic deliverable closing the sub-hypothesis, per the selection rule recorded in the run card.
+Four lane sessions ran in parallel on 2026-10-11 and two of them independently
+labelled their work "H61-M". `main` (squash-merged PR #21) carries
+`src/gems61/h61m.py` + `scripts/run_h61m.py` for the **gravity + magnetic
+conjunction** construction (`gems61-h61m-gravmag-corridor-ribbon-…`); this
+session's **out-of-fold logistic habitat** model was renamed into the
+`h61mh` (H61-M habitat) namespace — `src/gems61/h61mh.py`,
+`scripts/run_h61mh.py` — so both bodies of work survive the merge. The shipped
+raster keeps the name it was validated under (`gems61-h61m-invfeat-habitat-…`).
 
-## Session: `arena/241cb85c-61gemsdoe` — buried-structure lane (merged in this PR)
+### The other merged lane files
+
+| file | session | HOLDOUT-DTI | verdict |
+|---|---|---|---|
+| `61gemsdoe-basement-step-ribbon-20261011T054408Z` | arena/241cb85c | 0.045563 headline / **0.002715** shipped file re-measured | negative; P(Δ ≥ 0) = 0.939 |
+| `gems61-h61x-x3c-coarse-corridor-10128dots-…` | arena/6339e2fc (H61-X) | 0.0085, **below** random lines 0.0352 | negative, diagnostic |
+| `gems61-h61l-relief-any-corr10-40000dots-…` | arena/a7790b7f (H61-L, PR #13) | 0.0443 vs random lines 0.0314; statistically tied with H61-G | negative |
+| `gems61-h61m-gravmag-corridor-ribbon-40000dots-…` | arena/a7790b7f (H61-M, PR #11) | no segment-holdout recorded on this evaluator | not comparable |
+| `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-…` | arena/c57b45ae (H61-G, PR #9) | 0.0465 | negative |
+
+All of them remain in `docs/downloads/` as uniqueness references and as the
+evidence a selector should read. **None is a slot candidate.**
+
+
+## Session `arena/241cb85c-61gemsdoe` — buried-structure lane (merged from PR #21, kept for the audit trail)
 
 This session ran the **buried-structure lane** end to end and shipped one file.
 
@@ -43,12 +66,6 @@ This session ran the **buried-structure lane** end to end and shipped one file.
 - sha256 `875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c`, 137,204 bytes, **40,000 positive pixels**, value 1.0, zero on every mapped catalogue pixel outside the footprint.
 - Validator: **14 / 14** local checks on the bytes on disk (single band, float32, 3730 x 3292, EPSG:32611, template transform, no NaN / Inf / sentinel inside the footprint, values in [0, 1], zeros outside the footprint, zero dots on the mapped catalogue, non-empty).
 
-| question | answer |
-|---|---|
-| Is the file safe to download and upload? | **YES for format and uniqueness.** 14 / 14 local format checks pass and the uniqueness gate returns UNIQUE against **708** earlier rasters (worst Spearman **+0.114116** vs the 0.90 drift limit; worst dot overlap 0.7242, a **lift of only 1.60** over the 0.4502 coverage baseline of that comparator, under the 3.0 lift gate). |
-| Should it be given a weekly slot? | **NO.** HOLDOUT-DTI **0.045563**, 95 % CI [0.035640, 0.056876] on evaluator `gems61-pooled-hide-v1` with **12,898** withheld positives. Matched random lines at the same 40,000-dot budget: **0.035959**. Paired delta +0.009696, CI [-0.001902, +0.021709], **P(delta >= 0) = 0.939 -> negative**. |
-| Has an organiser scored it? | **No.** Every number for this file is HOLDOUT-DTI. |
-
 **Reported honestly:** the shipped file, re-measured on the same instrument, reads **0.002715** — *not* 0.045563. The shipped file is additionally pruned against the whole mapped catalogue, and the withheld positives are drawn from that same catalogue, so the prune removes them by construction. The 0.045563 headline is measured on the *unpruned* construction — the one the holdout instrument was built to compare. Both numbers and the reason are recorded in `evidence/run_card.json` (`headline_dti`, `shipped_file_remeasured_dti`) and on the [results page](docs/results.html).
 
 ### What this session fixed in the shared tools
@@ -56,7 +73,6 @@ This session ran the **buried-structure lane** end to end and shipped one file.
 1. **The uniqueness dot gate had a real defect (fixed in `src/gems61/uniqueness.py`, not forked).** A comparator that is a *continuous surface* rather than a dot set covers ~45 % of the footprint within 3 px, so *any* 40,000-dot placement lands inside it: our worst raw overlap was 0.7242 against `60GEMSDOE:docs/downloads/submission.tif`, while randomly placing the same 40,000 dots scores 0.4518 — a lift of **1.60**, i.e. coverage, not duplication. The gate now requires **both** `overlap > 0.70` **and** `lift = overlap / footprint_coverage_within_3px >= 3.0`, and excludes non-discriminating comparators (baseline coverage >= 0.70) from the dot leg, judging them on the surface leg instead. Result: **0 duplicates** among the 634 applicable comparators; restricted to sparse comparators (coverage < 0.25, n = 512) the worst overlap is 0.4279.
 2. `src/gems61/validate.py` now also answers to the check names the parallel lanes read back (`zero_dots_on_mapped_catalogue`, `no_nan_anywhere`, `transform_matches`, ...) so every lane's receipt is readable by every lane's reader. The aliases are the same facts under the other lane's key, not new claims.
 3. `src/gems61/uniqueness.py` gained the parallel lane's `dot_overlap` / `surface_rho` / `compare` API alongside this lane's `dot_overlap_stats`, so both sets of tests run against one module.
-
 ### Site defects found and fixed after the first deploy (PRs #16–#20)
 
 The lane's pages were correct locally but the **published** site was not, in five separate ways. All five are fixed and re-verified against the live URL.
@@ -73,10 +89,11 @@ The lane's pages were correct locally but the **published** site was not, in fiv
 
 `src/gems61/offcatalogue.py` (added on `origin/main`) imports `DOMAIN_ERODE` from `gems61.holdout`, which does not define it on either side of this merge — the module fails to import on `origin/main` as well. Not fixed here because it belongs to another lane's module; recorded for the consolidation pass. `src/gems61/fitting.py` needs `scikit-learn`, which is not in `requirements.txt`.
 
-## Candidate board — all gems61 files in `docs/downloads/` (seven parallel sessions merged on `main`, newest first)
+## Candidate board — every gems61 file in `docs/downloads/` (all parallel sessions merged on `main`, newest first)
 
 | file | session / PR | positive px | its own session's verdict | shipped file on the segment-withholding evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
+| **`gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`** | this session (arena/2a87ed28, H61-MH) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) vs random lines 0.0314 within protocol; LOQO-DTI at the random baseline → **negative for a slot** | 0.0606 |
 | `docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif` | this session (arena/241cb85c, PR #10) | 40,000 | FORMAT-VALID (14/14) + UNIQUE vs 708 rasters (worst rho 0.1141; worst lift 1.60 vs gate 3.0); HOLDOUT-DTI 0.045563 (CI 0.035640-0.056876) vs random lines 0.035959, P(delta>=0)=0.939 -> negative | 0.045563 (headline, unpruned) / 0.002715 (shipped file re-measured) |
 | **`gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros`** | this session (H61-X) | 10,128 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050–0.0117) **below** random lines 0.0352 → negative, diagnostic | 0.0085 |
 | `gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif` | H61-L, session arena/a7790b7f, PR #13 (2026-10-11) | 40,000 | FORMAT-VALID + UNIQUE (worst Spearman 0.293 vs H61-G; 69.8% of its dots within 3 px of H61-G's - under both gates); HOLDOUT-DTI 0.0443 (CI 0.0414-0.0478) vs random lines 0.0314, 340/1999 basin segments vs 215/1999 random; statistically tied with H61-G 0.0465; negative for a slot | 0.0443 (visible-only) / ≈0 shipped pruned (IR-61-INSTR-02) |
@@ -90,6 +107,21 @@ The lane's pages were correct locally but the **published** site was not, in fiv
 | `gems61c-gravstep-liveband-40k-20261011.tif` | session C, PR #8 | 40,000 | its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 < random lines 0.0092 (gems61-pooled-hide-v2); 'value unproven' | 0.0007 |
 
 The parallel sessions' own pages remain in `docs/` with SUPERSEDED-context banners; their evidence files are kept untouched.
+
+> H61-M **replaced** that list rather than renumbering it. Two of the five survive under new ids so that ids stay unique across sessions: H61-L (1 m lidar in corridor) → **H61-N**, now ranked first and unchanged in substance; H61-H (magnetic-edge conjunction) → **H61-P**. The other three (piedmont belt, source-depth filter, learned basin fusion) were dropped because this session's blocked measurements showed that adding more 100 m channels to a locator that does not generalise cannot help. Three new hypotheses were added in their place: H61-Q (geodetic strain), H61-R (seismicity nucleation) and H61-S (emission on disagreement between decorrelated locators). The authoritative list is `evidence/h61m_hypotheses.json`; the H61-G list is kept for the audit trail.
+
+## What this session found (H61-MH)
+
+1. **The inversion works, at a finer grid.** Parker/Oldenburg (damped) on the isostatic residual, regional removed at 15 km, GP-1012-calibrated (≈ 20 % of basin area deeper than 1 km → achieved 0.198). Run at **200 m** as well as 400 m: the two agree at ρ = 0.999, the inverted surface correlates 0.745 with the organiser's own depth layer (never used in the fit) and anti-correlates with gravity at −0.833. 12,572 Blakely-Simpson maxima → 5,579 steps with ≥ 80 m throw.
+2. **The step field cannot place a dot to 300 m — confirmed, not assumed.** The corridor indicator's leakage-canary AUC against withheld faults is 0.510; a hard corridor gate *reduces* the score (0.0364–0.0409 gated vs 0.0606 ungated at the same budget). The lane's instruments are in the final model as features and carry small weight (corridor +0.194, inv_depth −0.172, inv_depth_hgm −0.204, euler_depth −0.053, step_throw −0.046, step_indicator −0.006).
+3. **An out-of-fold habitat model is the best locator we have.** 28 catalogue-independent channels, L2 logistic regression trained only on the *visible* faults of each holdout cell: HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) against 0.0314 for random lines and 0.0465 for H61-G's corridor × slope-ridge locator. Leakage canary worst AUC 0.626 (limit 0.90) — clean.
+4. **But nothing generalises across space (the decisive result).** Leave-one-quadrant-out — retrain with *no* training pixel inside the scored quadrant — puts logistic at 0.0395, gradient boosting at 0.0376, the single strongest band at 0.0206 and the lane's corridor × slope locator at 0.0315, all with mean blocked canary AUC 0.56–0.59 (range 0.518–0.618 across 16 retests). The lane's corridor locator has the highest and most consistent blocked AUC (0.590).
+5. **A leakage finding (IR-61-LEAK-01).** A gradient-boosted version of the same model reached HOLDOUT-DTI 0.1670 and a canary AUC of 0.901 — above the protocol's 0.90 line. The LOQO retest shows the AUC falls to 0.518–0.618 with no training pixel inside the scored quadrant: the skill was **adjacency to visible traces, not generalisation**. The shipped file therefore uses the logistic model.
+6. **Dots, not ribbons — re-confirmed at the new budget.** 3 × 3 ribbons score 0.0184 against 0.0409 for the same dots (256,096 emitted px vs 39,794): the metric charges 0.2 per extra positive pixel.
+7. **Reverse engineering of the group's scored rasters** (`evidence/registry_habitat.json`, 28 rasters): every high scorer is binary, sparse (0.73–1.19 % of the footprint across the nine rasters scored at or above 0.20), carries **zero** dots exactly on a mapped catalogue pixel, and sits 14.1–19.6 px (1.4–2.0 km) from the catalogue. The strongest single-band separation between those nine and the other nineteen is `total_magnetic_intensity_horizontal_gradient` at 0.021 AUC — no single layer explains the scores; they come from the conjunction.
+8. **A 12-row configuration sweep** (`evidence/h61m3_sweep.json`) confirms the ranking under the same instrument: the best configuration is `S gbm prune2 tile4 @ 60000` at HOLDOUT-DTI 0.1693 — again the gradient-boosted model, again leakage-flagged. The best *logistic* configuration measured anywhere this session is 0.0546 (prune 3, no prior, `evidence/h61m2_holdout.json`) — below the ungated 0.0606 shipped here.
+
+The PhD-level answer to *why `h33-h33-2-b2` scored 0.2778 and whether we can beat it* is on [docs/analysis.html](docs/analysis.html); the ranked new hypotheses (H61-N lidar in corridor, H61-Q geodetic strain, H61-R seismicity, H61-P magnetic-edge conjunction, H61-S decorrelated ensemble) are on [docs/hypotheses.html](docs/hypotheses.html) and in `evidence/h61m_hypotheses.json`.
 
 ## Reproduce
 
@@ -112,9 +144,29 @@ PYTHONPATH=src .venv/bin/python scripts/build_site_h61x.py                      
 Checks run at the end of this session: `pytest -q tests` → 22 passed; `run_h61x.py all` → UNIQUENESS: UNIQUE; validator receipt all-pass;
 holdout instrument check 0.1011 = 0.1011; the site builder reads every number from JSON.
 
-## Session record (this session: arena/6339e2fc-61gemsdoe (H61-X))
+## Session record (arena/c57b45ae, 2026-10-11 — H61-G)
 
-- `src/gems61/*` — shared tools unchanged (22/22 tests pass; no forks).
+- `src/gems61/h61g.py` — inversion, steps, corridor, slope-ridge locator, dot packing, controls, Wilson CI, AUC.
+- `scripts/run_h61g.py` — stages `invert | screen | holdout | final | unique | card | all`.
+- `evidence/h61g_invert.json`, `h61g_screen.json`, `h61g_holdout.json`, `h61g_final.json`, `h61g_uniqueness.json`, `h61g_run_card.json`, `h61g_hypotheses.json`, `h61g_irregularities.json`.
+
+## Session record (arena/2a87ed28, 2026-10-11 — H61-MH)
+
+- `src/gems61/h61mh.py` — 200 m and 400 m Parker/Oldenburg inversions, basement steps, Euler SI = 0 source depth, the 28-channel habitat stack (written channel-by-channel into a memmap because the sandbox has ~3.9 GB of RAM), the logistic habitat model, dot packing, controls, Wilson CI, AUC.
+- `scripts/run_h61mh.py` — stages `features | holdout | final | unique | card`, with `--candidate / --prune / --budget / --tile` overrides.
+- `scripts/run_h61m2.py` — experiment 2 (model class, soft step prior).
+- `scripts/run_h61m3.py` — experiment 3 (leave-one-quadrant-out generalisation test; configuration sweep).
+- `scripts/run_h61m4.py` — experiment 4 (every locator through the same blocked test).
+- `scripts/registry_habitat.py` — reverse engineering of the group's scored rasters.
+- `scripts/h61m_card.py`, `scripts/build_site_h61m.py` — run card and site, both read every number from JSON.
+- `evidence/h61m_features.json`, `h61m_holdout.json`, `h61m2_holdout.json`, `h61m3_loqo.json`, `h61m3_sweep.json`, `h61m4_loqo.json`, `h61m_final.json`, `h61m_uniqueness.json`, `h61m_run_card.json`, `h61m_hypotheses.json`, `registry_habitat.json`.
+- Shared tools fixed in place (no private forks): `scripts/run_h61mh.py` gained explicit `--prune/--budget/--tile` overrides so the live-metric and holdout-metric disagreement about the prune is stated rather than inherited.
+- `src/gems61/*` — shared tools unchanged (64/64 tests pass after the merge; no forks).
+- `scripts/check_submission.py` — resolved the template through `gems61.io` instead of the
+  hard-coded `data/raw/example_submission.tif` (which does not exist under the `data/bridge`
+  symlink layout), and now prefers the H61-MH run card. It re-reads the shipped bytes from
+  disk and passes all 16 of its own checks including `sha256_matches_card`.
+- IR-61-NAME-01 — see the naming note at the top of this file.
 - `scripts/run_h61x.py` — H61-X driver: invert | holdout | final | unique | card | all.
 - `evidence/h61x_invert.json`, `h61x_holdout.json`, `h61x_final.json`, `h61x_uniqueness.json`, `h61x_run_card.json`.
 - New irregularity: **IR-61X-01** the random-line control draws differ between sessions (H61-G: single seed 100 for every cell → 0.0314; H61-X: per-cell seeds 100+ci → 0.0352). Both are recorded; CIs overlap; no conclusion depends on the 0.004 gap. The H61-X card reports the in-run draw as primary and the H61-G draw as secondary.
@@ -123,8 +175,13 @@ holdout instrument check 0.1011 = 0.1011; the site builder reads every number fr
 
 ## Irregularities (full list on [docs/irregularities.html](docs/irregularities.html))
 
-IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before H61-G (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt · **IR-61X-01 random-line control seed handling differs between H61-G (0.0314) and H61-X (0.0352) draws (both recorded, CIs overlap, no conclusion affected)** · **IR-61X-02 parallel session rewrote `elapsed_s` in the earlier `evidence/h61g_invert.json` (344.6 → 59.0); evidence receipts are immutable — restored in this merge**.
-
+IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before this session (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt ·
+**IR-61-LEAK-01** a gradient-boosted habitat model's 0.901 canary AUC was adjacency to visible traces, not skill (proved by the leave-one-quadrant-out retest) ·
+**IR-61-PRUNE-01** the holdout prefers a 2 px catalogue prune, the group's organizer-scored pair prefers 3 px — the shipped file follows the live evidence and reports the holdout cost ·
+**IR-61-BUDGET-01** the holdout prefers more dots monotonically, the live ladder prefers ~38–40 k — shipped at 40 k ·
+**IR-61-MEM-01** ~3.9 GB RAM: the 28-channel stack is streamed into a memmap and predictions are chunked ·
+**IR-61-NAME-01** two parallel sessions both labelled their lane work "H61-M"; this session's habitat model was renamed into the `h61mh` namespace so both bodies of work survive on `main` ·
+**IR-61-SRC-01** an earlier session claimed the competition ships `1m_DEM_links.csv`; the hash-pinned bridge manifest lists exactly three rasters, so the claim is false and is corrected.
 ## Core values
 
 **Maximize P(Win)** and **Own the Outcome**: the slot is not spent on a file the holdout says is weak; the two-scale sub-hypothesis is
@@ -218,6 +275,8 @@ uniqueness-checked against every earlier raster.
 | leaderboard | https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ |
 | official rules PDF | https://docs.nlr.gov/docs/fy26osti/96647.pdf |
 | reference solution | https://github.com/drivendataorg/gems-prize-reference-solution |
+| USGS GP-1012 (Saltus & Jachens 1995) basin-depth maps, the depth-scale calibration | https://pubs.usgs.gov/publication/gp1012 |
+| USGS 3DEP 1 m lidar (the named obtainable source, hypothesis H61-N) | https://www.usgs.gov/3d-elevation-program/about-3dep-products-services |
 | GeoDAWN airborne magnetic + radiometric surveys | https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and |
 | INGENIOUS (Great Basin conductivity / magnetotelluric project) | https://gbcge.org/current-projects/ingenious/ |
 | EPSG:32611 | https://epsg.io/32611 |

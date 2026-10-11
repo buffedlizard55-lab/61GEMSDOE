@@ -1,0 +1,57 @@
+[
+  {
+    "id": "H61-N",
+    "rank": 1,
+    "name": "1 m lidar scarp detection inside the 200 m basement-step corridor",
+    "layers": "USGS 3DEP 1 m DEM (free public domain, The National Map Download Client https://apps.nationalmap.gov/downloader/ or LidarExplorer https://www.usgs.gov/tools/lidarexplorer) -> scarp-likelihood raster (slope break, crest-toe curvature couplet, local relief model); this session's 200 m Parker/Oldenburg basement-step corridor and basin mask as the prior.",
+    "signature": "Metre-scale topographic steps: scarp height 0.5-5 m, a slope break and a curvature couplet along strike. This is the primary evidence a field mapper uses and it is invisible on the 100 m grid.",
+    "why": "The 1:24k-1:250k catalogue missed low scarps in Quaternary fans and bajadas; 1 m data resolves them. The corridor removes the fan-toe, terrace-riser and incised-channel mimics that have no basement step, and the basin mask removes the range-front scarps already in the catalogue.",
+    "diff": "No session in this repository has used lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.0430 live) scanned the whole area with no gravity prior and no basin gate.",
+    "gain": "Highest. The blocked tests this session show that every 100 m locator we have sits at the random baseline, so the only remaining lever is resolution the supplied grid does not contain. PROJECTION ONLY - not validated.",
+    "cost": "High (data volume). Obtainable without a sandbox change: fetch the tiles on an unrestricted machine, mirror them into a GitHub repository, and pin them by sha256 in scripts/prepare_data.py exactly as the feature stack is pinned. usgs.gov, apps.nationalmap.gov and prd-tnm.s3.amazonaws.com are all outside this sandbox's egress allow-list (IR-61-NET-01), so this session names the source rather than claiming it. NOTE (IR-61-SRC-01): the competition data tab ships exactly three rasters (training_features.tif, labels.tif, sample_submission.tif) - see the bridge manifest - so the 1 m tiles must be fetched from USGS directly, not from the organiser."
+  },
+  {
+    "id": "H61-Q",
+    "rank": 2,
+    "name": "Geodetic strain-rate locator: bands 4 (second invariant), 7 (shear rate), 8 (dilatation rate)",
+    "layers": "Bands 4, 7 and 8 of the supplied stack: band04 geod_2ndinv (geodetic second invariant, the strain-rate tensor magnitude), band07 geod_shearrate (shear rate, angular deformation from GPS/InSAR), band08 geod_dilaterate (volumetric strain). These measure present-day deformation rather than a re-expression of topography or gravity.",
+    "signature": "A fault that is accumulating slip has a geodetic strain-rate maximum across it; the second invariant localises the deformation and the dilatation rate separates opening (normal-fault) from closing regimes.",
+    "why": "An actively slipping fault that has not produced a mappable scarp is exactly the class the catalogue misses, and geodesy sees it through the regolith. The measured logistic weights are the third and seventh largest of all 28 channels (band07 +0.889, band04 -0.628), so the supplied stack already carries the signal and no session has used it as a primary locator.",
+    "diff": "Every previous locator in this repository is topographic, magnetic or gravity-derived. No session has built a candidate field from the geodetic bands, and the sign of band04 (negative) means the naive 'high strain = fault' reading is wrong and needs the tensor decomposition.",
+    "gain": "Moderate. Blocked canary AUC for a single geodetic band is untested; the model weight says the information is there. PROJECTION ONLY.",
+    "cost": "Low - all inputs are already cached. One holdout run."
+  },
+  {
+    "id": "H61-R",
+    "rank": 3,
+    "name": "Seismicity-nucleation locator: bands 10 (distance to earthquake) and 16 (earthquake intensity)",
+    "layers": "Bands 10 and 16 of the supplied stack: band10 deq_n100a15 (distance to the nearest earthquake within a 100 km radius, 15-degree azimuth parameterisation) and band16 ieq_n100a15 (earthquake intensity or density, same parameterisation).",
+    "signature": "Microseismicity nucleates on the faults that are critically stressed and weak. A cluster of small events with no mapped trace is a direct indication of an unmapped, currently active fault.",
+    "why": "This is the only supplied layer that measures present-day fault slip rather than a geological or geophysical proxy for it, so it is the closest available analogue to 'a fault exists here now'. band16 carries the second-largest logistic weight of all 28 channels (+0.890, behind only band19 detrended-elevation slope at +1.343).",
+    "diff": "No session in this repository has used the seismicity bands as a primary locator; they have only ever entered as two of nineteen channels.",
+    "gain": "Moderate. The azimuth/radius parameterisation of the supplied bands is coarse, so the resolution may be kilometres. PROJECTION ONLY.",
+    "cost": "Low - cached inputs, one holdout run."
+  },
+  {
+    "id": "H61-P",
+    "rank": 4,
+    "name": "Gravity-step x magnetic-edge conjunction at 100 m (GeoDAWN line spacing)",
+    "layers": "This session's 200 m basement-step corridor; band 3 (TMI horizontal gradient) automatic maxima; band 6 (tilt zero-crossings); band 9 (TMI vertical gradient).",
+    "signature": "A normal fault that offsets magnetised basement or a volcanic flow gives a sharp magnetic edge co-located with the gravity step. GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.",
+    "why": "Concealed under alluvium and invisible to surface mapping. Co-location rejects intrabasement density contacts that have no magnetic expression - which is exactly the competing explanation the lane names and which this session's model could not separate (euler_depth weight -0.053).",
+    "diff": "Earlier sessions proposed magnetic fabric as an oracle but never implemented a conjunction; sibling magnetic-edge files were standalone and scored 0.03-0.10 live.",
+    "gain": "Low-moderate: precision x1.5 plausible, recall small. PROJECTION ONLY.",
+    "cost": "Low - cached inputs, one holdout run."
+  },
+  {
+    "id": "H61-S",
+    "rank": 5,
+    "name": "Ensemble of decorrelated locators with a disagreement-weighted emission",
+    "layers": "All of the above, plus the logistic habitat model and the lane corridor x slope locator.",
+    "signature": "Not a new physical signature: an emission rule. Emit dots where at least two decorrelated locators agree, and weight the budget by their disagreement.",
+    "why": "This session's central measurement is that single locators do not generalise across space (blocked AUC 0.56-0.59) while the group's 0.26-0.28 files are conjunctions. If two locators fail independently, their agreement is more informative than either alone.",
+    "diff": "Every previous session fused lines of evidence inside one model. No session has measured the blocked generalisation of each locator separately and then emitted only on their intersection.",
+    "gain": "Uncertain; could be negative if the locators' errors are correlated. PROJECTION ONLY.",
+    "cost": "Medium - needs the blocked test for each locator first (already built this session as scripts/run_h61m4.py)."
+  }
+]

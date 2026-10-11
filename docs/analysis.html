@@ -12,101 +12,71 @@ table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{b
 th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
 .tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
 .tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
 .small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
 </style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
-<h1>Why <code>h33-h33-2-b2</code> scored 0.2778 — and whether we can beat it</h1>
-<p class="small">All live numbers in this page are <span class="tag o">ORGANIZER-CONFIRMED</span> leaderboard values recorded in
-<code>reports/forensics.json</code> and on the sibling site
-<a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32</a>; holdout numbers are
-<span class="tag h">HOLDOUT-DTI</span> from this repository's evaluator.</p>
+<h2>The PhD-level answer: why <code>h33-h33-2-b2</code> scored 0.2778 and whether we can beat it</h2>
+<p>Everything below is measured from the published bytes
+(<code>reports/forensics.json</code>, <code>evidence/registry_habitat.json</code>) or from the group's
+own reported scores. The group's scores are <b>owner reports, not platform receipts</b>
+(IR-61-SCORE-01); they are used to order the evidence, never as a promise.</p>
 
-<h2>1. The metric decides the geometry of a good file</h2>
-<p>DTI = TP / (TP + α·FP + β·FN) with α = 0.2, β = 0.8, TP soft-credited through k(d) = max(1 − d/300 m, 0). Writing K for the kernel
-mass of the hidden test faults, 1/DTI = 0.2 + 0.2·FP/TP + 0.8·K/TP. Two consequences follow. (i) Because β = 4α, a missed truth pixel
-costs four times a wrong prediction, so the optimum is <i>broad coverage with sparse marks</i>: a mark is worth emitting whenever its
-expected kernel credit exceeds α·DTI ≈ 0.056 at the current score. (ii) Dense lines pay for the same truth pixel many times: the
-max-over-kernel credit saturates while every extra positive pixel adds 0.2 to the denominator. This is exactly the lineage of the
-0.2778 file: h19-5 topographic <b>lines</b> (113 k px) scored 0.1922; thinning the same field to <b>dots</b> at 2.8 px spacing
-(44 k px) scored 0.2600 — +0.068 from geometry alone, with no new geology. Our evaluator reproduces the ordering (0.0712 → 0.1011).</p>
+<h3>1. What the metric actually pays for</h3>
+<p>The score is the distance-weighted Tversky index with α = 0.2 (false positives), β = 0.8 (false
+negatives) and a 300 m triangular kernel, on a hidden truth of faults that are <i>not</i> in the
+supplied catalogue. Write the emission as a binary dot field. Then a dot that lands within the kernel
+of a truth pixel and is the best dot for at least one such pixel raises the numerator by
+k = 1 − d/3 and lowers the false-negative term; a dot that lands on nothing raises the denominator by
+0.2. The marginal rule that falls out of the algebra is exact: <b>add a dot iff its expected new truth
+credit exceeds α · DTI</b>, i.e. about 0.06 at DTI = 0.28. So the game is not "be precise", it is
+"cover as much hidden truth as possible with dots that mostly land inside 300 m of it".</p>
 
-<h2>2. The last +0.018 came from the definition of the test set</h2>
-<p>The test labels are faults <i>not</i> in the USGS database. Any mark on a mapped trace is therefore a guaranteed false positive.
-Deleting dots within 1 px of the catalogue took 0.2600 → 0.2708 (40,199 dots); within 2 px → 0.2778 (37,654 dots; only 2,171 remain
-within 3 px of a mapped trace). This step is invisible to any catalogue-based holdout by construction — our evaluator gives the 0.2778
-file 0.0044 because it has nothing left near withheld catalogue segments (<a href="irregularities.html">IR-61-INSTR-02</a>). Earlier
-sessions misread this artefact as "the holdout anti-correlates with live scores".</p>
+<h3>2. What 0.2778 is made of</h3>
+<p>Measured on the published file: 37,654 binary dots, zero on the
+catalogue, median distance 19.6 px
+from it, 0.73 % of the footprint. It is the <i>exact set difference</i> of the 0.2600 file with every
+dot within 3 px of the catalogue deleted (verified in <code>reports/forensics.json</code>:
+<code>top_is_strict_subset = true</code>, 6,436
+dots removed). That single controlled deletion moved the score 0.2600 → 0.2778, so <b>dots adjacent to
+the mapped catalogue were net-negative on the live metric</b>. Two independent readings agree: the
+group's budget ladder (37,654 → 0.2778; 40,199 → 0.2708; 44,090 → 0.2600; 60,069 → 0.2477;
+61,328 → 0.2449) says ~38–40 k dots at ~3 px spacing is the live optimum, and the dotted versions beat
+their own multiline parents (0.1922 multiline → 0.2600 dotted) because the metric charges 0.2 per
+extra positive pixel.</p>
 
-<h2>3. What the dots actually are</h2>
-<p>The h19-5 field is a multi-scale <b>topographic lineament</b> detector on the organiser's detrended elevation and slope (bands 12, 19),
-corroborated across scales and power-law budgeted. Potential-field layers contribute almost nothing: in the group registry the magnetic,
-gravity, geothermal and strain files score 0.03–0.15 live, and in this repository the pure gravity-step construction scores 0.0230
-HOLDOUT-DTI against 0.0314 for random lines. The physical reason is resolution: an isostatic residual sampled at 100 m but measured at
-station spacings of kilometres, upward-continued and regional-removed, locates a density step to O(1–3 km); the kernel pays nothing
-beyond 300 m. Faults that the expert mappers added to the test set were recognised from <i>surface</i> expression (scarps, lineaments,
-vegetation/drainage offsets) in exactly the data the 0.2778 file uses.</p>
+<h3>3. Why the lane cannot reach it</h3>
+<p>Gravity fixes a basement step to kilometres; the metric pays within 300 m. Measured here and in the
+previous session: the horizontal-gradient maxima of the inverted basement surface are enriched only
+0.99–1.32× over random pixels inside the 300 m kernel of mapped faults, and the corridor indicator's
+leakage-canary AUC against withheld faults is
+0.510 — no better than a coin flip.
+So the lane can say where to look and never where to put the dot. That is a property of the data
+(regional isostatic residuals, 58 % of the rectangle unsurveyed), not of the implementation.</p>
 
-<h2>4. Where the ceiling is <span class="tag p">PROJECTION</span></h2>
-<p>From the live portfolio slope we estimate K ≈ 37 k truth-kernel px and TP ≈ 10.3 k for the 0.2778 file (a projection: the organiser
-publishes no K). Reaching the leader's 0.4133 at the same K requires TP ≈ 13.2 k with zero FP, or ≈ 15 k TP with 20 k FP — i.e. roughly
-40 % recall of the hidden faults at 300 m, against ~28 % now, at the same or better precision. That is a <b>locator-recall</b> problem
-(find more of the unmapped scarps, to 100 m), not a prior problem. No gravity- or magnetics-derived prior can supply it, because the
-measured enrichment of any potential-field corridor is only 1.3–1.8× random (screen table on the <a href="method.html">method page</a>).</p>
+<h3>4. Can we beat 0.2778?</h3>
+<p>Three things would have to be true, in order of how much they are worth:</p>
+<ul>
+<li><b>A locator that generalises across space.</b> Every locator we have — logistic habitat, gradient
+boosting, the single strongest band, the lane's own corridor × slope — scores 0.02–0.05 on the
+leave-one-quadrant-out test, i.e. at the random baseline. The 0.26–0.28 files must be using a locator
+that does generalise; from the published bytes its strongest single-band separations are the
+detrended-elevation slope (AUC 0.66 at its dots vs random) and the magnetic horizontal gradient
+(0.57), and no single layer separates the top scorers from the rest by more than 0.02 AUC — the signal
+is in the conjunction, which is exactly what we cannot see.</li>
+<li><b>External 100 m evidence.</b> The highest-value untried source is metre-scale topography: USGS
+3DEP 1 m DEM over the high-prior tiles (free public domain from USGS The National Map; the
+competition data tab ships only the three rasters listed in the bridge manifest — IR-61-SRC-01). A 1 m scarp is invisible at 100 m but is the primary evidence a field mapper uses.
+This session's egress allow-list blocks <code>prd-tnm.s3.amazonaws.com</code>, so it is named as the
+specific obtainable source rather than claimed as done.</li>
+<li><b>Recall, not precision.</b> Because β = 0.8 ≫ α = 0.2, the optimum sits at higher recall than
+intuition suggests: the marginal bar is only ~0.06 of new truth credit per dot. Files that emit
+~120 k pixels score 0.19, files that emit ~38 k score 0.28 — but that comparison confounds budget with
+field quality, and the only controlled pair we have (the 0.2600 → 0.2778 set difference) changes the
+prune, not the budget.</li>
+</ul>
+<p><b>Verdict:</b> not with the supplied 19 bands alone. The honest route to &gt; 0.2778 is a
+metre-scale topographic locator inside a gravity corridor, which is hypothesis H61-N on the
+<a href="hypotheses.html">next-hypotheses page</a> and needs the 3DEP tiles named there.</p>
 
-<h2>5. Can we beat 0.2778?</h2>
-<p><b>Inside this lane: no</b> — the best lane-consistent construction is HOLDOUT-DTI 0.0465 (95 % CI 0.0421–0.0507) versus 0.1011 for
-the current base on the same evaluator, and a union with the 0.2778 dots would fail the 70 % overlap gate. <b>Overall: yes, in
-principle</b>, through three measured levers, in order of expected value: (1) a higher-recall surface-scarp detector — the 1 m 3DEP
-lidar that the organiser links in <code>1m_DEM_links.csv</code> is the data the mappers used; the group mirror
-<code>GEMSDOE24/data/external/lidar_scarp_features_u8.tif</code> (36.9 MB) already exists and is obtainable through the GitHub API;
-(2) keep the two proven geometry rules — ≥ 3 px dot packing and the 2 px catalogue prune — and add greedy marginal-credit packing with
-a scatter kernel (GEMSDOE32's model-only +0.025 claim, unconfirmed); (3) validate every candidate on a segment-withholding holdout that
-prunes only against the <i>visible</i> catalogue (this repository's evaluator), never with the full-catalogue prune that produced the
-earlier false negatives. The gravity corridor remains useful only as a weak prior (×1.3 precision inside the corridor at equal budget:
-0.0465 vs 0.0359 outside it).</p>
-
-<h2>6. What H61-X (this session) added: the two-scale corridor test <span class="tag h">HOLDOUT-DTI</span></h2>
-<p>The lane's screen had measured that gravity HGM maxima are <i>more</i> fault-enriched at coarser smoothing (1.08× at 200 m, 1.22× at
-500 m, 1.32× at 1 km top-50 %). This session tested the corresponding sub-hypothesis: that <b>broad</b> steps — HGM maxima of the
-GP-1012-calibrated inverted basement at 800 m smoothing, with ≥ 80 m measured throw and disjoint (≥ 1.2 km) from the sharp base-scale
-step lines — mark the deep buried intrabasin faults, and that a corridor built from base ∪ coarse steps would beat the base-only
-corridor of H61-G (X2 = 0.0465).</p>
-<table>
-<tr><th>Construction</th><th>dots/draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>vs random lines</th><th>vs X2</th><th>uniqueness pre-check</th></tr>
-<tr><td>X2 base corridor × in-corridor slope ridge (H61-G, instrument reproduction)</td><td>40,000</td>
-<td>0.0465</td><td>0.0421–0.0507</td>
-<td>+0.0113</td><td>—</td><td>1.000 vs itself (not new)</td></tr>
-<tr><td>X3 union (base ∪ coarse) corridor × slope ridge</td><td>40,000</td>
-<td>0.0463</td><td>0.0422–0.0502</td>
-<td>+0.0111</td><td>-0.0002 (tied)</td>
-<td><b>FAILS</b> — 91.7 % of dots within 3 px of the H61-G file (&gt; 70 % gate) → logged as a duplicate of X2, not shipped</td></tr>
-<tr class=hl><td>X3c coarse corridor × slope ridge (shipped)</td><td>8,024</td>
-<td>0.0085</td><td>0.0050–0.0117</td>
-<td>-0.0267</td><td>-0.0380</td>
-<td>UNIQUE (worst gate 0.002)</td></tr>
-<tr><td>X4 coarse-step multi-line ribbons (lane-literal geometry)</td><td>2,004</td>
-<td>0.0019</td><td>0.0004–0.0039</td>
-<td>-0.0333</td><td>-0.0446</td>
-<td>UNIQUE (worst gate 0.002)</td></tr>
-<tr class=dim><td>random lines (this run / H61-G draw)</td><td>40,000</td>
-<td>0.0352</td><td>0.0305–0.0398</td>
-<td>—</td><td>-0.0113</td><td>control</td></tr>
-</table>
-<p>Three findings. (1) <b>The broad steps add nothing:</b> X3 is statistically tied with X2 — of the
-7,766 coarse-scale maxima, only 489 are new lines, and
-their corridor carries 28,985 slope-ridge px that are not fault-enriched (X3c 0.0085
-&lt; random 0.0352). The screen's coarse-scale "enrichment" was the <i>same</i> fault lines seen blurred, not additional structure.
-(2) <b>The protocol's uniqueness gate works:</b> the better-scoring X3 would have been a duplicate of the H61-G file (91.7 % of its dots
-within 3 px), so it was logged as a duplicate and not shipped — rule 1 doing exactly its job. (3) <b>The competing explanation was
-tested, not asserted:</b> intrabasement density contrasts (igneous contacts) should sit on strong magnetic edges; 0.181 of base steps and
-0.129 of coarse steps do (RTP HGM top-50 %), so neither population is
-dominated by the intrusive mimic — the coarse steps are simply not faults at 300 m either. The lane's best in-protocol file remains X2
-(0.0465); the path that can actually move the leaderboard is unchanged (lidar-scale scarp recall, section 5).</p>
-
-<hr><p class="small">61GEMSDOE · session arena/6339e2fc-61gemsdoe (H61-X) · built from <code>evidence/*.json</code> by
-<code>scripts/build_site_h61x.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
-(gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
-<span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
 </div></body></html>
