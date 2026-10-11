@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """H61-M experiment 2 -- model class and prior shape.
 
-Experiment 1 (``scripts/run_h61m.py holdout``) established, on the shared
+Experiment 1 (``scripts/run_h61mh.py holdout``) established, on the shared
 segmented holdout:
 
   * a hard corridor gate (the lane's literal "steps as candidates") *reduces*
@@ -38,12 +38,12 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from gems61 import buried as B                       # noqa: E402
 from gems61 import grid as gridmod                   # noqa: E402
-from gems61 import h61m as M                         # noqa: E402
+from gems61 import h61mh as M                         # noqa: E402
 from gems61 import holdout_segmented as holdoutmod   # noqa: E402
 from gems61.metric import ALPHA, BETA, EPS           # noqa: E402
 
 import run_h61g as R                                 # noqa: E402
-import run_h61m as R1                                # noqa: E402
+import run_h61mh as R1                                # noqa: E402
 
 EVID = ROOT / "evidence"
 CACHE = ROOT / ".cache" / "h61m"

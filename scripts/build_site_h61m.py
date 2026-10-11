@@ -416,7 +416,7 @@ every visible mapped trace, budget {fin['budget']:,} dots. Dots, not ribbons: a 
 same dots scores {RIBBON['pooled_dti']:.4f} against {GATE_P2['pooled_dti']:.4f} on the protocol holdout.</li>
 <li><b>Validate and check uniqueness.</b> <code>gems61.submission_writer</code> writes the TIFF and
 re-reads it from disk; <code>gems61.validate</code> runs {len(fin['validator'])} checks;
-<code>scripts/run_h61m.py unique</code> compares against {uni['n_registry_rasters_compared']} registry
+<code>scripts/run_h61mh.py unique</code> compares against {uni['n_registry_rasters_compared']} registry
 rasters.</li>
 </ol>
 <h3>Sources</h3>

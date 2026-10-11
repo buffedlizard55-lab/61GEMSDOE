@@ -40,7 +40,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from gems61 import buried as B                       # noqa: E402
 from gems61 import grid as gridmod                   # noqa: E402
-from gems61 import h61m as M                         # noqa: E402
+from gems61 import h61mh as M                         # noqa: E402
 from gems61 import holdout_segmented as holdoutmod   # noqa: E402
 from gems61.metric import ALPHA, BETA                # noqa: E402
 
