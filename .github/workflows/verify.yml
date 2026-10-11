@@ -1,0 +1,25 @@
+name: verify
+
+# The lane's contract, checked on every push: the metric identities, the
+# gravity operator, the step operator, the emission geometry and the
+# uniqueness gate must all hold.  Nothing here needs the organiser's rasters --
+# every test runs on small synthetic grids with analytically known answers.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+      - name: Run the lane test suite
+        run: python -m pytest tests -q

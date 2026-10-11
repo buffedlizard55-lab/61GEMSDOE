@@ -1,0 +1,133 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator_version": "gems61-pooled-hide-v1",
+  "generated_utc": "2026-10-11T02:27:57Z",
+  "n_withheld_positives": 12898,
+  "folds": {
+    "NW": 6073,
+    "NE": 3320,
+    "SW": 1732,
+    "SE": 1773
+  },
+  "rule": "ship the highest-DTI arm that is not significantly worse than the best arm in a paired block bootstrap",
+  "best_by_point_estimate": "demoted_k3_s6",
+  "dti": {
+    "demoted_k3_s6": 0.04556284683277675,
+    "ribbon_k3_s6": 0.044821183637859544,
+    "ribbon_k3_s9": 0.04256592367642933,
+    "ribbon_k2_s6": 0.03914350690470362,
+    "basin_k2_s6": 0.037723828099785396,
+    "ribbon_k4_s3": 0.03552728982989586,
+    "ribbon_k1": 0.034978645275857714,
+    "demoted_k1": 0.03225898922891011,
+    "basin_k3_s6": 0.0318871398225847,
+    "basin_k2_s3": 0.03143684858584124,
+    "basin_k1": 0.021558742533975744
+  },
+  "paired_vs_best": {
+    "ribbon_k3_s6": {
+      "dti": 0.044821183637859544,
+      "diff": 0.0007450347485563854,
+      "ci95": [
+        -0.0011522498850921597,
+        0.0028051944672178395
+      ],
+      "p_best_better": 0.7575,
+      "significantly_worse": false
+    },
+    "ribbon_k3_s9": {
+      "dti": 0.04256592367642933,
+      "diff": 0.003036308722142893,
+      "ci95": [
+        -0.002344018852316662,
+        0.008280047615768255
+      ],
+      "p_best_better": 0.8655,
+      "significantly_worse": false
+    },
+    "ribbon_k2_s6": {
+      "dti": 0.03914350690470362,
+      "diff": 0.006291170899294475,
+      "ci95": [
+        -0.002107811692941865,
+        0.015510961648864247
+      ],
+      "p_best_better": 0.933,
+      "significantly_worse": false
+    },
+    "basin_k2_s6": {
+      "dti": 0.037723828099785396,
+      "diff": 0.00779830760190394,
+      "ci95": [
+        -0.004646447185925886,
+        0.020761791252516204
+      ],
+      "p_best_better": 0.8935,
+      "significantly_worse": false
+    },
+    "ribbon_k4_s3": {
+      "dti": 0.03552728982989586,
+      "diff": 0.01007195966533879,
+      "ci95": [
+        0.004163251492455726,
+        0.015844050998192433
+      ],
+      "p_best_better": 0.9995,
+      "significantly_worse": true
+    },
+    "ribbon_k1": {
+      "dti": 0.034978645275857714,
+      "diff": 0.010466039695632506,
+      "ci95": [
+        -0.0010317372751186527,
+        0.022631429213656636
+      ],
+      "p_best_better": 0.9615,
+      "significantly_worse": false
+    },
+    "demoted_k1": {
+      "dti": 0.03225898922891011,
+      "diff": 0.013171653519928654,
+      "ci95": [
+        0.00231420994281607,
+        0.025009020879651293
+      ],
+      "p_best_better": 0.99,
+      "significantly_worse": true
+    },
+    "basin_k3_s6": {
+      "dti": 0.0318871398225847,
+      "diff": 0.013602849005223934,
+      "ci95": [
+        0.0033136913994816085,
+        0.025582159126430193
+      ],
+      "p_best_better": 0.995,
+      "significantly_worse": true
+    },
+    "basin_k2_s3": {
+      "dti": 0.03143684858584124,
+      "diff": 0.014183570468966145,
+      "ci95": [
+        0.001969147573250724,
+        0.026806688863791873
+      ],
+      "p_best_better": 0.991,
+      "significantly_worse": true
+    },
+    "basin_k1": {
+      "dti": 0.021558742533975744,
+      "diff": 0.024001952411949922,
+      "ci95": [
+        0.013165223984732475,
+        0.036098964002898436
+      ],
+      "p_best_better": 1.0,
+      "significantly_worse": true
+    }
+  },
+  "chosen": "demoted_k3_s6",
+  "chosen_dti": 0.04556284683277675,
+  "draws": 2000,
+  "seed": 61011
+}

@@ -1,0 +1,32 @@
+# GitHub Pages for this repository is served from the branch root with the
+# legacy (Jekyll) build. Jekyll walks every file in the tree, and
+# data/official/training_features.tif is a committed symlink into .cache/
+# (git-ignored, populated by scripts/prepare_data.py). On a fresh checkout that
+# symlink dangles and Jekyll aborts with
+#   "No such file or directory @ rb_check_realpath_internal"
+# which is why the native pages-build-deployment job failed.
+#
+# .nojekyll (sibling file) makes Pages serve the tree verbatim with no Jekyll
+# pass at all; the excludes below keep a local `jekyll build` working too.
+title: 61GEMSDOE
+description: >-
+  DOE GEMS Prize Challenge (DrivenData 306) - buried-structure lane:
+  basement-depth steps from Parker-Oldenburg inversion of isostatic residual
+  gravity.
+exclude:
+  - .cache
+  - .github
+  - .venv
+  - data
+  - evidence
+  - out
+  - reports
+  - scripts
+  - src
+  - tests
+  - Gemfile
+  - Gemfile.lock
+  - requirements.txt
+  - requirements-lock.txt
+  - pyproject.toml
+  - README.md

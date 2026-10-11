@@ -16,7 +16,7 @@ th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim
 </style></head><body><div class="wrap">
 <nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html" class=active>Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
-<h2>Method — H61-M</h2>
+<h2>Method — H61-MH</h2>
 <ol>
 <li><b>Band-pass the isostatic residual.</b> The supplied band 13 (isostatic gravity anomaly) is
 decimated to the inversion cell, inpainted across the unsurveyed 58 % by multi-scale normalised
@@ -47,7 +47,7 @@ every visible mapped trace, budget 40,000 dots. Dots, not ribbons: a 3 × 3 ribb
 same dots scores 0.0184 against 0.0409 on the protocol holdout.</li>
 <li><b>Validate and check uniqueness.</b> <code>gems61.submission_writer</code> writes the TIFF and
 re-reads it from disk; <code>gems61.validate</code> runs 19 checks;
-<code>scripts/run_h61m.py unique</code> compares against 28 registry
+<code>scripts/run_h61mh.py unique</code> compares against 28 registry
 rasters.</li>
 </ol>
 <h3>Sources</h3>

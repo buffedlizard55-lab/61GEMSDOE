@@ -29,6 +29,15 @@ Uniqueness against 28 earlier rasters: worst Spearman
 reference denser than ours is gated on Jaccard instead — worst
 0.008 against a limit of 0.5).
 Verdict <b>UNIQUE</b>.</p>
+<p class="small"><b>Naming (IR-61-NAME-01).</b> Two parallel lane sessions independently
+labelled their work "H61-M". The gravity + magnetic conjunction construction merged from PR #21 owns
+<code>src/gems61/h61m.py</code> and <code>scripts/run_h61m.py</code>; this out-of-fold logistic habitat
+model owns the <code>h61mh</code> (H61-M habitat) namespace. Both bodies of work are on
+<code>main</code>. Four other lane files are also merged and all are negative for a slot:
+<code>61gemsdoe-basement-step-ribbon-20261011T054408Z</code> (0.045563 headline / 0.002715 shipped file
+re-measured), <code>gems61-h61x-x3c-coarse-corridor-10128dots</code> (0.0085, below random lines),
+<code>gems61-h61l-relief-any-corr10-40000dots</code> (0.0443) and
+<code>gems61-h61m-gravmag-corridor-ribbon-40000dots</code> (no segment holdout recorded).</p>
 <p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0606
 (95 % CI 0.0494–0.0727; 22,641 withheld
 positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0314.
@@ -72,7 +81,7 @@ the previous session's corridor × slope-ridge locator. The <a href="analysis.ht
 explains why 0.2778 is where it is, and the <a href="holdout.html">holdout page</a> shows the
 leave-one-quadrant-out test that keeps this file off a slot.</p>
 
-<h2>What is new this session (H61-M)</h2>
+<h2>What is new this session (H61-MH)</h2>
 <ol>
 <li><b>200 m inversion.</b> The previous session inverted at 400 m. Halving the cell is the direct
 response to the lane's "a few hundred metres" resolution statement; the two solutions agree at

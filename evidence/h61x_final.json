@@ -1,0 +1,129 @@
+{
+  "evidence_class": "MEASURED (file) + HOLDOUT-DTI (selection)",
+  "submission": "gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros",
+  "note": "H61-X: coarse (800 m) basement-step corridor from GP-1012-calibrated gravity inversion x in-corridor slope ridge; 10128 dots; UNSCORED",
+  "note_chars": 134,
+  "candidate": "X3c coarse-corridor x slope-ridge (basin interior)",
+  "budget": 40000,
+  "n_dots": 10128,
+  "n_positive_px": 10128,
+  "dots_distance_to_catalogue_px": {
+    "min": 2.23606797749979,
+    "median": 23.706539182259394,
+    "mean": 33.55959567502951,
+    "frac_within_3px": 0.042752764612954186
+  },
+  "tif": "out/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+  "zip": "out/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.zip",
+  "receipt": "out/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.json",
+  "download_tif": "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+  "download_zip": "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.zip",
+  "sha256": "f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c",
+  "bytes": 77055,
+  "zip_sha256": "d5160a3943d6e7a82c133c4e28a318f3d1f28d2642f7fb4af84f59f98a877e41",
+  "validator": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches": true,
+    "transform_matches_sample_submission": true,
+    "no_nan_anywhere": true,
+    "no_inf_anywhere": true,
+    "no_sentinel_values": true,
+    "range_0_1_guaranteed": true,
+    "min_ge_0": true,
+    "max_le_1": true,
+    "in_footprint_all_finite": true,
+    "in_footprint_range_0_1": true,
+    "outside_footprint_zero": true,
+    "zero_dots_on_mapped_catalogue": true,
+    "whole_raster_all_finite": true,
+    "whole_raster_range_0_1": true,
+    "no_float32_sentinel": true
+  },
+  "validator_all_passed": true,
+  "uniqueness_pre_check": {
+    "X2 corridor x slope-ridge (basin interior)": {
+      "worst": {
+        "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+        "frac_within_3px": 1.0,
+        "jaccard": 0.9996000799840032,
+        "gate_rule": "overlap3px",
+        "gate_value": 1.0,
+        "gate_limit": 0.7
+      },
+      "n_compared": 28,
+      "unique": false
+    },
+    "X3 union-corridor x slope-ridge (basin interior)": {
+      "worst": {
+        "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+        "frac_within_3px": 0.9174,
+        "jaccard": 0.8349465571815221,
+        "gate_rule": "overlap3px",
+        "gate_value": 0.9174,
+        "gate_limit": 0.7
+      },
+      "n_compared": 28,
+      "unique": false
+    },
+    "X3c coarse-corridor x slope-ridge (basin interior)": {
+      "worst": {
+        "file": "gems61c-gravstep-liveband-40k-20261011.tif",
+        "frac_within_3px": 0.2992693522906793,
+        "jaccard": 0.0021992082850173936,
+        "gate_rule": "overlap3px",
+        "gate_value": 0.2992693522906793,
+        "gate_limit": 0.7
+      },
+      "n_compared": 28,
+      "unique": true
+    },
+    "X4 coarse-step multi-line ribbons (basin interior)": {
+      "worst": {
+        "file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+        "frac_within_3px": 0.026298487836949377,
+        "jaccard": 0.00194538766270515,
+        "gate_rule": "jaccard(dense)",
+        "gate_value": 0.00194538766270515,
+        "gate_limit": 0.5
+      },
+      "n_compared": 28,
+      "unique": true
+    }
+  },
+  "selection_rule": "primary eligibility = uniqueness pre-check (protocol rule 1); among eligible prefer beating the random-lines control, then highest pooled HOLDOUT-DTI, ties toward basin-interior segment recovery; if no candidate beats random, the best unique candidate ships with verdict=negative",
+  "holdout": {
+    "dti": 0.008485038615590941,
+    "ci95": [
+      0.005045210430452883,
+      0.011681580194307649
+    ],
+    "random_lines": 0.035199912118439786,
+    "random_lines_h61g_draw": 0.03141382104713175,
+    "beats_random_lines": false,
+    "registry_reference_best": {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif  [re-scored in H61-G pass, same deterministic holdout]",
+      "pooled_dti": 0.10106964768349222
+    },
+    "beats_registry_reference_on_holdout": false,
+    "n_withheld_truth_px": 22641,
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "basin_segments": "51/1999 vs random 255/1999"
+  },
+  "selection": {
+    "eligible_unique": [
+      "X3c coarse-corridor x slope-ridge (basin interior)",
+      "X4 coarse-step multi-line ribbons (basin interior)"
+    ],
+    "beats_random": {
+      "X3 union-corridor x slope-ridge (basin interior)": true,
+      "X3c coarse-corridor x slope-ridge (basin interior)": false,
+      "X4 coarse-step multi-line ribbons (basin interior)": false
+    },
+    "rule": "primary eligibility = uniqueness pre-check (protocol rule 1); among eligible prefer beating the random-lines control, then highest pooled HOLDOUT-DTI, ties toward basin-interior segment recovery; if no candidate beats random, the best unique candidate ships with verdict=negative"
+  },
+  "slot_recommendation": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "organizer_receipt": null
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · Data</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="active">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a><span class="navsep">Parallel sessions (merged on main):</span><a href="analysis.html">Why 0.2778</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="holdout.html">Holdout</a><a href="methodology.html">Methodology</a><a href="next-steps.html">Next steps</a><a href="limitations.html">Limitations</a><a href="verify.html">Verification</a><a href="candidate-h62.html">H62 candidate</a><a href="submit.html">Submit</a><a href="brief.md">Brief (md)</a></nav>
+</div></header>
+<main class="wrap">
+
+<h2>Hash-pinned bridge files</h2>
+<p>Bridge byte identity is <strong>not</strong> an independent organiser
+receipt: the DrivenData data tab sits behind a login and nothing here
+authenticates a fresh official download.</p>
+<table><thead><tr><th>File</th><th>Status</th><th class="num">Bytes</th><th>SHA-256</th></tr></thead>
+<tbody><tr><td><code>data/bridge/existing_faults.tif</code></td><td><span class='pill good'>VERIFIED</span></td><td class='num'>425830</td><td><code class='small'>7ba308ccdc4418b31a178f4f…</code></td></tr><tr><td><code>data/bridge/sample_submission.tif</code></td><td><span class='pill good'>VERIFIED</span></td><td class='num'>1599597</td><td><code class='small'>2176d08e485aa2cd2860ce8d…</code></td></tr><tr><td><code>data/official/training_features.tif</code></td><td><span class='pill good'>VERIFIED</span></td><td class='num'>418912844</td><td><code class='small'>4371c82e3b8339b807bdffcf…</code></td></tr><tr><td><code>data/external/sgmc_faults_100m.tif</code></td><td><span class='pill good'>VERIFIED</span></td><td class='num'>213034</td><td><code class='small'>26d142c4c93282cd94f6950a…</code></td></tr><tr><td><code>data/external/derived_sgmc_faults_100m.tif</code></td><td><span class='pill good'>VERIFIED</span></td><td class='num'>198602</td><td><code class='small'>643cbe992ef4ba37588fb469…</code></td></tr></tbody></table>
+<h2>The 19-band feature stack</h2>
+<p>[3730, 3292] · EPSG:32611 ·
+[100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0] · 19 bands.
+Provenance: hash-verified third-party bridge; official origin not independently authenticated.</p>
+<table><thead><tr><th class="num">#</th><th>Band description (organiser's own tag)</th>
+<th class="num">missing cells</th></tr></thead><tbody><tr><td class='num'>1</td><td><code>mag_anom - Magnetic anomaly - deviation from expected Earth's magnetic field</code></td><td class='num'>7113308</td></tr><tr><td class='num'>2</td><td><code>rtp - Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects</code></td><td class='num'>7113308</td></tr><tr><td class='num'>3</td><td><code>tmi_hg - Total magnetic intensity horizontal gradient - rate of change in horizontal direction</code></td><td class='num'>7113308</td></tr><tr><td class='num'>4</td><td><code>geod_2ndinv - Geodetic second invariant - measure of strain rate tensor magnitude</code></td><td class='num'>7113308</td></tr><tr><td class='num'>5</td><td><code>iso_grav_anom_slope - Isostatic gravity anomaly slope - gradient of gravity after isostatic correction</code></td><td class='num'>7113308</td></tr><tr><td class='num'>6</td><td><code>tc - Tilt angle or total curvature - magnetic field derivative for edge detection</code></td><td class='num'>7113320</td></tr><tr><td class='num'>7</td><td><code>geod_shearrate - Geodetic shear rate - rate of angular deformation from GPS/InSAR</code></td><td class='num'>7113308</td></tr><tr><td class='num'>8</td><td><code>geod_dilaterate - Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)</code></td><td class='num'>7113308</td></tr><tr><td class='num'>9</td><td><code>tmi_vg - Total magnetic intensity vertical gradient - rate of change in vertical direction</code></td><td class='num'>7113308</td></tr><tr><td class='num'>10</td><td><code>deq_n100a15 - Distance to earthquake (n=100km radius, a=15° azimuth parameters)</code></td><td class='num'>7113308</td></tr><tr><td class='num'>11</td><td><code>iso_grav_anom_vg - Isostatic gravity anomaly vertical gradient - vertical rate of change</code></td><td class='num'>7113308</td></tr><tr><td class='num'>12</td><td><code>det_elev - Detrended elevation - topography with regional trends removed</code></td><td class='num'>7113308</td></tr><tr><td class='num'>13</td><td><code>iso_grav_anom - Isostatic gravity anomaly - gravity after compensating for topographic mass</code></td><td class='num'>7113308</td></tr><tr><td class='num'>14</td><td><code>tmi - Total magnetic intensity - total strength of magnetic field</code></td><td class='num'>7113308</td></tr><tr><td class='num'>15</td><td><code>depth_to_base_surf - Depth to basement surface - thickness of sedimentary cover</code></td><td class='num'>7113308</td></tr><tr><td class='num'>16</td><td><code>ieq_n100a15 - Earthquake intensity or density (n=100km radius, a=15° parameters)</code></td><td class='num'>7113308</td></tr><tr><td class='num'>17</td><td><code>cond_surf - Conductivity surface - electrical conductivity of subsurface</code></td><td class='num'>7113308</td></tr><tr><td class='num'>18</td><td><code>iso_grav_anom_hg - Isostatic gravity anomaly horizontal gradient - horizontal rate of change</code></td><td class='num'>7113308</td></tr><tr><td class='num'>19</td><td><code>det_elev_slope - Detrended elevation slope - gradient of elevation after detrending</code></td><td class='num'>7113308</td></tr></tbody></table>
+<p class="small">Band 13 <code>iso_grav_anom</code> is the layer this lane
+inverts. Band 15 <code>depth_to_base_surf</code> is used only to calibrate the
+depth scale. Neither is the competition label.</p>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

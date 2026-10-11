@@ -1,7 +1,19 @@
+# large / regenerated artefacts -- never commit
 .cache/
+registry/rasters/
+registry/cache/
+docs/submissions/*.zip
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# memmaps
+*.npy
 out/*.tif
 out/*.zip
-__pycache__/
 *.pyc
 data/official/training_features.tif
 data/bridge/*.tif

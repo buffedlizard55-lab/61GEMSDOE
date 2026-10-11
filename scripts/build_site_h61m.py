@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the GitHub Pages site for the H61-M session from the evidence JSON.
+"""Build the GitHub Pages site for the H61-MH session from the evidence JSON.
 
 Every number is read from evidence/*.json (never typed by hand) and is labelled
 HOLDOUT-DTI (our hide-and-recover evaluator), LOQO-DTI (the spatially blocked
@@ -156,6 +156,15 @@ Uniqueness against {uni['n_registry_rasters_compared']} earlier rasters: worst S
 reference denser than ours is gated on Jaccard instead — worst
 {uni['worst_overlap']['gate_value']:.3f} against a limit of {uni['worst_overlap']['gate_limit']}).
 Verdict <b>{uni['verdict']}</b>.</p>
+<p class="small"><b>Naming (IR-61-NAME-01).</b> Two parallel lane sessions independently
+labelled their work "H61-M". The gravity + magnetic conjunction construction merged from PR #21 owns
+<code>src/gems61/h61m.py</code> and <code>scripts/run_h61m.py</code>; this out-of-fold logistic habitat
+model owns the <code>h61mh</code> (H61-M habitat) namespace. Both bodies of work are on
+<code>main</code>. Four other lane files are also merged and all are negative for a slot:
+<code>61gemsdoe-basement-step-ribbon-20261011T054408Z</code> (0.045563 headline / 0.002715 shipped file
+re-measured), <code>gems61-h61x-x3c-coarse-corridor-10128dots</code> (0.0085, below random lines),
+<code>gems61-h61l-relief-any-corr10-40000dots</code> (0.0443) and
+<code>gems61-h61m-gravmag-corridor-ribbon-40000dots</code> (no segment holdout recorded).</p>
 <p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> {f4(HD['value'])}
 (95 % CI {HD['ci95'][0]:.4f}–{HD['ci95'][1]:.4f}; {HD['n_withheld_positive_px']:,} withheld
 positive px; {esc(HD['evaluator'])}). Random lines at the same budget: {f4(HD['random_lines_same_budget'])}.
@@ -214,7 +223,7 @@ the previous session's corridor × slope-ridge locator. The <a href="analysis.ht
 explains why 0.2778 is where it is, and the <a href="holdout.html">holdout page</a> shows the
 leave-one-quadrant-out test that keeps this file off a slot.</p>
 
-<h2>What is new this session (H61-M)</h2>
+<h2>What is new this session (H61-MH)</h2>
 <ol>
 <li><b>200 m inversion.</b> The previous session inverted at 400 m. Halving the cell is the direct
 response to the lane's "a few hundred metres" resolution statement; the two solutions agree at
@@ -385,7 +394,7 @@ metre-scale topographic locator inside a gravity corridor, which is hypothesis H
 
 # --------------------------------------------------------------------------- #
 METHOD = page("Method", f"""
-<h2>Method — H61-M</h2>
+<h2>Method — H61-MH</h2>
 <ol>
 <li><b>Band-pass the isostatic residual.</b> The supplied band 13 (isostatic gravity anomaly) is
 decimated to the inversion cell, inpainted across the unsurveyed 58 % by multi-scale normalised

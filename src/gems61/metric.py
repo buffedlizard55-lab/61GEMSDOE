@@ -2,8 +2,11 @@
 
 Metric definition transcribed from the official problem description
 (DrivenData competition 306, page 967) and cross-checked against the shared
-template implementation in ``GEMSDOE32/src/gems32/metric.py`` (cloned from
-https://github.com/buffedlizard55-lab/GEMSDOE32, commit-verified locally).
+family implementation in ``57GEMSDOE/src/gems57/metric.py`` (cloned from
+<https://github.com/buffedlizard55-lab/57GEMSDOE>).  The arithmetic is the
+group's shared contract; this copy exists so the 61GEMSDOE lane is runnable
+standalone, and ``tests/test_metric.py`` re-derives every identity from the
+published formula.
 
 Definitions
 -----------
@@ -18,46 +21,22 @@ Components (G = truth pixels, P = predicted pixels, p(x) = predicted value)::
     FN_w = |G| - TP_w
     DTI  = TP_w / (TP_w + alpha*FP_w + beta*FN_w)      alpha = 0.2, beta = 0.8
 
-Binary-dot algebra (used for the emission decision)
----------------------------------------------------
-For a binary dot field of n dots, write
+Known (mapped catalogue) pixels are removed from the scored domain: the
+organiser masks them out of every term, so a prediction placed on a mapped
+fault is worthless, and it cannot radiate credit into the scored domain.
 
-* ``T = TP_w = sum_{g in G} max_{x in P} k(d(x,g))``  -- a sum over **truth** cells
-* ``M = sum_{x in P} max_{g in G} k(d(x,g))``         -- a sum over **dots**
-
-so that ``FP_w = n - M`` and the denominator is::
-
-    D = alpha*(T + n - M) + beta*|G|
-
-``T`` and ``M`` are **not** the same quantity: ``T`` saturates at 1 per truth
-cell while ``M`` saturates at 1 per dot, so a cluster of dots around one truth
-cell has ``M > T``.  Collapsing ``D`` to ``alpha*n + beta*|G|`` is only valid
-when ``T == M`` (a near-bijection between dots and truth cells) -- an error
-carried by the shared template's prose and corrected here; the template's own
-:func:`dti_algebra` keeps ``T``, ``S`` and ``M`` separate and is right.
-
-Adding one dot with self-credit ``k = max_g k(d(x,g))`` and marginal truth credit
-``dT`` (``dT <= k``, with equality when the dot covers only truth cells no
-earlier dot already covered) gives ``dD = alpha*(dT + 1 - k)`` and, writing
-``DTI = T / D``,
-
-    new DTI = (T + dT) / (D + alpha*(dT + 1 - k))
-    dDTI > 0  <=>  (T + dT)*D > T*(D + alpha*(dT + 1 - k))
-              <=>  dT > alpha * DTI * (dT + 1 - k)
-
-For a non-redundant dot (``dT == k``) this reduces to the simple bar
-``k > alpha * DTI``, which is the form quoted in the competition literature.
-
-.. warning:: an earlier revision of this module tested ``dT * D > DTI * alpha *
-   (dT + 1 - k)``, which is the same inequality multiplied through by ``D`` on
-   the wrong side only.  Because ``D`` is of order ``beta*K`` (tens of
-   thousands), that form makes the bar smaller by a factor of ``D`` and the
-   greedy allocation never terminates -- it ran to its hard cap and emitted
-   960,000 dots for a HOLDOUT-DTI of 0.0797.  Caught by the DTI-vs-brute-force
-   test suite; see irregularity ``IR-57-BAR-01``.
-:func:`gems61.emit.greedy_allocate` uses the **exact** two-sided test above,
-tracking both ``T`` and ``M``.  All of it is verified against
-:func:`dti_bruteforce` by ``tests/test_metric.py``.
+Two exact consequences used by the emitter
+------------------------------------------
+1. **Binary beats calibrated.**  For a support scaled by lambda in (0,1],
+   ``DTI(lambda) = lambda*T / (alpha*lambda*(T+F) + 0.8*G)`` and
+   ``dDTI/dlambda = 0.8*T*G / (...)**2 > 0``: a graded probability map is
+   strictly dominated by its own thresholded support.
+2. **Marginal inclusion.**  Adding a dot whose nearest-truth kernel credit is
+   ``k`` and whose marginal truth credit is ``dT`` raises DTI iff
+   ``(T + dT)/(D + alpha*(dT + 1 - k)) > T/D``.  For a non-redundant dot
+   (``dT == k``) this reduces to ``k > alpha*s/(1 - alpha*s)``, i.e. at the
+   current public-leader level ``s = 0.3195`` a dot pays for itself only inside
+   ~280 m.  :func:`marginal_accept` implements the exact two-sided test.
 """
 
 from __future__ import annotations
@@ -89,20 +68,15 @@ def offsets(radius: float = RADIUS_PX) -> tuple[np.ndarray, np.ndarray, np.ndarr
                 dy.append(j)
                 dx.append(i)
                 kw.append(k)
-    return (np.array(dy, np.int64), np.array(dx, np.int64), np.array(kw, np.float64))
+    return np.array(dy, np.int64), np.array(dx, np.int64), np.array(kw, np.float64)
 
 
 OFF_DY, OFF_DX, OFF_K = offsets()
 
 
 def marginal_inclusion_threshold(current_dti: float, alpha: float = ALPHA) -> float:
-    """Minimum realised kernel credit ``k`` for one more **non-redundant** dot.
-
-    ``dDTI > 0 <=> k > alpha * DTI`` when the dot's marginal truth credit equals
-    its self-credit.  For a redundant dot use :func:`marginal_accept`, which
-    applies the exact two-sided test.
-    """
-    return alpha * float(current_dti)
+    """Minimum realised kernel credit for one more **non-redundant** dot."""
+    return alpha * float(current_dti) / (1.0 - alpha * float(current_dti))
 
 
 def marginal_accept(dT: float, k_self: float, T: float, M: float, n: int,
@@ -110,10 +84,9 @@ def marginal_accept(dT: float, k_self: float, T: float, M: float, n: int,
     """Exact test: does adding one dot raise DTI?
 
     ``dT`` is the increase in ``TP_w``; ``k_self`` is the dot's own
-    ``max_g k(d(x,g))``; ``T``/``M``/``n`` are the current totals; ``K = |G|``.
-
-    Implemented by recomputing DTI before and after rather than by algebra, so
-    the test cannot drift from the metric.
+    ``max_g k(d(x,g))``; ``T``/``M``/``n`` are current totals; ``K = |G|``.
+    Implemented by recomputing DTI before and after so it cannot drift from
+    the metric.
     """
     D0 = alpha * (T + n - M) + beta * K + EPS
     D1 = alpha * (T + dT + (n + 1) - (M + k_self)) + beta * K + EPS
@@ -127,12 +100,7 @@ def dti_from_components(tp: float, fp: float, fn: float,
 
 def dti_binary(pred_bool, truth, valid=None, known=None,
                alpha: float = ALPHA, beta: float = BETA) -> dict:
-    """Exact DTI for a binary prediction field via Euclidean distance transforms.
-
-    ``valid`` restricts the scored domain (the study-area footprint); ``known``
-    removes pixels that the organiser masks out of scoring (mapped catalogue
-    faults -- see organiser thread 11516).
-    """
+    """Exact DTI for a binary prediction field via Euclidean distance transforms."""
     pred_bool = np.asarray(pred_bool, bool)
     truth = np.asarray(truth, bool)
     valid_ = np.ones(pred_bool.shape, bool) if valid is None else np.asarray(valid, bool)
@@ -162,9 +130,9 @@ def dti_binary(pred_bool, truth, valid=None, known=None,
 def max_cover(pred, truth):
     """Shared official-kernel primitives for soft predictions.
 
-    Returns credit per truth pixel (row-major), kernel credit per prediction
-    location, and distance-to-truth. Empty truth has zero kernel credit rather
-    than SciPy EDT's distance to the implicit array boundary.
+    Returns the per-truth-pixel credit (in the row-major order of
+    ``np.nonzero(truth)``), the kernel credit at every prediction location,
+    and the distance to the nearest truth pixel.
     """
     p = np.asarray(pred, np.float64)
     g = np.asarray(truth, bool)
@@ -231,5 +199,4 @@ def dti_bruteforce(pred, truth, alpha: float = ALPHA, beta: float = BETA,
         for g in gs:
             kmax = max(kmax, max(1.0 - float(np.hypot(*(x - g))) / radius, 0.0))
         fp += pred[tuple(x)] * (1.0 - kmax)
-    return dict(tp=tp, fp=fp, fn=fn,
-                dti=dti_from_components(tp, fp, fn, alpha, beta))
+    return dict(tp=tp, fp=fp, fn=fn, dti=dti_from_components(tp, fp, fn, alpha, beta))
