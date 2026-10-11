@@ -8,8 +8,7 @@
 # downloads no file contents at all, and `git show main:<path>` then fetches exactly
 # one blob on demand.  That is the whole trick.
 set -euo pipefail
-DEST="${1:-/tmp/refs/registry}"
-mkdir -p "$DEST"
+DEST="$(mkdir -p "${1:-/tmp/refs/registry}" && cd "${1:-/tmp/refs/registry}" && pwd)"
 
 # repo : path-within-repo   (the score the group reports for each file is in
 #                            scripts/forensics_registry.py -> CLAIMED)

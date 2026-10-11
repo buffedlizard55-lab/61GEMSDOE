@@ -1,4 +1,4 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>61GEMSDOE — buried structures from gravity inversion</title><style>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>61GEMSDOE — buried structures from gravity inversion</title><style>
 :root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
@@ -19,15 +19,24 @@ a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
 table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
 nav a{margin-right:14px}
 ul.tight li{margin:.15em 0}
+ol li,ul li{margin:.3em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="session-c.html">Session C (new)</a><a href="verify.html">Verification</a></nav><h1>61GEMSDOE — buried structures from gravity inversion</h1>
-<div class="banner ok"><strong>Download: OK. Submit to competition: OK.</strong>This GeoTIFF passed every local format gate (finite, in [0,1], zero on the mapped catalogue, zero outside the footprint) and is unique by rank and by dot-set: worst |Spearman| <b>0.0074</b>, worst Jaccard <b>0.0076</b> against the 12 comparable rasters in this repository. Its "% of dots within 3 px of a sibling" reading is 99.3&nbsp;% against the one <i>blanket</i> sibling (311,617 dots that cover 95.8&nbsp;% of the footprint within 3 px), so that statistic is degenerate here — documented in <code>evidence/e4_uniqueness.json</code>. No competition slot has been spent and no organizer has scored this file.</div>
-<p><a class="btn" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif">↓ Download the GeoTIFF (154,559 bytes)</a>
+.bad-pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#fdeeed;color:var(--bad);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="session-c.html">Session C</a><a href="candidate-h62.html">H62 candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>61GEMSDOE — buried basement steps from gravity inversion</h1>
+<div class="banner ok"><strong>Download: OK. Submit to competition: OK — for the session-C file below.</strong>
+It passes every local format gate (single band Float32, EPSG:32611, 3730 × 3292, every cell finite in
+[0,1], <b>zero</b> positive pixels on the mapped catalogue, <b>zero</b> outside the footprint) and is
+unique by rank and by dot set against the 12 comparable rasters in this repository (worst |Spearman|
+<b>0.0074</b>; worst Jaccard <b>0.0076</b>; nothing byte-identical). No competition slot has been spent
+and no organizer has scored it — its expected leaderboard value is <i>unproven</i>, and the other
+candidates on this page carry their own verdicts, one of which is NOT RECOMMENDED.</div>
+<p><a class="btn" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif">↓ Download the session-C GeoTIFF (154,559 bytes)</a>
 <a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.zip">↓ Single-TIFF ZIP</a>
-<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif.json">Run card (JSON)</a></p>
+<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif.json">Run card (JSON)</a>
+<a class="btn alt" href="session-c.html">Session-C report</a></p>
 
 <h2>What you are downloading</h2>
 <table>
@@ -39,20 +48,26 @@ ul.tight li{margin:.15em 0}
     zero positive mass outside the footprint; <b>zero</b> positive pixels on the mapped-fault catalogue</td></tr>
 <tr><th>Emitted</th><td><b>40,000</b> dots, each a single pixel, non-maximum thinned at ≥ 3 px separation</td></tr>
 <tr><th>Distance mix</th><td>min 2.8 px, median 23.6 px, mean 31.7 px, 95th percentile 84 px;
-    40.6 % of dots sit beyond 30 px of the mapped catalogue — deliberately matched to the distance
-    histogram of the highest live-scoring sibling raster (OWNER-REPORTED 0.2778)</td></tr>
+    40.6 % of dots sit beyond 30 px of the mapped catalogue — matched to the distance histogram of the
+    highest live-scoring sibling raster (OWNER-REPORTED 0.2778; distance mix only, no pixel reused)</td></tr>
 <tr><th>Suggested name</th><td><code>gems61c-gravstep-liveband-40k-20261011</code></td></tr>
 <tr><th>Suggested note</th><td>H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw minimum, none on the mapped catalogue <span class="pill">132 / 140 characters</span></td></tr>
 </table>
-<p class="mut">OK TO DOWNLOAD. Before submitting, read evidence/final.json: local validity is MEASURED; the placement argument is OWNER-REPORTED statistics; no organizer receipt exists for this file.</p>
-<h2>Other submissions in this repository</h2>
-<p>Two earlier lane candidates are kept and still downloadable — <code>gems61-h61a-basement-step-20000dots-…-zeros.tif</code>
-(20,000 dots, 61,888 B) and <code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code> (250,866 B),
-plus the dense 400k-budget field <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>.
-The session-C file above replaces H61-A as the <i>recommended</i> download: it is the same lane, the
-same inversion, but with the offset profile and the emission budget matched to the only live
-evidence the repository has. See <a href="session-c.html">the session C report</a> for the full
-numbers, including what did <b>not</b> work.</p>
+<p class="mut">OK TO DOWNLOAD. Before submitting, read <a href="session-c.html">the session-C report</a>:
+local validity is MEASURED; the placement argument rests on OWNER-REPORTED statistics about other
+people's files; the pure lane field is a measured negative on this repository's holdout instrument and
+is carried at a declared 0.10 weight; no organizer receipt exists for this file.</p>
+
+<h2>The full candidate board (each row carries its own session's verdict)</h2>
+<table>
+<tr><th>Candidate</th><th>dots</th><th>Verdict as recorded by its own session</th></tr>
+<tr><td><b>gems61c-gravstep-liveband-40k</b> (this page, session C)</td><td>40,000</td><td><b>Download OK · Submit OK</b> — format-valid, unique, unproven value</td></tr>
+<tr><td><a href="candidate-h62.html">gems61-h62-basinstep-habitat-38k</a> (PR #7)</td><td>38,000</td><td><span class="bad-pill">Download OK · Submit NOT RECOMMENDED</span> — its own run card measures a surrogate-truth DTI (0.03949) below every registry raster</td></tr>
+<tr><td><a href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif">gems61-h61b-sharp-step-22000dots</a> (PR #6)</td><td>22,000</td><td>see its run card in <code>docs/downloads/</code></td></tr>
+<tr><td><a href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif">gems61-h61a-basement-step-20000dots</a> (PR #5)</td><td>20,000</td><td>kept; superseded by the session-C file above</td></tr>
+<tr><td><a href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">gems61-buried-basement-step r3 rib2 k40k</a> (PR #3)</td><td>40,000</td><td>kept</td></tr>
+<tr><td><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">gems61-lane-buried-step HGM k400k</a> (PR #3)</td><td>311,617</td><td>kept — this is the blanket sibling that makes the raw 3-px overlap statistic degenerate (<code>IR-61-UNIQ-01</code>)</td></tr>
+</table>
 
 <h2>Where the dots sit — measured, not claimed</h2>
 <table>
@@ -64,49 +79,30 @@ numbers, including what did <b>not</b> work.</p>
 <tr><td>dots within 2 px of the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
 <tr><td>dots on the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
 </table>
-<p class="mut">The right-hand column is <b>OWNER-REPORTED</b> and is the reason this file exists in
-this shape: over the owner's scored rasters, deleting the near-catalogue dots <i>raised</i> the
-score (0.2600 → 0.2778 on an exact set difference), and the 400k-dot blanket 0.0888. The middle
-column is a property of <i>this</i> file, measured from its own bytes. Neither column is a score
-for this file.</p>
-<p class="mut">The right-hand column is <b>OWNER-REPORTED</b>: those numbers come from a sibling
-project's record of its own leaderboard rows. Over its 15 scored rasters the owner reports
-Spearman ρ = −0.81 between dot count and live score and +0.85 between mean offset and live score.
-No number in either column is a score for this file.</p>
+<p class="mut">The right-hand column is <b>OWNER-REPORTED</b> and is the reason this file exists in this
+shape: over the owner's scored rasters, deleting the near-catalogue dots <i>raised</i> the score
+(0.2600 → 0.2778 on a verified exact set difference), and a 400k-dot blanket scored 0.0888. The middle
+column is a property of <i>this</i> file, measured from its own bytes. Neither column is a score for
+this file.</p>
 
-<h2>How it was made (short version)</h2>
-<ol class="tight">
-<li>Invert the supplied isostatic residual gravity (band 13) for depth to basement with the
-    Parker–Oldenburg operator, at 400 m, using the first iterate — the low-passed Bouguer slab —
-    because the non-linear correction is measured to diverge here
-    (forward residual 26.31 mGal after one
-    iteration, 1.40 mGal at iteration
-    6).</li>
-<li>Calibrate the reference level and the density contrast against USGS <b>GP-1012</b>
-    (Saltus &amp; Jachens 1995) — the published map on which basin fill is thicker than 1 km
-    over about 20 % of the province. Selected: z<sub>0</sub> = 400.0 m,
-    Δρ = -600.0 kg/m³, giving
-    19.9 % deeper than 1 km.</li>
-<li>Take the automatic maxima of the horizontal gradient of that surface
-    (Blakely &amp; Simpson 1986) and <b>keep only the ones with measured throw</b> ≥
-    120 m across the ridge — a lineament is not a fault; a fault has displacement.</li>
-<li>Fuse that evidence with the offset band around the mapped traces and the supplied gravity
-    gradient, and emit dots where the competition metric's own marginal test says a dot pays.</li>
-</ol>
-<p>Cross-check: the inverted surface correlates <b>r = 0.526</b>
-(slope 0.804) with the competition's own
-<code>depth_to_base_surf</code> band — two independently derived depth surfaces agreeing on the
-broad pattern, not a copy of one another.</p>
+<h2>Holdout numbers for this file (HOLDOUT-DTI, never a score)</h2>
+<table>
+<tr><th>Arm (40,000 dots each)</th><th>Pooled HOLDOUT-DTI</th></tr>
+<tr><td><b>This file's construction</b> (offset-profile prior, lane weight 0.10)</td><td>0.0417</td></tr>
+<tr><td>Uniform draw inside the 2.5–30 px flank band</td><td>0.0649</td></tr>
+<tr><td>Pure lane field</td><td>0.0078</td></tr>
+<tr><td>Random lines, same budget</td><td>0.0092</td></tr>
+</table>
+<p class="mut">Instrument <code>gems61-pooled-hide-v2</code>, 39,310 withheld positive pixels. The lane
+brief's own number: <b>669 / 1,150 = 58.2 %</b> of withheld basin-interior segments recovered versus
+109 / 1,150 = 9.5 % for random lines. Full detail, including the negative result, in
+<a href="session-c.html">the session-C report</a>.</p>
 
 <h2>What this file does NOT claim</h2>
 <ul class="tight">
 <li>It has <b>not</b> been scored. There is no organizer receipt for it. Nothing here is a leaderboard score.</li>
-<li>The catalogue-frame holdout scores it <b>0.0000</b> and a random-line control <b>0.0089</b>
-    (n = 11,318 withheld truth px).
-    That instrument hides mapped traces and rewards dots placed <i>on</i> them; this file is
-    deliberately placed off them, so the instrument cannot rank it. The disagreement is
-    irregularity <code>IR-57-INSTR-01</code>, restated here rather than tuned away.</li>
-<li>The promotion argument therefore rests on the owner-reported statistics in the table above,
-    which are statistics about <i>other people's files</i>, not about this one.</li>
+<li>Its expected leaderboard value is <b>unproven</b>: the placement prior comes from other files' observed
+    behaviour, and the lane's own field measured negative on this repository's instrument.</li>
+<li>Promotion to a weekly slot is a separate selector decision and is <b>not</b> made by this page.</li>
 </ul>
 </main></body></html>

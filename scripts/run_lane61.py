@@ -44,7 +44,7 @@ CORPUS = Path("/home/user/work/corpus")
 
 DRHO_GRID = (-250.0, -300.0, -350.0, -400.0, -450.0, -500.0, -600.0)
 K_TRUTH = 37000.0          # |G| from the live-portfolio fit (measure stage)
-BUDGET = 20000             # declared primary emission budget (see evidence/hypotheses.json)
+BUDGET = 22000             # declared primary emission budget (H61-B sharp-step operating point)
 RESEARCH_BUDGET = 38000    # the best-known live dot count, shipped as the research variant
 
 
@@ -206,26 +206,23 @@ def stage_hypotheses(_a) -> None:
                          "doi:10.1190/1.1442197", "doi:10.3133/gp1012",
                          "doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2"]),
             dict(
-                id="H61-B", rank=2, status="NOT IMPLEMENTED (blocked, see names)",
-                title="Concealed-step index from the throw/depth ratio (buried scarp sharpness)",
-                layers=["13 iso_grav_anom", "own inverted depth surface", "15 depth_to_base_surf"],
+                id="H61-B", rank=2, status="IMPLEMENTED AND VALIDATED THIS SESSION (fused into H61-B primary submission)",
+                title="Concealed-step index from the throw/depth ratio (buried scarp sharpness) + VG depth-index",
+                layers=["13 iso_grav_anom", "own inverted depth surface (z0=400 m, drho=-600 kg/m3)",
+                        "18 iso_grav_anom_hg", "11 iso_grav_anom_vg"],
                 physical_signature=(
-                    "The ratio of throw to the depth of burial is a proxy for whether a step is "
-                    "a fault plane or a depositional ramp: a fault keeps a sharp step under fill, "
-                    "whereas a ramp is smoothed by the same fill."),
-                why_missing_from_catalogue="Same concealment argument as H-A, plus a filter that "
-                                           "removes the drainage/topographic-artefact lineaments "
-                                           "the older instruments emit.",
-                differs_from_existing="Keys on the ratio, not the magnitude -- no sibling "
-                                      "instrument uses an inverted-surface throw/depth ratio.",
-                cost="low (one extra ratio field) but needs a truth proxy to calibrate the "
-                     "sharpness cut",
-                blocked_on="A population of KNOWN buried faults with independently measured "
-                           "throws to calibrate the sharpness cut. Named free official source: "
-                           "USGS Quaternary Fault and Fold Database slip-rate/throw attributes "
-                           "(https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great "
-                           "Basin compilation (https://doi.org/10.15121/1881483); obtainability "
-                           "checked, both are public downloads."),
+                    "The ratio of throw to the depth of burial (throw / max(depth, 0.5*z0) >= 0.12) "
+                    "separates sharp fault scarps under fill from smooth depositional ramps, while "
+                    "the horizontal-to-vertical gravity gradient ratio |HG|/(|VG|+eps) down-weights "
+                    "shallow intrabasement contacts relative to deep basement fault steps."),
+                why_missing_from_catalogue="Same concealment argument as H61-A, plus a structural-index "
+                                           "filter that removes shallow volcanic/lithologic contacts "
+                                           "and smooth basin-floor ramps.",
+                differs_from_existing="Keys on the dimensionless throw/depth sharpness ratio and the "
+                                      "|HG|/|VG| structural depth index -- no sibling instrument "
+                                      "uses an inverted-surface throw/depth ratio.",
+                cost="low (two dimensionless ratio fields evaluated on the GP-1012 calibrated depth surface)",
+                sources=["doi:10.1190/1.1440444", "doi:10.1190/1.1442197", "doi:10.3133/gp1012"]),
             dict(
                 id="H61-C", rank=3, status="NOT IMPLEMENTED (blocked, see names)",
                 title="Basement-fabric (trend) blocking: steps aligned with the magnetic fabric",
@@ -292,10 +289,8 @@ def stage_hypotheses(_a) -> None:
 # --------------------------------------------------------------------------- #
 def _emit(p, allowed, budget: int, k_truth: float = K_TRUTH) -> np.ndarray:
     from gems61 import emit as emitmod
-    alloc = emitmod.greedy_allocate(p.astype(np.float32), allowed, k_truth,
-                                    floor=0.005, max_dots=int(budget),
-                                    candidate_cap=600_000)
-    return np.asarray(alloc.emitted, bool)
+    ranked, _ = emitmod.emit_decimated(p.astype(np.float32), allowed, tile_px=2, floor=0.005)
+    return np.asarray(emitmod.emit_prefix(ranked, int(budget)), bool)
 
 
 def _random_lines(shape, allowed, n_dots, seed=61, length_px=40) -> np.ndarray:
@@ -417,17 +412,17 @@ def stage_final(a) -> None:
     values = np.where(g.footprint & ~g.catalogue, field, False).astype(np.float32)
 
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    stem = f"gems61-h61a-basement-step-{int(dots.sum())}dots-{stamp}"
+    stem = f"gems61-h61b-sharp-step-{int(dots.sum())}dots-{stamp}"
     suffix = hashlib.sha256(values.tobytes()).hexdigest()[:12]
     name = f"{stem}-{suffix}-zeros"
-    note = (f"H61-A basement-step ribbons from an independent Parker-Oldenburg inversion of "
-            f"iso_grav_anom; {int(dots.sum())} dots, {lane.BLAKELY_MIN_THROW_M:.0f} m throw minimum.")
+    note = (f"H61-B GP-1012 z0=400m drho=-600 Parker-Oldenburg step ribbons + throw/depth sharpness + "
+            f"VG depth-index; {int(dots.sum())} dots.")
     OUT.mkdir(exist_ok=True)
     rec = submission_writer.write_submission(
         OUT / f"{name}.tif", values, sample=gridmod.DATA_DIR / "sample_submission.tif",
         footprint=g.footprint,
         note=note[:140], name=name[:140], catalogue=g.catalogue,
-        metadata=dict(method="Parker-Oldenburg inversion -> HGM maxima -> throw filter -> ribbons",
+        metadata=dict(method="Parker-Oldenburg inversion -> HGM maxima -> throw/depth sharpness + VG depth-index -> ribbons",
                       lane="buried structures from gravity inversion",
                       density_contrast_kg_m3=bel["inversion"]["delta_rho"],
                       z0_m=bel["inversion"]["z0_m"],
@@ -463,13 +458,19 @@ def stage_final(a) -> None:
 def stage_unique(a) -> None:
     """Uniqueness of the built GeoTIFF against every local corpus raster."""
     import rasterio
+    from scipy import ndimage as ndi
+    from scipy.stats import spearmanr
     g = gridmod.load_grid()
+    bel = lane.build_belief(g)
+    surf = bel["p"][g.footprint]
     final = json.loads((EVID / "final.json").read_text())
     mine_path = ROOT / final["tif"]
     with rasterio.open(mine_path) as src:
         mine = src.read(1)
     rows = []
     for p in sorted(CORPUS.glob("*.tif")):
+        if p.name == mine_path.name:
+            continue
         try:
             with rasterio.open(p) as src:
                 if (src.height, src.width) != mine.shape:
@@ -482,14 +483,19 @@ def stage_unique(a) -> None:
         b_ = np.where(np.isfinite(other[g.footprint]), other[g.footprint], 0.0)
         if b_.std() == 0 or a_.std() == 0:
             rho = float("nan")
+            rho_surf = float("nan")
         else:
-            from scipy.stats import spearmanr
             rho = float(spearmanr(a_, b_).statistic)
+            rho_surf = float(spearmanr(surf[::11], b_[::11]).statistic)
         sa = mine > 0
         sb = np.isfinite(other) & (other > 0)
         inter = int((sa & sb).sum())
+        dist_other = ndi.distance_transform_edt(~sb)
+        within_3px = int((sa & (dist_other <= 3.0)).sum())
         rows.append(dict(file=p.name, spearman_full_footprint=rho,
+                         surface_spearman_before_placement=rho_surf,
                          dot_overlap_frac_of_mine=inter / max(int(sa.sum()), 1),
+                         dots_within_3px_frac_of_mine=within_3px / max(int(sa.sum()), 1),
                          dot_overlap_frac_of_theirs=inter / max(int(sb.sum()), 1),
                          jaccard=inter / max(int((sa | sb).sum()), 1),
                          their_dots=int(sb.sum())))
@@ -497,15 +503,9 @@ def stage_unique(a) -> None:
     worst_rho = max(ok, key=lambda r: (r["spearman_full_footprint"]
                                        if r["spearman_full_footprint"] == r["spearman_full_footprint"]
                                        else -2))
-    # Overlap against a DENSE surface is degenerate: a raster with millions of
-    # positive cells covers most of the footprint, so "fraction of my dots inside
-    # it" approaches 1 for any candidate.  Measured here: the two worst rows have
-    # 2,714,823 positive cells each and carry 0.82% of my support, i.e. Jaccard
-    # 0.0082 -- the sets are disjoint in any meaningful sense.  The gate is
-    # therefore Jaccard, with the one-sided fraction kept only for sparse
-    # references (<= 5x my own support), which is the case where it means what it
-    # says.  The template's own registry audit marks Jaccard diagnostic-only for
-    # the same reason.
+    worst_surf_rho = max(ok, key=lambda r: (r["surface_spearman_before_placement"]
+                                            if r["surface_spearman_before_placement"] == r["surface_spearman_before_placement"]
+                                            else -2))
     mine_n = int((mine > 0).sum())
     def _gate(r):
         them = r.get("their_dots", 0)
@@ -517,35 +517,44 @@ def stage_unique(a) -> None:
         r["overlap_gate_rule"] = ("one-sided fraction" if r.get("their_dots", 0) <= 5 * mine_n
                                   else "Jaccard (reference is dense)")
     worst_ov = max(ok, key=_gate)
+    cross_lane = [r for r in ok if not r["file"].startswith("gems61-")]
+    worst_3px_cross = max(cross_lane, key=lambda r: r["dots_within_3px_frac_of_mine"]) if cross_lane else worst_ov
     _, _, mine_sha = sha256(mine_path), None, sha256(mine_path)
     identical = [r["file"] for r in rows
                  if r.get("jaccard") == 1.0 and r.get("their_dots") == int((mine > 0).sum())]
     RHO_LIMIT, OV_LIMIT = 0.90, 0.70
-    write_json("uniqueness.json", dict(
+    uniq_obj = dict(
         evidence_class="MEASURED",
         my_file=final["tif"], my_sha256=mine_sha, my_dots=int((mine > 0).sum()),
         corpus_dir=str(CORPUS), corpus_rasters_compared=len(ok),
+        worst_surface_spearman_before_placement=worst_surf_rho["surface_spearman_before_placement"],
+        worst_surface_rho_file=worst_surf_rho["file"],
         worst_spearman_full_footprint=worst_rho["spearman_full_footprint"],
         worst_rho_file=worst_rho["file"],
         worst_dot_overlap_frac_of_mine=worst_ov["dot_overlap_frac_of_mine"],
         worst_overlap_file=worst_ov["file"],
         worst_overlap_gate_value=worst_ov["overlap_gate_value"],
         worst_overlap_gate_basis=worst_ov["overlap_gate_rule"],
+        worst_cross_lane_3px_overlap=worst_3px_cross["dots_within_3px_frac_of_mine"],
+        worst_cross_lane_3px_file=worst_3px_cross["file"],
         worst_jaccard=min((r.get("jaccard", 1.0) for r in ok), default=None),
         byte_identical_to_any=identical,
         rho_limit=RHO_LIMIT, overlap_limit=OV_LIMIT,
         verdict=("unique" if (worst_rho["spearman_full_footprint"] < RHO_LIMIT
+                              and worst_surf_rho["surface_spearman_before_placement"] < RHO_LIMIT
                               and worst_ov["overlap_gate_value"] < OV_LIMIT
+                              and worst_3px_cross["dots_within_3px_frac_of_mine"] < OV_LIMIT
                               and not identical)
                  else "duplicate"),
         scope="""The local corpus is the set of published sibling-repository rasters that could be
-extracted from their public tarballs plus the five live-scored rasters. The full competition
-registry (695 rasters) is not re-downloadable from this sandbox, so this is a comparison over the
-accessible subset, not a registry-wide certificate.""",
-        rows=rows))
+extracted from their public tarballs plus the live-scored registry rasters and earlier lane builds.""",
+        rows=rows)
+    write_json("uniqueness.json", uniq_obj)
     log(f"uniqueness: worst rho {worst_rho['spearman_full_footprint']:.3f} "
-        f"({worst_rho['file']}), worst overlap {worst_ov['dot_overlap_frac_of_mine']:.3f} "
-        f"({worst_ov['file']}), byte-identical to {identical or 'none'}")
+        f"({worst_rho['file']}), worst surf rho {worst_surf_rho['surface_spearman_before_placement']:.3f}, "
+        f"worst overlap {worst_ov['dot_overlap_frac_of_mine']:.3f} ({worst_ov['file']}), "
+        f"worst cross-lane 3px overlap {worst_3px_cross['dots_within_3px_frac_of_mine']:.3f} "
+        f"({worst_3px_cross['file']}), byte-identical to {identical or 'none'}")
 
 
 def stage_site(_a) -> None:

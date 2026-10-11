@@ -52,6 +52,73 @@ def compare(mine: np.ndarray, other: np.ndarray, footprint: np.ndarray,
                               max(((mine > 0.5) | (other > 0.5)).sum(), 1)))
 
 
+RHO_LIMIT = 0.90
+OVERLAP_LIMIT = 0.70
+JACCARD_LIMIT = 0.50
+
+
+def dot_overlap(mine: np.ndarray, other: np.ndarray, px: int = 3) -> float:
+    sa = np.asarray(mine) > 0.5
+    sb = np.asarray(other) > 0.5
+    n_mine = int(sa.sum())
+    if n_mine == 0:
+        return 0.0
+    if not sb.any():
+        return 0.0
+    d_other = ndimage.distance_transform_edt(~sb)
+    return float((sa & (d_other <= px)).sum() / n_mine)
+
+
+def surface_rho(mine: np.ndarray, other: np.ndarray, valid: np.ndarray) -> dict:
+    from scipy.stats import spearmanr
+    a = np.asarray(mine, dtype=np.float64)
+    b = np.asarray(other, dtype=np.float64)
+    v = np.asarray(valid, dtype=bool)
+    av, bv = a[v], b[v]
+    rho_full = float(spearmanr(av, bv).statistic) if (av.std() > 0 and bv.std() > 0) else float("nan")
+    sa = (a > 0) & v
+    sb = (b > 0) & v
+    union = sa | sb
+    au, bu = a[union], b[union]
+    rho_union = float(spearmanr(au, bu).statistic) if (union.any() and au.std() > 0 and bu.std() > 0) else float("nan")
+    inter = int((sa & sb).sum())
+    jaccard = float(inter / max(int(union.sum()), 1))
+    return dict(spearman_full_footprint=rho_full,
+                spearman_on_dot_union=rho_union,
+                jaccard_dot_sets=jaccard)
+
+
+def compare_array_to_registry(candidate: np.ndarray, manifest: dict, valid: np.ndarray) -> dict:
+    rows = []
+    dups = 0
+    for item in manifest.get("rasters", []):
+        with rasterio.open(item["cache_file"]) as src:
+            prior = src.read(1)
+        sr = surface_rho(candidate, prior, valid)
+        ov3 = dot_overlap(candidate, prior, px=3)
+        dup_rho = bool(sr["spearman_full_footprint"] > RHO_LIMIT)
+        dup_ov = bool(ov3 > OVERLAP_LIMIT)
+        dup_jac = bool(sr["jaccard_dot_sets"] > JACCARD_LIMIT)
+        if dup_rho or dup_ov:
+            dups += 1
+        rows.append(dict(
+            repo=item.get("repo_first"),
+            sources=item.get("sources", []),
+            sha256=item.get("sha256"),
+            spearman_full_footprint=sr["spearman_full_footprint"],
+            spearman_on_dot_union=sr["spearman_on_dot_union"],
+            my_dots_within_3px_of_theirs=ov3,
+            jaccard_dot_sets=sr["jaccard_dot_sets"],
+            duplicate_by_jaccard=dup_jac,
+        ))
+    return dict(
+        rows=rows,
+        jaccard_diagnostic_only=True,
+        duplicate_count=dups,
+        unique=(dups == 0),
+    )
+
+
 def load_registry(paths, footprint_shape=None):
     out = {}
     for p in paths:

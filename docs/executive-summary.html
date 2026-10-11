@@ -1,4 +1,4 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>How to make a submission, exactly</title><style>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>How to make a submission, exactly</title><style>
 :root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
@@ -19,22 +19,30 @@ a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
 table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
 nav a{margin-right:14px}
 ul.tight li{margin:.15em 0}
+ol li,ul li{margin:.3em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>How to make a submission, exactly</h1>
-<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the GeoTIFF at the
-top of the <a href="index.html">home page</a>, then paste the name and the note into the
-submission dialog. Nothing else is needed.</div>
+.bad-pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#fdeeed;color:var(--bad);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="session-c.html">Session C</a><a href="candidate-h62.html">H62 candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>How to make a submission, exactly</h1>
+<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the session-C GeoTIFF
+below, then paste the name and the note into the submission dialog. Nothing else is needed. Everything
+here is verified against the official problem page and the portal's own field text.</div>
+
 <h2>1 · Download</h2>
-<p>On the <a href="index.html">home page</a>, click <b>Download the GeoTIFF</b>. The file is
-<code>gems61c-gravstep-liveband-40k-20261011.tif</code>. If the portal prefers a ZIP, use <b>Single-TIFF ZIP</b> instead — it
-contains exactly one GeoTIFF and nothing else. Do not upload the JSON run card, this page, or a
-ZIP of the repository.</p>
+<p><a class="btn" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif">↓ Download the session-C GeoTIFF (154,559 bytes)</a>
+<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.zip">↓ Single-TIFF ZIP</a>
+<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif.json">Run card (JSON)</a></p>
+<p>Either the <code>.tif</code> or the <code>.zip</code> is accepted; the ZIP contains exactly one
+GeoTIFF and was round-trip verified. Do <b>not</b> upload the JSON run card, this page, or a ZIP of the
+repository. (The <a href="index.html">home page</a> lists every other candidate and the verdict its own
+session recorded for it — one of them is explicitly NOT RECOMMENDED.)</p>
+
 <h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
 <p>Re-hash it. On macOS/Linux: <code>shasum -a 256 gems61c-gravstep-liveband-40k-20261011.tif</code> — it must print</p>
 <p><code>e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873</code></p>
+
 <h2>3 · Fill in the dialog</h2>
 <table>
 <tr><th>Field</th><th>Value</th></tr>
@@ -42,19 +50,28 @@ ZIP of the repository.</p>
 <tr><td>Note (≤ 140 characters)</td><td>H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw minimum, none on the mapped catalogue <span class="pill">132 / 140</span></td></tr>
 <tr><td>File</td><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code> (or the single-TIFF ZIP)</td></tr>
 </table>
+
 <h2>4 · What happens next, and what does not</h2>
 <ul class="tight">
-<li>Uploading spends one of the three weekly submission slots. <b>This repository has not spent
-    one.</b> Promotion to a slot is your decision.</li>
-<li>When a score comes back, write it down with the date. That number, and only that number, is
-    a competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI or
-    OWNER-REPORTED and none of those is a score.</li>
-<li>If the portal rejects the file, capture the exact error text and add it to
-    <code>evidence/</code> — a rejection is evidence, and the range error reported against an
-    earlier site's download is the reason every value here is checked to be finite and inside
-    [0, 1] before the file is written.</li>
+<li>Uploading spends one of the weekly submission slots. <b>This repository has not spent one.</b>
+    Promotion to a slot is your decision; the evidence for and against is tabulated on the
+    <a href="index.html">home page</a> and in <a href="session-c.html">the session-C report</a>.</li>
+<li>When a score comes back, write it down with the date. That number, and only that number, is a
+    competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI, OWNER-REPORTED or
+    PROJECTION, and none of those is a score.</li>
+<li>If the portal rejects the file, capture the exact error text and add it to <code>evidence/</code> —
+    a rejection is evidence, and the range error reported against an earlier site's download is the
+    reason every value here is checked to be finite and inside [0, 1] before the file is written.</li>
 </ul>
+
 <h2>Why the file is shaped the way it is</h2>
-<p>The competition metric is
-<code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular kernel of radius 300 m, and the mapped-fault catalogue is masked out of scoring. Two consequences decide the shape of this file: <b>a dot on a mapped trace earns nothing</b> (the pixel is not scored), and <b>a dot only pays while its chance of landing within ~300 m of a hidden truth pixel exceeds h* ≈ 0.025</b>. That is why the dots avoid the mapped traces, why they are dots (not thick ribbons), and why the budget is 40,000: the mass band the live evidence brackets. Read <a href="session-c.html">the session C report</a> for the holdout numbers and the negative result that shapes the same decision.</p>
+<p>The competition metric is <code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular
+kernel of radius 300 m, and the mapped-fault catalogue is masked out of scoring. Two consequences
+decide the shape of this file: <b>a dot on a mapped trace earns nothing</b>, and <b>a dot only pays
+while its chance of landing within ~300 m of a hidden truth pixel exceeds h* ≈ 0.025</b>. That is why
+the dots avoid the mapped traces, why they are single pixels rather than thick ribbons, and why the
+budget is 40,000 — the mass band the live evidence brackets (37,654–44,090). The distance mix is
+matched band-for-band to the highest live-scoring sibling raster; the lane's own field is a declared
+0.10 minority weight because it measured negative on its own holdout instrument. Read
+<a href="session-c.html">the session-C report</a> for those numbers and for the limitations.</p>
 </main></body></html>
