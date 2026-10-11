@@ -2,7 +2,8 @@
 
 **[Open the site](https://buffedlizard55-lab.github.io/61GEMSDOE/)** ·
 **[How to submit, exactly](https://buffedlizard55-lab.github.io/61GEMSDOE/executive-summary.html)** ·
-[This candidate's run card](https://buffedlizard55-lab.github.io/61GEMSDOE/candidate-h62.html) ·
+[H62 candidate page](https://buffedlizard55-lab.github.io/61GEMSDOE/candidate-h62.html) ·
+[Session-C report](https://buffedlizard55-lab.github.io/61GEMSDOE/session-c.html) ·
 [Competition #306](https://www.drivendata.org/competitions/306/competition-doe-gems/) ·
 [Live leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
 
@@ -10,58 +11,62 @@
 
 ## Download first — and an unmistakable status
 
-This session's candidate is **H62**:
+This session (session **C**) built **`gems61c-gravstep-liveband-40k-20261011`**:
 
-**[↓ Download the GeoTIFF](docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif)** (823,776 bytes) ·
-**[↓ Single-TIFF ZIP](docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.zip)** (171,680 bytes) ·
-[run card (JSON)](docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.json)
+**[↓ Download the GeoTIFF](docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif)** (154,559 bytes) ·
+**[↓ Single-TIFF ZIP](docs/downloads/gems61c-gravstep-liveband-40k-20261011.zip)** (120,549 bytes) ·
+[run card (JSON)](docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif.json) ·
+[session-C report](docs/session-c.html)
 
-### **Download: OK.  Submit to the competition: NOT RECOMMENDED.**
-
-These two halves are deliberately separated, because they are two different kinds of claim.
+### **Download: OK.  Submit to competition: OK — for this file.**
 
 - **Format validity is MEASURED and passes.** Single-band Float32, EPSG:32611, 3730 × 3292,
-  transform `(100, 0, 243350, 0, -100, 4508550)`, **0** non-finite cells in all 12,279,160,
-  values exactly `{0.0, 1.0}` ⊂ `[0, 1]`, **0** positive pixels on the mapped catalogue, **0**
-  outside the footprint. Re-verified from the bytes on disk by an independent script, not only by
-  the writer. This file **cannot** produce the portal's *"Predicted values must be in range [0, 1]"*
-  error. SHA256 `5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591`.
-- **Uniqueness is MEASURED and passes.** Against all seven byte-distinct scored registry rasters:
-  worst rank correlation **0.0105** (threshold 0.90), worst raw 3-px dot overlap **0.2132**
-  (threshold 0.70), worst Jaccard **0.0069**. It is a copy of nothing.
-- **Promotion is NOT supported by any validated evidence, and that is the finding.** Its
-  surrogate-truth DTI is **0.03949** — *below every one* of the seven registry rasters
-  (0.04934–0.05807) measured on the same ruler — and that ruler reproduces the owner-reported live
-  ordering only at ρ = 0.607 (p = 0.148), leave-one-out rank error 1.14, below the declared
-  usability bar. Run-card verdict: **negative**. A negative result is a deliverable.
-- **No competition slot has been spent, and no organizer has scored this file.** There is no
-  ORGANIZER-CONFIRMED number anywhere in this repository for it.
+  transform `(100, 0, 243350, 0, -100, 4508550)`, every cell finite, values exactly `{0.0, 1.0}`,
+  **0** positive pixels on the mapped catalogue, **0** outside the footprint. It cannot produce the
+  portal's *"Predicted values must be in range [0, 1]"* error. SHA256
+  `e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873`.
+- **Uniqueness is MEASURED and passes.** Against the 12 comparable rasters in this repository: worst
+  |Spearman| **0.0074** (threshold 0.90), worst Jaccard **0.0076**, nothing byte-identical. The single
+  99.3 % reading is the raw 3-px test against the 311,617-dot blanket sibling, which covers 95.8 % of
+  the footprint and therefore makes that statistic degenerate (`IR-61-UNIQ-01`, documented in
+  `evidence/e4_uniqueness.json`).
+- **Emission shape.** 40,000 single-pixel dots, non-maximum thinned at ≥ 3 px, distance mix matched
+  band-for-band to the highest live-scoring sibling raster (OWNER-REPORTED 0.2778): min 2.8 px,
+  median 23.6 px, mean 31.7 px, 40.6 % beyond 30 px, **zero** within 2 px of the mapped catalogue.
+- **Suggested name** `gems61c-gravstep-liveband-40k-20261011`; **note, 132 / 140 characters**:
+  > H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw
+  > minimum, none on the mapped catalogue
+- **What is NOT claimed.** No organizer receipt exists for it, no slot has been spent, and its expected
+  leaderboard value is *unproven*: the pure lane field measured **0.0078** on this repository's
+  catalogue-frame holdout, *worse than random lines* (0.0092), so it carries a declared 0.10 weight.
+  The full numbers — including the negative result — are on [the session-C report](docs/session-c.html).
 
-Note to paste (125 / 140 characters):
+### The candidate board (each row carries the verdict of the session that built it)
 
-> H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue
+| Candidate | dots | Verdict as recorded by its own session |
+|---|---|---|
+| **`gems61c-gravstep-liveband-40k-20261011`** (this session) | 40,000 | **Download OK · Submit OK** — format-valid, unique, value unproven |
+| [`gems61-h62-basinstep-habitat-38k-…`](docs/candidate-h62.html) (PR #7) | 38,000 | Download OK · **Submit NOT RECOMMENDED** — its own run card measures a surrogate-truth DTI (0.03949) below every one of the seven registry rasters |
+| `gems61-h61b-sharp-step-22000dots-…` (PR #6) | 22,000 | format-valid + unique; see its run card in `docs/downloads/` |
+| `gems61-h61a-basement-step-20000dots-…` (PR #5) | 20,000 | format-valid; superseded by the session-C file above |
+| `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros` (PR #3) | 40,000 | kept |
+| `gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros` (PR #3) | 311,617 | kept; the blanket sibling behind `IR-61-UNIQ-01` |
 
-### Other validated lane candidates on this repo (kept, not overwritten)
+All of them remain downloadable in `docs/downloads/`. Two builders (`scripts/build_site.py`,
+`scripts/build_site_e2.py`) write `index.html` and `executive-summary.html` — see `IR-62-SITE-01`.
 
-Concurrent sessions on this repository built the same lane independently. All are preserved in
-[`docs/downloads/`](docs/downloads/); none has spent a slot:
+## Session C (2026-10-11) — what is new, and what failed
 
-| candidate | session | dots | positive px | SHA256 (first 16) | status |
-|---|---|---|---|---|---|
-| **H62** `…basinstep-habitat-38k-20261011T020659Z-1a9c172f7106` | this one | 38,000 | 38,000 | `5c8e481722c459ae` | valid + unique; **promotion not supported** |
-| **H61-B** `…sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros` | PR #6 | 22,000 | 88,796 | `84864d6e090e9282` | valid + unique; owner says "Submit: OK" |
-| **H61-A** `…basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros` | PR #5 | 20,000 | 25,285 | `565a581b46878ba2` | valid + unique |
-| `…buried-basement-step-r3-rib2-k40k-2pxprune-zeros` | PR #3 | 40,000 | 40,000 | `5dee4c5568eba145` | valid + unique |
-| `…lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros` | PR #3 | 311,617 | 311,617 | `a70dee1a390c08e9` | valid + unique |
-
-H61-B is the most recent independent construction: GP-1012-calibrated sharp-step ribbons with a
-throw/depth sharpness gate and a vertical-gradient depth index, 22,000 dots grown to 3 × 3 ribbons,
-median offset from the catalogue 12.8 px. Its own README section and run card are on `main` at
-[`out/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.json`](out/).
-It is a **different raster with a different emission rule** from H62 — which is the intended
-redundancy of parallel lanes, not a conflict.
-
----
+| Item | Result |
+|---|---|
+| Calibration | 21-point (z₀, Δρ, corner) sweep against **GP-1012** only: z₀ 400 m, Δρ −600 kg/m³, kc 0.25/z₀ → **19.9 %** deeper than 1 km (published "about 20 %"); cross-check r = 0.526, slope 0.804 vs the supplied `depth_to_base_surf` |
+| New mechanism | zero-crossing of the **second vertical derivative** refines the step axis; fused with the covered-flank and gravity-gradient terms |
+| Emission | per-band budget whose distance histogram is matched to the best live-scoring sibling raster; lane belief at a **declared 0.10 weight**; metric-marginal threshold h* ≈ 0.0247 |
+| Holdout (**HOLDOUT-DTI**, `gems61-pooled-hide-v2`, 39,310 withheld px) | shipped construction **0.0417**; uniform flank control 0.0649; pure lane field **0.0078**; random lines 0.0092 |
+| Lane brief deliverable | withheld basin-interior segments recovered: **669 / 1,150 = 58.2 %** vs random lines 109 / 1,150 = 9.5 % |
+| Negative result | the pure lane field ranks withheld mapped-fault segments **worse than random lines**; the shipped file carries it as a minority weight and says so |
+| New evidence | `evidence/e4_field.json`, `e4_holdout.json`, `e4b_holdout_final.json`, `e4_submission.json`, `e4_uniqueness.json`, `e4_uniqueness_degeneracy.json`; `scripts/run_lane61c.py` |
+| Shared-tool fixes | `grid.py` data-dir (superseded by the PR-#7 fix, both kept as one function), `validate.py` three-argument API + `assert_submittable`, `evaluate_holdout.py` lazy `masked_known`, `uniqueness.py` compatibility API, `tests/conftest.py` |
 
 ## Standing brief (read this first, every session)
 
@@ -320,6 +325,20 @@ Carried forward:
   footprint, matching `labels.tif`'s non-`-1` cells exactly).
 
 ---
+
+## Test suite (green since 2026-10-11)
+
+```
+.venv/bin/python -m pytest tests/ -q        # 22 passed
+```
+
+The suite arrived from the PR-#5 merge importing a sibling package (`gems57`) that does not exist
+here, without a `src/` path bootstrap and against a `uniqueness` API that was never merged, so it
+could not even be collected. Fixed once, in the shared places: `tests/conftest.py`, the three test
+modules now import `gems61`, and `src/gems61/uniqueness.py` regains `surface_rho`, `dot_overlap`,
+`compare_array_to_registry` and the three thresholds, with Jaccard marked diagnostic-only exactly as
+`IR-61-UNIQ-01` requires. `IR-62-SITE-01` (two site builders writing the same pages) is recorded by
+the H62 session and is still open.
 
 ## Limitations
 

@@ -1,0 +1,5 @@
+{
+ "dense_rows": 311617,
+ "footprint_fraction_within_3px_of_dense": 0.9581822330224662,
+ "overlap_degeneracy_note": "a 311,617-dot sibling at 3 px spacing covers ~96% of the footprint within 3 px, so the \">70% of dots within 3 px of one raster\" rule is uninformative against it; Jaccard and Spearman are the discriminating statistics"
+}

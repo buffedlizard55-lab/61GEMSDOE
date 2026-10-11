@@ -1,0 +1,78 @@
+{
+ "path": "docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif",
+ "file": "docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif",
+ "bytes": 154559,
+ "sha256": "e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873",
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "count": 1,
+  "dtype": "float32",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "nodata": null
+ },
+ "meta": {
+  "crs": "EPSG:32611",
+  "shape": [
+   3730,
+   3292
+  ],
+  "dtype": "float32",
+  "count": 1,
+  "nodata": null,
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "profile_compress": "deflate"
+ },
+ "n_finite": 12279160,
+ "n_nan": 0,
+ "n_infinite": 0,
+ "min": 0.0,
+ "max": 1.0,
+ "mean": 0.0032575519289821386,
+ "emitted_positive_pixels": 40000,
+ "on_catalogue_positive_pixels": 0,
+ "in_footprint_positive_pixels": 40000,
+ "in_footprint_pixels": 5167373,
+ "positive_pixels": 40000,
+ "footprint_fraction": 0.007740877231041769,
+ "in_footprint_min": 0.0,
+ "in_footprint_max": 1.0,
+ "checks": {
+  "single_band": true,
+  "dtype_float32": true,
+  "dimensions_3730x3292": true,
+  "crs_epsg_32611": true,
+  "transform_matches": true,
+  "transform_matches_sample_submission": true,
+  "no_nan_anywhere": true,
+  "no_inf_anywhere": true,
+  "no_sentinel_values": true,
+  "range_0_1_guaranteed": true,
+  "min_ge_0": true,
+  "max_le_1": true,
+  "in_footprint_all_finite": true,
+  "in_footprint_range_0_1": true,
+  "outside_footprint_zero": true,
+  "zero_dots_on_mapped_catalogue": true,
+  "whole_raster_all_finite": true,
+  "whole_raster_range_0_1": true,
+  "no_float32_sentinel": true
+ },
+ "all_checks_passed": true,
+ "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance"
+}
