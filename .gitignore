@@ -5,3 +5,15 @@ __pycache__/
 *.pyc
 data/official/training_features.tif
 data/bridge/*.tif
+data/*.tif
+data/*.zip
+data/*.part-*
+.venv/
+venv/
+# 61GEMSDOE session arena/c463a286: large inputs and caches stay off git.
+# They are rebuilt by scripts/build_band_cache.py from the hash-pinned mirror
+# (see scripts/fetch_competition_data.sh) and by scripts/fetch_registry.sh.
+data/raw/
+data/cache/
+data/registry/*.tif
+src/**/__pycache__/

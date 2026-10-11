@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Method - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<h1>Method</h1>
+<h2>The lane</h2>
+<p>Alluvial cover is one reason a fault catalogue misses faults. Buried range-front and
+intrabasin faults still step the pre-Tertiary surface, and that step is a density
+contrast that gravity sees. The lane is therefore:</p>
+<ol>
+<li>invert the provided isostatic-gravity anomaly (band 13) for basement relief with the
+Parker (1973) forward series and the Oldenburg (1974) iteration;</li>
+<li>calibrate the depth and density-contrast scale against a basin-depth product
+(Saltus &amp; Jachens, USGS GP-1012, 1995, is regional 1:2,500,000 and is used only for
+scale) and against the competition's own band 15 "Depth to basement surface";</li>
+<li>take the horizontal gradient magnitude of the recovered relief;</li>
+<li>emit the gradient maxima as multi-pixel ribbons, because gravity resolves such a
+step only to a few hundred metres, and a 1-px line would claim precision the data does
+not support;</li>
+<li>report the recovery of withheld basin-interior segments against a random-line
+control with the same pixel budget.</li>
+</ol>
+
+<h2>Inversion</h2>
+<p><code>src/gravity.py</code>. Parameters actually used:
+{&#x27;z0_m&#x27;: 1200.0, &#x27;drho_kgm3&#x27;: -420.0, &#x27;cutoff_kc&#x27;: &#x27;0.5/z0&#x27;, &#x27;n_terms&#x27;: 4, &#x27;n_iter&#x27;: 6, &#x27;filter&#x27;: &#x27;Gaussian band-pass exp(-(k z0 /0.5)^2)&#x27;}</p>
+<p><strong>Filter design matters and cost a full debugging cycle.</strong> With the
+textbook Oldenburg low-pass <code>L(k) = 1/(1+(k/kc)^(2n))</code> the deconvolution
+gain <code>exp(|k| z0) * L(k)</code> peaks at <code>k* = 2n/z0</code> and then
+<em>grows</em>, so the iteration overflows &mdash; measured as
+<code>RuntimeWarning: overflow encountered in multiply</code> plus an all-NaN result,
+after 257 s of compute. A Gaussian band-pass with <code>kc = 0.5/z0</code> bounds the
+gain at <code>exp(0.25) = 1.28</code> and decays afterwards.</p>
+<p><strong>Verification:</strong> Pearson r =
+-0.1822,
+Spearman (approximate, decimated) =
+-0.1457 against the competition's own
+band 15 over 5167373 footprint pixels.
+That correlation is the honest check that the inversion recovers real basin structure.
+Note the magnitude: r = &minus;0.18 is a <em>weak</em> agreement, which is itself a
+finding and is recorded under <a href="limitations.html">Limitations</a>. The most
+likely reason is that band 13 is an <em>isostatic residual</em>, whose long-wavelength
+content that carries most of the basin-depth signal has already been removed.</p>
+
+<h2>The metric and why the emission is shaped the way it is</h2>
+<p><code>src/gems_metric.py</code> holds a verbatim transcription. Two structural
+facts drive the design:</p>
+<ul>
+<li><code>TP_w</code> takes a <em>maximum</em> over an R = 3 px neighbourhood, so
+several prediction pixels near one ground-truth pixel buy nothing extra in the
+numerator, while each adds <code>alpha = 0.2</code> of its own discounted mass to the
+denominator. &rarr; emit sparse and hard, not soft and everywhere.</li>
+<li><code>FP_w</code> is discounted by <code>1 &minus; k(d)</code>, so a prediction
+within 300 m of a real fault costs almost nothing. &rarr; a ribbon is a cheap hedge
+against location error, which is exactly what "multi-line ribbon" is for.</li>
+</ul>
+
+<h2>Holdout protocol</h2>
+<p><code>src/holdout.py</code>. Whole fault segments inside contiguous row-blocks are
+withheld, with a 6 px buffer; catalogue-derived features may only see the remaining
+visible faults; scoring is pooled DTI against the withheld pixels. The random-line
+control uses the identical pixel budget. A block bootstrap over 400 spatial blocks
+gives the 95% interval.</p>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>

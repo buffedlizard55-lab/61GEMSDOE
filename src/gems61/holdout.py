@@ -1,316 +1,176 @@
-"""Hide-and-recover spatially-blocked holdout.
+"""Hide-and-recover holdout + pooled distance-weighted Tversky index (DTI).
 
-Design (parallel-run protocol rule 2)
--------------------------------------
-* The mapped catalogue is split into **whole segments** (branches between
-  intersections, cut into <= 12 px chunks -- see :func:`gems61.network.segments`).
-* The footprint is split into four spatial quadrants (NW, NE, SW, SE) at the
-  median footprint row/col.  Fold *k* withholds segments inside quadrant *k*,
-  and ``DOMAIN_ERODE`` (12 px = 1.2 km) keeps the scored domain away from the
-  fold boundary, which is what provides the spatial separation between the
-  withheld strands and the catalogue context used to build the features.
-* Only segments lying wholly inside the scored domain are eligible for
-  withholding, so truth is never clipped by the domain edge.
-* Every catalogue-derived feature is computed from the **visible** mask only.
-* Visible fault pixels are masked out of scoring pixel-exactly (``known``),
-  matching the organiser's statement that a dot near a known trace but far from
-  any new-fault pixel is fully penalised (forum thread 11516).
-* Score: pooled DTI, alpha = 0.2, beta = 0.8, 300 m (3 px) triangular kernel.
+Protocol (from the run brief):
+  * withhold *whole* catalogue fault segments (connected components) with a buffer;
+  * derive every catalogue-based feature only from the *visible* faults;
+  * mask visible fault pixels out of the scored domain;
+  * score pooled DTI with alpha = 0.2, beta = 0.8 and a 300 m triangular kernel.
+
+Metric, written out exactly (k(d) = max(1 - d/R, 0), R = 300 m):
+
+    TP = sum_{g in truth} k(d(g, P))          truth coverage, each truth pixel once
+    FN = |truth| - TP
+    FP = sum_{p in pred} min(d(p, truth)/R, 1)
+    DTI = TP / (TP + 0.2*FP + 0.8*FN)
+
+The prediction-credit variant used by some earlier sessions is also returned
+(``dti_pooled``) so that rankings can be checked for convention dependence.
+
+This is a *proxy*: the live scorer's truth is expert-labelled faults that are not
+in the catalogue, whereas this truth is a withheld subset of catalogue faults, i.e.
+faults that were mappable from the surface.  Every number produced here is labelled
+HOLDOUT-DTI and is never a score.
 """
-
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
+from dataclasses import dataclass, field
 
 import numpy as np
-from scipy import ndimage as ndi
+from scipy import ndimage
 
-from .grid import Grid
-from .metric import ALPHA, BETA, EPS, kernel
-from .network import STRUCT3, component_detached, segments
+R_M = 300.0
+RES = 100.0
+ALPHA, BETA = 0.2, 0.8
 
-FOLD_NAMES = ("NW", "NE", "SW", "SE")
-DOMAIN_ERODE = 12     # 1.2 km boundary erosion; withheld segments must lie wholly inside
-DETACH_PX = 4         # 400 m separation defining the conservative "detached" subset
-HIDE_FRAC = 0.20      # fraction of the fold's catalogue pixels withheld
-MAX_SEG_PX = 12
+
+def kernel(d_m: np.ndarray, R: float = R_M) -> np.ndarray:
+    return np.clip(1.0 - d_m / R, 0.0, 1.0)
+
+
+def dti(truth: np.ndarray, pred: np.ndarray, domain: np.ndarray,
+        R: float = R_M, res: float = RES):
+    """Return (dti_coverage, dti_pooled, parts) for binary masks on one grid."""
+    T = truth & domain
+    P = pred & domain
+    n_truth = int(T.sum())
+    n_pred = int(P.sum())
+    if n_truth == 0 or n_pred == 0:
+        return 0.0, 0.0, dict(TP=0.0, FP=float(n_pred), FN=float(n_truth),
+                              n_truth=n_truth, n_pred=n_pred, mean_d=None)
+    # distance from every truth pixel to the nearest prediction pixel
+    d_pred = ndimage.distance_transform_edt(~P, sampling=res)
+    d_truth = ndimage.distance_transform_edt(~T, sampling=res)
+    k_truth = kernel(d_pred[T], R)
+    k_pred = kernel(d_truth[P], R)
+    TP = float(k_truth.sum())
+    FN = n_truth - TP
+    FP = float((1.0 - k_pred).sum())
+    dti_cov = TP / (TP + ALPHA * FP + BETA * FN)
+    dti_pool = float(k_pred.sum()) / (ALPHA * n_pred + BETA * n_truth)
+    parts = dict(TP=TP, FP=FP, FN=FN, n_truth=n_truth, n_pred=n_pred,
+                 mean_d=float(d_pred[T].mean()), med_d=float(np.median(d_pred[T])),
+                 frac_truth_within_R=float((d_pred[T] <= R).mean()))
+    return float(dti_cov), float(dti_pool), parts
+
+
+def segments(catalogue: np.ndarray, min_px: int = 1) -> np.ndarray:
+    """8-connected components of the catalogue = individual mapped fault segments."""
+    lab, n = ndimage.label(catalogue, structure=np.ones((3, 3), bool))
+    if min_px > 1:
+        sizes = np.bincount(lab.ravel())
+        keep = np.zeros(len(sizes), bool)
+        keep[1:] = sizes[1:] >= min_px
+        lab = np.where(keep[lab], lab, 0)
+    return lab
 
 
 @dataclass
-class Cell:
-    """One fold cell.  ``active`` and ``k_dg`` are cropped to ``bbox`` to keep the
-    whole context resident in memory; the bbox carries 6 px of padding so the
-    3 px kernel sees the same neighbourhood it would on the full grid."""
-    key: str
-    fold: int
-    seed: int
-    mode: str
-    bbox: tuple[slice, slice]
-    active: np.ndarray                  # bool, scored domain minus visible faults (cropped)
-    truth_yx: tuple[np.ndarray, np.ndarray]   # indices *within the crop*
-    k_dg: np.ndarray                    # float32 kernel(distance to truth) (cropped)
-    n_truth: int
+class Fold:
+    name: str
+    hidden: np.ndarray       # withheld truth (segment pixels)
+    visible: np.ndarray      # visible catalogue pixels (masked from scoring)
+    domain: np.ndarray       # scored domain
+    n_segments: int = 0
 
 
-@dataclass
-class HoldoutContext:
-    grid: Grid
-    quad: np.ndarray
-    cells: list[Cell]
-    hidden_by_cell: dict                # key -> full-grid bool mask of withheld pixels
+def make_folds(footprint: np.ndarray, catalogue: np.ndarray, n_folds: int = 4,
+               collar_px: int = 3, min_px: int = 20, seed: int = 0) -> list[Fold]:
+    """Spatially-blocked folds: whole segments are withheld, never split.
 
-    def visible(self, key: str) -> np.ndarray:
-        """Visible catalogue for a cell: everything mapped except what is withheld."""
-        return self.grid.catalogue & ~self.hidden_by_cell[key]
-
-    def cell(self, key: str) -> Cell:
-        for c in self.cells:
-            if c.key == key:
-                return c
-        raise KeyError(key)
-
-    def cells_of(self, mode: str) -> list[Cell]:
-        return [c for c in self.cells if c.mode == mode]
-
-
-def quadrant_ids(footprint: np.ndarray) -> np.ndarray:
-    fp = np.asarray(footprint, bool)
-    yy, xx = np.nonzero(fp)
-    ym, xm = int(np.median(yy)), int(np.median(xx))
-    gy, gx = np.ogrid[: fp.shape[0], : fp.shape[1]]
-    q = np.full(fp.shape, -1, np.int8)
-    q[(gy < ym) & (gx < xm) & fp] = 0
-    q[(gy < ym) & (gx >= xm) & fp] = 1
-    q[(gy >= ym) & (gx < xm) & fp] = 2
-    q[(gy >= ym) & (gx >= xm) & fp] = 3
-    return q
-
-
-def _pick_segments(rng, sizes: np.ndarray, ids: np.ndarray, target_px: float) -> np.ndarray:
-    """Random whole segments until their cumulative size reaches ``target_px``."""
-    if ids.size == 0:
-        return ids
-    perm = rng.permutation(ids)
-    cum = np.cumsum(sizes[perm])
-    k = int(np.searchsorted(cum, target_px)) + 1
-    return perm[: min(k, perm.size)]
-
-
-def build_holdout(grid: Grid, hide_frac: float = HIDE_FRAC,
-                  seeds: tuple[int, ...] = (20, 21),
-                  modes: tuple[str, ...] = ("all", "detached"),
-                  detach_px: int = DETACH_PX) -> HoldoutContext:
-    """Build the fold cells once; re-usable for any number of candidates.
-
-    ``mode="all"``      -- every segment lying wholly inside the fold domain is
-                           eligible for withholding.  Visible context is the
-                           whole remaining catalogue, including traces that are
-                           continuous with a withheld one.  This is the primary
-                           instrument.
-    ``mode="detached"`` -- only segments that lie at least ``detach_px`` from
-                           every other segment are eligible.  These are the
-                           withheld strands whose recovery does *not* benefit
-                           from a visible trace running into them, so this is the
-                           conservative reading and the closer analogue to a
-                           genuinely unmapped splay.
+    Blocks are quadrants of the grid so that a withheld fold is a contiguous region
+    (spatial blocking), which is the honest generalisation test for a geophysical
+    surface that has kilometre-scale autocorrelation.
     """
-    cat = grid.catalogue
-    quad = quadrant_ids(grid.footprint)
-    seg, n_seg = segments(cat, max_len_px=MAX_SEG_PX)[:2]
-    sizes = np.bincount(seg.ravel(), minlength=n_seg + 1)
-    all_ids = np.arange(1, n_seg + 1)
-
-    hidden_by_cell: dict[str, np.ndarray] = {}
-    cells: list[Cell] = []
-
-    for seed in seeds:
-        for fold, qname in enumerate(FOLD_NAMES):
-            q = quad == fold
-            rows = np.flatnonzero(q.any(axis=1))
-            cols = np.flatnonzero(q.any(axis=0))
-            # pad the bbox by 6 px so the 3-px kernel sees the same neighbourhood
-            # it would on the full grid
-            sl = (slice(max(0, rows[0] - 6), min(grid.height, rows[-1] + 7)),
-                  slice(max(0, cols[0] - 6), min(grid.width, cols[-1] + 7)))
-            domain = ndi.binary_erosion(q, iterations=DOMAIN_ERODE) & grid.footprint
-            # only segments wholly inside the domain can be withheld, so that
-            # truth is never clipped by the domain boundary
-            clipped = np.isin(all_ids, np.unique(seg[~domain & cat]))
-            eligible_base = all_ids[~clipped]
-
-            if "detached" in modes:
-                # "detached" = the segment belongs to a connected fault component
-                # lying at least ``detach_px`` away from every other component.
-                # Such strands are not simply the continuation of a visible
-                # trace, so recovering them is the harder, live-analogue problem.
-                comp, is_det = component_detached(cat, detach_px)
-                detached_ids = np.isin(all_ids, np.unique(seg[comp[is_det[comp]]]))
-                del comp, is_det
-            else:
-                detached_ids = None
-
-            for mode in modes:
-                pool = eligible_base if mode == "all" else eligible_base[detached_ids[eligible_base]]
-                rng = np.random.default_rng(10_000 * (seed + 1) + 7 * fold + (0 if mode == "all" else 1))
-                target = hide_frac * float((cat & q & domain).sum())
-                hidden_ids = _pick_segments(rng, sizes, pool, target)
-                hidden = np.isin(seg, hidden_ids) & grid.footprint
-                visible = cat & ~hidden
-
-                key = f"draw{seed}_fold{qname}_{mode}"
-                hidden_by_cell[key] = hidden
-
-                active = domain & ~visible
-                truth = hidden & domain & active
-                tyx_full = np.nonzero(truth)
-                k_full = kernel(ndi.distance_transform_edt(~truth))
-                # crop to the padded quadrant bbox
-                a_sub = active[sl].copy()
-                k_sub = k_full[sl].astype(np.float32)
-                t_sub = truth[sl]
-                tyx = np.nonzero(t_sub)
-                cells.append(Cell(key=key, fold=fold, seed=seed, mode=mode, bbox=sl,
-                                  active=a_sub, truth_yx=tyx, k_dg=k_sub,
-                                  n_truth=int(tyx[0].size)))
-                del hidden, visible, active, truth, tyx_full, k_full, a_sub, k_sub, t_sub
-
-    return HoldoutContext(grid=grid, quad=quad, cells=cells,
-                          hidden_by_cell=hidden_by_cell)
-
-
-def score_cell(cell: Cell, emitted: np.ndarray) -> dict:
-    """Exact DTI of a binary emission inside one fold cell.
-
-    ``emitted`` may be either the full grid or an array already cropped to
-    ``cell.bbox``.
-    """
-    if emitted.shape == cell.active.shape:
-        p = emitted & cell.active
+    lab = segments(catalogue, min_px=min_px)
+    ids = np.unique(lab[lab > 0])
+    H, W = footprint.shape
+    com = ndimage.center_of_mass(np.ones_like(lab, dtype=np.float64), lab, list(ids))
+    cy = np.array([c[0] for c in com])
+    cx = np.array([c[1] for c in com])
+    if n_folds == 4:
+        quad = ((cy >= H / 2).astype(int) * 2) + (cx >= W / 2).astype(int)
+        assign = {0: "NW", 1: "NE", 2: "SW", 3: "SE"}
+        fold_of = np.array([assign[q] for q in quad])
     else:
-        p = emitted[cell.bbox] & cell.active
-    n_emit = int(p.sum())
-    n_t = cell.n_truth
-    if n_t == 0 or n_emit == 0:
-        return dict(dti=0.0, coverage=0.0, tp=0.0, fp=float(n_emit), fn=float(n_t),
-                    n_truth=n_t, n_emitted=n_emit)
-    dp = ndi.distance_transform_edt(~p)
-    tp = float(kernel(dp[cell.truth_yx]).sum())
-    fn = float(n_t) - tp
-    fp = float((1.0 - cell.k_dg[p]).sum())
-    return dict(dti=float(tp / (tp + ALPHA * fp + BETA * fn + EPS)),
-                coverage=float(tp / n_t), tp=tp, fp=fp, fn=fn,
-                n_truth=n_t, n_emitted=n_emit)
+        rng = np.random.default_rng(seed)
+        perm = rng.permutation(n_folds)
+        fold_of = perm[np.arange(len(ids)) % n_folds]
+    st = ndimage.generate_binary_structure(2, 2)
+    folds = []
+    for f in np.unique(fold_of):
+        sel = np.isin(lab, ids[fold_of == f])
+        hidden = sel & catalogue
+        visible = catalogue & ~hidden
+        collar = ndimage.binary_dilation(visible, st, iterations=collar_px)
+        domain = footprint & ~collar
+        folds.append(Fold(name=str(f), hidden=hidden, visible=visible, domain=domain,
+                          n_segments=int((fold_of == f).sum())))
+    return folds
 
 
-def evaluate(emitted: np.ndarray, ctx: HoldoutContext, cell_mode: str = "") -> dict:
-    """Per-fold and pooled DTI for a binary emission mask."""
-    emitted = np.asarray(emitted, bool) & ctx.grid.footprint
-    per_fold = {}
-    tp = fp = fn = n_truth = n_emit = 0.0
-    for cell in ctx.cells:
-        if cell_mode and cell.mode != cell_mode:
+def segment_recovery(pred: np.ndarray, folds: list[Fold], R: float = R_M,
+                     res: float = RES, restrict: np.ndarray | None = None):
+    """Fraction of withheld segments with >= 1 prediction within R metres."""
+    out = {}
+    for fo in folds:
+        hidden = fo.hidden if restrict is None else (fo.hidden & restrict)
+        lab = segments(hidden, min_px=1)
+        ids = np.unique(lab[lab > 0])
+        if len(ids) == 0:
+            out[fo.name] = dict(n=0, recovered=0, frac=0.0)
             continue
-        r = score_cell(cell, emitted)
-        per_fold[cell.key] = r
-        tp += r["tp"]; fp += r["fp"]; fn += r["fn"]
-        n_truth += r["n_truth"]; n_emit += r["n_emitted"]
-    pooled = float(tp / (tp + ALPHA * fp + BETA * fn + EPS)) if (tp + fp + fn) > 0 else 0.0
-    by_draw: dict[str, list[float]] = {}
-    by_quad: dict[str, list[float]] = {}
-    for k, r in per_fold.items():
-        d, q, _m = k.split("_")
-        by_draw.setdefault(d, []).append(r["dti"])
-        by_quad.setdefault(q, []).append(r["dti"])
-    return {
-        "emitted_pixels": int(emitted.sum()),
-        "on_visible_catalogue": int((emitted & ctx.grid.catalogue).sum()),
-        "pooled_dti": pooled,
-        "pooled_coverage": float(tp / n_truth) if n_truth else 0.0,
-        "pooled_tp": tp, "pooled_fp": fp, "pooled_fn": fn, "pooled_n_truth": int(n_truth),
-        "mean_fold_dti": float(np.mean([r["dti"] for r in per_fold.values()])),
-        "std_fold_dti": float(np.std([r["dti"] for r in per_fold.values()])),
-        "per_fold_dti": {k: r["dti"] for k, r in per_fold.items()},
-        "per_draw_dti": {k: float(np.mean(v)) for k, v in sorted(by_draw.items())},
-        "per_quadrant_dti": {k: float(np.mean(v)) for k, v in sorted(by_quad.items())},
-        "folds": per_fold,
-    }
+        d = ndimage.distance_transform_edt(~(pred & fo.domain), sampling=res)
+        hits = ndimage.minimum(d, lab, ids)
+        out[fo.name] = dict(n=len(ids), recovered=int((np.array(hits) <= R).sum()),
+                            frac=float((np.array(hits) <= R).mean()))
+    return out
 
 
-def wilson_ci(k_success_mass: float, n_mass: float, z: float = 1.959963985) -> tuple[float, float]:
-    """Wilson score interval for a binomial proportion (used for coverage CIs)."""
-    if n_mass <= 0:
-        return (0.0, 0.0)
-    p = k_success_mass / n_mass
-    denom = 1.0 + z * z / n_mass
-    centre = (p + z * z / (2 * n_mass)) / denom
-    half = z * np.sqrt(p * (1 - p) / n_mass + z * z / (4 * n_mass * n_mass)) / denom
-    return (float(max(0.0, centre - half)), float(min(1.0, centre + half)))
+def random_lines(shape, n_px: int, domain: np.ndarray, rng, seg_len=(8, 40)):
+    """Control: random straight segments until the pixel budget is spent."""
+    H, W = shape
+    out = np.zeros(shape, bool)
+    drawn = 0
+    guard = 0
+    while drawn < n_px and guard < 200000:
+        guard += 1
+        L = int(rng.integers(*seg_len))
+        y0 = float(rng.integers(0, H)); x0 = float(rng.integers(0, W))
+        th = rng.uniform(0, np.pi)
+        yy = np.clip(np.round(y0 + np.arange(L) * np.sin(th)).astype(int), 0, H - 1)
+        xx = np.clip(np.round(x0 + np.arange(L) * np.cos(th)).astype(int), 0, W - 1)
+        out[yy, xx] = True
+        drawn += L
+    out &= domain
+    return out
 
 
-def score(prediction, fold, valid, restrict_to_region=True, extra=False):
-    """Compatibility adapter for the shared template's dictionary-fold callers.
+def auc(score: np.ndarray, labels: np.ndarray, n_bg: int = 400000, seed=0) -> float:
+    """AUC of ``score`` for separating label pixels from random background pixels."""
+    rng = np.random.default_rng(seed)
+    pos = np.flatnonzero(labels.ravel())
+    neg_pool = np.flatnonzero((~labels).ravel())
+    if len(pos) == 0 or len(neg_pool) == 0:
+        return float("nan")
+    neg = rng.choice(neg_pool, size=min(n_bg, len(neg_pool)), replace=False)
+    s = score.ravel()
+    a = s[pos]; b = s[neg]
+    a = a[np.isfinite(a)]; b = b[np.isfinite(b)]
+    if len(a) == 0 or len(b) == 0:
+        return float("nan")
+    from scipy.stats import rankdata
 
-    v2 fixes the missing adapter; official arithmetic remains in metric.py.
-    """
-    from .metric import dti_exact
-    region = fold['region'] if restrict_to_region else np.ones_like(valid, bool)
-    known = fold.get('masked_known', fold['visible'])
-    r = dti_exact(prediction, fold['truth'], valid=np.asarray(valid, bool) & region, known=known)
-    return {**r, 'tpw': r['tp'], 'fpw': r['fp'], 'fnw': r['fn']}
-
-
-def buffered_component_draw(grid, seed=20, hide_frac=0.20, buffer_px=3,
-                            boundary_px=DOMAIN_ERODE):
-    """A repaired label-blind quadrant draw with REAL catalogue context buffering.
-
-    Whole original 8-connected components are withheld (no <=12-pixel chunks).
-    Only components wholly inside a label-blind eroded quadrant are eligible.
-    The same globally hidden draw supplies every outer LOQO model, so a tested
-    component cannot reappear in a training quadrant's catalogue features.
-    Buffer-removal is for FEATURE context, not a truth-shaped evaluation halo.
-    Other catalogue pixels in that context collar remain pixel-exactly masked
-    from scoring; they are not invented negatives or silently clipped truth.
-    """
-    if not 0 < hide_frac < 1 or buffer_px < 0 or boundary_px < buffer_px:
-        raise ValueError('invalid holdout fraction/buffer')
-    cat = np.asarray(grid.catalogue, bool)
-    quad = quadrant_ids(grid.footprint)
-    comp, count = ndi.label(cat, STRUCT3)
-    sizes = np.bincount(comp.ravel(), minlength=count+1)
-    hidden = np.zeros(cat.shape, bool)
-    regions, receipts = [], []
-    for q, name in enumerate(FOLD_NAMES):
-        region = ndi.binary_erosion(quad == q, iterations=boundary_px) if boundary_px else quad == q
-        region &= grid.footprint
-        candidate = np.unique(comp[cat & region])
-        clipped = np.unique(comp[cat & ~region])
-        eligible = np.setdiff1d(candidate[candidate > 0], clipped, assume_unique=True)
-        rng = np.random.default_rng(seed * 10_000 + q)
-        chosen = _pick_segments(rng, sizes, eligible, hide_frac * float((cat & region).sum()))
-        withheld = np.isin(comp, chosen) & cat
-        if (withheld & ~region).any():
-            raise AssertionError('a withheld component was clipped')
-        hidden |= withheld
-        regions.append(region)
-        receipts.append(dict(fold=name, seed=seed, held_components=int(len(chosen)),
-            withheld_positive_pixels=int(withheld.sum()), eligible_components=int(len(eligible)),
-            boundary_buffer_px=boundary_px, feature_buffer_px=buffer_px))
-    if not hidden.any():
-        raise ValueError('no eligible withheld components')
-    collar = ndi.distance_transform_edt(~hidden) <= buffer_px
-    visible = cat & ~collar
-    masked_known = cat & ~hidden
-    if not visible.any():
-        raise ValueError('no visible catalogue context')
-    if (visible & hidden).any() or np.any(visible & collar):
-        raise AssertionError('withheld truth/context buffer reached a feature')
-    minimum = float(ndi.distance_transform_edt(~visible)[hidden].min())
-    if minimum <= buffer_px:
-        raise AssertionError('context buffer was not honored')
-    folds = [dict(fold=i, name=FOLD_NAMES[i], region=regions[i], truth=hidden & regions[i],
-                  visible=visible, masked_known=masked_known, hidden_all=hidden,
-                  receipt={**receipts[i], 'nearest_visible_to_truth_px': minimum,
-                           'split_version': 'buffered-whole-components-loqo-v2',
-                           'evaluation_region_label_blind': True}) for i in range(4)]
-    return folds, quad
+    allv = np.concatenate([a, b])
+    ranks = rankdata(allv, method="average")
+    ra = ranks[: len(a)].sum()
+    return float((ra - len(a) * (len(a) + 1) / 2.0) / (len(a) * len(b)))

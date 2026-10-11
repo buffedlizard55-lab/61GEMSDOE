@@ -1,0 +1,267 @@
+{
+  "h19_5_01922.tif": {
+    "site": "GEMSDOE19 h19-5-powerlaw",
+    "live_owner_reported": 0.1922,
+    "n_pos": 121131,
+    "n_pos_in_domain": 97603,
+    "dti_coverage": 0.0724057622312223,
+    "dti_pooled": 0.05995011185159551,
+    "mean_kernel_credit_per_dot": 0.016501641784618746,
+    "frac_dots_within_300m_of_any_catalogue": 0.19951127291940132,
+    "median_dist_to_catalogue_m": 1456.0219778561036,
+    "per_fold": {
+      "NE": {
+        "cov": 0.08912086669074859,
+        "pool": 0.08091666479525382
+      },
+      "NW": {
+        "cov": 0.07827451919308649,
+        "pool": 0.06358531901145471
+      },
+      "SE": {
+        "cov": 0.06434702404619805,
+        "pool": 0.04976667607261805
+      },
+      "SW": {
+        "cov": 0.05573708539929889,
+        "pool": 0.043848142528697634
+      }
+    }
+  },
+  "d15_02477.tif": {
+    "site": "GEMSDOE24 h25-1-dotted-d1.5",
+    "live_owner_reported": 0.2477,
+    "n_pos": 60069,
+    "n_pos_in_domain": 48426,
+    "dti_coverage": 0.09835351986693239,
+    "dti_pooled": 0.04822307596002229,
+    "mean_kernel_credit_per_dot": 0.01693981470705878,
+    "frac_dots_within_300m_of_any_catalogue": 0.19873811783116083,
+    "median_dist_to_catalogue_m": 1486.6068747318504,
+    "per_fold": {
+      "NE": {
+        "cov": 0.12259701248441206,
+        "pool": 0.06363300633883025
+      },
+      "NW": {
+        "cov": 0.09962606448424677,
+        "pool": 0.04906013716742478
+      },
+      "SE": {
+        "cov": 0.09012912041412327,
+        "pool": 0.04173797656868533
+      },
+      "SW": {
+        "cov": 0.07938189582960571,
+        "pool": 0.03749682138753208
+      }
+    }
+  },
+  "dotted_d2_8_02600.tif": {
+    "site": "GEMSDOE25 dotted-h19-5-d2.8",
+    "live_owner_reported": 0.26,
+    "n_pos": 44090,
+    "n_pos_in_domain": 35603,
+    "dti_coverage": 0.1025932632200956,
+    "dti_pooled": 0.04131459687514332,
+    "mean_kernel_credit_per_dot": 0.01675492229299325,
+    "frac_dots_within_300m_of_any_catalogue": 0.19521433431617147,
+    "median_dist_to_catalogue_m": 1500.0,
+    "per_fold": {
+      "NE": {
+        "cov": 0.12956007166575464,
+        "pool": 0.05450740108756707
+      },
+      "NW": {
+        "cov": 0.10011569052709747,
+        "pool": 0.04055689893951487
+      },
+      "SE": {
+        "cov": 0.09575065521059349,
+        "pool": 0.03693088960301497
+      },
+      "SW": {
+        "cov": 0.08470550989318679,
+        "pool": 0.03303380093230465
+      }
+    }
+  },
+  "dotted_d2_8_02708.tif": {
+    "site": "GEMSDOE31 h27-4-solo-d2.8",
+    "live_owner_reported": 0.2708,
+    "n_pos": 40199,
+    "n_pos_in_domain": 34887,
+    "dti_coverage": 0.02928039914978841,
+    "dti_pooled": 0.01370069848291469,
+    "mean_kernel_credit_per_dot": 0.005604780069020126,
+    "frac_dots_within_300m_of_any_catalogue": 0.11731635115301375,
+    "median_dist_to_catalogue_m": 1769.1806012954132,
+    "per_fold": {
+      "NE": {
+        "cov": 0.0386125872890867,
+        "pool": 0.018451444836120025
+      },
+      "NW": {
+        "cov": 0.02814739950673843,
+        "pool": 0.013378219798045309
+      },
+      "SE": {
+        "cov": 0.027224634231619308,
+        "pool": 0.012039630879844254
+      },
+      "SW": {
+        "cov": 0.023242883753139442,
+        "pool": 0.010900524480620455
+      }
+    }
+  },
+  "dotted_b2_prune_02778.tif": {
+    "site": "GEMSDOE32 h33-2-b2 (audit says UNSCORED)",
+    "live_owner_reported": 0.2778,
+    "n_pos": 37654,
+    "n_pos_in_domain": 34419,
+    "dti_coverage": 0.003764242206522859,
+    "dti_pooled": 0.002699913515910304,
+    "mean_kernel_credit_per_dot": 0.0011106108634866493,
+    "frac_dots_within_300m_of_any_catalogue": 0.057656557072289796,
+    "median_dist_to_catalogue_m": 1964.68827043885,
+    "per_fold": {
+      "NE": {
+        "cov": 0.004808770501356319,
+        "pool": 0.003590585052957846
+      },
+      "NW": {
+        "cov": 0.0038027601997429115,
+        "pool": 0.002743590903066571
+      },
+      "SE": {
+        "cov": 0.002773848522979034,
+        "pool": 0.0018855971122330461
+      },
+      "SW": {
+        "cov": 0.003648259433871456,
+        "pool": 0.0025527372492263186
+      }
+    }
+  },
+  "h36_rung30_02710.tif": {
+    "site": "GEMSDOE28 h36-1-rung30-blind-r1",
+    "live_owner_reported": 0.271,
+    "n_pos": 37660,
+    "n_pos_in_domain": 32765,
+    "dti_coverage": 0.02799545265079508,
+    "dti_pooled": 0.012974549205890511,
+    "mean_kernel_credit_per_dot": 0.005483506844243768,
+    "frac_dots_within_300m_of_any_catalogue": 0.11622411046202867,
+    "median_dist_to_catalogue_m": 1772.004514666935,
+    "per_fold": {
+      "NE": {
+        "cov": 0.037066420674989414,
+        "pool": 0.017548425403065185
+      },
+      "NW": {
+        "cov": 0.026925332642259936,
+        "pool": 0.012706538840475772
+      },
+      "SE": {
+        "cov": 0.02647384236328818,
+        "pool": 0.01147078511038276
+      },
+      "SW": {
+        "cov": 0.021579190309110388,
+        "pool": 0.010112645521368736
+      }
+    }
+  },
+  "tip_stepover_r30_02632.tif": {
+    "site": "GEMSDOE33 h33d-analog-tip-stepover",
+    "live_owner_reported": 0.2632,
+    "n_pos": 41865,
+    "n_pos_in_domain": 35331,
+    "dti_coverage": 0.041128414921517774,
+    "dti_pooled": 0.01825354613187574,
+    "mean_kernel_credit_per_dot": 0.007418878469170689,
+    "frac_dots_within_300m_of_any_catalogue": 0.14389107846649946,
+    "median_dist_to_catalogue_m": 1664.3316977093239,
+    "per_fold": {
+      "NE": {
+        "cov": 0.05090630266699427,
+        "pool": 0.023222684897099284
+      },
+      "NW": {
+        "cov": 0.04054862782738565,
+        "pool": 0.018386173523258144
+      },
+      "SE": {
+        "cov": 0.036999693906915924,
+        "pool": 0.01565552112135937
+      },
+      "SW": {
+        "cov": 0.03597377995295176,
+        "pool": 0.015525009997258967
+      }
+    }
+  },
+  "sgmc44k_00512.tif": {
+    "site": "GEMSDOE29 sgmc-off-catalogue-44k",
+    "live_owner_reported": 0.0512,
+    "n_pos": 44090,
+    "n_pos_in_domain": 38643,
+    "dti_coverage": 0.0421578333993495,
+    "dti_pooled": 0.022021366429902683,
+    "mean_kernel_credit_per_dot": 0.008570860188688861,
+    "frac_dots_within_300m_of_any_catalogue": 0.11147652528918121,
+    "median_dist_to_catalogue_m": 1802.7756377319947,
+    "per_fold": {
+      "NE": {
+        "cov": 0.05675384955955584,
+        "pool": 0.03126083510391645
+      },
+      "NW": {
+        "cov": 0.04089800452921253,
+        "pool": 0.020940877449507053
+      },
+      "SE": {
+        "cov": 0.0486387783911018,
+        "pool": 0.024974369985026647
+      },
+      "SW": {
+        "cov": 0.02152191794865554,
+        "pool": 0.010642432413047003
+      }
+    }
+  },
+  "_summary": {
+    "dti_coverage": {
+      "spearman_vs_live": -0.7619047619047621,
+      "p": 0.028004939153071805,
+      "n": 8
+    },
+    "dti_pooled": {
+      "spearman_vs_live": -0.8571428571428572,
+      "p": 0.0065300172547152905,
+      "n": 8
+    },
+    "mean_kernel_credit": {
+      "spearman_vs_live": -0.7857142857142858,
+      "p": 0.020815127253525273,
+      "n": 8
+    },
+    "median_dist_to_catalogue": {
+      "spearman_vs_live": 0.5000000000000001,
+      "p": 0.2070312499999999,
+      "n": 8
+    },
+    "frac_dots_within_300m_catalogue": {
+      "spearman_vs_live": -0.5000000000000001,
+      "p": 0.2070312499999999,
+      "n": 8
+    },
+    "n_pos": {
+      "spearman_vs_live": -0.8982196964349441,
+      "p": 0.002438796796382354,
+      "n": 8
+    },
+    "seconds": 88.47506880760193
+  }
+}

@@ -1,0 +1,2075 @@
+{
+ "generated_utc": "2026-10-11 00:40 UTC",
+ "experiment": {
+  "generated_utc": "2026-10-11T00:31:36Z",
+  "data": {
+   "shape": [
+    3730,
+    3292
+   ],
+   "n_valid": 5167373,
+   "n_gt": 60988,
+   "positive_fraction": 0.011803,
+   "n_features": 19
+  },
+  "experiment1_inversion": {
+   "method": "Parker (1973) forward / Oldenburg (1974) iterative inversion of band B13",
+   "params": {
+    "z0_m": 1200.0,
+    "drho_kgm3": -420.0,
+    "cutoff_kc": "0.5/z0",
+    "n_terms": 4,
+    "n_iter": 6,
+    "filter": "Gaussian band-pass exp(-(k z0 /0.5)^2)"
+   },
+   "verification": {
+    "pearson_vs_provided_B15_depth": -0.1822,
+    "spearman_approx": -0.1457,
+    "n": 5167373,
+    "independent_check": "competition band 15 'Depth to basement surface'"
+   },
+   "n_finite": true,
+   "hgm_range": [
+    0.0,
+    13.322891
+   ]
+  },
+  "experiment1_leakage_canary": {
+   "B03_tmi_hgrad": 0.5263,
+   "B05_isograv_slope": 0.533,
+   "B06_tilt_curvature": 0.4476,
+   "B11_isograv_vgrad_abs": 0.5093,
+   "B15_provided_depth_to_basement": 0.5114,
+   "B18_isograv_hgrad_abs": 0.5289,
+   "LANE_grav_inversion_hgm": 0.5061,
+   "_rule": "AUC > 0.90 = leakage until proven otherwise",
+   "_note": "AUC here is against the VISIBLE catalogue, which is the wrong target by construction; it is a leakage detector, not a score."
+  },
+  "experiment2_holdout": {
+   "protocol": "hide whole segments inside contiguous row-blocks, 6 px buffer, catalogue features from visible pixels only, pooled DTI",
+   "folds": [
+    {
+     "fold": 0,
+     "n_hidden": 13143,
+     "n_visible": 47449
+    },
+    {
+     "fold": 1,
+     "n_hidden": 15650,
+     "n_visible": 44467
+    },
+    {
+     "fold": 2,
+     "n_hidden": 13102,
+     "n_visible": 47121
+    },
+    {
+     "fold": 3,
+     "n_hidden": 14590,
+     "n_visible": 45695
+    }
+   ],
+   "total_hidden": 56485,
+   "best": {
+    "name": "RANDOM_control",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.05385,
+    "dti_per_fold": [
+     0.05216,
+     0.05668,
+     0.05405,
+     0.05252
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.05380759416652314,
+     "lo": 0.04916741394803854,
+     "hi": 0.058053887090036525
+    }
+   }
+  },
+  "experiment2_sweep": [
+   {
+    "name": "RANDOM_control",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.05385,
+    "dti_per_fold": [
+     0.05216,
+     0.05668,
+     0.05405,
+     0.05252
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.05380759416652314,
+     "lo": 0.04916741394803854,
+     "hi": 0.058053887090036525
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.05196,
+    "dti_per_fold": [
+     0.0559,
+     0.04013,
+     0.05653,
+     0.05526
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.05185965442080285,
+     "lo": 0.04086489964718217,
+     "hi": 0.06286893356604967
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.05037,
+    "dti_per_fold": [
+     0.0548,
+     0.03858,
+     0.05496,
+     0.05311
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.050263471763148646,
+     "lo": 0.03950444788253759,
+     "hi": 0.061138758591738854
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.04337,
+    "dti_per_fold": [
+     0.04982,
+     0.02998,
+     0.05008,
+     0.04361
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.04313147334293167,
+     "lo": 0.03256401458824372,
+     "hi": 0.05401080674812594
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.0416,
+    "dti_per_fold": [
+     0.04768,
+     0.02867,
+     0.04855,
+     0.0415
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.04135634413396196,
+     "lo": 0.031100563522620542,
+     "hi": 0.052172086956425986
+    }
+   },
+   {
+    "name": "RANDOM_control",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.04155,
+    "dti_per_fold": [
+     0.03881,
+     0.04337,
+     0.04366,
+     0.04036
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.0414949037552756,
+     "lo": 0.03824173984322954,
+     "hi": 0.044358738187689276
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03749,
+    "dti_per_fold": [
+     0.0133,
+     0.02096,
+     0.00747,
+     0.10825
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.03867610212218579,
+     "lo": 0.02531038193598409,
+     "hi": 0.05270310745213759
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03711,
+    "dti_per_fold": [
+     0.0133,
+     0.02096,
+     0.00747,
+     0.10673
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.038291495180104114,
+     "lo": 0.024969267384792472,
+     "hi": 0.05233378364632697
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03678,
+    "dti_per_fold": [
+     0.0133,
+     0.02096,
+     0.00747,
+     0.1054
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.03795578967625856,
+     "lo": 0.024678640697198013,
+     "hi": 0.052052289332345514
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03678,
+    "dti_per_fold": [
+     0.03104,
+     0.02984,
+     0.05211,
+     0.03411
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.03664358329798594,
+     "lo": 0.027648336629097298,
+     "hi": 0.04533817828203475
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03584,
+    "dti_per_fold": [
+     0.03073,
+     0.02881,
+     0.05074,
+     0.03309
+    ],
+    "n_emitted": 45000,
+    "boot": {
+     "mean": 0.03571319662065876,
+     "lo": 0.0268214239878307,
+     "hi": 0.04423473239536096
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03514,
+    "dti_per_fold": [
+     0.04083,
+     0.02358,
+     0.04498,
+     0.03117
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.034814629484581056,
+     "lo": 0.024911171888399596,
+     "hi": 0.04569634851860507
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03386,
+    "dti_per_fold": [
+     0.04008,
+     0.02237,
+     0.04333,
+     0.02966
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.03353155800837744,
+     "lo": 0.023843336086922483,
+     "hi": 0.04440767731285113
+    }
+   },
+   {
+    "name": "RANDOM_control",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.03076,
+    "dti_per_fold": [
+     0.03013,
+     0.03148,
+     0.03205,
+     0.02936
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.03070460834937573,
+     "lo": 0.02837305599497414,
+     "hi": 0.032889810232030865
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02998,
+    "dti_per_fold": [
+     0.01571,
+     0.02434,
+     0.00883,
+     0.07103
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.030950913560894917,
+     "lo": 0.01934611960178462,
+     "hi": 0.04350861513176182
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02956,
+    "dti_per_fold": [
+     0.01571,
+     0.02434,
+     0.00883,
+     0.06938
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.030526171620067377,
+     "lo": 0.019113571089744045,
+     "hi": 0.04297763269955417
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02923,
+    "dti_per_fold": [
+     0.01571,
+     0.02434,
+     0.00883,
+     0.06805
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.030182678115566745,
+     "lo": 0.018964394475571248,
+     "hi": 0.04232555546325952
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02712,
+    "dti_per_fold": [
+     0.02804,
+     0.01738,
+     0.03351,
+     0.02956
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.026989223707110953,
+     "lo": 0.01973097690680213,
+     "hi": 0.03473548127359665
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02631,
+    "dti_per_fold": [
+     0.01787,
+     0.02728,
+     0.01005,
+     0.05004
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.027182412674540957,
+     "lo": 0.01624238643648206,
+     "hi": 0.039560400617293885
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02604,
+    "dti_per_fold": [
+     0.02671,
+     0.01645,
+     0.03222,
+     0.02879
+    ],
+    "n_emitted": 30000,
+    "boot": {
+     "mean": 0.025919169467429837,
+     "lo": 0.01877021303367919,
+     "hi": 0.033451670941709116
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.0258,
+    "dti_per_fold": [
+     0.01787,
+     0.02728,
+     0.01005,
+     0.048
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.026653664462725636,
+     "lo": 0.01591881943162276,
+     "hi": 0.03894770803114616
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02533,
+    "dti_per_fold": [
+     0.01787,
+     0.02728,
+     0.01005,
+     0.04613
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.026173635725781616,
+     "lo": 0.015517429871747786,
+     "hi": 0.03820649402912961
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02357,
+    "dti_per_fold": [
+     0.0294,
+     0.01336,
+     0.03219,
+     0.01935
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.023168083911754296,
+     "lo": 0.015648614112933532,
+     "hi": 0.03154034756234941
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02228,
+    "dti_per_fold": [
+     0.02703,
+     0.01288,
+     0.03066,
+     0.01855
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.021921695890221905,
+     "lo": 0.014618733071012576,
+     "hi": 0.030013910948224847
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.02044,
+    "dti_per_fold": [
+     0.02072,
+     0.03102,
+     0.01165,
+     0.01837
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.021093841156417662,
+     "lo": 0.010831144104345249,
+     "hi": 0.0333389813369136
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.02027,
+    "dti_per_fold": [
+     0.02361,
+     0.01419,
+     0.02479,
+     0.01849
+    ],
+    "n_emitted": 136389,
+    "boot": {
+     "mean": 0.02025945483529346,
+     "lo": 0.013855841764192509,
+     "hi": 0.027245153704324888
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.01991,
+    "dti_per_fold": [
+     0.02072,
+     0.03102,
+     0.01165,
+     0.01623
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.02053276414932239,
+     "lo": 0.010367916095224706,
+     "hi": 0.032797938870764744
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01963,
+    "dti_per_fold": [
+     0.02203,
+     0.01529,
+     0.02277,
+     0.01844
+    ],
+    "n_emitted": 278100,
+    "boot": {
+     "mean": 0.019704743399840276,
+     "lo": 0.014051186638394025,
+     "hi": 0.02555305389634726
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.01958,
+    "dti_per_fold": [
+     0.02072,
+     0.03102,
+     0.01165,
+     0.01493
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.020194025419497386,
+     "lo": 0.01005185749713725,
+     "hi": 0.032469735854015434
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01922,
+    "dti_per_fold": [
+     0.02173,
+     0.01381,
+     0.02391,
+     0.01742
+    ],
+    "n_emitted": 135288,
+    "boot": {
+     "mean": 0.019224917196568412,
+     "lo": 0.013119349318800525,
+     "hi": 0.025846104082170154
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01894,
+    "dti_per_fold": [
+     0.0216,
+     0.01464,
+     0.02202,
+     0.0175
+    ],
+    "n_emitted": 276525,
+    "boot": {
+     "mean": 0.019012694477830733,
+     "lo": 0.013475467377761745,
+     "hi": 0.024758015664695876
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01879,
+    "dti_per_fold": [
+     0.02059,
+     0.01465,
+     0.02034,
+     0.01958
+    ],
+    "n_emitted": 421082,
+    "boot": {
+     "mean": 0.01888160066685443,
+     "lo": 0.01401811509000508,
+     "hi": 0.023995734231556282
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01829,
+    "dti_per_fold": [
+     0.01855,
+     0.01546,
+     0.01888,
+     0.02029
+    ],
+    "n_emitted": 637654,
+    "boot": {
+     "mean": 0.018383078659905346,
+     "lo": 0.014227256276838416,
+     "hi": 0.022684779999965137
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01818,
+    "dti_per_fold": [
+     0.0199,
+     0.01412,
+     0.01993,
+     0.01878
+    ],
+    "n_emitted": 419820,
+    "boot": {
+     "mean": 0.01826992663134573,
+     "lo": 0.013542859466480796,
+     "hi": 0.02326573364418992
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.01815,
+    "dti_per_fold": [
+     0.02179,
+     0.00845,
+     0.01879,
+     0.02359
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.01803403889544477,
+     "lo": 0.012272782464364246,
+     "hi": 0.024285261572466032
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 10000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.0178,
+    "dti_per_fold": [
+     0.01741,
+     0.02763,
+     0.00979,
+     0.01637
+    ],
+    "n_emitted": 81580,
+    "boot": {
+     "mean": 0.018599978952558844,
+     "lo": 0.009775938001138296,
+     "hi": 0.029714185643000657
+    }
+   },
+   {
+    "name": "B18_isograv_hgrad_abs",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01771,
+    "dti_per_fold": [
+     0.01806,
+     0.01488,
+     0.01837,
+     0.01954
+    ],
+    "n_emitted": 636131,
+    "boot": {
+     "mean": 0.01780580442249497,
+     "lo": 0.013704915659555872,
+     "hi": 0.022102429216367216
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.01747,
+    "dti_per_fold": [
+     0.02115,
+     0.00789,
+     0.01796,
+     0.02289
+    ],
+    "n_emitted": 20000,
+    "boot": {
+     "mean": 0.01735008149190724,
+     "lo": 0.011684726027564632,
+     "hi": 0.02343688951215548
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01739,
+    "dti_per_fold": [
+     0.01744,
+     0.02769,
+     0.00982,
+     0.01461
+    ],
+    "n_emitted": 81072,
+    "boot": {
+     "mean": 0.01818087926087567,
+     "lo": 0.009361365631948783,
+     "hi": 0.02928229475790305
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01708,
+    "dti_per_fold": [
+     0.01741,
+     0.02762,
+     0.0098,
+     0.01349
+    ],
+    "n_emitted": 81140,
+    "boot": {
+     "mean": 0.01786798595760112,
+     "lo": 0.00906643165252003,
+     "hi": 0.02897657247796393
+    }
+   },
+   {
+    "name": "RANDOM_control",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.01686,
+    "dti_per_fold": [
+     0.01624,
+     0.01682,
+     0.01769,
+     0.01669
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.016834003090972206,
+     "lo": 0.015306532478873935,
+     "hi": 0.018286593929941766
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 20000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01616,
+    "dti_per_fold": [
+     0.01045,
+     0.01706,
+     0.00588,
+     0.03122
+    ],
+    "n_emitted": 171267,
+    "boot": {
+     "mean": 0.016677703273719223,
+     "lo": 0.009973596942092976,
+     "hi": 0.02430004509292459
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01587,
+    "dti_per_fold": [
+     0.01046,
+     0.01708,
+     0.00589,
+     0.03004
+    ],
+    "n_emitted": 170854,
+    "boot": {
+     "mean": 0.016382490938924636,
+     "lo": 0.009804989201762511,
+     "hi": 0.023981288962385904
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01553,
+    "dti_per_fold": [
+     0.01039,
+     0.01696,
+     0.00585,
+     0.02892
+    ],
+    "n_emitted": 171053,
+    "boot": {
+     "mean": 0.016024486559543475,
+     "lo": 0.009549537572703461,
+     "hi": 0.02349753988118355
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 45000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01548,
+    "dti_per_fold": [
+     0.00523,
+     0.00872,
+     0.00294,
+     0.04504
+    ],
+    "n_emitted": 395561,
+    "boot": {
+     "mean": 0.015757827714758456,
+     "lo": 0.01024361131652515,
+     "hi": 0.02197216805666351
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01535,
+    "dti_per_fold": [
+     0.00523,
+     0.00872,
+     0.00295,
+     0.04449
+    ],
+    "n_emitted": 395108,
+    "boot": {
+     "mean": 0.015622549855232202,
+     "lo": 0.010143834547487919,
+     "hi": 0.02183430353204839
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01516,
+    "dti_per_fold": [
+     0.00518,
+     0.00864,
+     0.00292,
+     0.0439
+    ],
+    "n_emitted": 395578,
+    "boot": {
+     "mean": 0.015379028300805777,
+     "lo": 0.00996105160041123,
+     "hi": 0.021508588862652802
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 30000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01498,
+    "dti_per_fold": [
+     0.00747,
+     0.01234,
+     0.0042,
+     0.03591
+    ],
+    "n_emitted": 260888,
+    "boot": {
+     "mean": 0.015361515045998054,
+     "lo": 0.009504005774926053,
+     "hi": 0.022003645873273976
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.0148,
+    "dti_per_fold": [
+     0.00747,
+     0.01235,
+     0.00421,
+     0.03517
+    ],
+    "n_emitted": 260408,
+    "boot": {
+     "mean": 0.015176560503226416,
+     "lo": 0.009427227167257008,
+     "hi": 0.02171982423224902
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01467,
+    "dti_per_fold": [
+     0.01421,
+     0.02278,
+     0.0081,
+     0.01359
+    ],
+    "n_emitted": 145239,
+    "boot": {
+     "mean": 0.015413709825464701,
+     "lo": 0.00807176096330355,
+     "hi": 0.024540857879172834
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 1,
+    "dti_mean": 0.01458,
+    "dti_per_fold": [
+     0.00741,
+     0.01225,
+     0.00417,
+     0.03447
+    ],
+    "n_emitted": 260687,
+    "boot": {
+     "mean": 0.014919062902777754,
+     "lo": 0.009226148159985558,
+     "hi": 0.021393330390312732
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01437,
+    "dti_per_fold": [
+     0.01425,
+     0.02284,
+     0.00814,
+     0.01226
+    ],
+    "n_emitted": 144282,
+    "boot": {
+     "mean": 0.015109485938288134,
+     "lo": 0.007757231712724911,
+     "hi": 0.024284771199110364
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01417,
+    "dti_per_fold": [
+     0.01428,
+     0.02288,
+     0.00816,
+     0.01135
+    ],
+    "n_emitted": 143306,
+    "boot": {
+     "mean": 0.014915007509129682,
+     "lo": 0.0076047623072876035,
+     "hi": 0.024072721088383934
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.0122,
+    "dti_per_fold": [
+     0.00785,
+     0.01286,
+     0.00449,
+     0.02359
+    ],
+    "n_emitted": 304769,
+    "boot": {
+     "mean": 0.012595832293907733,
+     "lo": 0.007582840691762543,
+     "hi": 0.018315446520637046
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.012,
+    "dti_per_fold": [
+     0.00786,
+     0.01288,
+     0.0045,
+     0.02276
+    ],
+    "n_emitted": 303941,
+    "boot": {
+     "mean": 0.012394515327482803,
+     "lo": 0.007456014891639498,
+     "hi": 0.018049809662530635
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.0118,
+    "dti_per_fold": [
+     0.00784,
+     0.01284,
+     0.00449,
+     0.02204
+    ],
+    "n_emitted": 303121,
+    "boot": {
+     "mean": 0.012187098731028025,
+     "lo": 0.007316267244049004,
+     "hi": 0.017860536712112594
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01142,
+    "dti_per_fold": [
+     0.00925,
+     0.0098,
+     0.01581,
+     0.01082
+    ],
+    "n_emitted": 677925,
+    "boot": {
+     "mean": 0.01149730211739443,
+     "lo": 0.008432264354532946,
+     "hi": 0.01479489741213462
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01111,
+    "dti_per_fold": [
+     0.00915,
+     0.00944,
+     0.0154,
+     0.01045
+    ],
+    "n_emitted": 679438,
+    "boot": {
+     "mean": 0.011189834134294066,
+     "lo": 0.008187287470392794,
+     "hi": 0.01437591044647314
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01094,
+    "dti_per_fold": [
+     0.00371,
+     0.00616,
+     0.00212,
+     0.03176
+    ],
+    "n_emitted": 703579,
+    "boot": {
+     "mean": 0.011089772815117346,
+     "lo": 0.007222662849126038,
+     "hi": 0.015531298587238025
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 5,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01093,
+    "dti_per_fold": [
+     0.00543,
+     0.00896,
+     0.0031,
+     0.02621
+    ],
+    "n_emitted": 464012,
+    "boot": {
+     "mean": 0.011186092451009372,
+     "lo": 0.006946602306976921,
+     "hi": 0.01612183695761036
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01084,
+    "dti_per_fold": [
+     0.00371,
+     0.00616,
+     0.00212,
+     0.03139
+    ],
+    "n_emitted": 702669,
+    "boot": {
+     "mean": 0.011003075837449618,
+     "lo": 0.007139271260544323,
+     "hi": 0.015435948654243971
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01079,
+    "dti_per_fold": [
+     0.00543,
+     0.00897,
+     0.00311,
+     0.02566
+    ],
+    "n_emitted": 463095,
+    "boot": {
+     "mean": 0.011052823847601301,
+     "lo": 0.006896365572531125,
+     "hi": 0.01589846684666482
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 45000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01074,
+    "dti_per_fold": [
+     0.00369,
+     0.00613,
+     0.00211,
+     0.03104
+    ],
+    "n_emitted": 702160,
+    "boot": {
+     "mean": 0.010878325548451827,
+     "lo": 0.007022860929887848,
+     "hi": 0.015262708063610181
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01068,
+    "dti_per_fold": [
+     0.01057,
+     0.00745,
+     0.01309,
+     0.01161
+    ],
+    "n_emitted": 449864,
+    "boot": {
+     "mean": 0.010787105752028299,
+     "lo": 0.007720398328072242,
+     "hi": 0.01401890985602478
+    }
+   },
+   {
+    "name": "LANE_grav_inversion_hgm",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.01067,
+    "dti_per_fold": [
+     0.00541,
+     0.00894,
+     0.0031,
+     0.02522
+    ],
+    "n_emitted": 462370,
+    "boot": {
+     "mean": 0.010909905540531544,
+     "lo": 0.006792526943657739,
+     "hi": 0.01570564962877065
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 30000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.0103,
+    "dti_per_fold": [
+     0.01023,
+     0.00711,
+     0.01255,
+     0.0113
+    ],
+    "n_emitted": 450349,
+    "boot": {
+     "mean": 0.010406990605359377,
+     "lo": 0.00744155397405133,
+     "hi": 0.013554201491009294
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.00905,
+    "dti_per_fold": [
+     0.01045,
+     0.00478,
+     0.00912,
+     0.01185
+    ],
+    "n_emitted": 297804,
+    "boot": {
+     "mean": 0.00916106970924308,
+     "lo": 0.006304130599300984,
+     "hi": 0.01233897189962035
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 20000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.00869,
+    "dti_per_fold": [
+     0.01013,
+     0.0045,
+     0.00862,
+     0.01151
+    ],
+    "n_emitted": 298112,
+    "boot": {
+     "mean": 0.008799429386585568,
+     "lo": 0.0059924197034347685,
+     "hi": 0.01189420711826688
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.00698,
+    "dti_per_fold": [
+     0.01091,
+     0.00162,
+     0.00846,
+     0.00693
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.00685080484748555,
+     "lo": 0.00341297512170302,
+     "hi": 0.010807699719259465
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 0,
+    "dti_mean": 0.00686,
+    "dti_per_fold": [
+     0.01066,
+     0.00162,
+     0.00831,
+     0.00685
+    ],
+    "n_emitted": 10000,
+    "boot": {
+     "mean": 0.006736444830569417,
+     "lo": 0.00335012265447498,
+     "hi": 0.010647219843189195
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 3,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.00521,
+    "dti_per_fold": [
+     0.00794,
+     0.00153,
+     0.00616,
+     0.00521
+    ],
+    "n_emitted": 147759,
+    "boot": {
+     "mean": 0.005272400749465295,
+     "lo": 0.002824802340467647,
+     "hi": 0.007896853235519313
+    }
+   },
+   {
+    "name": "B15_provided_depth_to_basement",
+    "exclude_radius": 0,
+    "k": 10000,
+    "ribbon_half_width": 2,
+    "dti_mean": 0.00511,
+    "dti_per_fold": [
+     0.0078,
+     0.00149,
+     0.00611,
+     0.00503
+    ],
+    "n_emitted": 147742,
+    "boot": {
+     "mean": 0.005174798766826179,
+     "lo": 0.002769022811904495,
+     "hi": 0.007786436031657672
+    }
+   }
+  ],
+  "experiment2_random_line_control": {
+   "n_draws": 20,
+   "mean": 0.05429,
+   "std": 0.000926,
+   "max": 0.0566,
+   "emission_count": 45000,
+   "note": "identical pixel budget, uniformly random locations"
+  },
+  "experiment3_basin_interior": {
+   "definition": "depth-to-basement >= 60th percentile of valid pixels (B15)",
+   "basin_px": 2066949,
+   "per_fold": [
+    {
+     "fold": 0,
+     "hidden_total": 13143,
+     "hidden_basin_interior": 4928,
+     "hidden_basin_fraction": 0.375,
+     "emitted_in_basin": 12189,
+     "dti_basin_only": 0.00349,
+     "dti_outside_basin_only": 0.01287
+    },
+    {
+     "fold": 1,
+     "hidden_total": 15650,
+     "hidden_basin_interior": 6159,
+     "hidden_basin_fraction": 0.3935,
+     "emitted_in_basin": 12189,
+     "dti_basin_only": 0.00013,
+     "dti_outside_basin_only": 0.0236
+    },
+    {
+     "fold": 2,
+     "hidden_total": 13102,
+     "hidden_basin_interior": 6749,
+     "hidden_basin_fraction": 0.5151,
+     "emitted_in_basin": 12189,
+     "dti_basin_only": 0.00451,
+     "dti_outside_basin_only": 0.00512
+    },
+    {
+     "fold": 3,
+     "hidden_total": 14590,
+     "hidden_basin_interior": 4073,
+     "hidden_basin_fraction": 0.2792,
+     "emitted_in_basin": 12189,
+     "dti_basin_only": 0.03614,
+     "dti_outside_basin_only": 0.09275
+    }
+   ],
+   "mean_dti_basin_only": 0.01107,
+   "mean_dti_outside_basin_only": 0.03359,
+   "verdict": "basin-interior component does NOT carry the signal"
+  }
+ },
+ "forensics": {
+  "generated_utc": "2026-10-11T00:40:16Z",
+  "method": "read the published bytes, measure them; no filename is trusted",
+  "registry_dir": "/tmp/refs/registry",
+  "labels_reference": {
+   "path": "data/labels.tif",
+   "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+   "n_valid": 5167373,
+   "n_gt": 60988
+  },
+  "rasters": [
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "claimed_score_by_group": 0.26,
+    "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 44090,
+    "mass": 44090.0,
+    "sparse_fraction_of_valid": 0.008532,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 8607,
+    "n_pixels_within_10px": 17796,
+    "median_distance_to_visible_catalogue_px": 15.0,
+    "distance_buckets": {
+     "lt3": 8047,
+     "b3_10": 9529,
+     "b10_30": 12981,
+     "ge30": 13533
+    }
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+    "claimed_score_by_group": 0.2449,
+    "sha256": "a9bf76b57453a5b3af74c8eef837df53c29a0931162aa540b8763220b36ba3bb",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 61328,
+    "mass": 61328.0,
+    "sparse_fraction_of_valid": 0.011868,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 12187,
+    "n_pixels_within_10px": 25530,
+    "median_distance_to_visible_catalogue_px": 14.142135623730951,
+    "distance_buckets": {
+     "lt3": 11329,
+     "b3_10": 13895,
+     "b10_30": 17751,
+     "ge30": 18353
+    }
+   },
+   {
+    "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+    "claimed_score_by_group": 0.2708,
+    "sha256": "2fc94a38d77f74d4f4ed1a97a83e7bb71a1ceea090515ec641e6681cc47c44c8",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 40199,
+    "mass": 40199.0,
+    "sparse_fraction_of_valid": 0.007779,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 4716,
+    "n_pixels_within_10px": 13905,
+    "median_distance_to_visible_catalogue_px": 17.69180601295413,
+    "distance_buckets": {
+     "lt3": 4156,
+     "b3_10": 9529,
+     "b10_30": 12981,
+     "ge30": 13533
+    }
+   },
+   {
+    "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+    "claimed_score_by_group": 0.271,
+    "sha256": "7c74270ad48fa0b865163853046a6d3815967c5bf37bbda5b74ca7fa22583a32",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 37660,
+    "mass": 37660.0,
+    "sparse_fraction_of_valid": 0.007288,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 4377,
+    "n_pixels_within_10px": 12936,
+    "median_distance_to_visible_catalogue_px": 17.72004514666935,
+    "distance_buckets": {
+     "lt3": 3891,
+     "b3_10": 8847,
+     "b10_30": 12226,
+     "ge30": 12696
+    }
+   },
+   {
+    "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+    "claimed_score_by_group": 0.26,
+    "sha256": "4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 44090,
+    "mass": 44090.0,
+    "sparse_fraction_of_valid": 0.008532,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 8607,
+    "n_pixels_within_10px": 17796,
+    "median_distance_to_visible_catalogue_px": 15.0,
+    "distance_buckets": {
+     "lt3": 8047,
+     "b3_10": 9529,
+     "b10_30": 12981,
+     "ge30": 13533
+    }
+   },
+   {
+    "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+    "claimed_score_by_group": 0.2376,
+    "sha256": "3722e26fbf9129874be1fb8c687825803952c57ef1154ed0a21029596bc412f1",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 40000,
+    "mass": 40000.0,
+    "sparse_fraction_of_valid": 0.007741,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 0,
+    "n_pixels_within_10px": 12558,
+    "median_distance_to_visible_catalogue_px": 19.209372712298546,
+    "distance_buckets": {
+     "lt3": 0,
+     "b3_10": 12340,
+     "b10_30": 13970,
+     "ge30": 13690
+    }
+   },
+   {
+    "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+    "claimed_score_by_group": 0.0512,
+    "sha256": "9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 44090,
+    "mass": 44090.0,
+    "sparse_fraction_of_valid": 0.008532,
+    "n_pixels_on_visible_catalogue": 647,
+    "n_pixels_within_3px_of_visible_catalogue": 4915,
+    "n_pixels_within_10px": 14815,
+    "median_distance_to_visible_catalogue_px": 18.027756377319946,
+    "distance_buckets": {
+     "lt3": 4493,
+     "b3_10": 10104,
+     "b10_30": 15295,
+     "ge30": 14198
+    }
+   },
+   {
+    "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+    "claimed_score_by_group": 0.26,
+    "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 44090,
+    "mass": 44090.0,
+    "sparse_fraction_of_valid": 0.008532,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 8607,
+    "n_pixels_within_10px": 17796,
+    "median_distance_to_visible_catalogue_px": 15.0,
+    "distance_buckets": {
+     "lt3": 8047,
+     "b3_10": 9529,
+     "b10_30": 12981,
+     "ge30": 13533
+    }
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "claimed_score_by_group": 0.2778,
+    "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+    "min": 0.0,
+    "max": 1.0,
+    "is_binary_0_1": true,
+    "n_nonzero": 37654,
+    "mass": 37654.0,
+    "sparse_fraction_of_valid": 0.007287,
+    "n_pixels_on_visible_catalogue": 0,
+    "n_pixels_within_3px_of_visible_catalogue": 2171,
+    "n_pixels_within_10px": 11360,
+    "median_distance_to_visible_catalogue_px": 19.6468827043885,
+    "distance_buckets": {
+     "lt3": 1611,
+     "b3_10": 9529,
+     "b10_30": 12981,
+     "ge30": 13533
+    }
+   }
+  ],
+  "irregularities": [
+   {
+    "id": "IR-61-SCORE-01",
+    "severity": "high",
+    "statement": "Every score in CLAIMED is a group/owner report. None is an organizer receipt linking those bytes to a leaderboard row. The public leaderboard rows are the only observed scores and they belong to other teams."
+   },
+   {
+    "id": "IR-61-FOOTPRINT-01",
+    "severity": "medium",
+    "statement": "This project measures 5,165,852 finite footprint pixels from the official labels; the group's record says 5,167,373. A 0.03% difference in the footprint criterion."
+   },
+   {
+    "id": "IR-61-PROVENANCE-01",
+    "severity": "high",
+    "statement": "The competition rasters used here were obtained from a public GitHub mirror of the official data (the DrivenData data page is login-walled). All three match the official SHA-256 pins recorded by the mirror, but they are not organizer-authenticated."
+   }
+  ],
+  "pairwise_iou_over_80pct": {
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 91.175,
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 100.0,
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 100.0,
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403,
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 91.175,
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 91.175,
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 93.669,
+   "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 100.0,
+   "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403,
+   "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403
+  },
+  "set_difference_forensics": {
+   "top_minus_core": {
+    "core": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+    "top": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "core_n": 44090,
+    "top_n": 37654,
+    "removed_n": 6436,
+    "removed_all_within_3px_of_catalogue": true,
+    "removed_within_3px": 6436,
+    "top_is_strict_subset": true,
+    "verified_as_exact_set_difference": true
+   },
+   "solo_minus_core": {
+    "core_n": 44090,
+    "solo_n": 40199,
+    "removed_n": 3891,
+    "removed_all_within_3px_of_catalogue": true,
+    "removed_within_3px": 3891,
+    "solo_is_strict_subset": true
+   }
+  },
+  "conclusions": [
+   "Every registry raster is binary {0,1}; none uses soft probabilities.",
+   "Every registry raster is sparse: 0.73-1.19 percent of the 5,165,852 valid pixels.",
+   "Every high-scoring raster contains ZERO pixels on a visible catalogue fault; the one raster that does contain them (647 px) is the lowest scorer (0.0512).",
+   "The 0.2778 raster is the 0.2600 raster with every pixel within 3 px of the visible catalogue deleted -- an exact set difference, verified above.",
+   "Three filenames carry byte-identical rasters, so the group's apparent 0.2600 plateau is one artifact under three names."
+  ]
+ },
+ "uniqueness": null,
+ "checks": {
+  "path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "checks": {
+   "single_band": [
+    true,
+    1
+   ],
+   "dtype_float": [
+    true,
+    "float32"
+   ],
+   "crs_matches_template": [
+    true,
+    "EPSG:32611"
+   ],
+   "crs_is_epsg32611": [
+    true,
+    "EPSG:32611"
+   ],
+   "shape_matches_template": [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   "shape_is_expected": [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   "transform_matches_template": [
+    true,
+    [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ]
+   ],
+   "no_nan_anywhere": [
+    true,
+    0
+   ],
+   "min_ge_0": [
+    true,
+    0.0
+   ],
+   "max_le_1": [
+    true,
+    1.0
+   ],
+   "all_values_in_0_1": [
+    true,
+    null
+   ]
+  },
+  "pass": true,
+  "stats": {
+   "n_positive": 311617,
+   "n_pixels": 12279160,
+   "positive_fraction": 0.025378,
+   "unique_values_leq_8": [
+    0.0,
+    1.0
+   ],
+   "min": 0.0,
+   "max": 1.0,
+   "n_unique": 2
+  },
+  "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2"
+ },
+ "run_card": {
+  "hypothesis": "Buried range-front and intrabasin fault steps are resolvable from the provided isostatic-gravity anomaly by Parker-Oldenburg inversion, and their horizontal-gradient ridges mark faults the surface catalogue misses.",
+  "mechanism": "Parker (1973) forward series / Oldenburg (1974) iteration on band 13 -> basement relief -> |grad relief| -> grid-cell maxima emitted as ribbons -> pixels within a tuned radius of the visible catalogue removed -> binary all-finite GeoTIFF on the competition grid.",
+  "competing_non_fault_process": "Intrabasement density contrasts (intrusion margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge as a fault step and this lane cannot separate them.",
+  "holdout_dti": {
+   "value": 0.08875,
+   "evaluator": "src/holdout.py FoldContext, parity-checked against src/gems_metric.py score_arrays (max |diff| = 0)",
+   "withheld_positives": 56485,
+   "ci95": [
+    0.07687560182270048,
+    0.10041995595693597
+   ],
+   "operating_point": {
+    "k": 400000,
+    "exclude_radius": 3,
+    "ribbon_half_width": 0
+   },
+   "random_line_control": {
+    "n_draws": 20,
+    "mean": 0.05429,
+    "std": 0.000926,
+    "max": 0.0566,
+    "emission_count": 45000,
+    "note": "identical pixel budget, uniformly random locations"
+   },
+   "label": "HOLDOUT-DTI (proxy: withheld segments of the VISIBLE catalogue, NOT the competition's withheld set)"
+  },
+  "random_beats_lane_on_holdout": true,
+  "verdict_reason": "On the spatially blocked same-catalogue holdout the lane field does not beat a random dot field of identical size (0.0888 vs 0.0855 at saturation), and the registry's own top-scoring raster scores 0.0045 here while its mid-scoring raster scores 0.1089 -- the competition ranking inverts on a same-catalogue holdout.",
+  "uniqueness_vs_registry": {
+   "submission": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+   "n_pixels_emitted": 311617,
+   "registry_dir": "/tmp/refs/registry",
+   "thresholds": {
+    "rank_correlation": 0.9,
+    "overlap_within_3px": 0.7
+   },
+   "per_raster": [
+    {
+     "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+     "iou_pct": 0.6764,
+     "n_their_pixels": 44090,
+     "shared_pixels": 2390,
+     "my_pixels_within_3px_of_theirs": 45213,
+     "my_pixels_within_3px_fraction": 0.145092,
+     "rank_correlation_including_zeros": 0.010882
+    },
+    {
+     "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+     "iou_pct": 0.8947,
+     "n_their_pixels": 61328,
+     "shared_pixels": 3307,
+     "my_pixels_within_3px_of_theirs": 50266,
+     "my_pixels_within_3px_fraction": 0.161307,
+     "rank_correlation_including_zeros": 0.012604
+    },
+    {
+     "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+     "iou_pct": 0.684,
+     "n_their_pixels": 40199,
+     "shared_pixels": 2390,
+     "my_pixels_within_3px_of_theirs": 44689,
+     "my_pixels_within_3px_fraction": 0.14341,
+     "rank_correlation_including_zeros": 0.012315
+    },
+    {
+     "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+     "iou_pct": 0.646,
+     "n_their_pixels": 37660,
+     "shared_pixels": 2242,
+     "my_pixels_within_3px_of_theirs": 44266,
+     "my_pixels_within_3px_fraction": 0.142053,
+     "rank_correlation_including_zeros": 0.011955
+    },
+    {
+     "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+     "iou_pct": 0.6764,
+     "n_their_pixels": 44090,
+     "shared_pixels": 2390,
+     "my_pixels_within_3px_of_theirs": 45213,
+     "my_pixels_within_3px_fraction": 0.145092,
+     "rank_correlation_including_zeros": 0.010882
+    },
+    {
+     "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+     "iou_pct": 0.9578,
+     "n_their_pixels": 40000,
+     "shared_pixels": 3336,
+     "my_pixels_within_3px_of_theirs": 45393,
+     "my_pixels_within_3px_fraction": 0.145669,
+     "rank_correlation_including_zeros": 0.020495
+    },
+    {
+     "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+     "iou_pct": 0.7443,
+     "n_their_pixels": 44090,
+     "shared_pixels": 2628,
+     "my_pixels_within_3px_of_theirs": 35557,
+     "my_pixels_within_3px_fraction": 0.114105,
+     "rank_correlation_including_zeros": 0.012805
+    },
+    {
+     "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+     "iou_pct": 0.6764,
+     "n_their_pixels": 44090,
+     "shared_pixels": 2390,
+     "my_pixels_within_3px_of_theirs": 45213,
+     "my_pixels_within_3px_fraction": 0.145092,
+     "rank_correlation_including_zeros": 0.010882
+    },
+    {
+     "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+     "iou_pct": 0.689,
+     "n_their_pixels": 37654,
+     "shared_pixels": 2390,
+     "my_pixels_within_3px_of_theirs": 43751,
+     "my_pixels_within_3px_fraction": 0.1404,
+     "rank_correlation_including_zeros": 0.013331
+    }
+   ],
+   "verdict": "unique",
+   "summary": "highest rank correlation 0.020 (< 0.9); highest 3-px overlap fraction 0.1613 (< 0.7)",
+   "worst_rank_correlation": 0.020495,
+   "worst_rank_correlation_against": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+   "worst_pixels_within_3px_fraction": 0.161307,
+   "caveat": "The rank correlation includes the ~99 % of pixels that are zero in both rasters, so it is bounded away from 0 by construction; the 3-px overlap fraction is the discriminating statistic and is the one to read."
+  },
+  "raster_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+  "validator": {
+   "passed": true,
+   "checks": {
+    "single_band": [
+     true,
+     1
+    ],
+    "dtype_float": [
+     true,
+     "float32"
+    ],
+    "crs_matches_template": [
+     true,
+     "EPSG:32611"
+    ],
+    "crs_is_epsg32611": [
+     true,
+     "EPSG:32611"
+    ],
+    "shape_matches_template": [
+     true,
+     [
+      3730,
+      3292
+     ]
+    ],
+    "shape_is_expected": [
+     true,
+     [
+      3730,
+      3292
+     ]
+    ],
+    "transform_matches_template": [
+     true,
+     [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+     ]
+    ],
+    "no_nan_anywhere": [
+     true,
+     0
+    ],
+    "min_ge_0": [
+     true,
+     0.0
+    ],
+    "max_le_1": [
+     true,
+     1.0
+    ],
+    "all_values_in_0_1": [
+     true,
+     null
+    ]
+   },
+   "stats": {
+    "n_positive": 311617,
+    "n_pixels": 12279160,
+    "positive_fraction": 0.025378,
+    "unique_values_leq_8": [
+     0.0,
+     1.0
+    ],
+    "min": 0.0,
+    "max": 1.0,
+    "n_unique": 2
+   }
+  },
+  "submission_name": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "submission_note": "Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.",
+  "note_length": 122,
+  "verdict": "negative"
+ },
+ "claimed_scores": {
+  "_disclaimer": "Group/owner reports. None is an organizer receipt. The public leaderboard rows belong to other teams.",
+  "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros": 0.2778,
+  "h36-1-rung30-blind-r1-20261003-b531dae0a36f": 0.271,
+  "h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc": 0.2708,
+  "d28-poisson300m-offcat-44090": 0.26,
+  "dotted-h19-5-d2-8-20261002-e56ea318af89": 0.26,
+  "probe-S1-ANCHOR-identical-to-live-02600": 0.26,
+  "topo-gap-closure-t-v2-on-d1-5": 0.2449,
+  "gate_ortho_w0.25-40k": 0.2376,
+  "sgmc-off-catalogue-44k-20261003-c8dcd780e3fd": 0.0512,
+  "leaderboard_2026-10-04_nchuzhoy": 0.3262,
+  "leaderboard_2026-10-04_kinghorton42": 0.3222,
+  "leaderboard_2026-10-04_DARD": 0.3195
+ }
+}

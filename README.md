@@ -110,3 +110,19 @@ hash. Nothing under `data/` is downloaded from DrivenData, whose data tab is beh
 the metric's own algebra rather than by eye; every claim carries its evidence class and its
 source; the one negative result that matters is printed next to the positive ones; and the file is
 built to be *unique* rather than to be a copy of something that already scored.
+
+## Concurrent work already on `main` (do not lose it)
+
+A parallel session on this repository (`arena/c463a286-61gemsdoe`, PR #3) implemented the same lane
+independently and merged first. Its artifacts are **kept**: `docs/instrument.html`,
+`docs/submissions/e3-*.tif` (`…basement-step-r3-rib2-k40k-2pxprune-zeros.tif`, 250,866 bytes),
+`evidence/e1_calibration.json`, `evidence/e2b_instrument.json`, `evidence/e2c_canary.json`,
+`evidence/e3_submission.json`, and its own `scripts/build_site_e3.py`. Its site pages
+(`instrument.html`, `irregularities.html`, `submit.html`, `limitations.html`,
+`methodology.html`, `next-steps.html`, `brief.md`) are untouched by this session's
+`scripts/build_site.py`, which writes only `index.html`, `executive-summary.html`,
+`method.html`, `hypotheses.html` and `verify.html`.
+
+Two independent constructions of the same lane is the intended redundancy, not a conflict:
+this session's file and that one are different rasters with different emission rules, both
+uniqueness-checked, and neither has spent a slot.

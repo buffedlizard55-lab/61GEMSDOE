@@ -118,6 +118,15 @@ def main() -> None:
 <tr><th>Suggested note</th><td>{final['note']} <span class="pill">{final['writer_receipt']['note_chars']} / 140 characters</span></td></tr>
 </table>
 <p class="mut">{final['verdict']}</p>
+<h2>Other submissions in this repository</h2>
+<p>A parallel session on this repository built the same lane independently and merged first. Its
+artifacts are kept and are <i>not</i> replaced by this page: see
+<a href="instrument.html">the instrument study</a>,
+<a href="docs/submissions/">the E3 candidate under <code>docs/submissions/</code></a>
+(<code>…basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code>) and its receipts in
+<code>evidence/e1_calibration.json</code>, <code>e2b_instrument.json</code>,
+<code>e2c_canary.json</code>, <code>e3_submission.json</code>. Two independent constructions of one
+lane is the intended redundancy; neither file has spent a competition slot.</p>
 
 <h2>Where the dots sit — measured, not claimed</h2>
 <table>

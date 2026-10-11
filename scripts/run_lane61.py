@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from gems61 import buried as B                      # noqa: E402
 from gems61 import grid as gridmod                  # noqa: E402
-from gems61 import holdout as holdoutmod            # noqa: E402
+from gems61 import holdout_segmented as holdoutmod  # noqa: E402
 from gems61 import lane61 as lane                   # noqa: E402
 from gems61 import submission_writer                # noqa: E402
 

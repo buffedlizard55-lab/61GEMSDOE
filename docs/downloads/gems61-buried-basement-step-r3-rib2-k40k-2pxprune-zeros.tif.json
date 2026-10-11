@@ -1,0 +1,226 @@
+{
+  "lane": "61 buried-structure: basement-depth steps from gravity inversion",
+  "hypothesis": "Alluvial cover hides range-front and intrabasin faults from a surface-mapped catalogue; the Parker-Oldenburg inversion of the provided isostatic gravity anomaly recovers basement relief whose horizontal-gradient maxima are those steps.",
+  "mechanism": "Parker(1973)/Oldenburg(1974) inversion of band 13 (z0=600 m, dRho=222 kg/m^3 calibrated on band 15) -> basement depth -> regional tilt removed (sigma=100 px) -> |grad| at sigma=3.0 px -> directional NMS ridge -> 2 px ribbon -> cascade thinning at (3, 2, 1, 0) px -> 40000 px, 2 px catalogue prune -> binary zeros-outside GeoTIFF.",
+  "competing_non_fault_process": "Density contrasts inside basement (pluton margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge; this lane cannot separate them.",
+  "holdout_dti": {
+    "value": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "per_fold": {
+      "NE": 0.0,
+      "NW": 0.0,
+      "SE": 0.0,
+      "SW": 0.0
+    },
+    "withheld_positives": 39310,
+    "evaluator": "src/gems61/holdout.py dti(), alpha=0.2 beta=0.8 R=300 m triangular, 4 spatially blocked quadrant folds, 3 px visible collar, pooled TP/FP/FN",
+    "random_line_control": {
+      "per_fold": [
+        0.0031240244620561026,
+        0.002928122341181156,
+        0.004707221581357469,
+        0.002669381297219245
+      ],
+      "mean": 0.0033571874204534934
+    },
+    "segment_recovery": {
+      "candidate_all": {
+        "n_segments": 911,
+        "recovered": 333,
+        "frac": 0.36553238199780463
+      },
+      "candidate_basin_interior": {
+        "n_segments": 160,
+        "recovered": 45,
+        "frac": 0.28125
+      },
+      "random_lines_all": {
+        "n_segments": 911,
+        "recovered": 24,
+        "frac": 0.026344676180021953
+      },
+      "random_lines_basin_interior": {
+        "n_segments": 160,
+        "recovered": 1,
+        "frac": 0.00625
+      }
+    },
+    "label": "HOLDOUT-DTI (proxy: withheld segments of the SAME catalogue; measured to be anti-correlated with the live board, see evidence/e2b_instrument.json)",
+    "degeneracy_note": "DTI is exactly 0.0 because the emission is pruned 2 px (200 m) from the catalogue: the minimum dot-to-catalogue distance equals the kernel radius R = 300 m, so every kernel credit max(1 - d/R, 0) is 0. This is a property of the frame, not of the file."
+  },
+  "instrument_calibration": "evidence/e2b_instrument.json",
+  "correlation_vs_registry": {
+    "worst_spearman": 0.005934786555680653,
+    "worst_frac_dots_within_3px": 0.987575,
+    "worst_frac_dots_within_3px_enrichment": 1.36395025290904,
+    "worst_cross_lane_frac_dots_within_3px": 0.2303,
+    "worst_cross_lane_enrichment": 1.36395025290904,
+    "thresholds": {
+      "rank_correlation": 0.9,
+      "overlap_3px": 0.7
+    },
+    "verdict": "unique",
+    "verdict_note": "rank correlation <= 0.90 against every registry raster; 3-px overlap read against its base rate, which is the fraction of the eligible area within 3 px of the other raster. A same-lane sibling built from the identical inversion has a base rate near 1 and is reported separately, not as cross-lane drift.",
+    "per_raster": {
+      "d15_02477.tif": {
+        "pearson": -0.00034993043113733366,
+        "spearman": -0.000349930431137328,
+        "n_mine": 40000,
+        "n_other": 60069,
+        "dots_within_3px": 8641,
+        "frac_dots_within_3px": 0.216025,
+        "eligible_base_rate_within_3px": 0.1697943037343241,
+        "enrichment_vs_base_rate": 1.2722747185795626,
+        "jaccard": 0.0044970437959867895
+      },
+      "derived_sgmc_faults_100m.tif": {
+        "pearson": -0.0026094116173359205,
+        "spearman": -0.002609411617335922,
+        "n_mine": 40000,
+        "n_other": 83593,
+        "dots_within_3px": 5376,
+        "frac_dots_within_3px": 0.1344,
+        "eligible_base_rate_within_3px": 0.0985373181414432,
+        "enrichment_vs_base_rate": 1.36395025290904,
+        "jaccard": 0.0040456557943052114
+      },
+      "dotted_b2_prune_02778.tif": {
+        "pearson": 0.0010261526892526014,
+        "spearman": 0.0010261526892526025,
+        "n_mine": 40000,
+        "n_other": 37654,
+        "dots_within_3px": 7898,
+        "frac_dots_within_3px": 0.19745,
+        "eligible_base_rate_within_3px": 0.15854720251776447,
+        "enrichment_vs_base_rate": 1.2453704440346505,
+        "jaccard": 0.004280744409813381
+      },
+      "dotted_d2_8_02600.tif": {
+        "pearson": -0.0002471645482735357,
+        "spearman": -0.000247164548273536,
+        "n_mine": 40000,
+        "n_other": 44090,
+        "dots_within_3px": 8307,
+        "frac_dots_within_3px": 0.207675,
+        "eligible_base_rate_within_3px": 0.1616429488543386,
+        "enrichment_vs_base_rate": 1.2847761159513507,
+        "jaccard": 0.003951814133406559
+      },
+      "dotted_d2_8_02708.tif": {
+        "pearson": 0.0004982501384132909,
+        "spearman": 0.0004982501384132915,
+        "n_mine": 40000,
+        "n_other": 40199,
+        "dots_within_3px": 8108,
+        "frac_dots_within_3px": 0.2027,
+        "eligible_base_rate_within_3px": 0.1604247299282154,
+        "enrichment_vs_base_rate": 1.2635209053535656,
+        "jaccard": 0.004144338157960635
+      },
+      "h19_5_01922.tif": {
+        "pearson": -0.0006809688818834958,
+        "spearman": -0.0006809688818834981,
+        "n_mine": 40000,
+        "n_other": 121131,
+        "dots_within_3px": 9212,
+        "frac_dots_within_3px": 0.2303,
+        "eligible_base_rate_within_3px": 0.1839655504490712,
+        "enrichment_vs_base_rate": 1.2518648161996828,
+        "jaccard": 0.0055604093859211185
+      },
+      "h36_rung30_02710.tif": {
+        "pearson": 9.030371171478538e-05,
+        "spearman": 9.030371171478901e-05,
+        "n_mine": 40000,
+        "n_other": 37660,
+        "dots_within_3px": 8042,
+        "frac_dots_within_3px": 0.20105,
+        "eligible_base_rate_within_3px": 0.15839219466130258,
+        "enrichment_vs_base_rate": 1.2693175975616386,
+        "jaccard": 0.003813093776255413
+      },
+      "sgmc44k_00512.tif": {
+        "pearson": 1.6918681367439083e-05,
+        "spearman": 1.6918681367438734e-05,
+        "n_mine": 40000,
+        "n_other": 44090,
+        "dots_within_3px": 6454,
+        "frac_dots_within_3px": 0.16135,
+        "eligible_base_rate_within_3px": 0.12550364425990995,
+        "enrichment_vs_base_rate": 1.2856200387763606,
+        "jaccard": 0.00408367961025935
+      },
+      "tip_stepover_r30_02632.tif": {
+        "pearson": 0.00031844583070150616,
+        "spearman": 0.0003184458307015054,
+        "n_mine": 40000,
+        "n_other": 41865,
+        "dots_within_3px": 8273,
+        "frac_dots_within_3px": 0.206825,
+        "eligible_base_rate_within_3px": 0.1627733720026826,
+        "enrichment_vs_base_rate": 1.2706316607890351,
+        "jaccard": 0.004133549210087332
+      },
+      "PARALLEL-SESSION gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif": {
+        "pearson": 0.005934786555680658,
+        "spearman": 0.005934786555680653,
+        "n_mine": 40000,
+        "n_other": 311617,
+        "dots_within_3px": 39503,
+        "frac_dots_within_3px": 0.987575,
+        "eligible_base_rate_within_3px": 0.997118072088735,
+        "enrichment_vs_base_rate": 0.9904293459763049,
+        "jaccard": 0.008755899186665328
+      }
+    }
+  },
+  "raster_sha256": "5dee4c5568eba145af1bc2290552e145c962663c355d9f77774a3602f996afd8",
+  "validator": {
+    "path": "/home/user/61GEMSDOE/docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+    "grid": {
+      "width": 3292,
+      "height": 3730,
+      "crs": "EPSG:32611",
+      "count": 1,
+      "dtype": "float32",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "nodata": null
+    },
+    "in_footprint_pixels": 5167373,
+    "positive_pixels": 40000,
+    "footprint_fraction": 0.007740877231041769,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true
+    },
+    "all_checks_passed": true
+  },
+  "submission_name": "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+  "submission_note": "61GEMSDOE Parker-Oldenburg basement-step ribbons, 40k px, 2px catalogue prune, binary zeros-outside",
+  "note_length": 99,
+  "emitted_pixels": 40000,
+  "on_catalogue_pixels": 0,
+  "seconds": 75.41272473335266,
+  "verdict": "negative",
+  "verdict_reason": "The hide-and-recover holdout is measured to invert against the live board (Spearman -0.857, p=0.0065, n=8 hash-pinned artifacts) and is exactly degenerate (DTI 0.0) for any catalogue-pruned emission, which is the family that scores highest live. This candidate cannot be promoted on holdout evidence. Its geological claim does hold: 36.6% of withheld fault segments are recovered within 300 m versus 2.6% for random lines at the same budget, and 28.1% versus 0.6% for basin-interior segments. Format validation passes 16/16 independent checks, so the file is safe to upload; promotion is a selector decision, not made here."
+}

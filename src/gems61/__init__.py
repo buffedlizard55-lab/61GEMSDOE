@@ -1,15 +1,10 @@
-"""GEMSDOE57 -- fault-zone-anatomy lane for the DOE GEMS Prize Challenge.
+"""61GEMSDOE - buried-structure lane: basement-depth steps from gravity inversion.
 
-Lane: predict where secondary strands sit around known faults, from shear-zone
-mechanics, with every structural parameter fitted to a hide-and-recover holdout
-rather than taken from a textbook.
+Parker (1973) / Oldenburg (1974) inversion of the competition's isostatic gravity
+layer to basement relief, with the horizontal gradient of that relief used to map
+candidate buried range-front / intrabasin faults under alluvial cover.
 """
 
-from .grid import EPSG, HEIGHT, WIDTH, TRANSFORM, Grid, load_grid, write_submission
-from .metric import ALPHA, BETA, RADIUS_PX, dti_binary, dti_exact, dti_bruteforce
-
-__all__ = [
-    "EPSG", "HEIGHT", "WIDTH", "TRANSFORM", "Grid", "load_grid", "write_submission",
-    "ALPHA", "BETA", "RADIUS_PX", "dti_binary", "dti_exact", "dti_bruteforce",
-]
 __version__ = "0.1.0"
+
+GRID = dict(width=3292, height=3730, res=100.0, crs="EPSG:32611")

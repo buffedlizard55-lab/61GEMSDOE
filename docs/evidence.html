@@ -1,0 +1,235 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evidence - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<h1>Evidence</h1>
+<h2>1. Why the previously best-scoring raster scored 0.2778</h2>
+<p>Read from the published bytes, not from the filenames.</p>
+<table><thead><tr><th>Registry raster (group&#x27;s file)</th><th>score claimed by group</th><th>pixels set</th><th>pixels ON visible catalogue</th><th>within 3 px of it</th><th>binary</th></tr></thead><tbody><tr><td>gems25-dotted-h19-5-d2-8-26-10-02-e56e</td><td>0.26</td><td>44090</td><td>0</td><td>8607</td><td>yes</td></tr><tr><td>gems27-topo-gap-closure-t-v2-on-d1-5-2</td><td>0.2449</td><td>61328</td><td>0</td><td>12187</td><td>yes</td></tr><tr><td>gems28-h27-4-r1-solo-d2-8-26-10-03-8ac</td><td>0.2708</td><td>40199</td><td>0</td><td>4716</td><td>yes</td></tr><tr><td>gems28-h36-1-rung30-blind-r1-26-10-03-</td><td>0.271</td><td>37660</td><td>0</td><td>4377</td><td>yes</td></tr><tr><td>gems32-probe-S1-ANCHOR-identical-to-li</td><td>0.26</td><td>44090</td><td>0</td><td>8607</td><td>yes</td></tr><tr><td>gems49-gate_ortho_w0.25-40k-26-10-06T2</td><td>0.2376</td><td>40000</td><td>0</td><td>0</td><td>yes</td></tr><tr><td>g-29-sgmc-off-catalogue-44k-26-10-03-c</td><td>0.0512</td><td>44090</td><td>647</td><td>4915</td><td>yes</td></tr><tr><td>g-30-d28-poisson300m-offcat-44090-26-1</td><td>0.26</td><td>44090</td><td>0</td><td>8607</td><td>yes</td></tr><tr><td>g-32-h33-h33-2-b2-26-10-04T220000Z-e5e</td><td>0.2778</td><td>37654</td><td>0</td><td>2171</td><td>yes</td></tr></tbody></table>
+<div class="card"><h3>Conclusions, each a measurement</h3><ul><li>Every registry raster is binary {0,1}; none uses soft probabilities.</li><li>Every registry raster is sparse: 0.73-1.19 percent of the 5,165,852 valid pixels.</li><li>Every high-scoring raster contains ZERO pixels on a visible catalogue fault; the one raster that does contain them (647 px) is the lowest scorer (0.0512).</li><li>The 0.2778 raster is the 0.2600 raster with every pixel within 3 px of the visible catalogue deleted -- an exact set difference, verified above.</li><li>Three filenames carry byte-identical rasters, so the group&#x27;s apparent 0.2600 plateau is one artifact under three names.</li></ul>
+<h3>The exact set differences</h3><p><code>top_minus_core</code>: removed 6436 pixels; all of them within 3 px of the visible catalogue: <strong>True</strong>; strict subset: True</p><p><code>solo_minus_core</code>: removed 3891 pixels; all of them within 3 px of the visible catalogue: <strong>True</strong>; strict subset: True</p>
+<h3>Registry rasters that are &gt;80% identical to each other</h3><ul><li>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif</li><li>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif</li><li>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif</li><li>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</li><li>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif</li><li>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif</li><li>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</li><li>gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif</li><li>gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</li><li>gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</li></ul>
+</div>
+<h2>2. Irregularities flagged for review</h2>
+<table><thead><tr><th>ID</th><th>Severity</th><th>Irregularity</th></tr></thead><tbody><tr><td>IR-61-SCORE-01</td><td>high</td><td>Every score in CLAIMED is a group/owner report. None is an organizer receipt linking those bytes to a leaderboard row. The public leaderboard rows are the only observed scores and they belong to other teams.</td></tr><tr><td>IR-61-FOOTPRINT-01</td><td>medium</td><td>This project measures 5,165,852 finite footprint pixels from the official labels; the group&#x27;s record says 5,167,373. A 0.03% difference in the footprint criterion.</td></tr><tr><td>IR-61-PROVENANCE-01</td><td>high</td><td>The competition rasters used here were obtained from a public GitHub mirror of the official data (the DrivenData data page is login-walled). All three match the official SHA-256 pins recorded by the mirror, but they are not organizer-authenticated.</td></tr></tbody></table>
+<h2>3. Leakage canary</h2>
+<table><thead><tr><th>Band / field</th><th>AUC vs visible catalogue</th></tr></thead><tbody><tr><td>B03_tmi_hgrad</td><td>0.5263</td></tr><tr><td>B05_isograv_slope</td><td>0.533</td></tr><tr><td>B06_tilt_curvature</td><td>0.4476</td></tr><tr><td>B11_isograv_vgrad_abs</td><td>0.5093</td></tr><tr><td>B15_provided_depth_to_basement</td><td>0.5114</td></tr><tr><td>B18_isograv_hgrad_abs</td><td>0.5289</td></tr><tr><td>LANE_grav_inversion_hgm</td><td>0.5061</td></tr></tbody></table>
+<p class="dim">AUC is measured against the <em>visible</em> catalogue, which is the wrong
+target by construction; it is a leakage detector, not a score. Values near 0.5 mean the
+band carries no single-pixel information about catalogue membership.</p>
+<h2>4. Uniqueness against the registry</h2>
+<p>Run <code>scripts/check_uniqueness.py</code>.</p>
+<h2>5. Run card</h2>
+<pre>{
+ &quot;hypothesis&quot;: &quot;Buried range-front and intrabasin fault steps are resolvable from the provided isostatic-gravity anomaly by Parker-Oldenburg inversion, and their horizontal-gradient ridges mark faults the surface catalogue misses.&quot;,
+ &quot;mechanism&quot;: &quot;Parker (1973) forward series / Oldenburg (1974) iteration on band 13 -&gt; basement relief -&gt; |grad relief| -&gt; grid-cell maxima emitted as ribbons -&gt; pixels within a tuned radius of the visible catalogue removed -&gt; binary all-finite GeoTIFF on the competition grid.&quot;,
+ &quot;competing_non_fault_process&quot;: &quot;Intrabasement density contrasts (intrusion margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge as a fault step and this lane cannot separate them.&quot;,
+ &quot;holdout_dti&quot;: {
+  &quot;value&quot;: 0.08875,
+  &quot;evaluator&quot;: &quot;src/holdout.py FoldContext, parity-checked against src/gems_metric.py score_arrays (max |diff| = 0)&quot;,
+  &quot;withheld_positives&quot;: 56485,
+  &quot;ci95&quot;: [
+   0.07687560182270048,
+   0.10041995595693597
+  ],
+  &quot;operating_point&quot;: {
+   &quot;k&quot;: 400000,
+   &quot;exclude_radius&quot;: 3,
+   &quot;ribbon_half_width&quot;: 0
+  },
+  &quot;random_line_control&quot;: {
+   &quot;n_draws&quot;: 20,
+   &quot;mean&quot;: 0.05429,
+   &quot;std&quot;: 0.000926,
+   &quot;max&quot;: 0.0566,
+   &quot;emission_count&quot;: 45000,
+   &quot;note&quot;: &quot;identical pixel budget, uniformly random locations&quot;
+  },
+  &quot;label&quot;: &quot;HOLDOUT-DTI (proxy: withheld segments of the VISIBLE catalogue, NOT the competition&#x27;s withheld set)&quot;
+ },
+ &quot;random_beats_lane_on_holdout&quot;: true,
+ &quot;verdict_reason&quot;: &quot;On the spatially blocked same-catalogue holdout the lane field does not beat a random dot field of identical size (0.0888 vs 0.0855 at saturation), and the registry&#x27;s own top-scoring raster scores 0.0045 here while its mid-scoring raster scores 0.1089 -- the competition ranking inverts on a same-catalogue holdout.&quot;,
+ &quot;uniqueness_vs_registry&quot;: {
+  &quot;submission&quot;: &quot;gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif&quot;,
+  &quot;n_pixels_emitted&quot;: 311617,
+  &quot;registry_dir&quot;: &quot;/tmp/refs/registry&quot;,
+  &quot;thresholds&quot;: {
+   &quot;rank_correlation&quot;: 0.9,
+   &quot;overlap_within_3px&quot;: 0.7
+  },
+  &quot;per_raster&quot;: [
+   {
+    &quot;file&quot;: &quot;gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif&quot;,
+    &quot;iou_pct&quot;: 0.6764,
+    &quot;n_their_pixels&quot;: 44090,
+    &quot;shared_pixels&quot;: 2390,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 45213,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.145092,
+    &quot;rank_correlation_including_zeros&quot;: 0.010882
+   },
+   {
+    &quot;file&quot;: &quot;gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif&quot;,
+    &quot;iou_pct&quot;: 0.8947,
+    &quot;n_their_pixels&quot;: 61328,
+    &quot;shared_pixels&quot;: 3307,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 50266,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.161307,
+    &quot;rank_correlation_including_zeros&quot;: 0.012604
+   },
+   {
+    &quot;file&quot;: &quot;gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif&quot;,
+    &quot;iou_pct&quot;: 0.684,
+    &quot;n_their_pixels&quot;: 40199,
+    &quot;shared_pixels&quot;: 2390,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 44689,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.14341,
+    &quot;rank_correlation_including_zeros&quot;: 0.012315
+   },
+   {
+    &quot;file&quot;: &quot;gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif&quot;,
+    &quot;iou_pct&quot;: 0.646,
+    &quot;n_their_pixels&quot;: 37660,
+    &quot;shared_pixels&quot;: 2242,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 44266,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.142053,
+    &quot;rank_correlation_including_zeros&quot;: 0.011955
+   },
+   {
+    &quot;file&quot;: &quot;gems32-probe-S1-ANCHOR-identical-to-live-02600.tif&quot;,
+    &quot;iou_pct&quot;: 0.6764,
+    &quot;n_their_pixels&quot;: 44090,
+    &quot;shared_pixels&quot;: 2390,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 45213,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.145092,
+    &quot;rank_correlation_including_zeros&quot;: 0.010882
+   },
+   {
+    &quot;file&quot;: &quot;gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif&quot;,
+    &quot;iou_pct&quot;: 0.9578,
+    &quot;n_their_pixels&quot;: 40000,
+    &quot;shared_pixels&quot;: 3336,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 45393,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.145669,
+    &quot;rank_correlation_including_zeros&quot;: 0.020495
+   },
+   {
+    &quot;file&quot;: &quot;gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif&quot;,
+    &quot;iou_pct&quot;: 0.7443,
+    &quot;n_their_pixels&quot;: 44090,
+    &quot;shared_pixels&quot;: 2628,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 35557,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.114105,
+    &quot;rank_correlation_including_zeros&quot;: 0.012805
+   },
+   {
+    &quot;file&quot;: &quot;gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif&quot;,
+    &quot;iou_pct&quot;: 0.6764,
+    &quot;n_their_pixels&quot;: 44090,
+    &quot;shared_pixels&quot;: 2390,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 45213,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.145092,
+    &quot;rank_correlation_including_zeros&quot;: 0.010882
+   },
+   {
+    &quot;file&quot;: &quot;gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif&quot;,
+    &quot;iou_pct&quot;: 0.689,
+    &quot;n_their_pixels&quot;: 37654,
+    &quot;shared_pixels&quot;: 2390,
+    &quot;my_pixels_within_3px_of_theirs&quot;: 43751,
+    &quot;my_pixels_within_3px_fraction&quot;: 0.1404,
+    &quot;rank_correlation_including_zeros&quot;: 0.013331
+   }
+  ],
+  &quot;verdict&quot;: &quot;unique&quot;,
+  &quot;summary&quot;: &quot;highest rank correlation 0.020 (&lt; 0.9); highest 3-px overlap fraction 0.1613 (&lt; 0.7)&quot;,
+  &quot;worst_rank_correlation&quot;: 0.020495,
+  &quot;worst_rank_correlation_against&quot;: &quot;gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif&quot;,
+  &quot;worst_pixels_within_3px_fraction&quot;: 0.161307,
+  &quot;caveat&quot;: &quot;The rank correlation includes the ~99 % of pixels that are zero in both rasters, so it is bounded away from 0 by construction; the 3-px overlap fraction is the discriminating statistic and is the one to read.&quot;
+ },
+ &quot;raster_sha256&quot;: &quot;a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2&quot;,
+ &quot;validator&quot;: {
+  &quot;passed&quot;: true,
+  &quot;checks&quot;: {
+   &quot;single_band&quot;: [
+    true,
+    1
+   ],
+   &quot;dtype_float&quot;: [
+    true,
+    &quot;float32&quot;
+   ],
+   &quot;crs_matches_template&quot;: [
+    true,
+    &quot;EPSG:32611&quot;
+   ],
+   &quot;crs_is_epsg32611&quot;: [
+    true,
+    &quot;EPSG:32611&quot;
+   ],
+   &quot;shape_matches_template&quot;: [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   &quot;shape_is_expected&quot;: [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   &quot;transform_matches_template&quot;: [
+    true,
+    [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ]
+   ],
+   &quot;no_nan_anywhere&quot;: [
+    true,
+    0
+   ],
+   &quot;min_ge_0&quot;: [
+    true,
+    0.0
+   ],
+   &quot;max_le_1&quot;: [
+    true,
+    1.0
+   ],
+   &quot;all_values_in_0_1&quot;: [
+    true,
+    null
+   ]
+  },
+  &quot;stats&quot;: {
+   &quot;n_positive&quot;: 311617,
+   &quot;n_pixels&quot;: 12279160,
+   &quot;positive_fraction&quot;: 0.025378,
+   &quot;unique_values_leq_8&quot;: [
+    0.0,
+    1.0
+   ],
+   &quot;min&quot;: 0.0,
+   &quot;max&quot;: 1.0,
+   &quot;n_unique&quot;: 2
+  }
+ },
+ &quot;submission_name&quot;: &quot;gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif&quot;,
+ &quot;submission_note&quot;: &quot;Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.&quot;,
+ &quot;note_length&quot;: 122,
+ &quot;verdict&quot;: &quot;negative&quot;
+}</pre>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>
