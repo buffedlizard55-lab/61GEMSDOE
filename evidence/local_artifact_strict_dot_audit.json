@@ -1,0 +1,230 @@
+{
+  "schema": "gems61-local-artifact-strict-dot-audit-v1",
+  "generated_utc": "2026-10-11T15:01:33Z",
+  "evidence_class": "MEASURED final-raster one-sided overlap audit; not an organizer receipt",
+  "policy": {
+    "support": "every finite value strictly >0 inside the scored footprint",
+    "distance": "Euclidean distance transform; candidate positive cell within <=3 grid cells",
+    "stop": "one-sided candidate-support overlap >0.70 against any one prior raster; no Jaccard/density/base-rate exception",
+    "rank_correlation": "not calculated after a strict overlap stop; correlation cannot reverse a failing overlap result"
+  },
+  "inventory": {
+    "path": "evidence/registry_accessible_index.json",
+    "sha256": "7fb2fe155743b07e9c211e92d704fc45edffdabaeda80c7fbbca59457fe7aad1",
+    "declared_scope_complete": true,
+    "organizer_registry_complete": false,
+    "declared_public_sources": 21,
+    "local_prior_tiffs": 11,
+    "indexed_records": 32,
+    "roots": [
+      "docs/downloads",
+      "docs/submissions",
+      "out"
+    ]
+  },
+  "comparator": {
+    "path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+    "positive_pixels": 311617,
+    "footprint_coverage_within_3px": 0.9581822330224662
+  },
+  "execution_note": "The comparator already breaches the literal one-sided overlap stop for every listed local candidate. The gate therefore stops on that measured failure; no Jaccard exception, holdout, or submission clearance is inferred. These post-placement checks do not replace a required pre-placement surface gate.",
+  "summary": {
+    "candidate_artifacts": 10,
+    "strict_overlap_stops": 10,
+    "cleared_for_submission": 0,
+    "holdout_reached": 0
+  },
+  "candidates": [
+    {
+      "paths": [
+        "docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif"
+      ],
+      "sha256": "565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9",
+      "positive_pixels": 25285,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 25224,
+      "one_sided_overlap_fraction": 0.9975875024718213,
+      "one_sided_overlap_percent": 99.75875024718212,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif"
+      ],
+      "sha256": "5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591",
+      "positive_pixels": 38000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 37567,
+      "one_sided_overlap_fraction": 0.9886052631578948,
+      "one_sided_overlap_percent": 98.86052631578947,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif"
+      ],
+      "sha256": "5dee4c5568eba145af1bc2290552e145c962663c355d9f77774a3602f996afd8",
+      "positive_pixels": 40000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 39474,
+      "one_sided_overlap_fraction": 0.98685,
+      "one_sided_overlap_percent": 98.685,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif"
+      ],
+      "sha256": "685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9",
+      "positive_pixels": 40000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 39455,
+      "one_sided_overlap_fraction": 0.986375,
+      "one_sided_overlap_percent": 98.6375,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif"
+      ],
+      "sha256": "84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1",
+      "positive_pixels": 88796,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 88628,
+      "one_sided_overlap_fraction": 0.9981080228839136,
+      "one_sided_overlap_percent": 99.81080228839136,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+      ],
+      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+      "positive_pixels": 40000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 39659,
+      "one_sided_overlap_fraction": 0.991475,
+      "one_sided_overlap_percent": 99.1475,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif"
+      ],
+      "sha256": "94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6",
+      "positive_pixels": 55301,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 52361,
+      "one_sided_overlap_fraction": 0.9468364044049836,
+      "one_sided_overlap_percent": 94.68364044049837,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif"
+      ],
+      "sha256": "e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873",
+      "positive_pixels": 40000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 39728,
+      "one_sided_overlap_fraction": 0.9932,
+      "one_sided_overlap_percent": 99.32,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif"
+      ],
+      "sha256": "f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c",
+      "positive_pixels": 10128,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 10003,
+      "one_sided_overlap_fraction": 0.9876579778830964,
+      "one_sided_overlap_percent": 98.76579778830964,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif"
+      ],
+      "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+      "positive_pixels": 40000,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 39437,
+      "one_sided_overlap_fraction": 0.985925,
+      "one_sided_overlap_percent": 98.5925,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    }
+  ]
+}

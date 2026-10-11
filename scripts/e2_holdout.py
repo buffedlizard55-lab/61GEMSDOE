@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Experiment 2 - basement-step ridges on the hide-and-recover holdout.
+"""RETIRED historical holdout experiment.
 
-Scores the lane's candidate against pre-registered controls, runs the leakage
-canary on every provided band, and measures segment-level recovery of withheld
-basin-interior faults.  Every number printed here is HOLDOUT-DTI, never a score.
+This older CLI does not apply the current complete-inventory pre-placement gate,
+and the lineage experiment budget is exhausted. Existing HOLDOUT-DTI files remain
+historical evidence; direct execution is disabled.
 """
 from __future__ import annotations
 
@@ -203,4 +203,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this historical holdout runner bypasses the current strict "
+        "pre-placement gate. Do not run another candidate or holdout trial."
+    )

@@ -1,0 +1,92 @@
+{
+  "generated_utc": "2026-10-11T00:00:00Z",
+  "note": "Every entry below carries a verification status. 'fetched' means the page was retrieved and read during this session. 'crossref' means the DOI metadata was resolved through api.crossref.org this session. Nothing here is cited from memory alone.",
+  "sources": [
+    {
+      "id": "S1",
+      "role": "contest",
+      "title": "The Geologic Enhanced Mapping System (GEMS) Prize Challenge",
+      "publisher": "DrivenData, for the U.S. Department of Energy Office of Geothermal, with support from the National Lab of the Rockies",
+      "url": "https://www.drivendata.org/competitions/306/",
+      "verification": "fetched",
+      "facts_used": "competition 306 is the GEMS Prize Challenge; total prize pool $300,000 (initial round $50,000, final round $250,000); competition end date Dec 3 2026 23:59 UTC; the submission workflow is: enrol via Compete!, download data from the data tab, make a prediction matching the submission format, click Submit then Make new submission; external data is encouraged provided it is licensed and shareable with the organisers for independent verification; the private test set is a newly expert-labeled set of faults inside the GeoDAWN region and there is spatial overlap with the training set"
+    },
+    {
+      "id": "S1b",
+      "role": "contest-rules",
+      "citation": "U.S. Department of Energy, Geologic Enhanced Mapping System (GEMS) Prize Official Rules, September 2026, administered by the National Laboratory of the Rockies",
+      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+      "verification": "fetched",
+      "facts_used": "a submission is a single GeoTIFF with a single raster layer at 100 m resolution covering the whole GeoDAWN study area; the scoring metric is the distance-weighted Tversky index; at most three submissions per week; one final submission must be chosen for both prize rounds and must be chosen without knowledge of private-test scores; round 1 scores on a private test dataset, round 2 on an updated test dataset created by geology experts after the competition closes; the training labels come from the INGENIOUS project's Great Basin Regional Dataset Compilation (Ayling et al. 2022, DOI 10.15121/1881483) and the test labels additionally include newly identified faults labelled by experts at NLR and USGS; use of generative AI must be disclosed in the submission narrative"
+    },
+    {
+      "id": "S2",
+      "role": "method",
+      "citation": "Parker, R.L., 1973, The rapid calculation of potential anomalies, Geophysical Journal International, v. 31, p. 447-455",
+      "doi": "10.1111/j.1365-246X.1973.tb06513.x",
+      "url": "https://doi.org/10.1111/j.1365-246X.1973.tb06513.x",
+      "verification": "crossref",
+      "facts_used": "the Fourier-series forward operator that turns an undulating interface with a constant density contrast into a gravity anomaly; the series is truncated at the point where the term amplitude falls below a tolerance, which is the criterion our forward operator implements"
+    },
+    {
+      "id": "S3",
+      "role": "method",
+      "citation": "Oldenburg, D.W., 1974, The inversion and interpretation of gravity anomalies, Geophysics, v. 39, no. 4, p. 526-536",
+      "doi": "10.1190/1.1440444",
+      "url": "https://pubs.geoscienceworld.org/geophysics/article/39/4/526/67757/The-inversion-and-interpretation-of-gravity",
+      "verification": "crossref",
+      "facts_used": "the iterative rearrangement of Parker's series that recovers interface relief from the anomaly, with a low-pass cosine taper to control the exponential growth of the high-wavenumber terms; the taper is characterised by its plateau and roll-off wavenumbers (our plateau_fraction and cutoff_wavelength)"
+    },
+    {
+      "id": "S4",
+      "role": "method",
+      "citation": "Blakely, R.J., and Jachens, R.C., 1991, Regional study of mineral resources in Nevada: Insights from three-dimensional analysis of gravity and magnetic anomalies, Geological Society of America Bulletin, v. 103, no. 6, p. 795-803",
+      "doi": "10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+      "url": "https://doi.org/10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+      "verification": "crossref",
+      "facts_used": "isostatic residual gravity over Nevada interpreted in terms of the pre-Tertiary basement surface; this is the published precedent for reading the isostatic gravity field as a buried basement-topography product rather than as a raw channel"
+    },
+    {
+      "id": "S5",
+      "role": "method",
+      "citation": "Jachens, R.C., and Moring, B.C., 1990, Maps of the thickness of Cenozoic deposits and the isostatic residual gravity over basement for Nevada, U.S. Geological Survey Open-File Report 90-404",
+      "doi": "10.3133/ofr90404",
+      "url": "https://doi.org/10.3133/ofr90404",
+      "verification": "crossref",
+      "facts_used": "the gravity and basin-thickness maps of Nevada produced by the method that Blakely & Jachens (S4) describe; this is the direct provenance of the organiser's iso_grav_anom and depth_to_base_surf layers"
+    },
+    {
+      "id": "S6",
+      "role": "method",
+      "citation": "Hildenbrand, T.G., Langenheim, V.E., Mankinen, E.A., and McKee, E.H., 1999, Gravity of the Pahute Mesa-Oasis Valley region, Nye County, Nevada, U.S. Geological Survey Open-File Report 99-49",
+      "url": "https://pubs.usgs.gov/of/1999/0049/pdf/of99-49.pdf",
+      "verification": "fetched",
+      "facts_used": "isostatic residual gravity inverted with the Jachens & Moring (1990) method as modified to include drill-hole data; discrete fill-density profile 1900 / 2100 / 2300 / 2450 kg/m3 over the depth intervals 0-200 / 200-600 / 600-1200 / >1200 m; pre-Tertiary basement density 2670 kg/m3 (2650-2670 commonly used); reduction density 2400 kg/m3; fill density rises to about 2450 kg/m3 by 1-2 km depth; alternative density-depth functions shift the mean basement depth by only +0.7 to -0.5 km; an 800 m reduction-density error can bias depth by about 1000 m; welded tuffs and dense volcanic domes can be mis-read as shallow basement"
+    },
+    {
+      "id": "S7",
+      "role": "external-data",
+      "citation": "Saltus, R.W., and Jachens, R.C., 1995, Gravity and basin-depth maps of the Basin and Range Province, western United States, U.S. Geological Survey Geophysical Investigations Map GP-1012, scale 1:2,500,000",
+      "url": "https://store.usgs.gov/product/23063",
+      "verification": "fetched",
+      "facts_used": "the product exists and is sold as a paper, folded map only; no digital raster is published on the product page. This is the map the lane prescribes for calibrating the density-contrast depth scale, and it is NOT obtainable from this sandbox. See docs/irregularities.html."
+    },
+    {
+      "id": "S8",
+      "role": "data-provenance",
+      "citation": "the organiser's feature stack, band 13 iso_grav_anom and band 15 depth_to_base_surf, together with the official labels, existing faults and sample submission rasters",
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+      "verification": "not fetched - the data tab is behind a login and no DrivenData credentials are available in this sandbox",
+      "facts_used": "the rasters themselves were restored from the sibling repository's hash-pinned cache and every pin verified, see evidence/data_preparation.json"
+    },
+    {
+      "id": "S9",
+      "role": "data-provenance",
+      "citation": "Ayling, B., and 21 others, 2022, INGENIOUS - Great Basin Regional Dataset Compilation [data set], Geothermal Data Repository, GBCGE, NBMG, UNR",
+      "doi": "10.15121/1881483",
+      "url": "https://doi.org/10.15121/1881483",
+      "verification": "cited in the official rules (S1b); the dataset page itself was not fetched",
+      "facts_used": "the official rules state that the competition's training labels were obtained from this compilation, which is the provenance of the mapped-fault catalogue this lane holds out"
+    }
+  ]
+}

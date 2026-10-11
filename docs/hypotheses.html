@@ -20,7 +20,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 </p>
 
 <section><h2>#1 H61-L — 1 m lidar scarp detection restricted to gravity corridors</h2>
-<p class="callout"><b>Measured pre-placement outcome:</b> DUPLICATE_LANE_DRIFT — STOP; 94.6692% one-sided overlap; holdout not run by protocol, no TIFF emitted.</p><table>
+<p class="callout"><b>Measured pre-placement outcome:</b> DUPLICATE_LANE_DRIFT — STOP; 94.6692% one-sided overlap; this current run stopped before holdout/placement and emitted no TIFF. A separate archived main-branch H61-L TIFF exists but fails the strict final-dot gate.</p><table>
 <tr><th>Layers</th><td>USGS 3DEP 1 m DEM (organiser&#x27;s 1m_DEM_links.csv; public domain) → scarp-likelihood raster; this session&#x27;s ±1 km basement-step corridor and basin mask as prior.</td></tr>
 <tr><th>Physical signature</th><td>Metre-scale topographic steps (scarp height 0.5–5 m, slope break, curvature couplet) — the primary evidence the test-set mappers used.</td></tr>
 <tr><th>Why it may catch catalogue-missing faults</th><td>The 1:24k–1:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.</td></tr>
@@ -67,7 +67,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <h2>Selection rule</h2>
 <p>A hypothesis may proceed to holdout only after its pre-placement surface clears both literal thresholds against every raster in the declared inventory.
 A passing surface would then be tested by the shared spatially blocked hide-and-recover evaluator, with a feature-alone leakage canary and a matched random-line control.
-Weekly promotion is a separate selector decision. H61-L failed before holdout, so no score or TIFF is imputed.</p>
+Weekly promotion is a separate selector decision. The current-run H61-L candidate failed before holdout, so no score or TIFF is imputed for that run. A separate archived main-branch H61-L TIFF is retained as historical, and fails the strict final-dot gate.</p>
 
 <hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
 ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·

@@ -1,0 +1,592 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator_version": "gems61-pooled-hide-v1",
+  "generated_utc": "2026-10-11T02:25:21Z",
+  "parameters": {
+    "drho": 400.0,
+    "z0": 3000.0,
+    "cutoff_wavelength_m": 5000.0,
+    "budget": 40000,
+    "hide_fraction": 0.2,
+    "buffer_px": 3,
+    "seed": 61011,
+    "thin_px": 1.0
+  },
+  "n_withheld_positives": 12898,
+  "n_visible_masked": 45895,
+  "folds": {
+    "NW": 6073,
+    "NE": 3320,
+    "SW": 1732,
+    "SE": 1773
+  },
+  "basin_interior_px": 2066949,
+  "magnetic": {
+    "magnetic_crest_px": 209343,
+    "ambiguous_step_px": 25711,
+    "ambiguous_fraction": 0.1888085184505232
+  },
+  "resolution_px": {
+    "p10": 2.0,
+    "p50": 9.0,
+    "p90": 19.209372712298546
+  },
+  "holdout_dti": {
+    "ribbon_k1": {
+      "dots": 32600,
+      "null_dots": 32600,
+      "dti": 0.03497864527585773,
+      "ci95": [
+        0.02839259548682754,
+        0.042196456970852704
+      ],
+      "null_dti": 0.02738503827565621,
+      "reference": "null__ribbon_k1",
+      "diff": 0.007902739062497603,
+      "diff_ci95": [
+        -0.0005293660451242398,
+        0.016839800510586877
+      ],
+      "p_ge_zero": 0.962,
+      "beats_null": false
+    },
+    "ribbon_k2_s3": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.030528979647100014,
+      "ci95": [
+        0.02419375702173404,
+        0.03765124753648299
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__ribbon_k2_s3",
+      "diff": -0.005565072405240193,
+      "diff_ci95": [
+        -0.016477621244195016,
+        0.004221396494152449
+      ],
+      "p_ge_zero": 0.147,
+      "beats_null": false
+    },
+    "ribbon_k2_s6": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.03914350690470362,
+      "ci95": [
+        0.03240279248648018,
+        0.04676373071864154
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__ribbon_k2_s6",
+      "diff": 0.0031737442214131006,
+      "diff_ci95": [
+        -0.007026339902483897,
+        0.012834152719687839
+      ],
+      "p_ge_zero": 0.74,
+      "beats_null": false
+    },
+    "ribbon_k3_s6": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.044821183637859544,
+      "ci95": [
+        0.03532105011262794,
+        0.05613049649453927
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__ribbon_k3_s6",
+      "diff": 0.008972054322833557,
+      "diff_ci95": [
+        -0.002086981995160073,
+        0.02055785535874802
+      ],
+      "p_ge_zero": 0.93,
+      "beats_null": false
+    },
+    "ribbon_k4_s3": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.03552728982989586,
+      "ci95": [
+        0.025783269316556973,
+        0.04779614792549759
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__ribbon_k4_s3",
+      "diff": -0.00030570216618599355,
+      "diff_ci95": [
+        -0.011072985524598183,
+        0.011570590254172366
+      ],
+      "p_ge_zero": 0.468,
+      "beats_null": false
+    },
+    "ribbon_k3_s9": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.04256592367642932,
+      "ci95": [
+        0.03358282099410926,
+        0.052319665165849356
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__ribbon_k3_s9",
+      "diff": 0.0066806914477546735,
+      "diff_ci95": [
+        -0.0048326710934667285,
+        0.01829565963507799
+      ],
+      "p_ge_zero": 0.87,
+      "beats_null": false
+    },
+    "basin_k1": {
+      "dots": 14902,
+      "null_dots": 14902,
+      "dti": 0.021558742533975744,
+      "ci95": [
+        0.015435667862271402,
+        0.027911573399168756
+      ],
+      "null_dti": 0.015169605195049783,
+      "reference": "null__basin_k1",
+      "diff": 0.006399392245658488,
+      "diff_ci95": [
+        0.0008581012531366712,
+        0.012672719347573998
+      ],
+      "p_ge_zero": 0.991,
+      "beats_null": true
+    },
+    "basin_k2_s3": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.03143684858584126,
+      "ci95": [
+        0.023537109006192856,
+        0.04012554447757634
+      ],
+      "null_dti": 0.029254852623558043,
+      "reference": "null__basin_k2_s3",
+      "diff": 0.0020638772937240156,
+      "diff_ci95": [
+        -0.006729426795615709,
+        0.01208282763628898
+      ],
+      "p_ge_zero": 0.656,
+      "beats_null": false
+    },
+    "basin_k2_s6": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.037723828099785396,
+      "ci95": [
+        0.029902093016717746,
+        0.04585914425845375
+      ],
+      "null_dti": 0.029254852623558043,
+      "reference": "null__basin_k2_s6",
+      "diff": 0.008420497630085023,
+      "diff_ci95": [
+        0.0006361744939173492,
+        0.017156235042172268
+      ],
+      "p_ge_zero": 0.984,
+      "beats_null": true
+    },
+    "basin_k3_s6": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.0318871398225847,
+      "ci95": [
+        0.025318049628908507,
+        0.03841531709594909
+      ],
+      "null_dti": 0.029254852623558043,
+      "reference": "null__basin_k3_s6",
+      "diff": 0.0026868398568047178,
+      "diff_ci95": [
+        -0.004746631894953754,
+        0.010867352007596103
+      ],
+      "p_ge_zero": 0.738,
+      "beats_null": false
+    },
+    "basin_k4_s3": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.02556315909505493,
+      "ci95": [
+        0.019178794654436518,
+        0.03303339688364877
+      ],
+      "null_dti": 0.029254852623558043,
+      "reference": "null__basin_k4_s3",
+      "diff": -0.003542452081948767,
+      "diff_ci95": [
+        -0.012400030815037657,
+        0.006695946104659727
+      ],
+      "p_ge_zero": 0.223,
+      "beats_null": false
+    },
+    "basin_k3_s9": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.030214120113400626,
+      "ci95": [
+        0.02478291023189254,
+        0.03573539048970827
+      ],
+      "null_dti": 0.029254852623558043,
+      "reference": "null__basin_k3_s9",
+      "diff": 0.0009348316226139142,
+      "diff_ci95": [
+        -0.005127990864197513,
+        0.008178395361408661
+      ],
+      "p_ge_zero": 0.585,
+      "beats_null": false
+    },
+    "demoted_k1": {
+      "dots": 29113,
+      "null_dots": 29113,
+      "dti": 0.032258989228910115,
+      "ci95": [
+        0.026635753236072115,
+        0.03825958221437029
+      ],
+      "null_dti": 0.025247081315034753,
+      "reference": "null__demoted_k1",
+      "diff": 0.007411441144095797,
+      "diff_ci95": [
+        -7.037707304348478e-06,
+        0.015187931904990218
+      ],
+      "p_ge_zero": 0.974,
+      "beats_null": false
+    },
+    "demoted_k3_s6": {
+      "dots": 40000,
+      "null_dots": 40000,
+      "dti": 0.045562846832776734,
+      "ci95": [
+        0.03564033574230126,
+        0.0568759968254678
+      ],
+      "null_dti": 0.03595853811219751,
+      "reference": "null__demoted_k3_s6",
+      "diff": 0.00969562979613393,
+      "diff_ci95": [
+        -0.001902295456289475,
+        0.021709448195985196
+      ],
+      "p_ge_zero": 0.939,
+      "beats_null": false
+    },
+    "basin_topthrow_k1": {
+      "dots": 4001,
+      "null_dots": 4001,
+      "dti": 0.006734440299278032,
+      "ci95": [
+        0.0034412031849639434,
+        0.010477458398239324
+      ],
+      "null_dti": 0.00558361878994697,
+      "reference": "null__basin_topthrow_k1",
+      "diff": 0.0012361784784928318,
+      "diff_ci95": [
+        -0.004282265632648996,
+        0.00686147545320866
+      ],
+      "p_ge_zero": 0.654,
+      "beats_null": false
+    }
+  },
+  "raw_dti": {
+    "ribbon_k1": 0.034978645275857714,
+    "ribbon_k2_s3": 0.030528979647100014,
+    "ribbon_k2_s6": 0.03914350690470362,
+    "ribbon_k3_s6": 0.044821183637859544,
+    "ribbon_k4_s3": 0.03552728982989586,
+    "ribbon_k3_s9": 0.04256592367642933,
+    "basin_k1": 0.021558742533975744,
+    "basin_k2_s3": 0.03143684858584124,
+    "basin_k2_s6": 0.037723828099785396,
+    "basin_k3_s6": 0.0318871398225847,
+    "basin_k4_s3": 0.02556315909505493,
+    "basin_k3_s9": 0.030214120113400626,
+    "demoted_k1": 0.03225898922891011,
+    "demoted_k3_s6": 0.04556284683277675,
+    "basin_topthrow_k1": 0.006734440299278032,
+    "null__ribbon_k1": 0.027385038275656214,
+    "null__ribbon_k2_s3": 0.03595853811219752,
+    "null__ribbon_k2_s6": 0.03595853811219752,
+    "null__ribbon_k3_s6": 0.03595853811219752,
+    "null__ribbon_k4_s3": 0.03595853811219752,
+    "null__ribbon_k3_s9": 0.03595853811219752,
+    "null__basin_k1": 0.015169605195049783,
+    "null__basin_k2_s3": 0.029254852623558043,
+    "null__basin_k2_s6": 0.029254852623558043,
+    "null__basin_k3_s6": 0.029254852623558043,
+    "null__basin_k4_s3": 0.029254852623558043,
+    "null__basin_k3_s9": 0.029254852623558043,
+    "null__demoted_k1": 0.025247081315034753,
+    "null__demoted_k3_s6": 0.03595853811219752,
+    "null__basin_topthrow_k1": 0.00558361878994697
+  },
+  "recovery": {
+    "ribbon_k1": {
+      "segments_total": 640,
+      "segments_recovered": 202,
+      "recovery_rate": 0.315625,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 105,
+      "basin_recovery_rate": 0.3559322033898305
+    },
+    "null__ribbon_k1": {
+      "segments_total": 640,
+      "segments_recovered": 128,
+      "recovery_rate": 0.2,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 57,
+      "basin_recovery_rate": 0.19322033898305085
+    },
+    "ribbon_k2_s3": {
+      "segments_total": 640,
+      "segments_recovered": 126,
+      "recovery_rate": 0.196875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 86,
+      "basin_recovery_rate": 0.29152542372881357
+    },
+    "null__ribbon_k2_s3": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "ribbon_k2_s6": {
+      "segments_total": 640,
+      "segments_recovered": 163,
+      "recovery_rate": 0.2546875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 104,
+      "basin_recovery_rate": 0.3525423728813559
+    },
+    "null__ribbon_k2_s6": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "ribbon_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 158,
+      "recovery_rate": 0.246875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 87,
+      "basin_recovery_rate": 0.29491525423728815
+    },
+    "null__ribbon_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "ribbon_k4_s3": {
+      "segments_total": 640,
+      "segments_recovered": 99,
+      "recovery_rate": 0.1546875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 53,
+      "basin_recovery_rate": 0.17966101694915254
+    },
+    "null__ribbon_k4_s3": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "ribbon_k3_s9": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 95,
+      "basin_recovery_rate": 0.3220338983050847
+    },
+    "null__ribbon_k3_s9": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "basin_k1": {
+      "segments_total": 640,
+      "segments_recovered": 99,
+      "recovery_rate": 0.1546875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 96,
+      "basin_recovery_rate": 0.3254237288135593
+    },
+    "null__basin_k1": {
+      "segments_total": 640,
+      "segments_recovered": 63,
+      "recovery_rate": 0.0984375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 60,
+      "basin_recovery_rate": 0.2033898305084746
+    },
+    "basin_k2_s3": {
+      "segments_total": 640,
+      "segments_recovered": 117,
+      "recovery_rate": 0.1828125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 111,
+      "basin_recovery_rate": 0.376271186440678
+    },
+    "null__basin_k2_s3": {
+      "segments_total": 640,
+      "segments_recovered": 156,
+      "recovery_rate": 0.24375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 149,
+      "basin_recovery_rate": 0.5050847457627119
+    },
+    "basin_k2_s6": {
+      "segments_total": 640,
+      "segments_recovered": 164,
+      "recovery_rate": 0.25625,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 156,
+      "basin_recovery_rate": 0.5288135593220339
+    },
+    "null__basin_k2_s6": {
+      "segments_total": 640,
+      "segments_recovered": 156,
+      "recovery_rate": 0.24375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 149,
+      "basin_recovery_rate": 0.5050847457627119
+    },
+    "basin_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 144,
+      "recovery_rate": 0.225,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 137,
+      "basin_recovery_rate": 0.46440677966101696
+    },
+    "null__basin_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 156,
+      "recovery_rate": 0.24375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 149,
+      "basin_recovery_rate": 0.5050847457627119
+    },
+    "basin_k4_s3": {
+      "segments_total": 640,
+      "segments_recovered": 93,
+      "recovery_rate": 0.1453125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 86,
+      "basin_recovery_rate": 0.29152542372881357
+    },
+    "null__basin_k4_s3": {
+      "segments_total": 640,
+      "segments_recovered": 156,
+      "recovery_rate": 0.24375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 149,
+      "basin_recovery_rate": 0.5050847457627119
+    },
+    "basin_k3_s9": {
+      "segments_total": 640,
+      "segments_recovered": 162,
+      "recovery_rate": 0.253125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 158,
+      "basin_recovery_rate": 0.535593220338983
+    },
+    "null__basin_k3_s9": {
+      "segments_total": 640,
+      "segments_recovered": 156,
+      "recovery_rate": 0.24375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 149,
+      "basin_recovery_rate": 0.5050847457627119
+    },
+    "demoted_k1": {
+      "segments_total": 640,
+      "segments_recovered": 201,
+      "recovery_rate": 0.3140625,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 101,
+      "basin_recovery_rate": 0.3423728813559322
+    },
+    "null__demoted_k1": {
+      "segments_total": 640,
+      "segments_recovered": 107,
+      "recovery_rate": 0.1671875,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 45,
+      "basin_recovery_rate": 0.15254237288135594
+    },
+    "demoted_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 157,
+      "recovery_rate": 0.2453125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 87,
+      "basin_recovery_rate": 0.29491525423728815
+    },
+    "null__demoted_k3_s6": {
+      "segments_total": 640,
+      "segments_recovered": 173,
+      "recovery_rate": 0.2703125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 73,
+      "basin_recovery_rate": 0.24745762711864408
+    },
+    "basin_topthrow_k1": {
+      "segments_total": 640,
+      "segments_recovered": 24,
+      "recovery_rate": 0.0375,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 23,
+      "basin_recovery_rate": 0.07796610169491526
+    },
+    "null__basin_topthrow_k1": {
+      "segments_total": 640,
+      "segments_recovered": 13,
+      "recovery_rate": 0.0203125,
+      "basin_segments_total": 295,
+      "basin_segments_recovered": 13,
+      "basin_recovery_rate": 0.04406779661016949
+    }
+  },
+  "canary_auc": {
+    "inv_step_gradient_s1": 0.5339994603458924,
+    "inv_step_throw_s1": 0.5010838704457985,
+    "inv_step_gradient_s2": 0.5367296383304738,
+    "inv_step_throw_s2": 0.5006460839304044,
+    "inv_step_gradient_s3": 0.5391941515327151,
+    "inv_step_throw_s3": 0.4987328588938818,
+    "band15_depth_gradient": 0.5387215782389069,
+    "band13_gravity_gradient": 0.5520627653990611,
+    "band12_det_elev_gradient": 0.6137382414086487
+  },
+  "runtime_s": 361.3
+}

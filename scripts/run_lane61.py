@@ -586,4 +586,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(
+        "Retired: this legacy pipeline uses an incomplete local corpus and the removed "
+        "dense-reference/Jaccard uniqueness exception. Use the current strict-gate "
+        "runner; do not emit or score this candidate."
+    )

@@ -21,9 +21,11 @@ code,pre{overflow-wrap:anywhere}
 <p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes (19/19 checks),
 but strict uniqueness fails: <b>98.5925%</b> of its positive pixels fall within 3 px of
 <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
-<p><b>Top new hypothesis H61-L:</b> its pre-placement scarp-ribbon surface also fails, at
-<b>94.6692%</b> one-sided overlap. The prescribed stop was applied: <b>no H61-L holdout, final dots, or TIFF</b> were generated.
-The accessible public inventory is not organizer-complete.</p>
+<p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
+<b>94.6692%</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
+A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
+<p><b>Post-merge local-artifact audit:</b> <b>10/10</b> local candidate TIFFs fail the same literal final-dot threshold.
+The audited main-branch H61-L/H61-M/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. The accessible inventory is not organizer-complete.</p>
 <p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
 No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
 </div>
@@ -32,6 +34,9 @@ No weekly slot has been used and no organizer receipt/score exists for a project
 <p><a class="btn warn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>Download H61-G diagnostic TIFF — DO NOT SUBMIT</a>
 <a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>Diagnostic ZIP</a>
 <a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">Format receipt</a></p>
+<p><b>Archived file under <code>docs/submissions/</code> — DO NOT SUBMIT:</b> its strict final-dot overlap is 99.1475%.
+<a href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">View the historical TIFF only with this warning</a> ·
+<a href="../evidence/local_artifact_strict_dot_audit.json">full strict artifact audit</a>.</p>
 <p>SHA-256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission-form note attached to the historic artifact (133/140 chars):
 <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code>. That note does not make the file cleared.</p>
 <h2>How to submit a future cleared file</h2>
@@ -41,7 +46,7 @@ No weekly slot has been used and no organizer receipt/score exists for a project
 <li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">official submissions page</a> while logged into the competition account; upload the GeoTIFF and paste the note from the run card (at most 140 characters).</li>
 <li>Save the platform's submission receipt and score; only then label the value ORGANIZER-CONFIRMED for those exact bytes.</li>
 </ol>
-<p><b>Do not upload the H61-G or H61-L files from this session.</b> No automatic portal submission was attempted; no competition credential was used.</p>
+<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-X downloads.</b> The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
 <h2>Why the old range error should not recur</h2>
 <p>The H61-G diagnostic file passes its local template/range validator: single-band float32, EPSG:32611, 3730×3292, sample transform, finite everywhere,
 values in [0,1], zero outside the footprint. These checks establish local formatting only—not uniqueness, upload acceptance, or score.</p>

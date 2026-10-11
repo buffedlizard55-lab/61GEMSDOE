@@ -44,6 +44,7 @@ h61l = load("evidence/h61l_surface.json")
 lidar = load("evidence/h61l_lidar_source.json")
 hyps = load("evidence/h61g_hypotheses.json")
 registry = load("evidence/registry_accessible_index.json")
+artifact_audit = load("evidence/local_artifact_strict_dot_audit.json")
 forensics = load("reports/forensics.json")
 
 TIF = fin["download_tif"]
@@ -125,9 +126,11 @@ def status_box() -> str:
 <p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes ({sum(bool(v) for v in fin['validator'].values())}/{len(fin['validator'])} checks),
 but strict uniqueness fails: <b>{H61G_DENSE['my_dots_within_3px_of_theirs']:.4%}</b> of its positive pixels fall within 3 px of
 <code>{esc(H61G_DENSE['file'])}</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
-<p><b>Top new hypothesis H61-L:</b> its pre-placement scarp-ribbon surface also fails, at
-<b>{LIDAR_DENSE['my_dots_within_3px_of_theirs']:.4%}</b> one-sided overlap. The prescribed stop was applied: <b>no H61-L holdout, final dots, or TIFF</b> were generated.
-The accessible public inventory is not organizer-complete.</p>
+<p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
+<b>{LIDAR_DENSE['my_dots_within_3px_of_theirs']:.4%}</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
+A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
+<p><b>Post-merge local-artifact audit:</b> <b>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']}</b> local candidate TIFFs fail the same literal final-dot threshold.
+The audited main-branch H61-L/H61-M/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. The accessible inventory is not organizer-complete.</p>
 <p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
 No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
 </div>"""
@@ -150,7 +153,8 @@ The first question is whether an artifact is safe to submit. The answer is curre
 <table><tr><th>Artifact/result</th><th>What is measured</th><th>Decision</th></tr>
 <tr><td>H61-G existing TIF</td><td>One-band float32, EPSG:32611, 3730×3292, template transform, all finite, [0,1]. SHA-256 <code>{SHA}</code>.</td><td>Format-valid only; strict uniqueness fails ({H61G_DENSE['my_dots_within_3px_of_theirs']:.4%} &gt; 70%). Diagnostic only.</td></tr>
 <tr><td>H61-G old holdout</td><td>{metric_label(CANDIDATE, hold['evaluator'], hold['n_withheld_truth_px'])}. Random lines at equal budget: {metric_label(RANDOM_LINES, hold['evaluator'], hold['n_withheld_truth_px'])}.</td><td>Historical proxy evidence; not an organizer score.</td></tr>
-<tr><td>H61-L 3DEP scarp-ribbon surface</td><td>{LIDAR_GATE['candidate_support_pixels']:,} positive surface pixels; full-footprint Spearman max {LIDAR_GATE['worst_spearman']:.4f}; worst one-sided 3 px overlap {LIDAR_GATE['worst_overlap']:.4%}.</td><td>Pre-placement uniqueness stop; no holdout or TIFF.</td></tr>
+<tr><td>H61-L current-run surface</td><td>{LIDAR_GATE['candidate_support_pixels']:,} positive surface pixels; full-footprint Spearman max {LIDAR_GATE['worst_spearman']:.4f}; worst one-sided 3 px overlap {LIDAR_GATE['worst_overlap']:.4%}.</td><td>Pre-placement uniqueness stop; this run made no holdout or TIFF.</td></tr>
+<tr><td>Archived local candidate TIFFs</td><td>{artifact_audit['summary']['candidate_artifacts']} unique TIFF artifacts audited against <code>{esc(Path(artifact_audit['comparator']['path']).name)}</code>; one-sided overlap range {min(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}–{max(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}.</td><td>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']} strict final-dot stops; no file cleared. <a href="../evidence/local_artifact_strict_dot_audit.json">Audit receipt</a>.</td></tr>
 </table>
 <p><b>Download for audit only:</b> {file_link(Path(TIF).name, DOWNLOAD_TIF, download=True)} · {file_link("ZIP", DOWNLOAD_ZIP, download=True)} ·
 {file_link("format receipt", DOWNLOAD_RECEIPT)}. Do not upload these archived bytes. A future submission needs both a passing pre-placement and final-dot gate plus an eligible holdout result.</p>
@@ -167,6 +171,9 @@ exec_body = f"""
 <p><a class="btn warn" href="{esc(DOWNLOAD_TIF)}" download>Download H61-G diagnostic TIFF — DO NOT SUBMIT</a>
 <a class="btn sec" href="{esc(DOWNLOAD_ZIP)}" download>Diagnostic ZIP</a>
 <a class="btn sec" href="{esc(DOWNLOAD_RECEIPT)}">Format receipt</a></p>
+<p><b>Archived file under <code>docs/submissions/</code> — DO NOT SUBMIT:</b> its strict final-dot overlap is 99.1475%.
+<a href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">View the historical TIFF only with this warning</a> ·
+<a href="../evidence/local_artifact_strict_dot_audit.json">full strict artifact audit</a>.</p>
 <p>SHA-256 <code>{SHA}</code> · submission-form note attached to the historic artifact ({fin['note_chars']}/140 chars):
 <code>{esc(NOTE)}</code>. That note does not make the file cleared.</p>
 <h2>How to submit a future cleared file</h2>
@@ -176,7 +183,7 @@ exec_body = f"""
 <li>Open the <a href="{COMP}submissions/">official submissions page</a> while logged into the competition account; upload the GeoTIFF and paste the note from the run card (at most 140 characters).</li>
 <li>Save the platform's submission receipt and score; only then label the value ORGANIZER-CONFIRMED for those exact bytes.</li>
 </ol>
-<p><b>Do not upload the H61-G or H61-L files from this session.</b> No automatic portal submission was attempted; no competition credential was used.</p>
+<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-X downloads.</b> The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
 <h2>Why the old range error should not recur</h2>
 <p>The H61-G diagnostic file passes its local template/range validator: single-band float32, EPSG:32611, 3730×3292, sample transform, finite everywhere,
 values in [0,1], zero outside the footprint. These checks establish local formatting only—not uniqueness, upload acceptance, or score.</p>
@@ -204,7 +211,7 @@ but without a submission receipt we cannot assert the artifact scored 0.2778.</p
 {metric_label(H19_DOTTED, hold['evaluator'], hold['n_withheld_truth_px'])} for the as-published H19-5 dotted reference raster and
 {metric_label(RANDOM_LINES, hold['evaluator'], hold['n_withheld_truth_px'])} for the equal-budget random-line control.
 These are all HOLDOUT-DTI proxy scores, not organizer scores. H61-G does not beat the strongest reference and fails uniqueness.
-The H61-L top hypothesis was stopped before holdout because its surface failed the strict overlap rule.</p>
+The current-run H61-L top hypothesis was stopped before holdout because its surface failed the strict overlap rule. A separate archived main-branch H61-L variant has historical HOLDOUT-DTI evidence, but its final TIFF fails the current strict overlap rule and is not eligible.</p>
 <h2>Leaderboard discrepancy</h2>
 <p>The official page fetched 2026-10-11 listed the leader at 0.4133; 0.3195 was rank #8. A previously saved sibling-site snapshot gave a different ordering,
 so we report that dated official fetch, not an undated value. No owner-reported score is substituted for a public leaderboard row.</p>
@@ -216,7 +223,7 @@ for hypothesis in sorted(hyps, key=lambda row: row.get("rank", 99)):
     if hypothesis.get("id") == "H61-L":
         status_note = (f"<p class=\"callout\"><b>Measured pre-placement outcome:</b> {hypothesis.get('preplacement_status')}; "
                        f"{hypothesis.get('one_sided_overlap_fraction', 0):.4%} one-sided overlap; "
-                       "holdout not run by protocol, no TIFF emitted.</p>")
+                       "this current run stopped before holdout/placement and emitted no TIFF. A separate archived main-branch H61-L TIFF exists but fails the strict final-dot gate.</p>")
     hyp_rows.append(f"""
 <section><h2>#{hypothesis['rank']} {esc(hypothesis['id'])} — {esc(hypothesis['name'])}</h2>
 {status_note}<table>
@@ -236,7 +243,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <h2>Selection rule</h2>
 <p>A hypothesis may proceed to holdout only after its pre-placement surface clears both literal thresholds against every raster in the declared inventory.
 A passing surface would then be tested by the shared spatially blocked hide-and-recover evaluator, with a feature-alone leakage canary and a matched random-line control.
-Weekly promotion is a separate selector decision. H61-L failed before holdout, so no score or TIFF is imputed.</p>
+Weekly promotion is a separate selector decision. The current-run H61-L candidate failed before holdout, so no score or TIFF is imputed for that run. A separate archived main-branch H61-L TIFF is retained as historical, and fails the strict final-dot gate.</p>
 """
 
 method_body = f"""
@@ -262,7 +269,7 @@ Its file is dots, not the requested basement-step ribbons; this is recorded as a
 <p>H61-L uses an upstream public 12-band terrain-descriptor raster derived from USGS 3DEP 1 m DEM tiles (not raw lidar and not a fault prediction).
 It combines shortwave slope excess, 10 m/50 m slope break, crest/base curvature and structure-tensor coherence, then forms 3-pixel scarp ribbons inside
 basement-step corridors under fill. The descriptor covers {lidar['shape'][0]}×{lidar['shape'][1]} cells and {h61l['surface_metadata']['lidar_coverage_fraction_of_footprint']:.1%} of the valid competition footprint;
-SHA-256 <code>{lidar['local_sha256']}</code>. Its surface failed the strict pre-placement gate, so no holdout was run.</p>
+SHA-256 <code>{lidar['local_sha256']}</code>. The current-run surface failed the strict pre-placement gate, so that run did not reach holdout. A different main-branch H61-L variant has a historical HOLDOUT-DTI result but its final TIFF fails the strict post-placement gate and is not cleared.</p>
 <h2>Named non-fault mimic and trusted sources</h2>
 <ul>
 <li>Intrabasement lithologic/density contacts can make gravity steps without a fault; terrain-only steps can instead be fan toes, terrace risers, channels, landslides, roads or mines.</li>
@@ -294,10 +301,10 @@ These are proxy scores on withheld catalogue segments, not live organizer scores
 <table><tr><th>Arm</th><th>Positive pixels per draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th><th>Basin-interior segment recovery</th></tr>
 {''.join(hold_rows)}</table>
 <p>The historical H61-G construction is below the as-published dotted H19-5 reference and is not eligible for a slot. Its strict final-dot uniqueness verdict is
-<code>{esc(uni['verdict'])}</code>. The top new candidate H61-L was stopped at the pre-placement surface gate; <b>H61-L HOLDOUT-DTI: NOT RUN</b>.</p>
+<code>{esc(uni['verdict'])}</code>. The current-run H61-L surface stopped before holdout, so that run has no H61-L HOLDOUT-DTI. A separate archived main-branch H61-L variant was measured at <b>HOLDOUT-DTI 0.044330</b> (95% CI [0.041405, 0.047832]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2</code>), but its final TIFF has 98.6375% strict one-sided overlap and is not eligible for a slot.</p>
 <p>On the same 1,999 withheld basin-interior segments, historical H61-G recovered {CANDIDATE['segments_recovered_basin_interior']:,} ({CANDIDATE['basin_recovery_rate']:.1%}) versus {RANDOM_LINES['segments_recovered_basin_interior']:,} ({RANDOM_LINES['basin_recovery_rate']:.1%}) for equal-budget random lines. This is proxy recovery, not hidden organizer truth.</p>
 <p>Feature-alone canary on the historical H61-G holdout: worst AUC {hold['leakage_canary']['worst_auc']:.3f}, threshold 0.90.
-H61-L did not reach the holdout, so no H61-L canary or DTI is claimed.</p>
+The current-run H61-L surface did not reach holdout, so no canary or DTI is claimed for that run. The separate main-branch H61-L variant's historical HOLDOUT-DTI is documented above and does not clear its strict final-dot failure.</p>
 """
 
 irr = load("evidence/h61g_irregularities.json")
@@ -319,8 +326,9 @@ H61-L fails before placement. No organizer score exists for a repository artifac
 </ol>
 <h2>Limitations</h2>
 <ul>
-<li>The declared inventory covers {registry['scope']['declared_public_source_count']} paths from <code>scripts/registry_sources.tsv</code> and {registry['scope']['repository_prior_file_count']} earlier local downloads for the H61-G final check; it is not the organizer-side registry.</li>
-<li>H61-L's 3DEP-derived descriptor source is a public repository derivative. Its scarp score is not calibrated against hidden truth; it was not holdout-scored.</li>
+<li>The current index covers {registry['scope']['declared_public_source_count']} paths from <code>scripts/registry_sources.tsv</code> and {registry['scope']['repository_prior_file_count']} TIFFs across local roots (32 records total); it is not the organizer-side registry. The original H61-G/H61-L run receipts retain their 21+7 pre-merge snapshot.</li>
+<li>The 10 locally published candidate TIFFs all exceed the literal final-dot overlap stop against the hash-pinned HGM prior. The archived main-branch "UNIQUE" labels are retired; see <a href="../evidence/local_artifact_strict_dot_audit.json">the measured audit</a>. This short-circuit final-dot audit does not supply missing pre-placement receipts.</li>
+<li>The current-run H61-L 3DEP-derived descriptor source is a public repository derivative. Its scarp score is not calibrated against hidden truth; that surface was not holdout-scored. A separate archived H61-L variant was HOLDOUT-DTI-scored but failed the strict final-dot gate.</li>
 <li>The production basement surface is a first low-pass slab iterate; a converged nonlinear Parker–Oldenburg inversion remains unverified.</li>
 <li>HOLDOUT-DTI uses mapped catalogue segments as proxy truth, while competition truth is undisclosed/unmapped. No HOLDOUT-DTI value is a live score.</li>
 <li>Score claims for H33/H19 are owner-reported in the available forensics; no receipt binding exact artifact bytes to a score was found.</li>
@@ -341,6 +349,15 @@ for row in uni["rows"]:
     prior_rows.append(f"<tr><td><code>{esc(row['file'])}</code></td><td>{row['spearman_full_footprint']:+.5f}</td>"
                       f"<td>{row['my_dots_within_3px_of_theirs']:.5%}</td><td>{row['jaccard_dot_sets']:.5f}</td>"
                       f"<td>{'STOP' if row.get('duplicate') else 'pass'}</td></tr>")
+artifact_rows = []
+for row in artifact_audit["candidates"]:
+    artifact_rows.append(
+        f"<tr><td><code>{esc(', '.join(row['paths']))}</code></td>"
+        f"<td>{row['positive_pixels']:,}</td>"
+        f"<td>{row['one_sided_overlap_fraction']:.5%}</td>"
+        f"<td>{'STOP' if row['overlap_stop'] else 'not cleared'}</td></tr>"
+    )
+
 verify_body = f"""
 <h1>Format and uniqueness verification</h1>
 <h2>H61-G archived TIFF local-format validation</h2>
@@ -356,16 +373,21 @@ Jaccard is diagnostic only.</p>
 <h2>H61-L surface-before-placement gate</h2>
 <p>Verdict <b>{esc(LIDAR_GATE['verdict'])}</b>; candidate support {LIDAR_GATE['candidate_support_pixels']:,}; maximum positive Spearman
 {LIDAR_GATE['worst_spearman']:.5f}; worst one-sided overlap {LIDAR_GATE['worst_overlap']:.5%} vs limit {LIDAR_GATE['overlap_limit']:.0%}.
-The highest-overlap raster is <code>{esc(LIDAR_WORST['file'])}</code>. H61-L stopped here: no placement, holdout, or TIFF.</p>
+The highest-overlap raster is <code>{esc(LIDAR_WORST['file'])}</code>. This current-run H61-L surface stopped here: no placement, holdout, or TIFF from this run. The separate archived main-branch variant is listed in the post-merge final-dot audit below and is not cleared.</p>
 <p>Accessible inventory record: <a href="../evidence/registry_accessible_index.json">registry_accessible_index.json</a>;
 H61-G gate receipt: <a href="../evidence/h61g_uniqueness.json">h61g_uniqueness.json</a>;
 H61-L surface receipt: <a href="../evidence/h61l_surface.json">h61l_surface.json</a>.</p>
+<h2>Post-merge strict final-dot audit of local TIFFs</h2>
+<p>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']} local candidate artifacts stop at the one-sided 3 px overlap leg against
+<code>{esc(Path(artifact_audit['comparator']['path']).name)}</code>; threshold is strictly &gt;70%. This proves a stop, not a clearance of any unreported comparison.
+The archived main-branch pre-placement receipts are not accepted as strict-gate clearance; see the complete <a href="../evidence/local_artifact_strict_dot_audit.json">audit receipt</a>.</p>
+<table><tr><th>Local TIFF artifact</th><th>Positive cells</th><th>One-sided overlap</th><th>Strict gate</th></tr>{''.join(artifact_rows)}</table>
 """
 
 submit_body = f"""
 <h1>Submission instructions</h1>
 {status}
-<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit the current H61-G diagnostic TIFF.</b></p>
+<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit any current or archived repository TIFF, including the file under <code>docs/submissions/</code>.</b></p>
 <ol><li>Verify a current run card names an exact TIFF and reports both uniqueness phases passed.</li>
 <li>Verify the same card reports format checks passed and a holdout result above the selector's bar.</li>
 <li>Download that exact TIFF; use its SHA-256 and note from the run card.</li>
@@ -377,8 +399,8 @@ submit_body = f"""
 limitations_body = f"""
 <h1>Limitations</h1>
 <ul>
-<li>No unique competition TIFF is currently cleared. The H61-G file is format-valid but fails the literal overlap rule; H61-L was stopped before holdout.</li>
-<li>Registry coverage is a declared accessible scope ({registry['scope']['declared_public_source_count']} GitHub paths plus local repository priors), not an organizer-side inventory.</li>
+<li>No unique competition TIFF is currently cleared. H61-G fails the literal overlap rule; the current-run H61-L surface stopped before holdout; all {artifact_audit['summary']['candidate_artifacts']} local candidate TIFFs fail the strict final-dot overlap audit.</li>
+<li>Registry coverage is a declared accessible scope ({registry['scope']['declared_public_source_count']} GitHub paths plus {registry['scope']['repository_prior_file_count']} local TIFFs across downloads/submissions/out), not an organizer-side inventory.</li>
 <li>The existing basement-depth surface is the first low-passed slab iterate. Nonlinear convergence is unverified.</li>
 <li>The USGS GP-1012 depth-scale calibration is regional and coarse; it is not target truth or a spatial training label.</li>
 <li>The lidar derivative is a 100 m, 12-band descriptor stack aggregated from 2 m source work cells and has incomplete tile coverage; roads, channels, terraces, landslides, and mines mimic scarps.</li>
@@ -406,16 +428,26 @@ for filename, (title, body) in pages.items():
 
 # Older parallel-session pages remain accessible but are explicitly marked historical.
 banner = ('<div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0">'
-          '<b>HISTORICAL PAGE.</b> The current status and strict uniqueness verdict are on '
-          '<a href="index.html">the status page</a>. Do not treat this page as a current submission clearance.</div>')
+          '<b>HISTORICAL PAGE — SUPERSEDED.</b> Legacy score, “UNIQUE,” or “ready” labels are not current clearance. '
+          'The current status is no TIFF cleared; the strict audit blocks 10/10 local artifacts. '
+          '<a href="index.html">Current status</a> · '
+          '<a href="../evidence/local_artifact_strict_dot_audit.json">strict audit</a>. '
+          'Do not treat this page as a current submission clearance.</div>')
+legacy_banner_pattern = re.compile(
+    r'<div style="border:2px solid #d29922;.*?<b>(?:HISTORICAL PAGE\.|SUPERSEDED PAGE\.).*?</div>',
+    flags=re.IGNORECASE | re.DOTALL,
+)
 for old in DOCS.glob("*.html"):
     if old.name in pages or old.name in {"404.html"}:
         continue
     text = old.read_text(encoding="utf-8")
-    if "HISTORICAL PAGE." not in text and "SUPERSEDED PAGE." not in text:
+    if "HISTORICAL PAGE — SUPERSEDED." in text:
+        continue
+    text, count = legacy_banner_pattern.subn(banner, text, count=1)
+    if count == 0:
         text = re.sub(r"(<body[^>]*>)", lambda match: match.group(1) + banner, text, count=1,
                       flags=re.IGNORECASE)
-        old.write_text(text, encoding="utf-8")
+    old.write_text(text, encoding="utf-8")
 
 (ROOT / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta http-equiv="refresh" content="0; url=docs/index.html"><meta name="viewport" content="width=device-width,initial-scale=1">

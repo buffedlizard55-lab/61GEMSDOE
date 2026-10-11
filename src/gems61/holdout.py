@@ -1,35 +1,137 @@
-"""Hide-and-recover holdout + pooled distance-weighted Tversky index (DTI).
+"""Hide-and-recover holdout: withhold whole mapped-fault segments with a
+context buffer, and score against the withheld pixels.
 
-Protocol (from the run brief):
-  * withhold *whole* catalogue fault segments (connected components) with a buffer;
-  * derive every catalogue-based feature only from the *visible* faults;
-  * mask visible fault pixels out of the scored domain;
-  * score pooled DTI with alpha = 0.2, beta = 0.8 and a 300 m triangular kernel.
+Design (fixed before any result is looked at)
+---------------------------------------------
+* The catalogue is split into 8-connected **components** (physical fault
+  segments).  A seeded random 20 % of components is withheld *whole* -- a
+  segment is never split, so no part of a withheld fault can be inferred from
+  its own continuation.
+* A 3 px (300 m) **buffer** around each withheld segment removes the adjacent
+  catalogue pixels from the *visible* set as well.  This is the context buffer:
+  the visible catalogue that would otherwise point straight at the withheld
+  segment is not available.  (This lane uses no catalogue-derived feature at
+  all, so the buffer is a conservative extra, not a repair.)
+* Scoring follows the live setting: ``active = footprint & ~visible``. Mass
+  placed on a *visible* catalogue pixel is masked out of every metric term --
+  exactly what the organiser does with mapped faults -- and the withheld
+  segments are the only truth.
+* Pooled over four spatially blocked folds; the confidence interval comes from
+  resampling 20 km spatial blocks, so a single long fault is one cluster and
+  not hundreds of independent pixels.
 
-Metric, written out exactly (k(d) = max(1 - d/R, 0), R = 300 m):
-
-    TP = sum_{g in truth} k(d(g, P))          truth coverage, each truth pixel once
-    FN = |truth| - TP
-    FP = sum_{p in pred} min(d(p, truth)/R, 1)
-    DTI = TP / (TP + 0.2*FP + 0.8*FN)
-
-The prediction-credit variant used by some earlier sessions is also returned
-(``dti_pooled``) so that rankings can be checked for convention dependence.
-
-This is a *proxy*: the live scorer's truth is expert-labelled faults that are not
-in the catalogue, whereas this truth is a withheld subset of catalogue faults, i.e.
-faults that were mappable from the surface.  Every number produced here is labelled
-HOLDOUT-DTI and is never a score.
+Limitation carried explicitly: this instrument's truth is *catalogue* pixels,
+whereas the live truth is faults the catalogue does not contain.  It is a
+screen and a leakage canary, never a leaderboard estimate (see the run card).
 """
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
-from scipy import ndimage
+from scipy.ndimage import binary_dilation, distance_transform_edt, label
+
+BLOCK_SIDE_PX = 200          # 20 km spatial clusters for the bootstrap
+
+
+@dataclass(frozen=True)
+class Fold:
+    name: str
+    region: np.ndarray        # bool, scored region of this fold
+    truth: np.ndarray         # bool, withheld segment pixels (global)
+    visible: np.ndarray       # bool, catalogue pixels that remain visible (masked from scoring)
+    hidden_ids: np.ndarray
+    n_truth: int
+
+
+STRUCT8 = np.ones((3, 3), bool)
+
+
+def catalogue_components(catalogue: np.ndarray) -> tuple[np.ndarray, int]:
+    """8-connected components of the mapped-fault catalogue."""
+    lab, n = label(np.asarray(catalogue, bool), structure=STRUCT8)
+    return lab, int(n)
+
+
+def make_folds(catalogue: np.ndarray, footprint: np.ndarray, fraction: float = 0.20,
+               buffer_px: int = 3, seed: int = 20261011, n_folds: int = 4) -> list[Fold]:
+    """Withhold whole components and split the result into spatial folds."""
+    lab, n = catalogue_components(catalogue)
+    if n == 0:
+        raise ValueError("empty catalogue")
+    rng = np.random.default_rng(seed)
+    ids = rng.permutation(np.arange(1, n + 1))
+    n_hide = max(1, int(round(fraction * n)))
+    hidden_ids = np.sort(ids[:n_hide])
+    hidden = np.isin(lab, hidden_ids)
+
+    buffer = binary_dilation(hidden, structure=STRUCT8, iterations=int(buffer_px))
+    visible = (catalogue & ~buffer)
+
+    h, w = footprint.shape
+    # The four quadrants partition the WHOLE grid: 2 row bands x 2 column bands.
+    # (Splitting the rows into ``n_folds`` bands and then using only the first
+    # two would leave the southern half of the grid inside no fold at all, so
+    # half the catalogue could never be withheld.  That bug is pinned by
+    # tests/test_holdout.py::test_folds_cover_the_whole_grid.)
+    if n_folds == 2:
+        quadrants = [("N", np.arange(h)[: h // 2], np.arange(w)),
+                     ("S", np.arange(h)[h // 2:], np.arange(w))]
+    else:
+        fold_rows = np.array_split(np.arange(h), 2)
+        fold_cols = np.array_split(np.arange(w), 2)
+        quadrants = [("NW", fold_rows[0], fold_cols[0]), ("NE", fold_rows[0], fold_cols[1]),
+                     ("SW", fold_rows[1], fold_cols[0]), ("SE", fold_rows[1], fold_cols[1])]
+
+    folds = []
+    for name, rows, cols in quadrants:
+        region = np.zeros(footprint.shape, bool)
+        region[np.ix_(rows, cols)] = True
+        region &= footprint
+        truth = hidden & region
+        if not truth.any():
+            continue
+        folds.append(Fold(name=name, region=region, truth=truth, visible=visible,
+                          hidden_ids=hidden_ids, n_truth=int(truth.sum())))
+    if not folds:
+        raise ValueError("no fold contains withheld positives")
+    return folds
+
+
+def basin_interior_mask(depth: np.ndarray, valid: np.ndarray,
+                        depth_quantile: float = 0.60) -> np.ndarray:
+    """Cells under thick cover (deep basement) -- the 'buried' domain.
+
+    The lane's target population is faults concealed by alluvium, so the
+    lane-specific recovery test is restricted to withheld segments that sit in
+    the deep half of the basement-depth distribution.
+    """
+    d = np.asarray(depth, np.float64)
+    m = np.asarray(valid, bool) & np.isfinite(d)
+    thr = float(np.quantile(d[m], depth_quantile))
+    return m & (d >= thr)
+
+
+def distance_to_mask(mask: np.ndarray) -> np.ndarray:
+    """Euclidean distance (px) to the nearest True cell; +inf for an empty mask."""
+    mask = np.asarray(mask, bool)
+    if not mask.any():
+        return np.full(mask.shape, np.inf)
+    return distance_transform_edt(~mask)
+
+
+# ---------------------------------------------------------------------------
+# merged from the parallel lane on origin/main (names kept only where this
+# module did not already define them)
+# ---------------------------------------------------------------------------
 
 R_M = 300.0
+
+
 RES = 100.0
+
+
 ALPHA, BETA = 0.2, 0.8
 
 
@@ -72,50 +174,6 @@ def segments(catalogue: np.ndarray, min_px: int = 1) -> np.ndarray:
         keep[1:] = sizes[1:] >= min_px
         lab = np.where(keep[lab], lab, 0)
     return lab
-
-
-@dataclass
-class Fold:
-    name: str
-    hidden: np.ndarray       # withheld truth (segment pixels)
-    visible: np.ndarray      # visible catalogue pixels (masked from scoring)
-    domain: np.ndarray       # scored domain
-    n_segments: int = 0
-
-
-def make_folds(footprint: np.ndarray, catalogue: np.ndarray, n_folds: int = 4,
-               collar_px: int = 3, min_px: int = 20, seed: int = 0) -> list[Fold]:
-    """Spatially-blocked folds: whole segments are withheld, never split.
-
-    Blocks are quadrants of the grid so that a withheld fold is a contiguous region
-    (spatial blocking), which is the honest generalisation test for a geophysical
-    surface that has kilometre-scale autocorrelation.
-    """
-    lab = segments(catalogue, min_px=min_px)
-    ids = np.unique(lab[lab > 0])
-    H, W = footprint.shape
-    com = ndimage.center_of_mass(np.ones_like(lab, dtype=np.float64), lab, list(ids))
-    cy = np.array([c[0] for c in com])
-    cx = np.array([c[1] for c in com])
-    if n_folds == 4:
-        quad = ((cy >= H / 2).astype(int) * 2) + (cx >= W / 2).astype(int)
-        assign = {0: "NW", 1: "NE", 2: "SW", 3: "SE"}
-        fold_of = np.array([assign[q] for q in quad])
-    else:
-        rng = np.random.default_rng(seed)
-        perm = rng.permutation(n_folds)
-        fold_of = perm[np.arange(len(ids)) % n_folds]
-    st = ndimage.generate_binary_structure(2, 2)
-    folds = []
-    for f in np.unique(fold_of):
-        sel = np.isin(lab, ids[fold_of == f])
-        hidden = sel & catalogue
-        visible = catalogue & ~hidden
-        collar = ndimage.binary_dilation(visible, st, iterations=collar_px)
-        domain = footprint & ~collar
-        folds.append(Fold(name=str(f), hidden=hidden, visible=visible, domain=domain,
-                          n_segments=int((fold_of == f).sum())))
-    return folds
 
 
 def segment_recovery(pred: np.ndarray, folds: list[Fold], R: float = R_M,

@@ -27,8 +27,9 @@ H61-L fails before placement. No organizer score exists for a repository artifac
 </ol>
 <h2>Limitations</h2>
 <ul>
-<li>The declared inventory covers 21 paths from <code>scripts/registry_sources.tsv</code> and 7 earlier local downloads for the H61-G final check; it is not the organizer-side registry.</li>
-<li>H61-L's 3DEP-derived descriptor source is a public repository derivative. Its scarp score is not calibrated against hidden truth; it was not holdout-scored.</li>
+<li>The current index covers 21 paths from <code>scripts/registry_sources.tsv</code> and 11 TIFFs across local roots (32 records total); it is not the organizer-side registry. The original H61-G/H61-L run receipts retain their 21+7 pre-merge snapshot.</li>
+<li>The 10 locally published candidate TIFFs all exceed the literal final-dot overlap stop against the hash-pinned HGM prior. The archived main-branch "UNIQUE" labels are retired; see <a href="../evidence/local_artifact_strict_dot_audit.json">the measured audit</a>. This short-circuit final-dot audit does not supply missing pre-placement receipts.</li>
+<li>The current-run H61-L 3DEP-derived descriptor source is a public repository derivative. Its scarp score is not calibrated against hidden truth; that surface was not holdout-scored. A separate archived H61-L variant was HOLDOUT-DTI-scored but failed the strict final-dot gate.</li>
 <li>The production basement surface is a first low-pass slab iterate; a converged nonlinear Parker–Oldenburg inversion remains unverified.</li>
 <li>HOLDOUT-DTI uses mapped catalogue segments as proxy truth, while competition truth is undisclosed/unmapped. No HOLDOUT-DTI value is a live score.</li>
 <li>Score claims for H33/H19 are owner-reported in the available forensics; no receipt binding exact artifact bytes to a score was found.</li>

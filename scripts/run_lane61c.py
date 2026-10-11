@@ -435,7 +435,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(
+        "Retired: this legacy pipeline reports uniqueness from a partial corpus. Use "
+        "the shared strict-gate runner; do not emit or score this candidate."
+    )
 
 
 # --------------------------------------------------------------- poisson disk

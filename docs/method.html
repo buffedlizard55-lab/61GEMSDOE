@@ -36,7 +36,7 @@ Its file is dots, not the requested basement-step ribbons; this is recorded as a
 <p>H61-L uses an upstream public 12-band terrain-descriptor raster derived from USGS 3DEP 1 m DEM tiles (not raw lidar and not a fault prediction).
 It combines shortwave slope excess, 10 m/50 m slope break, crest/base curvature and structure-tensor coherence, then forms 3-pixel scarp ribbons inside
 basement-step corridors under fill. The descriptor covers 3730×3292 cells and 75.4% of the valid competition footprint;
-SHA-256 <code>d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568</code>. Its surface failed the strict pre-placement gate, so no holdout was run.</p>
+SHA-256 <code>d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568</code>. The current-run surface failed the strict pre-placement gate, so that run did not reach holdout. A different main-branch H61-L variant has a historical HOLDOUT-DTI result but its final TIFF fails the strict post-placement gate and is not cleared.</p>
 <h2>Named non-fault mimic and trusted sources</h2>
 <ul>
 <li>Intrabasement lithologic/density contacts can make gravity steps without a fault; terrain-only steps can instead be fan toes, terrace risers, channels, landslides, roads or mines.</li>

@@ -10,10 +10,10 @@ screen    label-aware enrichment screen of gravity edges vs the catalogue (why t
           pure lane cannot place a dot to 300 m)                -> h61g_screen.json
 invert    band-pass + GP-1012-calibrated slab inversion, steps, cross-check
                                                                 -> h61g_invert.json
-holdout   hide-and-recover (whole withheld segments, visible-only features,
-          pixel-exact masking, pooled DTI a=0.2 b=0.8 R=300 m) for every candidate,
-          both controls and the registry references; basin-interior segment
-          recovery vs random lines; per-feature leakage canary
+holdout   first apply the literal pre-placement uniqueness gate to every
+          candidate surface; stop if none pass. Only then run hide-and-recover
+          (whole segments, visible-only features, pixel-exact masking, pooled
+          DTI a=0.2 b=0.8 R=300 m), controls, and leakage canary
                                                                 -> h61g_holdout.json
 final     build + validate the GeoTIFF of the candidate the holdout selects
                                                                 -> h61g_final.json
@@ -298,11 +298,50 @@ def _boot_ci(parts, n_boot=2000, seed=7):
     return [float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))]
 
 
+def _preflight_surface_fields(fields, g):
+    """Apply the shared strict surface gate before any candidate holdout scoring."""
+    inventory_path = EVID / "registry_accessible_index.json"
+    if not inventory_path.is_file():
+        raise SystemExit(f"missing fail-closed registry inventory: {inventory_path}")
+    inventory = json.loads(inventory_path.read_text())
+    sample = gridmod.DATA_DIR / "sample_submission.tif"
+    reports = {}
+    eligible = {}
+    for name, field in fields.items():
+        report = gatesmod.lane_uniqueness_report(
+            field, g.footprint, sample=sample, phase="surface",
+            registry_index=inventory,
+        )
+        reports[name] = report
+        if report["ok"]:
+            eligible[name] = field
+    write_json("h61g_surface_preflight.json", dict(
+        evidence_class="MEASURED — pre-placement strict surface gate",
+        inventory_path=str(inventory_path.relative_to(ROOT)),
+        declared_scope_complete=bool(inventory.get("declared_scope_complete")),
+        organizer_registry_complete=bool(inventory.get("organizer_registry_complete", False)),
+        candidate_fields_evaluated=len(fields),
+        eligible_candidate_fields=sorted(eligible),
+        holdout_started=bool(eligible),
+        action=("SURFACE CLEARED for listed candidate fields; only these may proceed to holdout"
+                if eligible else "STOP — no candidate surface cleared; holdout not run"),
+        reports=reports,
+    ))
+    if not eligible:
+        raise SystemExit(
+            "strict pre-placement uniqueness STOP: no candidate surface cleared; "
+            "do not run holdout, place dots, or emit a TIFF"
+        )
+    return eligible
+
+
 def stage_holdout(_a) -> None:
     t0 = time.time()
     g, grav, valid = load_base()
     fields, meta, aux = _candidate_fields(g, valid)
-    log(f"corridor covers {meta['corridor_fraction_of_valid']:.3f} of the valid area; basin {meta['basin_fraction_of_valid']:.3f}")
+    fields = _preflight_surface_fields(fields, g)
+    log(f"strict pre-placement gate passed for {len(fields)} candidate surface(s); "
+        f"corridor={meta['corridor_fraction_of_valid']:.3f}, basin={meta['basin_fraction_of_valid']:.3f}")
     ctx = holdoutmod.build_holdout(g, hide_frac=0.20, seeds=SEEDS, modes=("all",))
     n_truth = sum(c.n_truth for c in ctx.cells)
     log(f"holdout: {len(ctx.cells)} cells, {n_truth} withheld truth px")

@@ -2,9 +2,9 @@
 """Build a hash-pinned, fail-closed index of accessible prior prediction rasters.
 
 The index covers exactly the owner-repository/path list in
-``scripts/registry_sources.tsv`` plus raster artifacts already published in
-``docs/downloads``. It does not claim completeness for private, unlisted, or
-organizer-side submissions.
+``scripts/registry_sources.tsv`` plus TIFFs in the repository's local artifact
+roots: ``docs/downloads``, ``docs/submissions``, and ``out``. It does not claim
+completeness for private, unlisted, or organizer-side submissions.
 """
 from __future__ import annotations
 
@@ -82,12 +82,19 @@ def raster_record(path: Path, *, scope: str, sources: list[str], expected_grid=N
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--public-cache", type=Path, default=Path("/tmp/refs/registry"))
-    ap.add_argument("--local-root", type=Path, default=Path("docs/downloads"))
+    ap.add_argument(
+        "--local-root", type=Path, action="append", default=None,
+        help=("local TIFF root to inventory; repeatable. Defaults to docs/downloads, "
+              "docs/submissions, and out."),
+    )
     ap.add_argument("--sample", type=Path, default=Path("data/official/sample_submission.tif"))
     ap.add_argument("--output", type=Path, default=Path("evidence/registry_accessible_index.json"))
     a = ap.parse_args()
     public_cache = a.public_cache if a.public_cache.is_absolute() else ROOT / a.public_cache
-    local_root = a.local_root if a.local_root.is_absolute() else ROOT / a.local_root
+    local_roots = a.local_root or [
+        Path("docs/downloads"), Path("docs/submissions"), Path("out")
+    ]
+    local_roots = [p if p.is_absolute() else ROOT / p for p in local_roots]
     sample = a.sample if a.sample.is_absolute() else ROOT / a.sample
     output = a.output if a.output.is_absolute() else ROOT / a.output
 
@@ -114,12 +121,18 @@ def main() -> None:
         fetched += 1
         rasters.append(row)
 
-    local_files = sorted({*local_root.rglob("*.tif"), *local_root.rglob("*.tiff")}) if local_root.exists() else []
+    local_files_by_path = {}
+    for local_root in local_roots:
+        if local_root.exists():
+            for path in (*local_root.rglob("*.tif"), *local_root.rglob("*.tiff")):
+                local_files_by_path[path.resolve()] = path
+    local_files = [local_files_by_path[k] for k in sorted(local_files_by_path)]
     for path in local_files:
-        row = raster_record(path, scope="repository-prior-downloads",
-                            sources=[path.relative_to(ROOT).as_posix()], expected_grid=expected_grid)
+        relative = path.relative_to(ROOT).as_posix()
+        row = raster_record(path, scope="repository-prior-artifacts",
+                            sources=[relative], expected_grid=expected_grid)
         if not row["grid_ok"]:
-            errors.append(dict(source=path.relative_to(ROOT).as_posix(), error=row["error"]))
+            errors.append(dict(source=relative, error=row["error"]))
         rasters.append(row)
 
     expected_count = len(sources) + len(local_files)
@@ -130,11 +143,14 @@ def main() -> None:
         declared_scope_complete=bool(scope_complete),
         organizer_registry_complete=False,
         completeness_note=("All paths explicitly declared in scripts/registry_sources.tsv and every TIFF in "
-                           "docs/downloads were opened and matched to the pinned competition grid; this is not "
-                           "the organizer-side registry and cannot include unlisted, private, or inaccessible files."),
+                           "the configured local artifact roots were opened and matched to the pinned "
+                           "competition grid; this is not the organizer-side registry and cannot include "
+                           "unlisted, private, or inaccessible files."),
         scope=dict(public_source_manifest="scripts/registry_sources.tsv",
                    declared_public_source_count=len(sources), fetched_public_source_count=fetched,
-                   repository_prior_root=str(local_root), repository_prior_file_count=len(local_files),
+                   repository_prior_roots=[str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p)
+                                           for p in local_roots],
+                   repository_prior_file_count=len(local_files),
                    total_raster_records=len(rasters)),
         grid=dict(shape=list(expected_grid[0]), crs=str(expected_grid[1]),
                   transform=list(expected_grid[2])[:6]),

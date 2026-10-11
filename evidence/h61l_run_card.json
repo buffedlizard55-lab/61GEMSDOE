@@ -3,7 +3,7 @@
   "run_id": "H61-L-preplacement-screen-20261011",
   "card_scope": "Sole current terminal run card; evidence/h61g_run_card.json is retained as a historical H61-G card.",
   "created_utc": "2026-10-11T05:31:57Z",
-  "last_reviewed_utc": "2026-10-11T05:39:37Z",
+  "last_reviewed_utc": "2026-10-11T15:33:45Z",
   "branch": "arena/1f8f2833-61gemsdoe",
   "evidence_class": "MEASURED pre-placement gate; historical proxy results are HOLDOUT-DTI; no ORGANIZER-CONFIRMED score",
   "overall_verdict": "NEGATIVE — H61-L stopped before holdout; NO TIFF IS CLEARED FOR SUBMISSION",
@@ -16,9 +16,9 @@
     "h61l_tiff_path": null,
     "h61l_download_url": null,
     "h61l_sha256": null,
-    "h61l_format_validation": "NOT RUN — no H61-L GeoTIFF was written",
+    "h61l_format_validation": "NOT RUN — the current H61-L screen stopped before a TIFF was written; a separate main-branch archived H61-L TIFF exists but fails the strict final-dot gate.",
     "h61l_submission_note": null,
-    "note_verdict": "No submission note is issued because no candidate TIFF exists. Do not reuse the archived H61-G note."
+    "note_verdict": "No note is issued for the current H61-L run because no candidate TIFF was written. Do not reuse the archived H61-G note or any legacy main-branch candidate note."
   },
   "lane": {
     "objective": "Infer basement relief from the supplied isostatic gravity; use USGS GP-1012 only to calibrate regional depth scale; identify basement-depth horizontal-gradient steps; emit multi-line ribbons; compare withheld basin-interior segment recovery with equal-budget random lines.",
@@ -114,7 +114,11 @@
     "upstream_git_blob_sha": "da733b53147efad5c141ffdb96e469ec5b4da8b8",
     "terrain_descriptor_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
     "terrain_descriptor_bytes": 36943606,
-    "terrain_descriptor_shape_bands": [3730, 3292, 12],
+    "terrain_descriptor_shape_bands": [
+      3730,
+      3292,
+      12
+    ],
     "terrain_descriptor_footprint_coverage_fraction": 0.7536552906089806,
     "terrain_source_caveat": "Public sibling-repository derivative, not raw lidar, not organizer-provided, and not a fault prediction; upstream metadata reports 10 failed tiles of 716 and an approximately 1–2 m datum offset.",
     "registry_inventory": {
@@ -125,7 +129,21 @@
       "h61g_final_dot_comparisons_after_exact_candidate_mirror_exclusion": 27,
       "declared_scope_complete": true,
       "organizer_registry_complete": false,
-      "inventory_path": "evidence/registry_accessible_index.json"
+      "inventory_path": "evidence/registry_accessible_index_h61g_h61l_run.json",
+      "scope_note": "Historical run-time inventory used by the original H61-G/H61-L receipts; post-merge records are separately indexed in evidence/registry_accessible_index.json.",
+      "current_post_merge_inventory": {
+        "path": "evidence/registry_accessible_index.json",
+        "declared_public_paths": 21,
+        "local_prior_geotiffs": 11,
+        "indexed_records": 32,
+        "roots": [
+          "docs/downloads",
+          "docs/submissions",
+          "out"
+        ],
+        "declared_scope_complete": true,
+        "organizer_registry_complete": false
+      }
     }
   },
   "strict_uniqueness_gate": {
@@ -180,7 +198,10 @@
         "artifact": "H61-G archived 40,000-dot corridor × slope-ridge candidate",
         "score_label": "HOLDOUT-DTI",
         "value": 0.046504803513711855,
-        "95_percent_ci": [0.04214325650932585, 0.05066048017118602],
+        "95_percent_ci": [
+          0.04214325650932585,
+          0.05066048017118602
+        ],
         "withheld_positive_count": 22641,
         "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
         "basin_interior_segments_recovered": 351,
@@ -190,7 +211,10 @@
         "artifact": "Equal-budget random lines control",
         "score_label": "HOLDOUT-DTI",
         "value": 0.03141382104713175,
-        "95_percent_ci": [0.02824302937445006, 0.034091835908101865],
+        "95_percent_ci": [
+          0.02824302937445006,
+          0.034091835908101865
+        ],
         "withheld_positive_count": 22641,
         "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
         "basin_interior_segments_recovered": 215,
@@ -200,7 +224,10 @@
         "artifact": "As-published H19-5 dotted registry reference",
         "score_label": "HOLDOUT-DTI",
         "value": 0.10106964768349222,
-        "95_percent_ci": [0.08650299026430025, 0.11733972171612815],
+        "95_percent_ci": [
+          0.08650299026430025,
+          0.11733972171612815
+        ],
         "withheld_positive_count": 22641,
         "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
         "basin_interior_segments_recovered": 681,
@@ -210,7 +237,10 @@
         "artifact": "H19-5 power-law multi-line registry reference",
         "score_label": "HOLDOUT-DTI",
         "value": 0.07120613242443212,
-        "95_percent_ci": [0.06158450049323349, 0.08236351939143297],
+        "95_percent_ci": [
+          0.06158450049323349,
+          0.08236351939143297
+        ],
         "withheld_positive_count": 22641,
         "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
         "basin_interior_segments_recovered": 739,
@@ -220,7 +250,10 @@
         "artifact": "H61-G hypothetical 3×3 ribbons, not shipped",
         "score_label": "HOLDOUT-DTI",
         "value": 0.021645645549291177,
-        "95_percent_ci": [0.019311243305548308, 0.024306743311927507],
+        "95_percent_ci": [
+          0.019311243305548308,
+          0.024306743311927507
+        ],
         "withheld_positive_count": 22641,
         "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
         "note": "Historical comparison only; not a submission artifact or unique candidate."
@@ -269,10 +302,14 @@
       "focus": "Technical gate and experiment correctness",
       "result": "PASS",
       "checks": [
-        "Strict H61-G final-dot gate re-run over 27 hash-pinned raster comparisons; DUPLICATE_LANE_DRIFT at 98.5925% one-sided overlap. No pre-placement uniqueness receipt was found for the archived H61-G output; no pass is inferred.",
-        "Literal gate tests include dense-prior one-sided overlap, exact 70% boundary, empty-prior edge handling, Jaccard-only diagnostics, missing pins, malformed rows/error lists, grid checks, expected-grid and progress logging.",
-        "Full current test suite: 32 passed, 1 pending-deprecation warning in a rasterio test fixture.",
-        "Python compilation of the status builders, H61-L runner, gates and uniqueness module passed."
+        "Strict H61-G final-dot gate remains DUPLICATE_LANE_DRIFT at 98.5925% against the HGM raster; original 27-comparison run-time receipt is preserved.",
+        "Current H61-L pre-placement surface remains stopped at 94.6692% one-sided overlap; its original comparison snapshot is preserved and no new surface/holdout experiment was run.",
+        "Post-merge short-circuit final-dot audit verifies all 10 local candidate TIFFs against a hash-pinned earlier HGM raster; 10/10 exceed the strict 70% limit. No Jaccard or density exception is applied.",
+        "The current declared inventory is 21 public paths plus 11 local TIFFs (32 records) and remains explicitly not organizer-complete.",
+        "Final code validation: 70/70 pytest tests passed with no warnings reported; changed Python entrypoints and tests compiled successfully.",
+        "Exercised scripts/check_uniqueness.py using a deterministic synthetic 40,000-dot /tmp-only smoke mask: the complete 32/32-row declared inventory verified, the shared strict gate returned DUPLICATE_LANE_DRIFT at 95.655% worst one-sided overlap, and all scratch files were removed. This was a gate smoke test, not a candidate or DTI experiment.",
+        "Retired 13 legacy candidate/holdout/writer CLI entrypoints; regression tests confirm they fail closed before candidate, holdout, or TIFF execution. The H61-X/H61-M wrappers are separately retired too.",
+        "The H61-G direct holdout stage now calls the shared literal surface gate on every candidate field and stops before evaluator construction if none pass; a regression test pins this ordering. No new H61-G holdout was run."
       ]
     },
     {
@@ -280,10 +317,12 @@
       "focus": "Evidence, score provenance, and site-link review",
       "result": "PASS",
       "checks": [
-        "Cross-checked H61-G bytes/hash, 19/19 format receipt, H61-G and H61-L strict gate results, inventory counts, DTI/CIs, and basin-interior recovery against source evidence JSON.",
-        "Confirmed every historical score is labelled HOLDOUT-DTI with evaluator, 22,641 withheld positives and 95% CI; no H61-L score is invented.",
-        "Validated 185 local href targets across the 11 current generated pages; no broken local download or run-card links remain.",
-        "Recorded leaderboard context with its 2026-10-11 fetch date and distinguished it from scores for repository artifacts."
+        "Cross-checked H61-G and H61-L original receipts against their preserved run-time inventory, and computed fresh hash-verified final-dot overlaps for all 10 local candidate TIFFs against the HGM prior.",
+        "Historical H61-G and main-branch H61-L holdout values remain labelled HOLDOUT-DTI with evaluator, 22,641 withheld positives and 95% CI; no ORGANIZER-CONFIRMED artifact score exists.",
+        "The archived main-branch H61-L/H61-M/H61-X and docs/submissions TIFF are explicitly marked not cleared; the current-run H61-L stop is distinguished from main’s historical H61-L holdout result.",
+        "Leaderboard context retains its 2026-10-11 fetch date: #1 = 0.4133 and #8 = 0.3195.",
+        "Rebuilt all 11 current status pages; scripts/check_site.py passed with 11 current pages and 9 historical pages, consistent links and no current clearance claim.",
+        "The site checker now rejects any non-current HTML page lacking the HISTORICAL PAGE — SUPERSEDED warning, a current-status link, and a strict-audit link."
       ]
     },
     {
@@ -291,20 +330,21 @@
       "focus": "Diff, user-protocol, and submission-safety review",
       "result": "PASS",
       "checks": [
-        "git diff --check passed; the fixed Arena branch remains arena/1f8f2833-61gemsdoe.",
-        "README retains the complete standing brief and clearly marks the only available TIFF as diagnostic-only; no H61-L TIFF or weekly submission slot was created/used.",
-        "All site-builder entry points delegate to the same evidence-driven status renderer, preventing older page generators from restoring stale clearance claims.",
-        "No private evaluator, feature stack, or submission writer fork was introduced; no competition credentials or portal upload were used.",
-        "Budget review flags 4 aggregate model/surface activities if the historical H61-G three-budget run and H61-L surface screen are counted together; no further experiment was run."
+        "Work remains on arena/1f8f2833-61gemsdoe; merge conflict resolutions preserve the strict uniqueness implementation and current no-clearance verdict.",
+        "README retains the standing brief and prominently identifies the H61-G diagnostic download and the archived docs/submissions TIFF as NOT SAFE TO SUBMIT.",
+        "The evidence-driven status builder is reconciled with merged legacy builders; all older HTML explicitly supersedes READY/UNIQUE labels and links the strict audit, legacy model/holdout CLIs fail closed, and no Jaccard exception can clear a candidate.",
+        "No private evaluator, feature stack, or submission-writer fork was introduced; no competition credentials or portal upload were used.",
+        "Budget review still counts 4 aggregate model/surface activities if lineage-wide; this merge added only a raster audit, not a new model or holdout trial. No weekly slot was used.",
+        "The three final review passes are recorded; current README preserves the standing brief, trusted links, upload procedure, status warning, and remaining limitations."
       ]
     }
   ],
   "remaining_work_and_limitations": [
-    "No competition TIFF is cleared. H61-G fails final-dot uniqueness; H61-L fails before holdout. Do not upload either.",
-    "The accessible raster inventory (21 declared public paths plus 7 local priors) is hash/grid-verified but is not the organizer's complete registry.",
-    "H61-L has no HOLDOUT-DTI, withheld-positive count, CI, feature-alone canary, final-dot test, or TIFF because its pre-placement gate failed.",
+    "No competition TIFF is cleared. H61-G fails the final-dot gate, the current-run H61-L surface fails pre-placement, and all 10 local archived candidate TIFFs fail a strict final-dot stop. Do not upload any repository TIFF.",
+    "The current accessible index covers 21 declared public paths plus 11 local TIFFs across docs/downloads, docs/submissions, and out; it is complete only for that declared/accessed scope, not the organizer’s complete registry. Original H61-G/H61-L run receipts retain the 28-record pre-merge snapshot.",
+    "The current-run H61-L candidate has no holdout, feature-alone leakage canary, final-dot placement check, or TIFF because its pre-placement gate failed. A separate main-branch H61-L variant has historical HOLDOUT-DTI 0.044330 (CI 0.041405–0.047832; 22,641 positives; gems61.holdout_segmented v2) but its final TIFF fails strict overlap and is not promotable.",
     "The production basement surface is a first low-pass slab iterate; nonlinear Parker–Oldenburg convergence is unverified.",
-    "The historical proxy holdout is mapped-catalogue hide-and-recover, not undisclosed organizer truth. All listed proxy values remain HOLDOUT-DTI.",
+    "Historical proxy holdouts use mapped-catalogue hide-and-recover, not undisclosed organizer truth. All such values remain HOLDOUT-DTI.",
     "No artifact-bound organizer receipt was located for the group/owner-reported H33 score 0.2778."
   ],
   "trusted_sources": {
@@ -328,6 +368,46 @@
     "evidence/h61g_uniqueness.json",
     "evidence/h61g_holdout.json",
     "evidence/registry_accessible_index.json",
-    "evidence/h61g_hypotheses.json"
-  ]
+    "evidence/h61g_hypotheses.json",
+    "evidence/local_artifact_strict_dot_audit.json",
+    "evidence/registry_accessible_index_h61g_h61l_run.json"
+  ],
+  "post_merge_artifact_audit": {
+    "evidence_class": "MEASURED final-raster one-sided overlap audit; not an organizer receipt",
+    "receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "runner": "scripts/audit_local_artifact_dots.py",
+    "current_inventory": "evidence/registry_accessible_index.json",
+    "local_candidate_tiffs_audited": 10,
+    "strict_final_dot_stops": 10,
+    "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "comparator_positive_pixels": 311617,
+    "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+    "overlap_limit": 0.7,
+    "observed_overlap_range": [
+      0.9468364044049836,
+      0.998108
+    ],
+    "not_cleared_for_submission": true,
+    "rank_correlation": "Not re-computed after a measured strict overlap stop; no stop is waived.",
+    "preplacement_surface_gates": "Not recorded for archived main-branch candidate TIFFs; final-dot stops independently prohibit clearance.",
+    "main_archived_examples": [
+      {
+        "path": "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+        "one_sided_overlap_fraction": 0.986375
+      },
+      {
+        "path": "docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+        "one_sided_overlap_fraction": 0.9468364044049836
+      },
+      {
+        "path": "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+        "one_sided_overlap_fraction": 0.9876579778830964
+      },
+      {
+        "path": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+        "one_sided_overlap_fraction": 0.991475
+      }
+    ],
+    "weekly_slots_used": 0
+  }
 }

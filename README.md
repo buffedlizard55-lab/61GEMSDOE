@@ -8,14 +8,18 @@
 ## Current status — read this first
 
 > **NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION.**
-> The existing H61-G raster passes the local GeoTIFF validator, but fails the literal strict uniqueness rule. The top new H61-L surface also fails before placement. Do not upload either file.
+> The H61-G raster fails the literal final-dot uniqueness rule; the current H61-L screen failed before placement. The merged `main` branch also contained archived H61-L/H61-M/H61-X and a file under `docs/submissions/`; every one of the 10 local candidate TIFFs fails the strict one-sided overlap stop. Do not upload any repository TIFF.
 
 | Item | Verified result |
 |---|---|
 | Existing H61-G artifact | `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif`; one-band float32, 3730×3292, EPSG:32611, sample transform, finite and within `[0,1]`; **19/19 local format checks pass**. SHA-256: `fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077`. |
 | H61-G strict uniqueness | **FAIL — duplicate/lane-drift stop.** `98.5925%` of its positive pixels lie within 3 px of `gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif`, exceeding the literal `>70%` stop rule. Jaccard `0.007481` is diagnostic only and does not waive the stop. |
-| New top hypothesis H61-L | Public 3DEP-derived scarp-ribbon surface: 614,556 positive pixels; full-footprint Spearman max `0.172986`; one-sided 3 px overlap `94.6692%` with the same prior. **Stopped before holdout, placement, or TIFF writing.** |
-| Download/submission verdict | Existing TIFF is **downloadable for audit/learning only; NOT SAFE TO SUBMIT**. No new unique TIFF was generated. No weekly slot was used. |
+| Current-run H61-L surface | Public 3DEP-derived scarp-ribbon surface: 614,556 positive pixels; full-footprint Spearman max `0.172986`; one-sided 3 px overlap `94.6692%` with the HGM prior. **Stopped before holdout, placement, or TIFF writing.** |
+| Archived local candidate TIFFs | The refreshed audit tested all **10** TIFFs in `docs/downloads/` and `docs/submissions/` against the same earlier HGM raster. **10/10 fail** the strict `>70%` one-sided overlap rule (range `94.6836%`–`99.8108%`); details in [`evidence/local_artifact_strict_dot_audit.json`](evidence/local_artifact_strict_dot_audit.json). |
+| Main-branch H61-L/H61-M/H61-X outputs | Their old “UNIQUE” claims used a dense-reference/Jaccard exception. Rechecked strict one-sided overlaps are H61-L `98.6375%`, H61-M `94.6836%`, H61-X `98.7658%`; all are **NOT CLEARED**. |
+| `docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif` | Historical file retained from `main`; strict one-sided overlap is `99.1475%`. The filename/location does **not** indicate approval. **DO NOT SUBMIT.** |
+| Download/submission verdict | H61-G remains linked **for audit/learning only; NOT SAFE TO SUBMIT**. No new unique TIFF was generated in this run. No weekly slot was used. |
+| Current inventory scope | **21/21** declared public owner-repository paths plus **11** local TIFFs in `docs/downloads/`, `docs/submissions/`, and `out/` (32 indexed records); complete only for this declared/accessed scope, **not** the organizer-side registry. |
 | Organizer score | None for this repository's artifacts. The owner-reported H33 value `0.2778` has no located receipt tying exact bytes to an organizer leaderboard row. |
 
 **[↓ Download the H61-G diagnostic TIFF — DO NOT SUBMIT](docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif)** ·
@@ -23,21 +27,25 @@
 [format receipt](docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json) ·
 [current run card](evidence/h61l_run_card.json) · [strict uniqueness evidence](evidence/h61g_uniqueness.json) · [H61-L surface stop](evidence/h61l_surface.json)
 
+**Historical file under `docs/submissions/` — DO NOT SUBMIT (99.1475% strict overlap):**
+[download archived TIFF](docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif) · [strict local-artifact audit](evidence/local_artifact_strict_dot_audit.json)
+
 The attached 133-character note is `H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED`. It belongs to the archived diagnostic file and must not be reused as a submission note.
 
 ## What was done in this continuation
 
 - Replaced the prior dense-reference/Jaccard exception with one literal shared gate: signed full-footprint Spearman `>0.90` **or** more than `70%` of candidate positive pixels within 3 px of any single prior raster. The check counts every strictly positive value, runs before placement and on final output, and fails closed on incomplete inventories, missing files, hash mismatches, or grid errors.
-- Rebuilt the declared accessible raster inventory: all **21/21** owner-repository paths in `scripts/registry_sources.tsv` plus **7** local prior GeoTIFFs. For H61-G's final-dot audit, the exact candidate mirror is excluded, leaving 27 prior comparisons. This is a complete declared/publicly accessible scope, **not** the organizer-side registry.
-- Rechecked H61-G final dots: worst one-sided overlap `0.985925` against the 311,617-pixel near-blanket raster; duplicate stop. Its archived run has no saved pre-placement uniqueness receipt—do not infer a surface pass. The final-dot stop independently prohibits submission; the old exception is retired.
+- Rebuilt the declared accessible raster inventory: all **21/21** owner-repository paths in `scripts/registry_sources.tsv` plus **11** local prior GeoTIFFs across `docs/downloads/`, `docs/submissions/`, and `out/` (32 records; `out/` currently adds no TIFF). This is complete for the declared/accessed scope, **not** the organizer-side registry. The H61-G/H61-L run-time receipts retain their original 28-record snapshot at [`evidence/registry_accessible_index_h61g_h61l_run.json`](evidence/registry_accessible_index_h61g_h61l_run.json); H61-G excluded its exact candidate mirror and compared 27 prior rasters.
+- Rechecked H61-G final dots: worst one-sided overlap `0.985925` against the 311,617-pixel HGM raster; duplicate stop. Its archived run has no saved pre-placement uniqueness receipt—do not infer a surface pass. The final-dot stop independently prohibits submission; the old exception is retired.
+- Audited all 10 locally published candidate TIFFs against that same hash-pinned HGM prior using the literal final-dot rule. Every overlap is `>0.70` (worst range: `0.946836`–`0.998108`); all stop. The archived main-branch H61-L/H61-M/H61-X and the `docs/submissions/` TIFF are historical/unapproved despite old status text. Reproducible receipt: [`evidence/local_artifact_strict_dot_audit.json`](evidence/local_artifact_strict_dot_audit.json); runner: `scripts/audit_local_artifact_dots.py`.
 - Verified and fetched the public 12-band USGS-3DEP-derived descriptor raster from GEMSDOE24 by GitHub/API path. Built H61-L once: 614,556 scarp-ribbon pixels inside basement-step corridors and basin fill. Its pre-placement overlap is `0.946692`; per protocol, stopped before holdout or output.
 - Corrected the Parker (1973) DOI to `10.1111/j.1365-246X.1973.tb06513.x` and the inversion-method account: production uses the first low-passed Bouguer-slab iterate; a converged nonlinear Parker–Oldenburg solve has not been demonstrated.
-- **Experiment-budget irregularity:** the archived H61-G card records 3 candidate/budget experiments, and the H61-L pre-placement screen adds one if counted across the whole workflow (aggregate 4). No additional model/holdout trial or weekly slot was used in this review; do not exceed the budget with more tuning. Elapsed time was not independently measured.
+- **Experiment-budget irregularity:** the archived H61-G card records 3 candidate/budget experiments, and the H61-L pre-placement screen adds one if counted across the whole workflow (aggregate 4). No additional model/holdout trial or weekly slot was used in this review; do not exceed the budget with more tuning. Legacy `run_lane.py`, `build_candidate.py`, `run_lane61*.py`, `e2_build_candidate.py`, `make_submission.py`, `e3_build_submission.py`, `write_submission.py`, `run_experiment.py`, `e2_holdout.py`, `e2b_instrument.py`, `e2c_canary.py`, and `compare_top_arms.py` CLIs are retired to prevent bypassing the current strict gate or budget. The H61-G direct holdout stage now gates every surface first. Elapsed time was not independently measured.
 - Refreshed the public leaderboard on 2026-10-11: #1 was `0.4133`; `0.3195` was rank #8, not the high. [Official leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/).
 
 ## Historical HOLDOUT-DTI evidence (not a live score)
 
-The archived H61-G dots had **HOLDOUT-DTI 0.046505** (95% CI `[0.042143, 0.050660]`; 22,641 withheld positives; evaluator `gems61.holdout_segmented v2` with whole segments, four eroded quadrants, seeds 20+21, mode `all`). Same-budget random lines were **HOLDOUT-DTI 0.031414** (95% CI `[0.028243, 0.034092]`; same evaluator and withheld count). The as-published H19-5 dotted reference was **HOLDOUT-DTI 0.101070** (95% CI `[0.086503, 0.117340]`; same evaluator and count). On the same 1,999 withheld basin-interior segments, H61-G recovered 351 (17.56%) versus 215 (10.76%) for equal-budget random lines. These are proxy results on withheld catalogue segments, not organizer scores. H61-L has **no HOLDOUT-DTI result** because its pre-placement uniqueness gate failed.
+The archived H61-G dots had **HOLDOUT-DTI 0.046505** (95% CI `[0.042143, 0.050660]`; 22,641 withheld positives; evaluator `gems61.holdout_segmented v2` with whole segments, four eroded quadrants, seeds 20+21, mode `all`). Same-budget random lines were **HOLDOUT-DTI 0.031414** (95% CI `[0.028243, 0.034092]`; same evaluator and withheld count). The as-published H19-5 dotted reference was **HOLDOUT-DTI 0.101070** (95% CI `[0.086503, 0.117340]`; same evaluator and count). On the same 1,999 withheld basin-interior segments, H61-G recovered 351 (17.56%) versus 215 (10.76%) for equal-budget random lines. These are proxy results on withheld catalogue segments, not organizer scores. The H61-L surface in this branch's current run has **no HOLDOUT-DTI** because its pre-placement gate failed. A separate archived main-branch H61-L output was scored under the older gate: **HOLDOUT-DTI 0.044330** (95% CI `[0.041405, 0.047832]`; 22,641 withheld positives; evaluator `gems61.holdout_segmented v2`). That historical score does not restore eligibility: its final TIFF fails strict overlap at `98.6375%`, and its old “UNIQUE” label is retired.
 
 ## Score provenance and leaderboard context
 
@@ -45,7 +53,7 @@ The archived H61-G dots had **HOLDOUT-DTI 0.046505** (95% CI `[0.042143, 0.05066
 
 ## Ranked next hypotheses
 
-Five candidates with layers, physical signatures, catalogue-gap rationale, difference from implemented work, expected-gain ranking, and cost are documented in [the hypotheses page](docs/hypotheses.html) and [`evidence/h61g_hypotheses.json`](evidence/h61g_hypotheses.json). H61-L (3DEP scarp ribbons in a gravity-step corridor) ranked first and was screened; its surface failed the literal uniqueness gate, so it was not holdout-scored. The remaining hypotheses are projections, not measured scores.
+Five candidates with layers, physical signatures, catalogue-gap rationale, difference from implemented work, expected-gain ranking, and cost are documented in [the hypotheses page](docs/hypotheses.html) and [`evidence/h61g_hypotheses.json`](evidence/h61g_hypotheses.json). H61-L (3DEP scarp ribbons in a gravity-step corridor) ranked first. The current-run surface failed the literal uniqueness gate, so that candidate was not holdout-scored. A different archived main-branch H61-L variant has historical HOLDOUT-DTI evidence, but its TIFF fails the strict final-dot gate and is not eligible. The remaining hypotheses are projections, not measured scores.
 
 ## Reproduce the checks
 
@@ -54,8 +62,8 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 PYTHONPATH=src .venv/bin/python scripts/prepare_data.py --fetch --cache-bands
 bash scripts/fetch_registry.sh
 PYTHONPATH=src .venv/bin/python scripts/build_registry_index.py --public-cache /tmp/refs/registry
+PYTHONPATH=src .venv/bin/python scripts/audit_local_artifact_dots.py
 PYTHONPATH=src .venv/bin/python scripts/run_h61g.py unique
-PYTHONPATH=src .venv/bin/python scripts/run_h61l.py
 PYTHONPATH=src .venv/bin/python -m pytest -q tests
 PYTHONPATH=src .venv/bin/python scripts/build_site_h61g.py
 ```

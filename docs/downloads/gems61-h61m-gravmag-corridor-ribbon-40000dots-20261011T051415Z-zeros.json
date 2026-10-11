@@ -1,0 +1,123 @@
+{
+  "submission_name": "gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros",
+  "note": "H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED",
+  "sha256": "7d3a11b623021313d9ec1cbc2d021e1a9565f5d76855ec7ac88376b8fca65797",
+  "n_positive_px": 55301,
+  "n_dots": 7942,
+  "budget": 40000,
+  "validation": {
+    "path": "/home/user/61GEMSDOE/docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+    "file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+    "bytes": 818188,
+    "sha256": "94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6",
+    "grid": {
+      "width": 3292,
+      "height": 3730,
+      "crs": "EPSG:32611",
+      "count": 1,
+      "dtype": "float32",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "nodata": null
+    },
+    "meta": {
+      "crs": "EPSG:32611",
+      "shape": [
+        3730,
+        3292
+      ],
+      "dtype": "float32",
+      "count": 1,
+      "nodata": null,
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "profile_compress": "deflate"
+    },
+    "n_finite": 12279160,
+    "n_nan": 0,
+    "n_infinite": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.004503646865487099,
+    "emitted_positive_pixels": 55301,
+    "on_catalogue_positive_pixels": 0,
+    "in_footprint_positive_pixels": 55301,
+    "in_footprint_pixels": 5167373,
+    "positive_pixels": 55301,
+    "footprint_fraction": 0.010701956293846022,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true
+    },
+    "all_checks_passed": true,
+    "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance"
+  },
+  "timestamp": "20261011T051415Z",
+  "method": {
+    "lane": "buried-structure",
+    "gravity_band": 13,
+    "magnetic_band": 3,
+    "corridor_px": 10,
+    "ribbon_width_px": 1,
+    "prune_px": 2.0,
+    "inversion": {
+      "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+      "filter": "Butterworth order 4.0, kc = 2.500e-04 rad/m (kc_scale=0.25)",
+      "rms_residual_mgal": 4.668974457375093,
+      "delta_rho": -300.0,
+      "z0_m": 500.0,
+      "regional_sigma_km": 15.0,
+      "source_doi": "doi:10.1190/1.1440444"
+    },
+    "calibration": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.25,
+      "stats": {
+        "n": 321284,
+        "p50": 477.7139892578125,
+        "p90": 1049.1387939453125,
+        "p99": 1572.9806335449218,
+        "mean": 506.24949657469307,
+        "vmax": 1867.1475830078125,
+        "fraction_gt_1km": 0.11854932085008901,
+        "fraction_gt_2km": 0.0
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.5229882828586919,
+      "penalty": 0.5229882828586919,
+      "rms_residual_mgal": 4.668974457375093
+    }
+  }
+}

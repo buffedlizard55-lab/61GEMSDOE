@@ -21,13 +21,15 @@ code,pre{overflow-wrap:anywhere}
 <p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes (19/19 checks),
 but strict uniqueness fails: <b>98.5925%</b> of its positive pixels fall within 3 px of
 <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
-<p><b>Top new hypothesis H61-L:</b> its pre-placement scarp-ribbon surface also fails, at
-<b>94.6692%</b> one-sided overlap. The prescribed stop was applied: <b>no H61-L holdout, final dots, or TIFF</b> were generated.
-The accessible public inventory is not organizer-complete.</p>
+<p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
+<b>94.6692%</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
+A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
+<p><b>Post-merge local-artifact audit:</b> <b>10/10</b> local candidate TIFFs fail the same literal final-dot threshold.
+The audited main-branch H61-L/H61-M/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. The accessible inventory is not organizer-complete.</p>
 <p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
 No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
 </div>
-<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit the current H61-G diagnostic TIFF.</b></p>
+<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit any current or archived repository TIFF, including the file under <code>docs/submissions/</code>.</b></p>
 <ol><li>Verify a current run card names an exact TIFF and reports both uniqueness phases passed.</li>
 <li>Verify the same card reports format checks passed and a holdout result above the selector's bar.</li>
 <li>Download that exact TIFF; use its SHA-256 and note from the run card.</li>

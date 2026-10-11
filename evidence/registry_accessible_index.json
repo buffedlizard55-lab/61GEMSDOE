@@ -1,16 +1,20 @@
 {
   "schema": "gems61-accessible-raster-index-v1",
-  "generated_utc": "2026-10-11T05:12:04Z",
+  "generated_utc": "2026-10-11T14:53:09Z",
   "declared_scope_complete": true,
   "organizer_registry_complete": false,
-  "completeness_note": "All paths explicitly declared in scripts/registry_sources.tsv and every TIFF in docs/downloads were opened and matched to the pinned competition grid; this is not the organizer-side registry and cannot include unlisted, private, or inaccessible files.",
+  "completeness_note": "All paths explicitly declared in scripts/registry_sources.tsv and every TIFF in the configured local artifact roots were opened and matched to the pinned competition grid; this is not the organizer-side registry and cannot include unlisted, private, or inaccessible files.",
   "scope": {
     "public_source_manifest": "scripts/registry_sources.tsv",
     "declared_public_source_count": 21,
     "fetched_public_source_count": 21,
-    "repository_prior_root": "/home/user/61GEMSDOE/docs/downloads",
-    "repository_prior_file_count": 7,
-    "total_raster_records": 28
+    "repository_prior_roots": [
+      "docs/downloads",
+      "docs/submissions",
+      "out"
+    ],
+    "repository_prior_file_count": 11,
+    "total_raster_records": 32
   },
   "grid": {
     "shape": [
@@ -642,7 +646,7 @@
       "file": "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif"
       ],
@@ -669,7 +673,7 @@
       "file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif"
       ],
@@ -696,7 +700,7 @@
       "file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif"
       ],
@@ -723,7 +727,7 @@
       "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif"
       ],
@@ -747,10 +751,91 @@
       "grid_ok": true
     },
     {
+      "file": "gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+      "repo_relative_path": "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif"
+      ],
+      "bytes": 133987,
+      "sha256": "685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
+      "file": "gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+      "repo_relative_path": "docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif"
+      ],
+      "bytes": 818188,
+      "sha256": "94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
+      "file": "gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+      "repo_relative_path": "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif"
+      ],
+      "bytes": 77055,
+      "sha256": "f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
       "file": "gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
       "repo_relative_path": "docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif"
       ],
@@ -777,7 +862,7 @@
       "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif"
       ],
@@ -804,12 +889,39 @@
       "file": "gems61c-gravstep-liveband-40k-20261011.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif",
       "repo_relative_path": "docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif",
-      "scope": "repository-prior-downloads",
+      "scope": "repository-prior-artifacts",
       "sources": [
         "docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif"
       ],
       "bytes": 154559,
       "sha256": "e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
+      "file": "61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+      "repo_relative_path": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+      ],
+      "bytes": 137204,
+      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
       "count": 1,
       "shape": [
         3730,
