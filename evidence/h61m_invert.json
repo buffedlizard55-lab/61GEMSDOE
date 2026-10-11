@@ -1,0 +1,52 @@
+{
+  "stage": "invert",
+  "timestamp": "20261011T050804Z",
+  "inversion": {
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
+    "rms_residual_mgal": 2.425341944786814,
+    "delta_rho": -300.0,
+    "z0_m": 500.0,
+    "regional_sigma_km": 15.0,
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "calibration": {
+    "best": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.5,
+      "stats": {
+        "n": 321284,
+        "p50": 462.2573547363281,
+        "p90": 1343.3979248046876,
+        "p99": 2125.57255859375,
+        "mean": 508.8574333212868,
+        "vmax": 2589.3759765625,
+        "fraction_gt_1km": 0.20323763399360067,
+        "fraction_gt_2km": 0.016664384158563764
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.01605853866907435,
+      "penalty": 0.01605853866907435,
+      "rms_residual_mgal": 2.425341944786814
+    },
+    "anchors": {
+      "deep_fraction_gt_1km": 0.2,
+      "median_depth_m_range": [
+        250.0,
+        700.0
+      ],
+      "p90_depth_m_range": [
+        900.0,
+        2000.0
+      ]
+    },
+    "source": "USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "n_combinations": 72
+  },
+  "n_basement_steps": 4104,
+  "n_magnetic_edges": 691269,
+  "n_magnetic_edges_in_corridor": 72798,
+  "corridor_px": 571754,
+  "elapsed_s": 122.58165407180786
+}

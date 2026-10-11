@@ -1,0 +1,85 @@
+{
+  "hypothesis": "H61-G: a buried normal fault is a step in the GP-1012-calibrated inverted basement surface; the gravity step fixes a +/-1 km corridor and the in-corridor slope ridge of the detrended elevation fixes the trace to the 300 m kernel.",
+  "mechanism": "Basement throw under alluvium -> isostatic-residual gradient maximum (Parker/Oldenburg inversion, Blakely-Simpson maxima, measured throw >= 80 m) -> growth of the same fault through the fill -> subtle young scarp = slope-ridge of band 19 inside the corridor.",
+  "named_non_fault_mimic": "Density contrasts inside the basement (intrabasement lithologic contacts) give the same gravity step with no scarp; alluvial-fan toes, terrace risers and incised channels give slope ridges with no gravity step. The conjunction removes each one's false positives.",
+  "holdout_dti": {
+    "value": 0.046504803513711855,
+    "ci95": [
+      0.04214325650932585,
+      0.05066048017118602
+    ],
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "n_withheld_positive_px": 22641,
+    "n_dots_per_draw": 40000,
+    "random_lines_same_budget": 0.03141382104713175,
+    "basin_interior_segments": "351/1999 recovered vs 215/1999 by random lines",
+    "registry_reference_best": {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "pooled_dti": 0.10106964768349222
+    }
+  },
+  "correlation_overlap_vs_registry": {
+    "worst_spearman": {
+      "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif",
+      "value": 0.015285099819131428
+    },
+    "worst_overlap": {
+      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "value": 0.985925,
+      "base_rate": 0.9581822330224662,
+      "gate_rule": "Jaccard (reference is dense: >5x my support)",
+      "gate_value": 0.0074812467407437125,
+      "gate_limit": 0.5
+    },
+    "n_compared": 24,
+    "verdict": "UNIQUE"
+  },
+  "raster_sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+  "validator_output": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "transform_matches": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true,
+      "zero_dots_on_mapped_catalogue": true
+    },
+    "all_passed": true
+  },
+  "submission_name": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
+  "note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
+  "note_chars": 133,
+  "leakage_canary": true,
+  "leakage_worst_auc": 0.5576993057395875,
+  "inversion": {
+    "z0_m": 500.0,
+    "delta_rho": -300.0,
+    "regional_sigma_km": 15.0,
+    "fraction_deeper_than_1km": 0.20323763399360067,
+    "cross_check_r_vs_band15": 0.7382397545865853
+  },
+  "verdict": "negative",
+  "verdict_reason": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "candidate_selection": {
+    "rule": "max pooled HOLDOUT-DTI over candidates and budgets; ties (overlapping 95% CIs) broken toward the lane's stated population (basin interior) and higher basin-interior segment recovery",
+    "shipped": "X2 corridor x slope-ridge (basin interior)",
+    "shipped_budget": 40000,
+    "best_by_pooled_dti": "X2b corridor x slope-ridge (any depth) @ 40000"
+  },
+  "organizer_confirmed_score": null,
+  "experiments_run": 3,
+  "budget_experiments": 3
+}

@@ -65,3 +65,9 @@ ul.tight li { margin-bottom: 4px; }
 footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .82rem; }
 footer .wrap { padding-top: 18px; padding-bottom: 30px; }
 .toc a { display: block; padding: 3px 0; }
+
+/* Parallel-session nav row: the same <a> styling, separated by a label. */
+nav.main .navsep {
+  opacity: .55; font-size: .78rem; letter-spacing: .04em;
+  text-transform: uppercase; margin-left: .35rem; align-self: center;
+}

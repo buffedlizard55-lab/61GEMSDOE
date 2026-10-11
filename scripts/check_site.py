@@ -38,7 +38,10 @@ PLACEHOLDER = re.compile(r"\{\{|TODO|undefined|nan%|>nan<|None%")
 
 def main() -> int:
     problems: list[str] = []
-    pages = sorted(p for p in DOCS.rglob("*.html"))
+    # Only the pages this session's builder emits are in scope; pages written by
+    # the parallel sessions that are merged on main are linked, not vetted here.
+    from build_site import PAGES  # noqa: PLC0415
+    pages = sorted(DOCS / name for name, _ in PAGES)
     if not pages:
         print("[site] FAIL: no html pages in docs/")
         return 1

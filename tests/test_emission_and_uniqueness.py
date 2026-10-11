@@ -114,7 +114,7 @@ def test_spearman_detects_a_copy():
 def test_dot_overlap_is_one_for_identical_dots():
     dots = np.zeros((50, 50), bool)
     dots[10, 5:25] = True
-    assert uq.dot_overlap(dots, dots, 3.0)["fraction"] == pytest.approx(1.0)
+    assert uq.dot_overlap_stats(dots, dots, 3.0)["fraction"] == pytest.approx(1.0)
 
 
 def test_dot_overlap_is_zero_for_disjoint_dots():
@@ -122,7 +122,7 @@ def test_dot_overlap_is_zero_for_disjoint_dots():
     a[10, 5:25] = True
     b = np.zeros((60, 60), bool)
     b[50, 5:25] = True
-    assert uq.dot_overlap(a, b, 3.0)["fraction"] == pytest.approx(0.0)
+    assert uq.dot_overlap_stats(a, b, 3.0)["fraction"] == pytest.approx(0.0)
 
 
 def test_dot_overlap_partial_case():
@@ -130,7 +130,7 @@ def test_dot_overlap_partial_case():
     a[10, 0:20] = True          # 20 dots
     b = np.zeros((60, 60), bool)
     b[13, 0:10] = True          # 3 px directly above the first 10, 3.16 px from #11
-    assert uq.dot_overlap(a, b, 3.0)["fraction"] == pytest.approx(0.5)
+    assert uq.dot_overlap_stats(a, b, 3.0)["fraction"] == pytest.approx(0.5)
 
 
 def test_sha256_is_stable():

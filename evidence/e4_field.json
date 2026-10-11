@@ -1,0 +1,29 @@
+{
+  "evidence_class": "MEASURED",
+  "what": "session-C lane field",
+  "stats": {
+    "n_ribbon_px": 130719,
+    "n_step_maxima": 22684,
+    "n_zc_px": 733435,
+    "throw_p50_m": 57.32534258841639,
+    "depth_p50_m": 689.0398784820165,
+    "depth_fraction_gt_1km": 0.198383588721,
+    "rms_residual_mgal": 4.28319214212109,
+    "z0_m": 400.0,
+    "delta_rho_kg_m3": -600.0,
+    "kc_scale": 0.25,
+    "decimation": 4,
+    "seconds": 16.576268434524536,
+    "throw_threshold_m": 51.15272015559046,
+    "throw_quantile": 0.95
+  },
+  "inversion": {
+    "delta_rho": -600.0,
+    "z0_m": 400.0,
+    "filter": "Butterworth order 4.0, kc = 3.125e-04 rad/m (kc_scale=0.25)",
+    "rms_residual_mgal": 4.28319214212109,
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "caveat": "the belief is catalogue-free; the flank gate is the only catalogue-derived term"
+}

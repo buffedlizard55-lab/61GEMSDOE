@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Limitations - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>SUPERSEDED PAGE.</b> This page describes an earlier session of this repository. The current status, download and evidence are on <a href="index.html">index.html</a> (session arena/c57b45ae, H61-G).</div><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<h1>Limitations and what is still blocking progress</h1>
+<div class="card">
+<h2>Honest limits of this lane as implemented</h2>
+<ul>
+<li><strong>The inversion agrees only weakly with the provided depth band.</strong>
+Pearson r &asymp; &minus;0.18 over the full footprint against band 15, versus
+&minus;0.77 on a single well-covered 900 x 900 crop. The full-grid number is the honest
+one. Band 13 is an isostatic <em>residual</em>; the long wavelengths that carry most of
+the basin-depth signal have already been removed from it, and 57.93% of the grid is
+outside the survey, so the FFT operates on a filled hole. A bounded-domain inversion
+(e.g. only the largest valid connected region, with a taper) is the next thing to try.</li>
+<li><strong>No single band separates the catalogue.</strong> Every one of the seven
+candidate fields has AUC between 0.45 and 0.53 for catalogue membership. Whatever model
+wins this competition is not a per-pixel threshold on one geophysical band.</li>
+<li><strong>The withheld set is unknown, so every score here is a proxy.</strong> The
+holdout hides segments of the <em>visible</em> catalogue. The real Phase 1 set is a
+different, expert-compiled dataset. The two share the disjointness property, which is
+why the off-catalogue step transfers, but no holdout number in this repository is a
+leaderboard prediction and none is presented as one.</li>
+<li><strong>Gravity cannot see the target at full strength.</strong> A few hundred
+metres of resolution is the published limit; a fault with a small vertical throw is
+simply not in the band.</li>
+</ul>
+</div>
+<div class="card">
+<h2>Blockers that are not technical</h2>
+<ul>
+<li><strong>DrivenData login.</strong> The official data tab and the submission page both
+require an account. This repository cannot download the data or submit a file
+unattended. Data arrives through a public hash-pinned mirror of the same bytes; the
+upload is a manual step by the account holder.</li>
+<li><strong>Egress.</strong> The development sandbox reaches github.com, pypi and
+nothing else: no Dropbox, no USGS, no drivendata.org. Every non-GitHub source in
+<a href="methodology.html">Method</a> is cited but was read through a mirror or a
+citation, and is labelled that way.</li>
+<li><strong>No organizer receipts.</strong> No score in this repository has been
+confirmed by the submission page for <em>our</em> bytes. Until one is, every claim of
+quality here is a holdout measurement.</li>
+</ul>
+</div>
+<div class="card">
+<h2>The competing explanation that must not be forgotten</h2>
+<p>Density contrasts <em>within</em> basement produce horizontal gravity gradients that
+look exactly like a fault step. A Jurassic intrusion margin, a basement lithologic
+contact, or a Tertiary volcanic centre all put a ridge in the horizontal gradient
+magnitude that no fault explains. This lane cannot separate them, and any ribbon it
+emits on such a contact is a false positive the metric will charge at alpha = 0.2. Any
+future scoring of this lane must report that contamination explicitly.</p>
+</div>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>

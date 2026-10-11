@@ -1,0 +1,82 @@
+{
+  "evidence_class": "MEASURED (file) + HOLDOUT-DTI",
+  "submission": "gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros",
+  "note": "H61-L: lidar relief maxima inside GP-1012 corridor (any depth); 40000 dots; UNSCORED",
+  "note_chars": 84,
+  "candidate": "L1 relief maxima inside corridor any depth",
+  "budget": 40000,
+  "n_dots": 40000,
+  "n_positive_px": 40000,
+  "ribbon_vs_dots_holdout": {
+    "dots (shipped)": {
+      "pooled_dti": 0.04433,
+      "ci95": [
+        0.041405107488824,
+        0.04783192637207127
+      ],
+      "coverage": 0.067
+    },
+    "3x3 ribbons (not shipped)": {
+      "pooled_dti": 0.021,
+      "ci95": [
+        0.019,
+        0.024
+      ],
+      "coverage": 0.12
+    }
+  },
+  "dots_distance_to_catalogue_px": {
+    "min": 2.23606797749979,
+    "median": 18.110770276274835,
+    "mean": 27.232101423323737,
+    "frac_within_3px": 0.066
+  },
+  "tif": "out/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+  "zip": "out/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.zip",
+  "receipt": "out/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.json",
+  "download_tif": "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif",
+  "download_zip": "docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.zip",
+  "sha256": "685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9",
+  "bytes": 133987,
+  "zip_sha256": "58c6ae123ae0907df498cf364ddb73a2bb0031f1b6326d98a93913e66297a90a",
+  "validator": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches": true,
+    "transform_matches_sample_submission": true,
+    "no_nan_anywhere": true,
+    "no_inf_anywhere": true,
+    "no_sentinel_values": true,
+    "range_0_1_guaranteed": true,
+    "min_ge_0": true,
+    "max_le_1": true,
+    "in_footprint_all_finite": true,
+    "in_footprint_range_0_1": true,
+    "outside_footprint_zero": true,
+    "zero_dots_on_mapped_catalogue": true,
+    "whole_raster_all_finite": true,
+    "whole_raster_range_0_1": true,
+    "no_float32_sentinel": true
+  },
+  "validator_all_passed": true,
+  "holdout": {
+    "dti": 0.04433,
+    "ci95": [
+      0.041405107488824,
+      0.04783192637207127
+    ],
+    "random_lines": 0.03141382104713175,
+    "beats_random_lines": true,
+    "registry_reference_best": {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "pooled_dti": 0.10106964768349222
+    },
+    "beats_registry_reference_on_holdout": false,
+    "n_withheld_truth_px": 22641,
+    "evaluator": "gems61.holdout_segmented v2"
+  },
+  "slot_recommendation": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "organizer_receipt": null
+}

@@ -186,3 +186,32 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+# ---------------------------------------------------------------------------
+# merged from the parallel lane on origin/main (names kept only where this
+# module did not already define them)
+# ---------------------------------------------------------------------------
+
+def link_legacy_layouts(root: Path) -> list:
+    """Create data/bridge/* and data/raw/* symlinks onto data/official/* (idempotent)."""
+    wanted = {
+        "data/bridge/existing_faults.tif": "../official/existing_faults.tif",
+        "data/bridge/labels.tif": "../official/labels.tif",
+        "data/bridge/sample_submission.tif": "../official/sample_submission.tif",
+        "data/bridge/training_features.tif": "../official/training_features.tif",
+        "data/raw/existing_faults.tif": "../official/existing_faults.tif",
+        "data/raw/example_submission.tif": "../official/sample_submission.tif",
+        "data/raw/training_features.tif": "../official/training_features.tif",
+    }
+    made = []
+    for rel, target in wanted.items():
+        link = root / rel
+        link.parent.mkdir(parents=True, exist_ok=True)
+        if link.is_symlink() or link.exists():
+            made.append(dict(path=rel, state="exists"))
+            continue
+        link.symlink_to(target)
+        made.append(dict(path=rel, state="linked", target=target))
+    return made
+

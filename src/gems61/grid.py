@@ -159,3 +159,75 @@ def write_geotiff(path: str | Path, arr: np.ndarray, *, nodata: float | None = N
         dst.write(arr, 1)
         dst.set_band_description(1, "predicted_new_fault_probability")
     return read_geotiff(path)
+
+
+# ---------------------------------------------------------------------------
+# merged from the parallel lane on origin/main (names kept only where this
+# module did not already define them)
+# ---------------------------------------------------------------------------
+
+def _default_data_dir() -> Path:
+    """Locate the pinned rasters.
+
+    IR-61-PATH-01: this module was written against a ``data/bridge/`` layout that
+    does not exist in this repository -- the pinned rasters live in
+    ``data/official/`` (``scripts/prepare_data.py`` writes them there and verifies
+    their sha256).  ``load_grid()`` therefore raised ``FileNotFoundError`` for every
+    caller that did not pass ``data_dir`` explicitly.  Fixed once, here, rather than
+    forked: try ``data/bridge`` first (the original layout, still honoured if a
+    caller creates it), then ``data/official``.
+    """
+    for name in ("bridge", "official"):
+        candidate = REPO_ROOT / "data" / name
+        if (candidate / "existing_faults.tif").exists() and (candidate / "sample_submission.tif").exists():
+            return candidate
+    return REPO_ROOT / "data" / "official"
+
+
+DATA_DIR = _default_data_dir()
+
+
+def write_submission(path: Path, values: np.ndarray, *, mode: str = "zeros") -> dict:
+    """Serialize a pre-normalized array on the pinned grid without repairing it.
+
+    ``mode="zeros"`` is the only submission-compatible mode: callers must pass
+    an all-finite field already in ``[0,1]`` (normally with cells outside the
+    footprint explicitly set to zero). Out-of-range and non-finite values are
+    rejected; nothing is clipped or silently replaced.
+
+    ``mode="nan"`` is retained for local diagnostics only. The organizer's
+    nodata handling is not inferred here, and a prior portal range error does
+    not establish NaN as its cause. Prefer the stricter all-finite zeros policy
+    for any future candidate.
+    """
+    values = np.asarray(values)
+    if values.shape != (HEIGHT, WIDTH):
+        raise ValueError(f"values shape {values.shape} != {(HEIGHT, WIDTH)}")
+    if not np.issubdtype(values.dtype, np.number):
+        raise ValueError("values must be numeric")
+    if mode == "zeros":
+        if not np.isfinite(values).all():
+            raise ValueError("zeros mode requires all values finite; set outside-footprint cells to 0 explicitly")
+        if (values < 0.0).any() or (values > 1.0).any():
+            raise ValueError("submission values must already be in [0,1]; no clipping")
+        out = values.astype(np.float32, copy=False)
+        nodata = None
+    elif mode == "nan":
+        finite = np.isfinite(values)
+        if np.isinf(values).any() or (values[finite] < 0.0).any() or (values[finite] > 1.0).any():
+            raise ValueError("diagnostic values must remain in [0,1] except for NaN cells; no silent clipping")
+        out = values.astype(np.float32, copy=False)
+        nodata = float("nan")
+    else:
+        raise ValueError("mode must be 'zeros' or 'nan'")
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with rasterio.open(
+        path, "w", driver="GTiff", height=HEIGHT, width=WIDTH, count=1,
+        dtype="float32", crs=f"EPSG:{EPSG}", transform=TRANSFORM,
+        nodata=nodata, compress="lzw", tiled=False,
+    ) as dst:
+        dst.write(out, 1)
+        dst.set_band_description(1, "predicted_new_fault_probability")
+    return {"path": str(path), "mode": mode, "nodata": nodata}
+

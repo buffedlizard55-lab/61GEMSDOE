@@ -1,0 +1,329 @@
+{
+  "evidence_class": "MEASURED lidar screen",
+  "rows": [
+    {
+      "candidate": "RANDOM lidar-valid pixel",
+      "n": 3892829,
+      "within_3px": 0.09024722123679206,
+      "mean_kernel": 0.04280137419709802
+    },
+    {
+      "candidate": "RANDOM inside corridor (lidar-valid)",
+      "n": 763855,
+      "within_3px": 0.1049060358314078,
+      "mean_kernel": 0.050088527835184644
+    },
+    {
+      "candidate": "ex_max top50% all",
+      "n": 1952377,
+      "within_3px": 0.10471901687020488,
+      "mean_kernel": 0.05078371278229295
+    },
+    {
+      "candidate": "ex_max top50% inside corridor",
+      "n": 340268,
+      "within_3px": 0.1343793715541867,
+      "mean_kernel": 0.06633063923161418
+    },
+    {
+      "candidate": "ex_max top50% inside corridor+basin",
+      "n": 265328,
+      "within_3px": 0.14573282880057892,
+      "mean_kernel": 0.07224741061463136
+    },
+    {
+      "candidate": "ex_max top50% outside corridor",
+      "n": 1612109,
+      "within_3px": 0.09845860298528201,
+      "mean_kernel": 0.047502221537558474
+    },
+    {
+      "candidate": "ex_max top25% inside corridor",
+      "n": 162732,
+      "within_3px": 0.14228301747658728,
+      "mean_kernel": 0.07091900477249712
+    },
+    {
+      "candidate": "ex_mean top50% all",
+      "n": 1965750,
+      "within_3px": 0.10134503370214931,
+      "mean_kernel": 0.04894876183641183
+    },
+    {
+      "candidate": "ex_mean top50% inside corridor",
+      "n": 336824,
+      "within_3px": 0.1296879082250671,
+      "mean_kernel": 0.06354196916476114
+    },
+    {
+      "candidate": "ex_mean top50% inside corridor+basin",
+      "n": 262306,
+      "within_3px": 0.14061439692572797,
+      "mean_kernel": 0.06917661208836362
+    },
+    {
+      "candidate": "ex_mean top50% outside corridor",
+      "n": 1628926,
+      "within_3px": 0.09548438664494274,
+      "mean_kernel": 0.04593122607041391
+    },
+    {
+      "candidate": "ex_mean top25% inside corridor",
+      "n": 155829,
+      "within_3px": 0.13924237465426845,
+      "mean_kernel": 0.06745431268128851
+    },
+    {
+      "candidate": "step_max top50% all",
+      "n": 1957394,
+      "within_3px": 0.10404803529590874,
+      "mean_kernel": 0.0506448704286126
+    },
+    {
+      "candidate": "step_max top50% inside corridor",
+      "n": 327429,
+      "within_3px": 0.13474066133421292,
+      "mean_kernel": 0.06708321869876968
+    },
+    {
+      "candidate": "step_max top50% inside corridor+basin",
+      "n": 253307,
+      "within_3px": 0.14732715637546534,
+      "mean_kernel": 0.07368316012692186
+    },
+    {
+      "candidate": "step_max top50% outside corridor",
+      "n": 1629965,
+      "within_3px": 0.09788246986898491,
+      "mean_kernel": 0.047342718581334126
+    },
+    {
+      "candidate": "step_max top25% inside corridor",
+      "n": 152109,
+      "within_3px": 0.13609319632631864,
+      "mean_kernel": 0.06671807353686734
+    },
+    {
+      "candidate": "lapneg_max top50% all",
+      "n": 1955312,
+      "within_3px": 0.10586648064349832,
+      "mean_kernel": 0.05142995181268581
+    },
+    {
+      "candidate": "lapneg_max top50% inside corridor",
+      "n": 331574,
+      "within_3px": 0.13703426686048967,
+      "mean_kernel": 0.06777690132568776
+    },
+    {
+      "candidate": "lapneg_max top50% inside corridor+basin",
+      "n": 256267,
+      "within_3px": 0.14986713076595895,
+      "mean_kernel": 0.07448088541929926
+    },
+    {
+      "candidate": "lapneg_max top50% outside corridor",
+      "n": 1623738,
+      "within_3px": 0.09950189008325235,
+      "mean_kernel": 0.04809183726598917
+    },
+    {
+      "candidate": "lapneg_max top25% inside corridor",
+      "n": 155014,
+      "within_3px": 0.14260647425393835,
+      "mean_kernel": 0.07023717419717324
+    },
+    {
+      "candidate": "lappos_max top50% all",
+      "n": 1949754,
+      "within_3px": 0.10811466472180593,
+      "mean_kernel": 0.05255124956240445
+    },
+    {
+      "candidate": "lappos_max top50% inside corridor",
+      "n": 332681,
+      "within_3px": 0.1400350485900908,
+      "mean_kernel": 0.06937258426636049
+    },
+    {
+      "candidate": "lappos_max top50% inside corridor+basin",
+      "n": 258058,
+      "within_3px": 0.15278348278294027,
+      "mean_kernel": 0.07603985559759537
+    },
+    {
+      "candidate": "lappos_max top50% outside corridor",
+      "n": 1617073,
+      "within_3px": 0.10154767286325354,
+      "mean_kernel": 0.04909059042664076
+    },
+    {
+      "candidate": "lappos_max top25% inside corridor",
+      "n": 151184,
+      "within_3px": 0.14360646629272938,
+      "mean_kernel": 0.07096553890980778
+    },
+    {
+      "candidate": "downface_max top50% all",
+      "n": 1610059,
+      "within_3px": 0.1040986696760802,
+      "mean_kernel": 0.05093967662754429
+    },
+    {
+      "candidate": "downface_max top50% inside corridor",
+      "n": 260600,
+      "within_3px": 0.13808902532617037,
+      "mean_kernel": 0.06927675986301116
+    },
+    {
+      "candidate": "downface_max top50% inside corridor+basin",
+      "n": 197912,
+      "within_3px": 0.15214337685435952,
+      "mean_kernel": 0.07675129493598594
+    },
+    {
+      "candidate": "downface_max top50% outside corridor",
+      "n": 1349459,
+      "within_3px": 0.09753464166010231,
+      "mean_kernel": 0.047398521326669885
+    },
+    {
+      "candidate": "downface_max top25% inside corridor",
+      "n": 124284,
+      "within_3px": 0.1334926458755753,
+      "mean_kernel": 0.06624925598988683
+    },
+    {
+      "candidate": "upface_max top50% all",
+      "n": 1611930,
+      "within_3px": 0.10941293976785592,
+      "mean_kernel": 0.053647842121660023
+    },
+    {
+      "candidate": "upface_max top50% inside corridor",
+      "n": 267560,
+      "within_3px": 0.14344446105546418,
+      "mean_kernel": 0.07185732478482244
+    },
+    {
+      "candidate": "upface_max top50% inside corridor+basin",
+      "n": 204049,
+      "within_3px": 0.15778562992222456,
+      "mean_kernel": 0.07954809130086875
+    },
+    {
+      "candidate": "upface_max top50% outside corridor",
+      "n": 1344370,
+      "within_3px": 0.10263989824229937,
+      "mean_kernel": 0.050023743710243714
+    },
+    {
+      "candidate": "upface_max top25% inside corridor",
+      "n": 126958,
+      "within_3px": 0.1401408339765907,
+      "mean_kernel": 0.06850133675716774
+    },
+    {
+      "candidate": "cross_max top50% all",
+      "n": 1605930,
+      "within_3px": 0.10529911017292161,
+      "mean_kernel": 0.051037755497571335
+    },
+    {
+      "candidate": "cross_max top50% inside corridor",
+      "n": 258173,
+      "within_3px": 0.14114179251896983,
+      "mean_kernel": 0.06979328420823203
+    },
+    {
+      "candidate": "cross_max top50% inside corridor+basin",
+      "n": 195744,
+      "within_3px": 0.15592304234101684,
+      "mean_kernel": 0.07750279643446928
+    },
+    {
+      "candidate": "cross_max top50% outside corridor",
+      "n": 1347757,
+      "within_3px": 0.09843317452626846,
+      "mean_kernel": 0.047444992771191574
+    },
+    {
+      "candidate": "cross_max top25% inside corridor",
+      "n": 122024,
+      "within_3px": 0.13464564347997116,
+      "mean_kernel": 0.06509276789892776
+    },
+    {
+      "candidate": "relief top50% all",
+      "n": 1970653,
+      "within_3px": 0.1149903103184579,
+      "mean_kernel": 0.05531898838532156
+    },
+    {
+      "candidate": "relief top50% inside corridor",
+      "n": 330381,
+      "within_3px": 0.15095904425496623,
+      "mean_kernel": 0.07401339720431668
+    },
+    {
+      "candidate": "relief top50% inside corridor+basin",
+      "n": 254258,
+      "within_3px": 0.16538319344917368,
+      "mean_kernel": 0.08153056132573466
+    },
+    {
+      "candidate": "relief top50% outside corridor",
+      "n": 1640272,
+      "within_3px": 0.10774554464137655,
+      "mean_kernel": 0.05155359003673764
+    },
+    {
+      "candidate": "relief top25% inside corridor",
+      "n": 138875,
+      "within_3px": 0.11873987398739874,
+      "mean_kernel": 0.058016108619734996
+    },
+    {
+      "candidate": "coh100 top50% all",
+      "n": 1950726,
+      "within_3px": 0.09168176361006107,
+      "mean_kernel": 0.04210107257640973
+    },
+    {
+      "candidate": "coh100 top50% inside corridor",
+      "n": 394139,
+      "within_3px": 0.10691405823833723,
+      "mean_kernel": 0.04907195454500272
+    },
+    {
+      "candidate": "coh100 top50% inside corridor+basin",
+      "n": 330667,
+      "within_3px": 0.11169545191990733,
+      "mean_kernel": 0.05149932447223779
+    },
+    {
+      "candidate": "coh100 top50% outside corridor",
+      "n": 1556587,
+      "within_3px": 0.08782483728824665,
+      "mean_kernel": 0.0403359952320536
+    },
+    {
+      "candidate": "coh100 top25% inside corridor",
+      "n": 200917,
+      "within_3px": 0.10524246330574316,
+      "mean_kernel": 0.047091648461749826
+    },
+    {
+      "candidate": "COMBO relief+ex_max+step+lappos top50% inside corridor",
+      "n": 327087,
+      "within_3px": 0.14073319942400644,
+      "mean_kernel": 0.06995104257523453
+    },
+    {
+      "candidate": "COMBO top25% inside corridor",
+      "n": 147622,
+      "within_3px": 0.13690371353863245,
+      "mean_kernel": 0.06759305141533381
+    }
+  ]
+}

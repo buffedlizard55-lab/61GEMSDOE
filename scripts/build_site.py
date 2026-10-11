@@ -8,6 +8,8 @@ so no page can advertise a decision the receipt does not record.
 """
 from __future__ import annotations
 
+import pathlib
+
 import json
 from pathlib import Path
 import sys
@@ -37,6 +39,22 @@ def load(name: str, default=None):
     return default
 
 
+# Pages produced by the parallel sessions that are merged on main. They are not
+# part of this session's site, but they must stay reachable from it.
+SIBLINGS = [
+    ("analysis.html", "Why 0.2778"),
+    ("instrument.html", "Instrument study"),
+    ("evidence.html", "Evidence"),
+    ("holdout.html", "Holdout"),
+    ("methodology.html", "Methodology"),
+    ("next-steps.html", "Next steps"),
+    ("limitations.html", "Limitations"),
+    ("verify.html", "Verification"),
+    ("candidate-h62.html", "H62 candidate"),
+    ("submit.html", "Submit"),
+    ("brief.md", "Brief (md)"),
+]
+
 def esc(x) -> str:
     return (str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             .replace('"', "&quot;"))
@@ -54,6 +72,12 @@ def shell(title: str, active: str, body: str) -> str:
     nav = "".join(
         f'<a href="{p}" class="{"active" if p == active else ""}">{esc(t)}</a>'
         for p, t in PAGES)
+    here = pathlib.Path(__file__).resolve().parent
+    sib = "".join(
+        f'<a href="{p}">{esc(t)}</a>'
+        for p, t in SIBLINGS if (here.parent / "docs" / p).exists())
+    if sib:
+        nav += ('<span class="navsep">Parallel sessions (merged on main):</span>' + sib)
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -586,3 +610,67 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+# ---------------------------------------------------------------------------
+# merged from the parallel lane on origin/main (names kept only where this
+# module did not already define them)
+# ---------------------------------------------------------------------------
+
+EVID = ROOT / "evidence"
+
+
+DOWNLOADS = DOCS / "downloads"
+
+
+CSS = """
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+"""
+
+
+def read(name, default=None):
+    p = EVID / name
+    return json.loads(p.read_text()) if p.exists() else default
+
+
+def page(title, body, nav=True):
+    links = ('<nav>' + (
+        '<a href="index.html">Home</a>'
+        '<a href="executive-summary.html">How to submit</a>'
+        '<a href="method.html">Method</a>'
+        '<a href="hypotheses.html">Hypotheses</a>'
+        '<a href="verify.html">Verification</a>'
+        '<a href="instrument.html">Instrument study</a>'
+        '<a href="evidence.html">Evidence</a>'
+        '<a href="irregularities.html">Irregularities</a>'
+        '<a href="limitations.html">Limitations</a>'
+        '<a href="next-steps.html">Next steps</a>'
+    ) + '</nav>') if nav else ""
+    return (f"<!doctype html><html lang=en><head><meta charset=utf-8>"
+            f"<meta name=viewport content='width=device-width,initial-scale=1'>"
+            f"<title>{title}</title><style>{CSS}</style></head><body><main>{links}"
+            f"<h1>{title}</h1>{body}</main></body></html>")
+

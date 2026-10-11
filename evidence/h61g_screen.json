@@ -1,0 +1,215 @@
+{
+  "evidence_class": "MEASURED (label-aware screen; not a holdout score)",
+  "question": "Do gravity-derived edges sit within the 300 m kernel of mapped faults more often than random pixels?",
+  "marginal_bar_note": "A dot pays off only if its mean kernel credit exceeds alpha*DTI = 0.2 x 0.2778 = 0.056 at the group's best live score; random pixels sit at ~0.03.",
+  "rows": [
+    {
+      "candidate": "RANDOM pixel",
+      "region": "depth>300m",
+      "n": 2620626,
+      "within_3px": 0.07653553006037489,
+      "mean_kernel": 0.030070549782539608,
+      "enrichment_mean_kernel_vs_random": 1.0
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 2px, all",
+      "region": "depth>300m",
+      "n": 26104,
+      "within_3px": 0.08152007355194606,
+      "mean_kernel": 0.032367867693597986,
+      "enrichment_mean_kernel_vs_random": 1.0763976025603732
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 2px, top50%",
+      "region": "depth>300m",
+      "n": 13052,
+      "within_3px": 0.07830217591173766,
+      "mean_kernel": 0.030801568908427394,
+      "enrichment_mean_kernel_vs_random": 1.0243101350382442
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 5px, all",
+      "region": "depth>300m",
+      "n": 12745,
+      "within_3px": 0.09329148685759121,
+      "mean_kernel": 0.03668321785349727,
+      "enrichment_mean_kernel_vs_random": 1.219905127068787
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 5px, top50%",
+      "region": "depth>300m",
+      "n": 6373,
+      "within_3px": 0.09273497567864428,
+      "mean_kernel": 0.03685280056693185,
+      "enrichment_mean_kernel_vs_random": 1.2255446220118775
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 10px, all",
+      "region": "depth>300m",
+      "n": 8308,
+      "within_3px": 0.09966297544535388,
+      "mean_kernel": 0.039790160055339516,
+      "enrichment_mean_kernel_vs_random": 1.3232268895344101
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 10px, top50%",
+      "region": "depth>300m",
+      "n": 4154,
+      "within_3px": 0.0953298025999037,
+      "mean_kernel": 0.035172628373260025,
+      "enrichment_mean_kernel_vs_random": 1.1696702796462646
+    },
+    {
+      "candidate": "supplied depth band 15 HGM maxima",
+      "region": "depth>300m",
+      "n": 179888,
+      "within_3px": 0.07716468024548608,
+      "mean_kernel": 0.03047455548382742,
+      "enrichment_mean_kernel_vs_random": 1.013435261550236
+    },
+    {
+      "candidate": "detrended-elevation slope ridges (band 19), all",
+      "region": "depth>300m",
+      "n": 833596,
+      "within_3px": 0.07548500712575396,
+      "mean_kernel": 0.029615555066846294,
+      "enrichment_mean_kernel_vs_random": 0.9848690922186761
+    },
+    {
+      "candidate": "slope ridges, >= median strength",
+      "region": "depth>300m",
+      "n": 416798,
+      "within_3px": 0.10433831256387986,
+      "mean_kernel": 0.041080406024920364,
+      "enrichment_mean_kernel_vs_random": 1.3661341851745459
+    },
+    {
+      "candidate": "RANDOM pixel inside gravity corridor",
+      "region": "depth>300m",
+      "n": 397234,
+      "within_3px": 0.08291586319398642,
+      "mean_kernel": 0.03244161049307918,
+      "enrichment_mean_kernel_vs_random": 1.078849928840221
+    },
+    {
+      "candidate": "slope ridges >= median, inside gravity corridor",
+      "region": "depth>300m",
+      "n": 58413,
+      "within_3px": 0.11973362094054406,
+      "mean_kernel": 0.04711476482005601,
+      "enrichment_mean_kernel_vs_random": 1.5668075629070501
+    },
+    {
+      "candidate": "slope ridges >= median, outside gravity corridor",
+      "region": "depth>300m",
+      "n": 358385,
+      "within_3px": 0.10182903860373621,
+      "mean_kernel": 0.04009686876666386,
+      "enrichment_mean_kernel_vs_random": 1.3334265271713126
+    },
+    {
+      "candidate": "RANDOM pixel",
+      "region": "all valid",
+      "n": 5103418,
+      "within_3px": 0.0751619796771497,
+      "mean_kernel": 0.029307935351928625,
+      "enrichment_mean_kernel_vs_random": 1.0
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 2px, all",
+      "region": "all valid",
+      "n": 48680,
+      "within_3px": 0.08009449465899754,
+      "mean_kernel": 0.031637113085538314,
+      "enrichment_mean_kernel_vs_random": 1.079472596948267
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 2px, top50%",
+      "region": "all valid",
+      "n": 24340,
+      "within_3px": 0.08159408381265407,
+      "mean_kernel": 0.032387254953441955,
+      "enrichment_mean_kernel_vs_random": 1.1050677765095689
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 5px, all",
+      "region": "all valid",
+      "n": 23598,
+      "within_3px": 0.0878464276633613,
+      "mean_kernel": 0.03512573096091813,
+      "enrichment_mean_kernel_vs_random": 1.1985058155455042
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 5px, top50%",
+      "region": "all valid",
+      "n": 11799,
+      "within_3px": 0.09619459276209848,
+      "mean_kernel": 0.03839034737506935,
+      "enrichment_mean_kernel_vs_random": 1.30989600304762
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 10px, all",
+      "region": "all valid",
+      "n": 14678,
+      "within_3px": 0.09531271290366534,
+      "mean_kernel": 0.03796161335586058,
+      "enrichment_mean_kernel_vs_random": 1.2952674045448411
+    },
+    {
+      "candidate": "grav HGM maxima, gaussian 10px, top50%",
+      "region": "all valid",
+      "n": 7339,
+      "within_3px": 0.09197438343098514,
+      "mean_kernel": 0.03589507827620907,
+      "enrichment_mean_kernel_vs_random": 1.2247562936516092
+    },
+    {
+      "candidate": "supplied depth band 15 HGM maxima",
+      "region": "all valid",
+      "n": 314506,
+      "within_3px": 0.07410351471832016,
+      "mean_kernel": 0.029011135930108112,
+      "enrichment_mean_kernel_vs_random": 0.9898730695882683
+    },
+    {
+      "candidate": "detrended-elevation slope ridges (band 19), all",
+      "region": "all valid",
+      "n": 1648233,
+      "within_3px": 0.07328272155696433,
+      "mean_kernel": 0.02841909325042047,
+      "enrichment_mean_kernel_vs_random": 0.9696723057822063
+    },
+    {
+      "candidate": "slope ridges, >= median strength",
+      "region": "all valid",
+      "n": 824117,
+      "within_3px": 0.08453411348145955,
+      "mean_kernel": 0.03310773431026554,
+      "enrichment_mean_kernel_vs_random": 1.1296508577867759
+    },
+    {
+      "candidate": "RANDOM pixel inside gravity corridor",
+      "region": "all valid",
+      "n": 610222,
+      "within_3px": 0.09160928317890867,
+      "mean_kernel": 0.0358550338286386,
+      "enrichment_mean_kernel_vs_random": 1.2233899590023196
+    },
+    {
+      "candidate": "slope ridges >= median, inside gravity corridor",
+      "region": "all valid",
+      "n": 58635,
+      "within_3px": 0.1286774111025838,
+      "mean_kernel": 0.05106043159839852,
+      "enrichment_mean_kernel_vs_random": 1.7422050030227891
+    },
+    {
+      "candidate": "slope ridges >= median, outside gravity corridor",
+      "region": "all valid",
+      "n": 765482,
+      "within_3px": 0.08115279000681923,
+      "mean_kernel": 0.03173257930271516,
+      "enrichment_mean_kernel_vs_random": 1.0827299474245287
+    }
+  ]
+}

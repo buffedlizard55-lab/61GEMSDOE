@@ -119,3 +119,117 @@ def distance_to_mask(mask: np.ndarray) -> np.ndarray:
     if not mask.any():
         return np.full(mask.shape, np.inf)
     return distance_transform_edt(~mask)
+
+
+# ---------------------------------------------------------------------------
+# merged from the parallel lane on origin/main (names kept only where this
+# module did not already define them)
+# ---------------------------------------------------------------------------
+
+R_M = 300.0
+
+
+RES = 100.0
+
+
+ALPHA, BETA = 0.2, 0.8
+
+
+def kernel(d_m: np.ndarray, R: float = R_M) -> np.ndarray:
+    return np.clip(1.0 - d_m / R, 0.0, 1.0)
+
+
+def dti(truth: np.ndarray, pred: np.ndarray, domain: np.ndarray,
+        R: float = R_M, res: float = RES):
+    """Return (dti_coverage, dti_pooled, parts) for binary masks on one grid."""
+    T = truth & domain
+    P = pred & domain
+    n_truth = int(T.sum())
+    n_pred = int(P.sum())
+    if n_truth == 0 or n_pred == 0:
+        return 0.0, 0.0, dict(TP=0.0, FP=float(n_pred), FN=float(n_truth),
+                              n_truth=n_truth, n_pred=n_pred, mean_d=None)
+    # distance from every truth pixel to the nearest prediction pixel
+    d_pred = ndimage.distance_transform_edt(~P, sampling=res)
+    d_truth = ndimage.distance_transform_edt(~T, sampling=res)
+    k_truth = kernel(d_pred[T], R)
+    k_pred = kernel(d_truth[P], R)
+    TP = float(k_truth.sum())
+    FN = n_truth - TP
+    FP = float((1.0 - k_pred).sum())
+    dti_cov = TP / (TP + ALPHA * FP + BETA * FN)
+    dti_pool = float(k_pred.sum()) / (ALPHA * n_pred + BETA * n_truth)
+    parts = dict(TP=TP, FP=FP, FN=FN, n_truth=n_truth, n_pred=n_pred,
+                 mean_d=float(d_pred[T].mean()), med_d=float(np.median(d_pred[T])),
+                 frac_truth_within_R=float((d_pred[T] <= R).mean()))
+    return float(dti_cov), float(dti_pool), parts
+
+
+def segments(catalogue: np.ndarray, min_px: int = 1) -> np.ndarray:
+    """8-connected components of the catalogue = individual mapped fault segments."""
+    lab, n = ndimage.label(catalogue, structure=np.ones((3, 3), bool))
+    if min_px > 1:
+        sizes = np.bincount(lab.ravel())
+        keep = np.zeros(len(sizes), bool)
+        keep[1:] = sizes[1:] >= min_px
+        lab = np.where(keep[lab], lab, 0)
+    return lab
+
+
+def segment_recovery(pred: np.ndarray, folds: list[Fold], R: float = R_M,
+                     res: float = RES, restrict: np.ndarray | None = None):
+    """Fraction of withheld segments with >= 1 prediction within R metres."""
+    out = {}
+    for fo in folds:
+        hidden = fo.hidden if restrict is None else (fo.hidden & restrict)
+        lab = segments(hidden, min_px=1)
+        ids = np.unique(lab[lab > 0])
+        if len(ids) == 0:
+            out[fo.name] = dict(n=0, recovered=0, frac=0.0)
+            continue
+        d = ndimage.distance_transform_edt(~(pred & fo.domain), sampling=res)
+        hits = ndimage.minimum(d, lab, ids)
+        out[fo.name] = dict(n=len(ids), recovered=int((np.array(hits) <= R).sum()),
+                            frac=float((np.array(hits) <= R).mean()))
+    return out
+
+
+def random_lines(shape, n_px: int, domain: np.ndarray, rng, seg_len=(8, 40)):
+    """Control: random straight segments until the pixel budget is spent."""
+    H, W = shape
+    out = np.zeros(shape, bool)
+    drawn = 0
+    guard = 0
+    while drawn < n_px and guard < 200000:
+        guard += 1
+        L = int(rng.integers(*seg_len))
+        y0 = float(rng.integers(0, H)); x0 = float(rng.integers(0, W))
+        th = rng.uniform(0, np.pi)
+        yy = np.clip(np.round(y0 + np.arange(L) * np.sin(th)).astype(int), 0, H - 1)
+        xx = np.clip(np.round(x0 + np.arange(L) * np.cos(th)).astype(int), 0, W - 1)
+        out[yy, xx] = True
+        drawn += L
+    out &= domain
+    return out
+
+
+def auc(score: np.ndarray, labels: np.ndarray, n_bg: int = 400000, seed=0) -> float:
+    """AUC of ``score`` for separating label pixels from random background pixels."""
+    rng = np.random.default_rng(seed)
+    pos = np.flatnonzero(labels.ravel())
+    neg_pool = np.flatnonzero((~labels).ravel())
+    if len(pos) == 0 or len(neg_pool) == 0:
+        return float("nan")
+    neg = rng.choice(neg_pool, size=min(n_bg, len(neg_pool)), replace=False)
+    s = score.ravel()
+    a = s[pos]; b = s[neg]
+    a = a[np.isfinite(a)]; b = b[np.isfinite(b)]
+    if len(a) == 0 or len(b) == 0:
+        return float("nan")
+    from scipy.stats import rankdata
+
+    allv = np.concatenate([a, b])
+    ranks = rankdata(allv, method="average")
+    ra = ranks[: len(a)].sum()
+    return float((ra - len(a) * (len(a) + 1) / 2.0) / (len(a) * len(b)))
+

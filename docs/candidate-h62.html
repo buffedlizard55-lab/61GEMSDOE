@@ -1,0 +1,128 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Candidate gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:940px;margin:0 auto;padding:26px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:16px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}.warn{background:#fff8ec;border-color:#f2d6a8}.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:20px;margin-bottom:6px}
+.ok strong{color:var(--ok)}.warn strong{color:var(--warn)}.bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:13px 22px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0;font-size:17px}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
+nav a{margin-right:14px}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+.bad-pill{background:#fdeeed;color:var(--bad)}
+ol li,ul li{margin:.3em 0}
+</style></head><body><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>PARALLEL-SESSION PAGE.</b> This page was written by another session on this repository and keeps its own numbers and verdict. The merged status, candidate board, download and evidence are on <a href="index.html">index.html</a> (session arena/c57b45ae, H61-G).</div><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="candidate-h62.html">This candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>Candidate gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106</h1>
+<h2>Run card (protocol item 5)</h2>
+<table>
+<tr><th>Hypothesis</th><td>Alluvial cover hides range-front and intrabasin faults from a surface-mapped catalogue; a Parker-Oldenburg inversion of the supplied isostatic residual recovers basement relief whose horizontal-gradient maxima, filtered by a MEASURED throw >= 120 m, are those steps; weighting them by a declared basin-floor habitat ramp places dots where the live truth (new faults NOT in the USGS database) is more likely than a catalogue-offset field does.</td></tr>
+<tr><th>Mechanism</th><td>band 13 -> Parker(1973)/Oldenburg(1974) first iterate (z0=400 m, drho=-600 kg/m^3, Butterworth-4 kc_scale=0.25, GP-1012 calibrated) -> basement depth -> Blakely-Simpson HGM maxima with throw >= 120 m -> 2 px ribbons -> fused belief (declared weights) x concealment_prior^1.0 -> hard-core top-38000 over footprint >= 3 px from catalogue -> binary float32 GeoTIFF, zeros outside.</td></tr>
+<tr><th>Named non-fault process that could mimic it</th><td>Density contrasts INSIDE basement (pluton margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge as a fault step; this lane cannot separate them, and neither can the supplied depth_to_base_surf band it is cross-checked against.</td></tr>
+<tr><th>Inversion</th><td>z₀ = 400.0 m, Δρ = -600.0 kg/m³,
+    Butterworth order 4.0, kc = 3.125e-04 rad/m (kc_scale=0.25), forward RMS 4.28 mGal.<br>
+    Stage: first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual.<br>
+    Sign guard: corr(inverted depth, band 13) = -0.9342
+    (must be &lt; 0 — this is the IR-61-SIGN-01 regression test).<br>
+    Calibration source: USGS GP-1012, doi:10.3133/gp1012 (1:2,500,000 - scale anchor only, NOT a truth mask)</td></tr>
+<tr><th>Declared design</th><td><code>{"prune_px": 3.0, "k_dots": 38000, "separation_px": 3, "habitat_exponent": 0.25, "seed": 61202610}</code></td></tr>
+<tr><th>Holdout DTI + CI</th><td><b>0.03949</b> — HOLDOUT-DTI - INSTRUMENT NOT VALIDATED: it reproduces the owner-reported live ordering at rho = 0.607 (p = 0.148) with leave-one-out rank error 1.14, below the declared usability bar (rho >= 0.80, LOO MAE <= 1.0). This number is a measurement on a ruler known to be soft. It is NOT a projection and NOT a score.<br>
+    Instrument: surrogate-truth DTI from evidence/e1_habitat_instrument.json (alpha 0.2, beta 0.8, R = 300 m triangular kernel)<br>
+    γ = 0.15, N = 30,000;
+    in-sample ρ vs live = 0.607;
+    LOO mean rank error = 1.14<br>
+    Withheld positives = 12,222<br>
+    <b>No 95 % CI is quoted</b>: a CI on an unvalidated instrument would imply a precision the
+    ruler does not have. That absence is deliberate.</td></tr>
+<tr><th>Correlation / overlap vs registry</th><td>
+    worst rank correlation <b>0.0105</b> (threshold 0.90)<br>
+    worst raw 3-px dot overlap <b>0.2132</b> (threshold 0.70)<br>
+    worst Jaccard <b>0.00687</b><br>
+    verdict: <b>unique</b></td></tr>
+<tr><th>Raster sha256</th><td><code>5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591</code></td></tr>
+<tr><th>Validator output</th><td>10/10 checks passed;
+    no NaN inside the footprint (0 non-finite cells in the whole raster); values in
+    [0.0, 1.0] ⊂ [0, 1];
+    CRS EPSG:32611, shape 3730 × 3292,
+    transform [100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0] — all match the pinned template.</td></tr>
+<tr><th>Submission name</th><td><code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106</code></td></tr>
+<tr><th>Submission note</th><td><code>H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue</code>
+    <span class="mut">(114/140)</span></td></tr>
+<tr><th>Verdict</th><td><b class="pill bad-pill">negative</b> — valid and unique, but not
+    evidence-backed for promotion. Reported as a deliverable.</td></tr>
+</table>
+
+<h2>Surrogate-truth DTI against the registry, same ruler</h2>
+<table><tr><th>registry raster</th><th>owner-reported live</th><th>surrogate DTI</th><th>dots</th></tr>
+<tr><td><code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e</code></td><td>0.2778</td><td>0.05681</td><td>37,654</td></tr><tr><td><code>gems28-h36-1-rung30-blind-r1-20261003-b531dae0a3</code></td><td>0.2710</td><td>0.05547</td><td>37,660</td></tr><tr><td><code>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-</code></td><td>0.2708</td><td>0.05644</td><td>40,199</td></tr><tr><td><code>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-z</code></td><td>0.2600</td><td>0.05526</td><td>44,090</td></tr><tr><td><code>gems27-topo-gap-closure-t-v2-on-d1-5-20261002-55</code></td><td>0.2449</td><td>0.05774</td><td>61,328</td></tr><tr><td><code>gems49-gate_ortho_w0.25-40k-20261006T213721Z-zer</code></td><td>0.2376</td><td>0.05807</td><td>40,000</td></tr><tr><td><code>gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd7</code></td><td>0.0512</td><td>0.04934</td><td>44,090</td></tr>
+<tr><td><b>THIS CANDIDATE</b></td><td><i>unscored</i></td><td><b>0.03949</b></td>
+<td>38,000</td></tr></table>
+<p class="mut">The candidate sits below every registry raster on this ruler. The ruler is not
+validated (ρ = 0.607), so this is a measurement, not a prediction — but
+it is the measurement that decides the verdict.</p>
+
+<h2>Uniqueness, per raster</h2>
+<table><tr><th>registry raster</th><th>their dots</th><th>shared</th><th>Jaccard</th>
+<th>raw 3-px frac</th><th>eligible base rate</th><th>enrichment</th><th>rank corr</th></tr>
+<tr><td><code>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros</code></td><td>44,090</td><td>359</td><td>0.00439</td><td>0.1967</td><td>0.1560</td><td>1.261</td><td>0.0055</td></tr><tr><td><code>gems27-topo-gap-closure-t-v2-on-d1-5-20261002-551249</code></td><td>61,328</td><td>498</td><td>0.00504</td><td>0.2132</td><td>0.1680</td><td>1.270</td><td>0.0064</td></tr><tr><td><code>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allf</code></td><td>40,199</td><td>359</td><td>0.00461</td><td>0.1900</td><td>0.1548</td><td>1.228</td><td>0.0060</td></tr><tr><td><code>gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-a</code></td><td>37,660</td><td>322</td><td>0.00427</td><td>0.1866</td><td>0.1527</td><td>1.222</td><td>0.0054</td></tr><tr><td><code>gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.t</code></td><td>40,000</td><td>532</td><td>0.00687</td><td>0.2004</td><td>0.1549</td><td>1.294</td><td>0.0105</td></tr><tr><td><code>gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3</code></td><td>44,090</td><td>382</td><td>0.00468</td><td>0.1409</td><td>0.1191</td><td>1.183</td><td>0.0060</td></tr><tr><td><code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zer</code></td><td>37,654</td><td>359</td><td>0.00477</td><td>0.1821</td><td>0.1529</td><td>1.191</td><td>0.0064</td></tr></table>
+<p class="mut">the protocol gate is the RAW fraction of my dots within 3 px of a registry raster's dots (< 0.70). The enrichment over the eligible-area base rate is reported as the IR-61-UNIQ-01 correction, since a dense reference absorbs dots by geometry.</p>
+
+<h2>Leakage canary — each feature alone</h2>
+<p>Withheld: 12,222 pixels in 82 whole connected traces of the catalogue
+(20 % of catalogue mass), buffered 3 px; visible traces masked pixel-exactly; every
+catalogue-derived feature recomputed from the <b>visible</b> faults only. Domain
+4,942,579 px. Threshold: AUC &gt; 0.90 is leakage until proven otherwise.</p>
+<table><tr><th>feature</th><th>AUC alone</th><th>flag</th></tr><tr><td><code>ribbon_lane</code></td><td>0.4065</td><td>ok</td></tr><tr><td><code>concealed_ribbon</code></td><td>0.4065</td><td>ok</td></tr><tr><td><code>edge_gravity</code></td><td>0.4259</td><td>ok</td></tr><tr><td><code>offset_band_visible_only</code></td><td>0.6897</td><td>ok</td></tr><tr><td><code>habitat_depth</code></td><td>0.5448</td><td>ok</td></tr><tr><td><code>fused_p</code></td><td>0.1592</td><td>ok</td></tr><tr><td><code>final_score</code></td><td>0.0170</td><td>ok</td></tr></table>
+<p><b>Reading this honestly.</b> No feature exceeds 0.90, so nothing leaks. But
+<code>final_score</code> scores AUC 0.0170 and
+<code>fused_p</code> 0.1592 — far <i>below</i> 0.5, i.e.
+deliberately anti-predictive of withheld <i>catalogue</i> traces. That is not a defect: the
+emission is hard-pruned ≥ 3 px from the whole catalogue, so by construction it cannot sit on a
+withheld catalogue pixel. It is the same structural fact as IR-57-INSTR-01 — a catalogue-frame
+holdout measures the opposite of the live target, whose truth is disjoint from the catalogue.</p>
+
+<h2>The lane's required test — and why it is degenerate here</h2>
+<table>
+<tr><th>withheld segments scored</th><td>1370</td></tr>
+<tr><th>candidate recovered within 300 m</th><td>0.1445</td></tr>
+<tr><th>random lines, same budget</th><td>0.1844 ± 0.1000 (8 draws)</td></tr>
+<tr><th>lift</th><td>0.78 ×</td></tr>
+<tr><th>basin-interior</th><td>0.0000 vs
+    0.0000 — <b>degenerate</b></td></tr>
+</table>
+<div class="banner bad"><strong>IR-62-DEGEN-01 — structural conflict, reported not hidden.</strong>
+The lane asks how many withheld <i>basin-interior</i> segments the steps recover versus random
+lines. But obeying the official constraint (truth disjoint from the catalogue) means pruning every
+dot ≥ 3 px from the catalogue — and 3 px <b>is</b> the metric's kernel radius R = 300 m. So no
+compliant dot can ever lie within R of a withheld catalogue pixel, and recovery is ≤ the fraction
+of a segment that falls outside its own component. The test cannot be answered by a
+same-catalogue holdout once the official constraint is obeyed. A previous session on this repository
+answered it with a 2 px prune instead and measured <b>36.6 % of withheld segments recovered versus
+2.6 % for random lines</b> (14 ×), and <b>28.1 % versus 0.6 %</b> for basin-interior segments
+(45 ×) — see <code>evidence/e3_submission.json</code>. That is the geological validation of this
+lane; it is a different emission from the one on this page, and it is credited, not re-claimed.</div>
+
+<h2>What would actually be needed to beat 0.2778</h2>
+<ol>
+<li><b>A validated instrument.</b> Nothing else matters until a surrogate truth reproduces the
+owner-reported live ordering at ρ ≥ 0.9 with leave-one-out rank error ≤ 1. The single-parameter
+depth-habitat law fitted here reaches only ρ = 0.607
+(LOO 1.14, 3/7 exact).
+The obvious next step is a two-factor law — basin habitat <i>and</i> budget — fitted on the seven
+distinct registry fields, since budget alone explains topo-gap and contamination alone explains
+sgmc.</li>
+<li><b>More independent scored rasters.</b> Seven distinct fields cannot pin a habitat law. Every
+additional published raster with an owner-reported score is worth more than another model.</li>
+<li><b>A habitat test that is not catalogue-framed.</b> The only honest validation target is
+faults that are genuinely absent from the catalogue; the free official source that could supply one
+is named in <code>evidence/hypotheses.json</code>.</li>
+</ol>
+</main></body></html>

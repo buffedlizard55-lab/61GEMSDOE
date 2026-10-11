@@ -1,0 +1,117 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "instrument": "gems61.holdout whole-segment withholding, seed 20, mode 'all', 4 eroded quadrants",
+  "known_limitation": "IR-57-INSTR-01: this instrument has measured Spearman -0.928 against 15 owner-reported live scores, i.e. it ranks placements by coverage of a large population. It is used here for STRUCTURAL fidelity, not for promotion.",
+  "results": [
+    {
+      "variant": "H61-A fused belief",
+      "n_dots": 22000,
+      "holdout_dti_mean": 0.0,
+      "holdout_dti_median": 0.0,
+      "holdout_dti_min": 0.0,
+      "holdout_dti_max": 0.0,
+      "per_cell": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "live_properties": {
+        "n_dots": 22000,
+        "mean_distance_px": 13.856466401350762,
+        "median_distance_px": 12.806248474865697,
+        "p25_distance_px": 8.246211251235321,
+        "p75_distance_px": 18.867962264113206,
+        "frac_within_1px": 0.0,
+        "frac_within_2px": 0.0,
+        "frac_within_3px": 0.0,
+        "frac_on_catalogue": 0.0
+      }
+    },
+    {
+      "variant": "lane only (concealed ribbons)",
+      "n_dots": 22000,
+      "holdout_dti_mean": 0.00011158359764758294,
+      "holdout_dti_median": 8.30193995235375e-05,
+      "holdout_dti_min": 0.0,
+      "holdout_dti_max": 0.0002802955915432568,
+      "per_cell": [
+        0.0,
+        2e-05,
+        0.00014,
+        0.00028
+      ],
+      "live_properties": {
+        "n_dots": 22000,
+        "mean_distance_px": 29.130610928401854,
+        "median_distance_px": 22.80350850198276,
+        "p25_distance_px": 10.198039027185569,
+        "p75_distance_px": 46.09772228646444,
+        "frac_within_1px": 0.0,
+        "frac_within_2px": 0.0,
+        "frac_within_3px": 0.022318181818181817,
+        "frac_on_catalogue": 0.0
+      }
+    },
+    {
+      "variant": "random lines (control)",
+      "n_dots": 22000,
+      "holdout_dti_mean": 0.010066085630760665,
+      "holdout_dti_median": 0.01041620454228544,
+      "holdout_dti_min": 0.005842145560900756,
+      "holdout_dti_max": 0.01358978787757102,
+      "per_cell": [
+        0.01023,
+        0.00584,
+        0.0106,
+        0.01359
+      ],
+      "live_properties": {
+        "n_dots": 22000,
+        "mean_distance_px": 29.320723579352013,
+        "median_distance_px": 22.02271554554524,
+        "p25_distance_px": 10.0,
+        "p75_distance_px": 42.05948168962618,
+        "frac_within_1px": 0.02359090909090909,
+        "frac_within_2px": 0.047863636363636365,
+        "frac_within_3px": 0.07731818181818181,
+        "frac_on_catalogue": 0.0
+      }
+    },
+    {
+      "variant": "supplied band 15 ribbons (no inversion)",
+      "n_dots": 22000,
+      "holdout_dti_mean": 0.0012754087890313407,
+      "holdout_dti_median": 0.0006403410945580257,
+      "holdout_dti_min": 0.0,
+      "holdout_dti_max": 0.003820952967009312,
+      "per_cell": [
+        0.00128,
+        0.00382,
+        0.0,
+        0.0
+      ],
+      "live_properties": {
+        "n_dots": 22000,
+        "mean_distance_px": 38.00982193408538,
+        "median_distance_px": 30.610455730027933,
+        "p25_distance_px": 16.0312195418814,
+        "p75_distance_px": 55.226805085936306,
+        "frac_within_1px": 0.018454545454545456,
+        "frac_within_2px": 0.02931818181818182,
+        "frac_within_3px": 0.04472727272727273,
+        "frac_on_catalogue": 0.0
+      }
+    }
+  ],
+  "winner": "random lines (control)",
+  "lane_vs_control": {
+    "lane": 0.0,
+    "control": 0.010066085630760665,
+    "delta": -0.010066085630760665,
+    "beats_control": false
+  },
+  "n_withheld_truth_px": 11318,
+  "budget": 22000,
+  "note": "HOLDOUT-DTI is an evaluator-version index on withheld catalogue traces. It is not a competition score and is never written as one."
+}
