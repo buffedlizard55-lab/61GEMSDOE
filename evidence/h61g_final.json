@@ -1,0 +1,88 @@
+{
+  "evidence_class": "MEASURED (file) + HOLDOUT-DTI (selection)",
+  "submission": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
+  "note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
+  "note_chars": 133,
+  "candidate": "X2 corridor x slope-ridge (basin interior)",
+  "budget": 40000,
+  "n_dots": 40000,
+  "n_positive_px": 40000,
+  "ribbon_vs_dots_holdout": {
+    "dots (shipped)": {
+      "pooled_dti": 0.046504803513711855,
+      "ci95": [
+        0.04214325650932585,
+        0.05066048017118602
+      ],
+      "coverage": 0.07029474583254391,
+      "emitted_per_draw": 40000.0,
+      "fp_mass": 78960.47265625,
+      "tp_mass": 1591.5433403946267
+    },
+    "3x3 ribbons (not shipped)": {
+      "pooled_dti": 0.021645645549291177,
+      "ci95": [
+        0.019311243305548308,
+        0.024306743311927507
+      ],
+      "coverage": 0.12044026741444919,
+      "emitted_per_draw": 271536.5,
+      "fp_mass": 536602.10546875,
+      "tp_mass": 2726.8880945305436
+    }
+  },
+  "dots_distance_to_catalogue_px": {
+    "min": 2.23606797749979,
+    "median": 17.4928556845359,
+    "mean": 25.684536856938518,
+    "frac_within_3px": 0.070775
+  },
+  "tif": "out/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+  "zip": "out/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip",
+  "receipt": "out/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json",
+  "download_tif": "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+  "download_zip": "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip",
+  "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+  "bytes": 135152,
+  "zip_sha256": "798ff272764d363c327caec0f889e4427580a0df124722649e4a5d51560e3586",
+  "validator": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches_sample_submission": true,
+    "no_nan_anywhere": true,
+    "no_inf_anywhere": true,
+    "no_sentinel_values": true,
+    "range_0_1_guaranteed": true,
+    "min_ge_0": true,
+    "max_le_1": true,
+    "in_footprint_all_finite": true,
+    "in_footprint_range_0_1": true,
+    "outside_footprint_zero": true,
+    "transform_matches": true,
+    "whole_raster_all_finite": true,
+    "whole_raster_range_0_1": true,
+    "no_float32_sentinel": true,
+    "zero_dots_on_mapped_catalogue": true
+  },
+  "validator_all_passed": true,
+  "holdout": {
+    "dti": 0.046504803513711855,
+    "ci95": [
+      0.04214325650932585,
+      0.05066048017118602
+    ],
+    "random_lines": 0.03141382104713175,
+    "beats_random_lines": true,
+    "registry_reference_best": {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "pooled_dti": 0.10106964768349222
+    },
+    "beats_registry_reference_on_holdout": false,
+    "n_withheld_truth_px": 22641,
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
+  },
+  "slot_recommendation": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "organizer_receipt": null
+}

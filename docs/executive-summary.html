@@ -1,77 +1,72 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>How to make a submission, exactly</title><style>
-:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
-h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
-h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
-h3{font-size:17px;margin:1.4em 0 .35em}
-p,li{color:var(--ink)}
-small,.mut{color:var(--mut)}
-.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
-.ok{background:#eefaf1;border-color:#b6e2c5}
-.warn{background:#fff8ec;border-color:#f2d6a8}
-.bad{background:#fdeeed;border-color:#f3c2bd}
-.banner strong{display:block;font-size:19px;margin-bottom:6px}
-.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
-a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
-a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
-th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
-th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
-nav a{margin-right:14px}
-ul.tight li{margin:.15em 0}
-ol li,ul li{margin:.3em 0}
-.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-.bad-pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#fdeeed;color:var(--bad);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="session-c.html">Session C</a><a href="candidate-h62.html">H62 candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>How to make a submission, exactly</h1>
-<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the session-C GeoTIFF
-below, then paste the name and the note into the submission dialog. Nothing else is needed. Everything
-here is verified against the official problem page and the portal's own field text.</div>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Executive summary · 61GEMSDOE</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status.ok{border-color:var(--ok);background:#0f2a16}
+.status.bad{border-color:var(--bad);background:#2a0f0f}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
+.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
+nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+</style></head><body><div class="wrap">
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
-<h2>1 · Download</h2>
-<p><a class="btn" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif">↓ Download the session-C GeoTIFF (154,559 bytes)</a>
-<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.zip">↓ Single-TIFF ZIP</a>
-<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif.json">Run card (JSON)</a></p>
-<p>Either the <code>.tif</code> or the <code>.zip</code> is accepted; the ZIP contains exactly one
-GeoTIFF and was round-trip verified. Do <b>not</b> upload the JSON run card, this page, or a ZIP of the
-repository. (The <a href="index.html">home page</a> lists every other candidate and the verdict its own
-session recorded for it — one of them is explicitly NOT RECOMMENDED.)</p>
+<h1>Executive summary &amp; exactly how to submit</h1>
 
-<h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
-<p>Re-hash it. On macOS/Linux: <code>shasum -a 256 gems61c-gravstep-liveband-40k-20261011.tif</code> — it must print</p>
-<p><code>e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873</code></p>
+<div class="status">
+<h2 style="margin:.2em 0;border:0">Status of the newest file: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to upload</span>
+ · <span style="color:var(--warn)">EXPECTED TO SCORE WELL BELOW 0.2778 – not recommended for a weekly slot</span></h2>
+<p><b>What it is:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; everything else 0.0), float32, EPSG:32611,
+3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, min 0 / max 1
+(<a href="verify.html">validator receipt</a>: 19 checks, all passed). Uniqueness against 24 earlier rasters:
+worst Spearman +0.0153, verdict <b>UNIQUE</b>.</p>
+<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465 (95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)).
+Random lines with the same budget: 0.0314. The best earlier group file on the same evaluator (the unpruned dotted h19-5 base, which is
+<span class="tag o">ORGANIZER-CONFIRMED</span> 0.2600 live): 0.1011. The new file is therefore <b>better than random but about
+half as good as the file family that already holds our 0.2778</b>. Verdict in the run card: <b>negative</b>.</p>
+<p><a class="btn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>⬇ Download gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif (135 kB)</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>zip</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">format receipt (JSON)</a>
+<a class="btn sec" href="executive-summary.html">How to submit</a></p>
+<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · note (133 chars): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
+</div>
+<h2>Decision in one line</h2>
+<p>Upload is <b>safe</b> (the format is pinned to the organiser's sample and every value is 0.0 or 1.0), but the file is a <b>negative result</b>:
+HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507), 22,641 withheld positive px against 0.1011 for the unpruned base of our current 0.2778 on the same evaluator. Spend a slot on it only if the goal
+is to obtain an ORGANIZER-CONFIRMED number for the gravity lane itself (useful to close the lane for good); do not expect it to move the leaderboard position.</p>
 
-<h2>3 · Fill in the dialog</h2>
-<table>
-<tr><th>Field</th><th>Value</th></tr>
-<tr><td>Name</td><td><code>gems61c-gravstep-liveband-40k-20261011</code></td></tr>
-<tr><td>Note (≤ 140 characters)</td><td>H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw minimum, none on the mapped catalogue <span class="pill">132 / 140</span></td></tr>
-<tr><td>File</td><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code> (or the single-TIFF ZIP)</td></tr>
-</table>
+<h2>How to submit (step by step)</h2>
+<ol>
+<li>Download <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></a> (or the <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip">zip</a>). Check the sha256 if you like: <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code>.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> while logged in as the competition account.</li>
+<li>Upload the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the zip is only a convenience copy).</li>
+<li>Paste the submission note (≤ 140 characters, 133 here): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></li>
+<li>After the platform scores it, copy the number into <code>evidence/h61g_run_card.json</code> → <code>organizer_confirmed_score</code> and rebuild the site; until then every number on this site stays HOLDOUT-DTI.</li>
+</ol>
+<h3>Why the earlier upload error cannot recur</h3>
+<p>The earlier rejection <i>“Predicted values must be in range [0, 1]”</i> came from a file with NaN / sentinel values outside the footprint. The writer used here
+(<code>src/gems61/submission_writer.py</code>) writes 0.0 outside the footprint, float32, no nodata tag, and the validator (<code>src/gems61/validate.py</code>) refuses to emit a file
+unless <code>no_nan_anywhere</code>, <code>no_inf_anywhere</code>, <code>min_ge_0</code>, <code>max_le_1</code>, <code>dtype_float32</code>, <code>crs_epsg_32611</code>,
+<code>transform_matches_sample_submission</code> and <code>dimensions_3730x3292</code> all pass. The receipt for this file lists 19 checks, all true
+(<a href="verify.html">verify</a>). The filename ends in <code>-zeros</code> to record that convention.</p>
 
-<h2>4 · What happens next, and what does not</h2>
-<ul class="tight">
-<li>Uploading spends one of the weekly submission slots. <b>This repository has not spent one.</b>
-    Promotion to a slot is your decision; the evidence for and against is tabulated on the
-    <a href="index.html">home page</a> and in <a href="session-c.html">the session-C report</a>.</li>
-<li>When a score comes back, write it down with the date. That number, and only that number, is a
-    competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI, OWNER-REPORTED or
-    PROJECTION, and none of those is a score.</li>
-<li>If the portal rejects the file, capture the exact error text and add it to <code>evidence/</code> —
-    a rejection is evidence, and the range error reported against an earlier site's download is the
-    reason every value here is checked to be finite and inside [0, 1] before the file is written.</li>
-</ul>
+<h2>What the file contains, in plain words</h2>
+<p>40,000 dots, each one pixel (100 m), placed where (a) the inverted basement surface has a step with ≥ 80 m throw within ±1 km, (b) the basin fill is ≥ 300 m deep,
+(c) the detrended-elevation slope field has a local ridge, and (d) the spot is more than 2 px from any mapped fault. Dots are packed at ≥ 3 px spacing so they never pay twice for one truth pixel.
+Median distance of a dot from the nearest mapped fault: 17.5 px; 7.1% within 3 px.</p>
 
-<h2>Why the file is shaped the way it is</h2>
-<p>The competition metric is <code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular
-kernel of radius 300 m, and the mapped-fault catalogue is masked out of scoring. Two consequences
-decide the shape of this file: <b>a dot on a mapped trace earns nothing</b>, and <b>a dot only pays
-while its chance of landing within ~300 m of a hidden truth pixel exceeds h* ≈ 0.025</b>. That is why
-the dots avoid the mapped traces, why they are single pixels rather than thick ribbons, and why the
-budget is 40,000 — the mass band the live evidence brackets (37,654–44,090). The distance mix is
-matched band-for-band to the highest live-scoring sibling raster; the lane's own field is a declared
-0.10 minority weight because it measured negative on its own holdout instrument. Read
-<a href="session-c.html">the session-C report</a> for those numbers and for the limitations.</p>
-</main></body></html>
+<h2>Expected outcome <span class="tag p">PROJECTION</span></h2>
+<p>We do not translate HOLDOUT-DTI into a live score. The only calibration we have is ordinal: on this evaluator the h19-5 lines (live 0.1922) score 0.0712
+and their dotted version (live 0.2600) scores 0.1011 — the evaluator orders them like the leaderboard. Our file sits at 0.0465, below both. Expect a live number well below 0.26.</p>
+
+<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
+(gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
+<span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
+</div></body></html>

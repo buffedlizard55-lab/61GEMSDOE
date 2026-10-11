@@ -140,6 +140,29 @@ def cache_bands(root: Path) -> dict:
     return report
 
 
+def link_legacy_layouts(root: Path) -> list:
+    """Create data/bridge/* and data/raw/* symlinks onto data/official/* (idempotent)."""
+    wanted = {
+        "data/bridge/existing_faults.tif": "../official/existing_faults.tif",
+        "data/bridge/labels.tif": "../official/labels.tif",
+        "data/bridge/sample_submission.tif": "../official/sample_submission.tif",
+        "data/bridge/training_features.tif": "../official/training_features.tif",
+        "data/raw/existing_faults.tif": "../official/existing_faults.tif",
+        "data/raw/example_submission.tif": "../official/sample_submission.tif",
+        "data/raw/training_features.tif": "../official/training_features.tif",
+    }
+    made = []
+    for rel, target in wanted.items():
+        link = root / rel
+        link.parent.mkdir(parents=True, exist_ok=True)
+        if link.is_symlink() or link.exists():
+            made.append(dict(path=rel, state="exists"))
+            continue
+        link.symlink_to(target)
+        made.append(dict(path=rel, state="linked", target=target))
+    return made
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--fetch", action="store_true")
@@ -168,6 +191,10 @@ def main() -> int:
             receipt["files"].append(dict(path=relative, verified=False, error=str(error)))
             print(f"[data] FAILED {relative}: {error}", file=sys.stderr, flush=True)
     receipt["all_pins_verified"] = bool(ok)
+    # IR-61-DATA-01: three generations of code expect three layouts (data/official,
+    # data/bridge, data/raw).  Link the two legacy layouts onto data/official so every
+    # module in src/gems61 resolves the same bytes; the links are git-ignored.
+    receipt["layout_links"] = link_legacy_layouts(ROOT)
     (ROOT / "evidence/data_preparation.json").write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
     if ok and a.cache_bands:
         report = cache_bands(ROOT)

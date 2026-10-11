@@ -1,0 +1,57 @@
+[
+  {
+    "id": "H61-L",
+    "rank": 1,
+    "name": "1 m lidar scarp detection restricted to gravity corridors",
+    "layers": "USGS 3DEP 1 m DEM (organiser's 1m_DEM_links.csv; public domain) \u2192 scarp-likelihood raster; this session's \u00b11 km basement-step corridor and basin mask as prior.",
+    "signature": "Metre-scale topographic steps (scarp height 0.5\u20135 m, slope break, curvature couplet) \u2014 the primary evidence the test-set mappers used.",
+    "why": "The 1:24k\u20131:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.",
+    "diff": "Repo has no lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.043 live) used the whole area and no gravity prior.",
+    "gain": "Highest: this is the lever the leader (0.4133) most plausibly uses. PROJECTION only; no holdout yet.",
+    "cost": "High (data volume). Obtainable now without 3DEP download: GEMSDOE24/data/external/lidar_scarp_features_u8.tif, 36,943,606 bytes, blob da733b53147efad5c141ffdb96e469ec5b4da8b8, via api.github.com (raw.githubusercontent.com is outside this sandbox's allow-list)."
+  },
+  {
+    "id": "H61-I",
+    "rank": 2,
+    "name": "Piedmont belt: basinward of the inverted bedrock\u2013fill contact",
+    "layers": "Inverted depth = 0 contour (bedrock outcrop boundary) buffered 0\u20132 km basinward; band 12 detrended elevation curvature; band 19 slope ridges.",
+    "signature": "Range-front normal faults step basinward through time; young splays and antithetic strands sit 0\u20132 km in front of the mapped range-front trace as low scarps across fans.",
+    "why": "The catalogue holds the main range-front trace; piedmont splays are the commonest unmapped class in Basin-and-Range compilations.",
+    "diff": "Targets the basin edge instead of the basin interior; no sibling defines the piedmont from an independent inversion.",
+    "gain": "Moderate. The screen's highest prior-only enrichment (1.7\u00d7 random for pixels inside the gravity corridor, all depths) sits at the range fronts. PROJECTION.",
+    "cost": "Low (all inputs cached). One holdout run."
+  },
+  {
+    "id": "H61-H",
+    "rank": 3,
+    "name": "Gravity-step \u00d7 magnetic-edge conjunction (intrabasin faults offsetting magnetic basement or flows)",
+    "layers": "Corridor from the inversion; band 3 TMI horizontal-gradient maxima; band 6 tilt zero-crossings; band 9 vertical gradient.",
+    "signature": "A normal fault that offsets magnetised basement or volcanic flows gives a sharp magnetic edge co-located with the gravity step; GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.",
+    "why": "Concealed under alluvium; surface mapping cannot see them. Co-location rejects intrabasement density contacts that have no magnetic expression (the lane's named mimic).",
+    "diff": "H61-C in this repo only proposed mags as a fabric oracle (never implemented); sibling magnetic-edge files were standalone (0.03\u20130.10 live).",
+    "gain": "Low\u2013moderate: precision \u00d71.5 plausible, recall small (few magnetic basins). PROJECTION.",
+    "cost": "Low."
+  },
+  {
+    "id": "H61-J",
+    "rank": 4,
+    "name": "Source-depth consistency filter (Euler SI = 0) to reject intrabasement contacts",
+    "layers": "Band 13 gravity, band 5 horizontal gradient, band 11 vertical gradient \u2192 contact-depth estimate; compare with inverted basin depth.",
+    "signature": "A basement step has source depth \u2248 fill thickness; an intrabasement density contrast has source depth \u226b fill thickness.",
+    "why": "Directly tests the lane's competing explanation; improves the purity of X1-type candidates.",
+    "diff": "Not attempted by any sibling or earlier session.",
+    "gain": "Low: raises precision of a candidate family whose recall is already tiny (X1a 0.023). PROJECTION.",
+    "cost": "Medium."
+  },
+  {
+    "id": "H61-K",
+    "rank": 5,
+    "name": "Learned fusion inside basins with segment-withholding target",
+    "layers": "All 19 bands + inverted depth + corridor indicator; gradient-boosted trees trained on visible-catalogue proximity; spatial blocks.",
+    "signature": "Multi-band conjunctions too subtle for hand rules.",
+    "why": "Could learn the piedmont/scarp patterns automatically.",
+    "diff": "Sibling learned models trained on the whole area scored 0.029\u20130.042 live (sup01-hgb21, gems6_hgb88); restricting to basins and a dotted target is new.",
+    "gain": "Uncertain; the registry evidence is against learned 100 m models. PROJECTION.",
+    "cost": "Medium\u2013high."
+  }
+]

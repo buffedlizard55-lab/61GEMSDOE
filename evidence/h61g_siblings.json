@@ -1,0 +1,86 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "n_withheld_truth_px": 22641,
+  "rows": [
+    {
+      "file": "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+      "n_positive_px": 40000,
+      "pooled_dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "coverage": 0.0,
+      "sha256": "5dee4c5568eba145af1bc2290552e145c962663c355d9f77774a3602f996afd8"
+    },
+    {
+      "file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+      "n_positive_px": 25285,
+      "pooled_dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "coverage": 0.0,
+      "sha256": "565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9"
+    },
+    {
+      "file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+      "n_positive_px": 88796,
+      "pooled_dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "coverage": 0.0,
+      "sha256": "84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1"
+    },
+    {
+      "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+      "n_positive_px": 40000,
+      "pooled_dti": 0.004450519789765816,
+      "ci95": [
+        0.003746329880900709,
+        0.005183380484519902
+      ],
+      "coverage": 0.006342815283195061,
+      "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077"
+    },
+    {
+      "file": "gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
+      "n_positive_px": 38000,
+      "pooled_dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "coverage": 0.0,
+      "sha256": "5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591"
+    },
+    {
+      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "n_positive_px": 311617,
+      "pooled_dti": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "coverage": 0.0,
+      "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2"
+    },
+    {
+      "file": "gems61c-gravstep-liveband-40k-20261011.tif",
+      "n_positive_px": 40000,
+      "pooled_dti": 0.0006785424116304849,
+      "ci95": [
+        0.0006095110131566873,
+        0.0007429419586687028
+      ],
+      "coverage": 0.0009927143968132617,
+      "sha256": "e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873"
+    }
+  ],
+  "caveat": "rasters pruned against the full catalogue cannot recover withheld catalogue segments (IR-61-INSTR-02)",
+  "stamp": "2026-10-11T02:35:35Z"
+}

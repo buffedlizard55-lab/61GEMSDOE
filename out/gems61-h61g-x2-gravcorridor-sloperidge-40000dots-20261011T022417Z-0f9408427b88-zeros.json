@@ -1,0 +1,184 @@
+{
+  "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+  "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+  "bytes": 135152,
+  "submission_name": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
+  "note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
+  "note_chars": 133,
+  "validator": {
+    "file": "/home/user/61GEMSDOE/out/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+    "bytes": 135152,
+    "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+    "meta": {
+      "crs": "EPSG:32611",
+      "shape": [
+        3730,
+        3292
+      ],
+      "dtype": "float32",
+      "count": 1,
+      "nodata": null,
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "profile_compress": "deflate"
+    },
+    "grid": {
+      "width": 3292,
+      "height": 3730,
+      "crs": "EPSG:32611",
+      "count": 1,
+      "dtype": "float32",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "nodata": null,
+      "compress": "deflate"
+    },
+    "band_description": [
+      null
+    ],
+    "n_finite": 12279160,
+    "n_nan": 0,
+    "n_infinite": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.0032575519289821386,
+    "emitted_positive_pixels": 40000,
+    "in_footprint_pixels": 5167373,
+    "in_footprint_positive_pixels": 40000,
+    "positive_pixels": 40000,
+    "footprint_fraction": 0.007740877231041769,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "on_catalogue_positive_pixels": 0,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "transform_matches": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true,
+      "zero_dots_on_mapped_catalogue": true
+    },
+    "all_checks_passed": true,
+    "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance"
+  },
+  "template_report": {
+    "path": "/home/user/61GEMSDOE/out/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+    "bytes": 135152,
+    "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+    "bands": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "bounds": [
+      243350.0,
+      4135550.0,
+      572550.0,
+      4508550.0
+    ],
+    "ref_bounds": [
+      243350.0,
+      4135550.0,
+      572550.0,
+      4508550.0
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "nodata": null,
+    "blocksize": [
+      256,
+      256
+    ],
+    "fixture_grid": false,
+    "has_validity_mask": false,
+    "nan_pixels": 0,
+    "infinity_pixels": 0,
+    "n_nan": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.0032575519289821386,
+    "n_nonzero": 40000,
+    "mass": 40000.0,
+    "mass_outside_footprint": 0,
+    "problems": [],
+    "ok": true,
+    "validation_class": "local on-disk template/range check; not organizer upload acceptance"
+  },
+  "zip_file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip",
+  "zip_sha256": "798ff272764d363c327caec0f889e4427580a0df124722649e4a5d51560e3586",
+  "approved_for_weekly_slot": false,
+  "promoted": false,
+  "submission_slots_used": 0,
+  "status": "locally validated within separately recorded inventory scope; not organizer acceptance or slot approval",
+  "metadata": {
+    "method": "H61-G",
+    "candidate": "X2 corridor x slope-ridge (basin interior)",
+    "budget": 40000,
+    "n_dots": 40000,
+    "n_positive_px": 40000,
+    "holdout_dti": 0.046504803513711855,
+    "holdout_ci95": [
+      0.04214325650932585,
+      0.05066048017118602
+    ],
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "prune_px": 2.0,
+    "corridor_px": 10,
+    "ribbon_vs_dots_holdout": {
+      "dots (shipped)": {
+        "pooled_dti": 0.046504803513711855,
+        "ci95": [
+          0.04214325650932585,
+          0.05066048017118602
+        ],
+        "coverage": 0.07029474583254391,
+        "emitted_per_draw": 40000.0,
+        "fp_mass": 78960.47265625,
+        "tp_mass": 1591.5433403946267
+      },
+      "3x3 ribbons (not shipped)": {
+        "pooled_dti": 0.021645645549291177,
+        "ci95": [
+          0.019311243305548308,
+          0.024306743311927507
+        ],
+        "coverage": 0.12044026741444919,
+        "emitted_per_draw": 271536.5,
+        "fp_mass": 536602.10546875,
+        "tp_mass": 2726.8880945305436
+      }
+    },
+    "no_prior_submission_raster_used": true
+  }
+}
