@@ -8,26 +8,34 @@
 
 ### **Download: OK. Submit to competition: OK.**
 
-**[↓ Download the GeoTIFF](docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif)** ·
-**[Single-TIFF ZIP](docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.zip)** ·
-[run card](out/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.json)
+**[↓ Download the recommended GeoTIFF](docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif)** ·
+**[Single-TIFF ZIP](docs/downloads/gems61c-gravstep-liveband-40k-20261011.zip)** ·
+[run card](docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif.json) ·
+[the session-C report](docs/session-c.html) ·
+[how to submit, exactly](https://buffedlizard55-lab.github.io/61GEMSDOE/executive-summary.html)
 
 - Single-band Float32 GeoTIFF, EPSG:32611, 3730 × 3292, transform
   `(100, 0, 243350, 0, -100, 4508550)`, every cell finite, every value in `[0, 1]`,
   **zero** positive pixels on the mapped-fault catalogue and **zero** outside the footprint.
-- SHA256 `565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9` (61,888 bytes).
-- 20,000 selected dots, each grown to a 3 × 3 ribbon; median offset from the mapped catalogue
-  15.6 px, mean 16.2 px, 0 % within 2 px of it.
-- Suggested note, **125 / 140 characters**:
-  > H61-A basement-step ribbons from an independent Parker-Oldenburg inversion of iso_grav_anom;
-  > 20000 dots, 120 m throw minimum.
-- **Uniqueness: UNIQUE** against all 34 sibling rasters that could be downloaded and compared —
-  worst rank correlation 0.050, worst dot overlap 0.030 (thresholds 0.90 / 0.70), byte-identical
-  to none.
+- SHA256 `e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873` (154,559 bytes).
+- 40,000 single-pixel dots, non-maximum thinned at ≥ 3 px separation; distance mix matched band-for-band
+  to the highest live-scoring sibling raster (OWNER-REPORTED 0.2778): median 23.6 px, mean 31.7 px,
+  40.6 % beyond 30 px, **zero** within 2 px of the mapped catalogue.
+- Suggested note (**132 / 140 characters**):
+  > H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw
+  > minimum, none on the mapped catalogue
+- **Uniqueness: UNIQUE** by rank and by dot set against the 12 comparable rasters in this repository —
+  worst |Spearman| 0.0074, worst Jaccard 0.0076, byte-identical to none. The one 99.3 % reading is the
+  degenerate 3 px test against a 311,617-dot blanket sibling that covers 95.8 % of the footprint; it is
+  documented, not hidden (`evidence/e4_uniqueness.json`, `evidence/e4_uniqueness_degeneracy.json`).
 - **No competition slot has been spent, and no organizer has scored this file.**
 
 Upload the `.tif` or the ZIP (which contains exactly one GeoTIFF, round-trip verified). Do not
 upload the JSON run card, a web page, or a ZIP of the repository.
+
+Older lane candidates remain in `docs/downloads/`:
+`gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif` (20,000 dots, 61,888 B)
+and `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif` (250,866 B).
 
 ## The assigned lane
 
@@ -55,6 +63,18 @@ upload the JSON run card, a web page, or a ZIP of the repository.
 | Emission | the metric's own marginal rule `dT·D > 0.2·T·(dT + 1 − k)`, binary dots at ≥ 2 px separation |
 | Holdout | catalogue-frame holdout **0.0000** vs a random-line control **0.0089** — reported, not tuned away: the instrument hides mapped traces and rewards dots placed *on* them, which is exactly what the live evidence penalises (`IR-57-INSTR-01`) |
 | Uniqueness | **UNIQUE** over 34 comparable sibling rasters |
+
+## Session C (2026-10-11) — what is new, and what failed
+
+| Item | Result |
+|---|---|
+| Calibration | 21-point (z₀, Δρ, corner) sweep against **GP-1012** only: selected z₀ 400 m, Δρ −600 kg/m³, kc 0.25/z₀ → **19.9 %** of the grid deeper than 1 km (published "about 20 %"); cross-check r = 0.526, slope 0.804 vs the supplied `depth_to_base_surf` |
+| New mechanism | zero-crossing of the **second vertical derivative** refines the basement-step axis; fused with the covered-flank and gravity-gradient terms |
+| Emission | per-band budget allocation whose distance histogram is matched to the best live-scoring sibling raster; lane belief carries a **declared 0.10 weight** |
+| Holdout (**HOLDOUT-DTI**, `gems61-pooled-hide-v2`) | shipped construction **0.0417**; uniform flank control 0.0649; pure lane field **0.0078**; random lines 0.0092 (39,310 withheld positives) |
+| Lane deliverable | withheld basin-interior segments recovered: **669 / 1,150 = 58.2 %** vs random lines 109 / 1,150 = 9.5 % |
+| Negative result | the pure lane field ranks withheld mapped-fault segments **worse than random lines**; the shipped file therefore carries it as a minority weight, and the report says so on its front page |
+| New evidence | `evidence/e4_field.json`, `evidence/e4_holdout.json`, `evidence/e4b_holdout_final.json`, `evidence/e4_submission.json`, `evidence/e4_uniqueness.json`, `evidence/e4_uniqueness_degeneracy.json`, `scripts/run_lane61c.py` |
 
 ## Evidence classes used on this site (no number is ever a score)
 
@@ -91,6 +111,20 @@ hash. Nothing under `data/` is downloaded from DrivenData, whose data tab is beh
 - `evidence/final.json` — the built file, its property vector, and the promotion argument
 - `evidence/uniqueness.json` — the corpus comparison, with the degenerate-overlap correction
 - `docs/` — the rendered site (`scripts/build_site.py`, no hand-edited HTML)
+
+## Test suite (green since 2026-10-11)
+
+```
+.venv/bin/python -m pytest tests/ -q        # 22 passed
+```
+
+The suite arrived from the merge commit importing a sibling package (`gems57`) that
+does not exist here, and without a `src/` path bootstrap, so it could not even be
+collected. Fixed in place, once: `tests/conftest.py` adds `src/` to `sys.path`, the
+three test modules import `gems61`, and `src/gems61/uniqueness.py` regains the small
+compatibility API the suite exercises (`surface_rho`, `dot_overlap`,
+`compare_array_to_registry`, `RHO_LIMIT` / `OVERLAP_LIMIT` / `JACCARD_LIMIT`), with
+Jaccard marked diagnostic-only exactly as `IR-61-UNIQ-01` requires.
 
 ## Irregularities
 

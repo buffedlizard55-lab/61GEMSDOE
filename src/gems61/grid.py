@@ -46,7 +46,14 @@ SHA256_EXISTING_FAULTS = "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7
 SHA256_SAMPLE_SUBMISSION = "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = REPO_ROOT / "data" / "bridge"
+# Shared-tool fix (session arena/d29229b5, 2026-10-11): ``scripts/prepare_data.py``
+# installs the pinned bridge under ``data/official``; ``data/bridge`` was the
+# pre-merge layout and no longer exists, so ``load_grid()`` raised
+# FileNotFoundError for every caller.  One source of truth, with a fallback so an
+# older checkout still works.
+DATA_DIR = (REPO_ROOT / "data" / "official"
+            if (REPO_ROOT / "data" / "official" / "existing_faults.tif").exists()
+            else REPO_ROOT / "data" / "bridge")
 
 
 @dataclass(frozen=True)

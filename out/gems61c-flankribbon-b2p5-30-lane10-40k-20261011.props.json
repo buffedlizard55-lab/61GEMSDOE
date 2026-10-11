@@ -1,0 +1,11 @@
+{
+  "n_dots": 40000,
+  "mean_distance_px": 14.351033818642257,
+  "median_distance_px": 13.435015956036224,
+  "p25_distance_px": 7.211102550927978,
+  "p75_distance_px": 21.0,
+  "frac_within_1px": 0.0,
+  "frac_within_2px": 0.0,
+  "frac_within_3px": 0.04085,
+  "frac_on_catalogue": 0.0
+}

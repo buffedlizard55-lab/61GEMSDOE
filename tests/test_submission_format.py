@@ -6,9 +6,9 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from gems57 import grid as gridmod
-from gems57.validate import validate
-from gems57.submission_writer import write_submission as write_portal_submission
+from gems61 import grid as gridmod
+from gems61.validate import validate
+from gems61.submission_writer import write_submission as write_portal_submission
 
 
 def test_zeros_mode_passes_and_nan_mode_fails(tmp_path):
@@ -85,10 +85,10 @@ def test_shared_submission_writer_is_fail_closed_and_emits_single_tif_zip(tmp_pa
     foot[100:200, 100:200] = True
     pred = np.zeros(foot.shape, dtype=np.float32)
     pred[120:125, 130:135] = 1.0
-    path = tmp_path / "gems57-test-candidate.tif"
+    path = tmp_path / "gems61-test-candidate.tif"
     receipt = write_portal_submission(
         path, pred, gridmod.DATA_DIR / "sample_submission.tif", foot,
-        name="gems57-test-candidate", note="gems57-test-candidate | fault-zone anatomy")
+        name="gems61-test-candidate", note="gems61-test-candidate | fault-zone anatomy")
 
     assert receipt["validator"]["all_checks_passed"]
     assert receipt["template_report"]["ok"]

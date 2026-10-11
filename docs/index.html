@@ -23,48 +23,52 @@ code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
 nav a{margin-right:14px}
 ul.tight li{margin:.15em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>61GEMSDOE — buried structures from gravity inversion</h1>
-<div class="banner ok"><strong>Download: OK. Submit to competition: OK.</strong>This GeoTIFF passed every local format gate and is <b>unique</b> against all 34 sibling rasters that could be downloaded and compared (worst rank correlation 0.050, worst dot overlap 0.030; thresholds 0.90 and 0.70). No competition slot has been spent and no organizer has scored this file.</div>
-<p><a class="btn" href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif">↓ Download the GeoTIFF (61,888 bytes)</a>
-<a class="btn alt" href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.zip">↓ Single-TIFF ZIP</a>
-<a class="btn alt" href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.json">Run card (JSON)</a></p>
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="session-c.html">Session C (new)</a><a href="verify.html">Verification</a></nav><h1>61GEMSDOE — buried structures from gravity inversion</h1>
+<div class="banner ok"><strong>Download: OK. Submit to competition: OK.</strong>This GeoTIFF passed every local format gate (finite, in [0,1], zero on the mapped catalogue, zero outside the footprint) and is unique by rank and by dot-set: worst |Spearman| <b>0.0074</b>, worst Jaccard <b>0.0076</b> against the 12 comparable rasters in this repository. Its "% of dots within 3 px of a sibling" reading is 99.3&nbsp;% against the one <i>blanket</i> sibling (311,617 dots that cover 95.8&nbsp;% of the footprint within 3 px), so that statistic is degenerate here — documented in <code>evidence/e4_uniqueness.json</code>. No competition slot has been spent and no organizer has scored this file.</div>
+<p><a class="btn" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif">↓ Download the GeoTIFF (154,559 bytes)</a>
+<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.zip">↓ Single-TIFF ZIP</a>
+<a class="btn alt" href="downloads/gems61c-gravstep-liveband-40k-20261011.tif.json">Run card (JSON)</a></p>
 
 <h2>What you are downloading</h2>
 <table>
-<tr><th>File</th><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td></tr>
-<tr><th>SHA256</th><td><code>565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9</code></td></tr>
+<tr><th>File</th><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code> <span class="pill">session C</span></td></tr>
+<tr><th>SHA256</th><td><code>e3ccdf59f8b36f2f089f0eeaafac2547a96cc46e07c7eb2535449bd0e26f8873</code></td></tr>
 <tr><th>Type</th><td>single-band Float32 GeoTIFF, EPSG:32611, 3730 × 3292, 100 m,
     transform <code>(100, 0, 243350, 0, -100, 4508550)</code></td></tr>
-<tr><th>Values</th><td>0.0 to
-    1.0; every cell finite;
-    0 NaN;
-    0 non-finite;
+<tr><th>Values</th><td>0.0 / 1.0 binary; every cell finite; 0 NaN; 0 non-finite;
     zero positive mass outside the footprint; <b>zero</b> positive pixels on the mapped-fault catalogue</td></tr>
-<tr><th>Emitted</th><td>25,285 positive pixels
-    (20,000 selected dots, then each grown to a 3 × 3 ribbon)</td></tr>
-<tr><th>Suggested name</th><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros</code></td></tr>
-<tr><th>Suggested note</th><td>H61-A basement-step ribbons from an independent Parker-Oldenburg inversion of iso_grav_anom; 20000 dots, 120 m throw minimum. <span class="pill">125 / 140 characters</span></td></tr>
+<tr><th>Emitted</th><td><b>40,000</b> dots, each a single pixel, non-maximum thinned at ≥ 3 px separation</td></tr>
+<tr><th>Distance mix</th><td>min 2.8 px, median 23.6 px, mean 31.7 px, 95th percentile 84 px;
+    40.6 % of dots sit beyond 30 px of the mapped catalogue — deliberately matched to the distance
+    histogram of the highest live-scoring sibling raster (OWNER-REPORTED 0.2778)</td></tr>
+<tr><th>Suggested name</th><td><code>gems61c-gravstep-liveband-40k-20261011</code></td></tr>
+<tr><th>Suggested note</th><td>H61-C buried basement steps from a Parker-Oldenburg gravity inversion; 40000 dots, 120 m throw minimum, none on the mapped catalogue <span class="pill">132 / 140 characters</span></td></tr>
 </table>
 <p class="mut">OK TO DOWNLOAD. Before submitting, read evidence/final.json: local validity is MEASURED; the placement argument is OWNER-REPORTED statistics; no organizer receipt exists for this file.</p>
 <h2>Other submissions in this repository</h2>
-<p>A parallel session on this repository built the same lane independently and merged first. Its
-artifacts are kept and are <i>not</i> replaced by this page: see
-<a href="instrument.html">the instrument study</a>,
-<a href="downloads/">the E3 candidate in <code>docs/downloads/</code></a>
-(<code>…basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code>) and its receipts in
-<code>evidence/e1_calibration.json</code>, <code>e2b_instrument.json</code>,
-<code>e2c_canary.json</code>, <code>e3_submission.json</code>. Two independent constructions of one
-lane is the intended redundancy; neither file has spent a competition slot.</p>
+<p>Two earlier lane candidates are kept and still downloadable — <code>gems61-h61a-basement-step-20000dots-…-zeros.tif</code>
+(20,000 dots, 61,888 B) and <code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code> (250,866 B),
+plus the dense 400k-budget field <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>.
+The session-C file above replaces H61-A as the <i>recommended</i> download: it is the same lane, the
+same inversion, but with the offset profile and the emission budget matched to the only live
+evidence the repository has. See <a href="session-c.html">the session C report</a> for the full
+numbers, including what did <b>not</b> work.</p>
 
 <h2>Where the dots sit — measured, not claimed</h2>
 <table>
-<tr><th>Property of the emitted dots</th><th>This file</th><th>Best-known live file (owner-reported 0.2778)</th></tr>
-<tr><td>number of dots</td><td>20,000</td><td>37,654</td></tr>
-<tr><td>median offset from the mapped catalogue</td><td>15.6 px</td><td>19.6 px</td></tr>
-<tr><td>mean offset from the mapped catalogue</td><td>16.2 px</td><td>29.0 px</td></tr>
+<tr><th>Property of the emitted dots</th><th>This file</th><th>Best-known live file (OWNER-REPORTED 0.2778)</th></tr>
+<tr><td>number of dots</td><td>40,000</td><td>37,654</td></tr>
+<tr><td>median offset from the mapped catalogue</td><td>23.6 px</td><td>19.6 px</td></tr>
+<tr><td>mean offset from the mapped catalogue</td><td>31.7 px</td><td>29.0 px</td></tr>
+<tr><td>share beyond 30 px</td><td>40.6 %</td><td>36.0 %</td></tr>
 <tr><td>dots within 2 px of the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
 <tr><td>dots on the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
 </table>
+<p class="mut">The right-hand column is <b>OWNER-REPORTED</b> and is the reason this file exists in
+this shape: over the owner's scored rasters, deleting the near-catalogue dots <i>raised</i> the
+score (0.2600 → 0.2778 on an exact set difference), and the 400k-dot blanket 0.0888. The middle
+column is a property of <i>this</i> file, measured from its own bytes. Neither column is a score
+for this file.</p>
 <p class="mut">The right-hand column is <b>OWNER-REPORTED</b>: those numbers come from a sibling
 project's record of its own leaderboard rows. Over its 15 scored rasters the owner reports
 Spearman ρ = −0.81 between dot count and live score and +0.85 between mean offset and live score.

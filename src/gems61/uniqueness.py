@@ -58,3 +58,92 @@ def load_registry(paths, footprint_shape=None):
         with rasterio.open(p) as src:
             out[pathlib.Path(p).name] = src.read(1)
     return out
+
+
+# ---------------------------------------------------------------------------
+# Compatibility helpers the merged test suite expects (tests/test_uniqueness.py).
+# They are thin wrappers over `compare` so that the protocol thresholds live in
+# exactly one place; Jaccard is *diagnostic only* and never a stop rule
+# (IR-61-UNIQ-01: dot overlap is degenerate against a dense sibling surface).
+# ---------------------------------------------------------------------------
+RHO_LIMIT = 0.90
+OVERLAP_LIMIT = 0.70
+JACCARD_LIMIT = 0.50
+OVERLAP_PX = 3
+
+
+def surface_rho(mine: np.ndarray, other: np.ndarray, footprint: np.ndarray,
+                px: int = OVERLAP_PX) -> dict:
+    """Signed agreement of two rasters, reported on both informative supports."""
+    m = np.asarray(mine, np.float64)
+    o = np.asarray(other, np.float64)
+    mine_b, other_b = m > 0.5, o > 0.5
+    valid = np.asarray(footprint, bool)
+    inter = int((mine_b & other_b).sum())
+    union = int((mine_b | other_b).sum())
+    jacc = inter / union if union else float("nan")
+    # full footprint: both arrays are almost all zeros, so this is the degenerate one
+    rho_full = float("nan")
+    if valid.any():
+        a, b = m[valid], o[valid]
+        if a.std() > 0 and b.std() > 0:
+            rho_full = _pearson(rankdata(a, method="average"), rankdata(b, method="average"))
+    # dot union only: the informative support
+    idx = mine_b | other_b
+    rho_union = float("nan")
+    if idx.any():
+        a, b = m[idx], o[idx]
+        if a.std() > 0 and b.std() > 0:
+            rho_union = _pearson(rankdata(a, method="average"), rankdata(b, method="average"))
+    return dict(spearman_full_footprint=rho_full,
+                spearman_on_dot_union=rho_union,
+                jaccard_dot_sets=jacc,
+                n_mine=int(mine_b.sum()), n_other=int(other_b.sum()),
+                n_intersection=inter, n_union=union)
+
+
+def dot_overlap(mine: np.ndarray, other: np.ndarray, px: int = OVERLAP_PX) -> float:
+    """Fraction of MY dots that fall within ``px`` of any dot of ``other``."""
+    mine_b = np.asarray(mine) > 0.5
+    n = int(mine_b.sum())
+    if n == 0:
+        return 0.0
+    other_b = np.asarray(other) > 0.5
+    if not other_b.any():
+        return 0.0
+    d = ndimage.distance_transform_edt(~other_b)
+    return float((d[mine_b] <= px).mean())
+
+
+def compare_array_to_registry(candidate: np.ndarray, manifest: dict,
+                              footprint: np.ndarray, px: int = OVERLAP_PX) -> dict:
+    """Apply the protocol screen to every raster named in ``manifest``.
+
+    Stop rules: |full-footprint Spearman| > RHO_LIMIT, or forward dot overlap >
+    OVERLAP_LIMIT, against any single registry raster.  Jaccard is reported and
+    flagged, never a stop rule.
+    """
+    rows, dupes = [], 0
+    for item in manifest.get("rasters", []):
+        path = item.get("cache_file")
+        if not path or not pathlib.Path(path).exists():
+            continue
+        with rasterio.open(path) as src:
+            other = src.read(1)
+        st = surface_rho(candidate, other, footprint, px=px)
+        ov = dot_overlap(candidate, other, px=px)
+        dup_rho = abs(st["spearman_full_footprint"]) > RHO_LIMIT
+        dup_ov = ov > OVERLAP_LIMIT
+        if dup_rho or dup_ov:
+            dupes += 1
+        rows.append(dict(file=pathlib.Path(path).name, source=item.get("sources", []),
+                         sha256=item.get("sha256"),
+                         spearman_full_footprint=st["spearman_full_footprint"],
+                         spearman_on_dot_union=st["spearman_on_dot_union"],
+                         my_dots_within_3px_of_theirs=ov,
+                         jaccard_dot_sets=st["jaccard_dot_sets"],
+                         duplicate_by_rho=dup_rho, duplicate_by_overlap=dup_ov,
+                         duplicate_by_jaccard=st["jaccard_dot_sets"] > JACCARD_LIMIT))
+    return dict(evidence_class="MEASURED", rows=rows, duplicate_count=dupes,
+                unique=dupes == 0, jaccard_diagnostic_only=True,
+                limits=dict(rho=RHO_LIMIT, overlap=OVERLAP_LIMIT, jaccard=JACCARD_LIMIT))

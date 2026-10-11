@@ -61,8 +61,17 @@ def write_submission(pred: np.ndarray, path: pathlib.Path, outside: str = "zeros
     return validate(path, footprint=fp)
 
 
-def validate(path: pathlib.Path, footprint: np.ndarray | None = None) -> dict:
-    """Fail-closed validation, re-reading the bytes from disk."""
+def validate(path: pathlib.Path, footprint: np.ndarray | None = None,
+             catalogue: np.ndarray | None = None) -> dict:
+    """Fail-closed validation, re-reading the bytes from disk.
+
+    Shared-tool fix (session arena/d29229b5, 2026-10-11): ``submission_writer`` --
+    which merged from the other session on this repository -- calls
+    ``validate(path, footprint, catalogue)`` and then ``assert_submittable``.
+    The merge kept this module's older one-argument API, so the writer raised
+    ImportError for every caller.  The three-argument form is restored here, in
+    the one shared module, instead of forking the writer.
+    """
     with rasterio.open(path) as src:
         a = src.read(1)
         got = dict(width=src.width, height=src.height, crs=str(src.crs), count=src.count,
@@ -72,12 +81,18 @@ def validate(path: pathlib.Path, footprint: np.ndarray | None = None) -> dict:
             with rasterio.open(TEMPLATE_TIF) as t:
                 footprint = np.isfinite(t.read(1))
     fin = np.isfinite(a)
+    outside = ~footprint
     checks = dict(
         single_band=got["count"] == 1,
         dtype_float32=got["dtype"] == "float32",
         dimensions_3730x3292=(got["height"], got["width"]) == (3730, 3292),
         crs_epsg_32611=got["crs"] == EXPECTED["crs"],
         transform_matches=tuple(got["transform"]) == EXPECTED["transform"],
+        no_nan_anywhere=bool(not np.isnan(a).any()),
+        no_inf_anywhere=bool(not np.isinf(a).any()),
+        no_sentinel_values=bool((np.abs(a) < 1e30).all()),
+        outside_footprint_zero=bool((a[outside] == 0).all()) if outside.any() else True,
+        range_0_1_guaranteed=bool(np.nanmin(a) >= 0.0 and np.nanmax(a) <= 1.0),
         in_footprint_all_finite=bool(fin[footprint].all()),
         in_footprint_range_0_1=bool(np.nanmin(a[footprint]) >= 0.0
                                     and np.nanmax(a[footprint]) <= 1.0),
@@ -86,11 +101,34 @@ def validate(path: pathlib.Path, footprint: np.ndarray | None = None) -> dict:
                                     if fin.any() else False),
         no_float32_sentinel=bool((a > -1e30).all()),
     )
+    if catalogue is not None:
+        cat = np.asarray(catalogue, bool) & footprint
+        checks["zero_dots_on_mapped_catalogue"] = bool(not (a[cat] > 0).any())
+        on_cat = int((a[cat] > 0).sum())
+    else:
+        on_cat = None
     rep = dict(path=str(path), grid=got,
                in_footprint_pixels=int(footprint.sum()),
                positive_pixels=int((a[footprint] > 0.5).sum()),
                footprint_fraction=float((a[footprint] > 0.5).sum() / footprint.sum()),
                in_footprint_min=float(np.nanmin(a[footprint])),
                in_footprint_max=float(np.nanmax(a[footprint])),
-               checks=checks, all_checks_passed=bool(all(checks.values())))
+               n_finite=int(fin.sum()), n_nan=int(np.isnan(a).sum()),
+               n_infinite=int(np.isinf(a).sum()),
+               min=float(np.nanmin(a)), max=float(np.nanmax(a)), mean=float(np.nanmean(a)),
+               emitted_positive_pixels=int((a > 0).sum()),
+               on_catalogue_positive_pixels=on_cat,
+               checks=checks, all_checks_passed=bool(all(checks.values())),
+               validation_class=("local format/range preflight; not organizer acceptance "
+                                 "or uniqueness clearance"))
     return rep
+
+
+def assert_submittable(report: dict) -> None:
+    """Raise AssertionError unless every on-disk check passed.
+
+    ``submission_writer`` catches AssertionError and re-raises it as ValueError so
+    that a rejected output never leaves a partial deliverable behind.
+    """
+    failed = sorted(k for k, v in report["checks"].items() if not v)
+    assert not failed, f"validator checks failed: {failed}"

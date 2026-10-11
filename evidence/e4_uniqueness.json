@@ -1,0 +1,129 @@
+{
+ "evidence_class": "MEASURED",
+ "method": "overlap = fraction of shipped dots within 3 px of a corpus raster dot; rho = Spearman on a 300k random sample of footprint pixels; jaccard on dot sets",
+ "corpus": [
+  "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+  "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+  "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+  "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+  "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+  "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+  "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+  "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+  "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+  "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif"
+ ],
+ "per_raster": [
+  {
+   "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+   "n": 311617,
+   "overlap": 0.9932,
+   "spearman": 0.0042006899146892485,
+   "jaccard": 0.007619828174164226,
+   "identical": false
+  },
+  {
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+   "n": 61328,
+   "overlap": 0.164825,
+   "spearman": 0.0021769797064952415,
+   "jaccard": 0.004311498320002379,
+   "identical": false
+  },
+  {
+   "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+   "n": 44090,
+   "overlap": 0.15235,
+   "spearman": 0.0004564574865284885,
+   "jaccard": 0.003424698399818622,
+   "identical": false
+  },
+  {
+   "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+   "n": 44090,
+   "overlap": 0.15235,
+   "spearman": 0.0004564574865284885,
+   "jaccard": 0.003424698399818622,
+   "identical": false
+  },
+  {
+   "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "n": 44090,
+   "overlap": 0.15235,
+   "spearman": 0.0004564574865284885,
+   "jaccard": 0.003424698399818622,
+   "identical": false
+  },
+  {
+   "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+   "n": 40199,
+   "overlap": 0.14905,
+   "spearman": 0.0011918038904515094,
+   "jaccard": 0.003591450595655221,
+   "identical": false
+  },
+  {
+   "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+   "n": 37660,
+   "overlap": 0.14705,
+   "spearman": 0.00046912734392335476,
+   "jaccard": 0.003501789660029203,
+   "identical": false
+  },
+  {
+   "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+   "n": 37654,
+   "overlap": 0.1455,
+   "spearman": 0.0017796085418313558,
+   "jaccard": 0.0037095919448860626,
+   "identical": false
+  },
+  {
+   "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+   "n": 40000,
+   "overlap": 0.1395,
+   "spearman": 0.003896359161798634,
+   "jaccard": 0.003801899695095173,
+   "identical": false
+  },
+  {
+   "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+   "n": 44090,
+   "overlap": 0.106875,
+   "spearman": -0.0024554650286185793,
+   "jaccard": 0.0037960177624982096,
+   "identical": false
+  },
+  {
+   "file": "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+   "n": 40000,
+   "overlap": 0.076025,
+   "spearman": 0.0024695225235797625,
+   "jaccard": 0.00394046633034661,
+   "identical": false
+  },
+  {
+   "file": "gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif",
+   "n": 25285,
+   "overlap": 0.01845,
+   "spearman": 0.007446106611023865,
+   "jaccard": 0.0073912909298521744,
+   "identical": false
+  }
+ ],
+ "worst": {
+  "overlap": 0.9932,
+  "abs_rho": 0.007446106611023865,
+  "jaccard": 0.007619828174164226,
+  "n_corpus": 12,
+  "identical": []
+ },
+ "verdict": "DUPLICATE",
+ "limits": {
+  "overlap": 0.7,
+  "abs_rho": 0.9
+ },
+ "scope": "9 live-scored registry rasters + the 3 lane rasters already shipped in docs/downloads; the full 695-raster registry is not downloadable from this sandbox"
+}

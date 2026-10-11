@@ -11,7 +11,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from gems57.metric import (ALPHA, BETA, dti_binary, dti_bruteforce, dti_exact,
+from gems61.metric import (ALPHA, BETA, dti_binary, dti_bruteforce, dti_exact,
                            dti_from_components, kernel, marginal_accept,
                            marginal_inclusion_threshold, offsets)
 
