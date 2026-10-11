@@ -93,129 +93,35 @@ def test_ribbon_gain_table_is_monotone_in_the_positional_error():
         [r["single_line_dti"] for r in rows if r["sigma_px"] == 1.0][0])
 
 
-# --------------------------------------------------------------- uniqueness
-def test_spearman_is_one_for_a_monotone_transform():
+# ---------------------------------------------------------- shared strict gate
+def test_surface_spearman_is_one_for_a_monotone_transform():
     rng = np.random.default_rng(12)
-    a = rng.random(5000)
-    m = np.ones(5000, bool)
-    assert uq.spearman(a, a ** 3, m) == pytest.approx(1.0)
-    assert uq.spearman(a, -a, m) == pytest.approx(-1.0)
+    a = rng.random((50, 100))
+    mask = np.ones(a.shape, bool)
+    assert uq.surface_rho(a, a ** 3, mask)["spearman_full_footprint"] == pytest.approx(1.0)
+    assert uq.surface_rho(a, -a, mask)["spearman_full_footprint"] == pytest.approx(-1.0)
 
 
-def test_spearman_detects_a_copy():
+def test_surface_spearman_detects_a_copy():
     rng = np.random.default_rng(13)
-    a = rng.random(5000)
-    m = np.ones(5000, bool)
-    # a copy with 5 % pixel noise must still read as a copy
-    b = a + rng.normal(0, 0.01, 5000)
-    assert uq.spearman(a, b, m) > 0.98
+    a = rng.random((50, 100))
+    mask = np.ones(a.shape, bool)
+    b = a + rng.normal(0, 0.01, a.shape)
+    assert uq.surface_rho(a, b, mask)["spearman_full_footprint"] > 0.98
 
 
-def test_dot_overlap_is_one_for_identical_dots():
-    dots = np.zeros((50, 50), bool)
+def test_one_sided_overlap_counts_every_positive_and_uses_three_pixels():
+    dots = np.zeros((60, 60), bool)
     dots[10, 5:25] = True
-    assert uq.dot_overlap_stats(dots, dots, 3.0)["fraction"] == pytest.approx(1.0)
+    same = np.zeros_like(dots)
+    same[13, 5:15] = True  # exactly 3 px from 10 of 20 candidate cells
+    assert uq.dot_overlap(dots, dots, px=3.0) == pytest.approx(1.0)
+    assert uq.dot_overlap(dots, same, px=3.0) == pytest.approx(0.5)
 
 
-def test_dot_overlap_is_zero_for_disjoint_dots():
+def test_one_sided_overlap_is_zero_for_disjoint_support():
     a = np.zeros((60, 60), bool)
     a[10, 5:25] = True
     b = np.zeros((60, 60), bool)
     b[50, 5:25] = True
-    assert uq.dot_overlap_stats(a, b, 3.0)["fraction"] == pytest.approx(0.0)
-
-
-def test_dot_overlap_partial_case():
-    a = np.zeros((60, 60), bool)
-    a[10, 0:20] = True          # 20 dots
-    b = np.zeros((60, 60), bool)
-    b[13, 0:10] = True          # 3 px directly above the first 10, 3.16 px from #11
-    assert uq.dot_overlap_stats(a, b, 3.0)["fraction"] == pytest.approx(0.5)
-
-
-def test_sha256_is_stable():
-    import hashlib
-    import tempfile
-    with tempfile.NamedTemporaryFile(delete=False) as fh:
-        fh.write(b"61GEMSDOE")
-        name = fh.name
-    assert uq.sha256(Path(name)) == hashlib.sha256(b"61GEMSDOE").hexdigest()
-
-
-def test_missing_registry_fails_closed(tmp_path):
-    """An empty registry is not evidence of uniqueness."""
-    with pytest.raises(Exception):
-        uq.check(np.zeros((10, 10), np.float32), None, np.ones((10, 10), bool),
-                 root=tmp_path)
-
-
-# ------------------------------------------------------- dot-leg scope rule
-def _fake_registry(tmp_path, rasters):
-    """Write a minimal but complete registry: check() must fail closed without one."""
-    import json
-    import rasterio
-    from affine import Affine
-
-    (tmp_path / "evidence").mkdir(exist_ok=True)
-    (tmp_path / "cache").mkdir(exist_ok=True)
-    recs = []
-    for i, arr in enumerate(rasters):
-        name = f"cache/r{i}.tif"
-        with rasterio.open(tmp_path / name, "w", driver="GTiff", height=arr.shape[0],
-                           width=arr.shape[1], count=1, dtype="float32",
-                           crs="EPSG:32611",
-                           transform=Affine(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)) as dst:
-            dst.write(arr.astype(np.float32), 1)
-        recs.append(dict(sha256=f"sha{i}", cache_file=name, sources=[f"repo{i}:f{i}.tif"],
-                         comparable=True, reason=""))
-    (tmp_path / "evidence/registry_refreshed.json").write_text(
-        json.dumps(dict(complete_accessible_scan=True, rasters=recs)))
-    return tmp_path
-
-
-def test_dot_leg_is_skipped_for_a_dense_probability_field(tmp_path):
-    """A continuous probability map is positive almost everywhere, so the 3 px
-    overlap test would score 1.0 against ANY candidate.  It must be excluded
-    from the dot leg and compared on the surface leg instead."""
-    fp = np.ones((40, 40), bool)
-    dense = np.linspace(0.001, 1.0, 1600).reshape(40, 40).astype(np.float32)
-    dots = np.zeros((40, 40), bool)
-    dots[5, 5:15] = True
-    _fake_registry(tmp_path, [dense])
-    out = uq.check(np.zeros((40, 40), np.float32), dots, fp, root=tmp_path)
-    assert out["dot_leg_scope"]["applicable"] == 0
-    assert out["dot_leg_scope"]["vacuous_excluded"] == 1
-    assert out["per_raster"][0]["dot_overlap_3px"] is None
-    # and the gate fails closed rather than reporting a vacuous pass
-    assert out["dot_gate_pass"] is False
-    assert out["unique"] is False
-
-
-def test_dot_leg_is_skipped_for_a_uniform_lattice(tmp_path):
-    """A 5 px lattice is only 4 % dense but lies within 3 px of ~100 % of the
-    footprint, so the raw overlap test is just as vacuous as for a dense map.
-    Density alone is not the right criterion; footprint coverage is."""
-    fp = np.ones((40, 40), bool)
-    lattice = np.zeros((40, 40), np.float32)
-    lattice[::5, ::5] = 1.0
-    assert 0.0 < lattice.mean() < 0.05                 # sparse by density ...
-    dots = np.zeros((40, 40), bool)
-    dots[5, 5:15] = True
-    _fake_registry(tmp_path, [lattice])
-    out = uq.check(np.zeros((40, 40), np.float32), dots, fp, root=tmp_path)
-    assert out["per_raster"][0]["footprint_coverage_within_3px"] > 0.9   # ... not by coverage
-    assert out["dot_leg_scope"]["applicable"] == 0
-    assert out["per_raster"][0]["dot_overlap_3px"] is None
-
-
-def test_dot_leg_runs_for_a_sparse_raster(tmp_path):
-    fp = np.ones((40, 40), bool)
-    sparse = np.zeros((40, 40), np.float32)
-    sparse[20, 5:25] = 1.0
-    dots = np.zeros((40, 40), bool)
-    dots[20, 5:25] = True
-    _fake_registry(tmp_path, [sparse])
-    out = uq.check(np.zeros((40, 40), np.float32), dots, fp, root=tmp_path)
-    assert out["dot_leg_scope"]["applicable"] == 1
-    assert out["per_raster"][0]["dot_overlap_3px"] == pytest.approx(1.0)
-    assert out["dot_gate_pass"] is False          # a copy is not unique
+    assert uq.dot_overlap(a, b, px=3.0) == pytest.approx(0.0)

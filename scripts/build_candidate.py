@@ -1,33 +1,12 @@
 #!/usr/bin/env python3
-"""Build and measure the 61GEMSDOE submission candidate.
+"""RETIRED legacy candidate/holdout pipeline.
 
-This script is the *product* stage.  It does not introduce a new hypothesis; it
-assembles the emission geometry from what E1 (leakage canary + smoothing scale)
-and E2 (ribbon geometry) already selected, adds the two pre-registered
-refinements the lane's own physics demands, and measures every arm on the same
-spatially-blocked holdout before anything is written to disk.
-
-Pre-registered selection rule (declared before the numbers below were read)
---------------------------------------------------------------------------
-1. Candidate = the arm with the highest HOLDOUT-DTI among the structural arms.
-2. It is marked ``okay_to_submit`` only if the 95 % paired block-bootstrap CI of
-   ``candidate - domain-matched random-line null`` excludes zero **and** it
-   clears the uniqueness drift gate.
-3. Otherwise the verdict is ``negative``.  The GeoTIFF is still produced, still
-   validated and still downloadable -- a negative result is a deliverable -- but
-   the site and the run card must say plainly that it is not ready to submit.
-
-Arms
-----
-``ribbon_k1``            single line at the estimated crest (E1/E2 baseline)
-``ribbon_k2_s3``         two lines at 0, +/-3 px
-``ribbon_k2_s6``         two lines at 0, +/-6 px  (matches the measured p50 error)
-``ribbon_k3_s6``         three lines at 0, +/-6, +/-12 px
-``basin_k1``             ribbon_k1 restricted to the basin-interior domain
-``basin_demoted_k1``     basin_k1 with magnetically-ambiguous steps removed (E3)
-``basin_topthrow_k1``    basin_k1 with the budget spent on the highest-throw cells
-``randomlines_r*``       length-matched random-line null over the full domain
-``randomlines_basin_r0`` length-matched random-line null over the basin domain
+The CLI is fail-closed because this older runner can score candidate arms before
+applying the current complete-inventory pre-placement gate, and the aggregate
+candidate-experiment budget is already exhausted. Its implementation remains in
+source for historical reproducibility, but direct execution is not authorized.
+Use the current run card and strict-gated H61-G/H61-L entrypoints only after a
+new eligible candidate and selector authorization exist.
 """
 from __future__ import annotations
 
@@ -392,4 +371,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this legacy candidate/holdout pipeline has no current pre-placement "
+        "gate and the experiment budget is exhausted. Do not run another candidate or holdout trial."
+    )

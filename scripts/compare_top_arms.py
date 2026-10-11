@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""Pairwise comparison of the leading candidates on the same holdout.
+"""RETIRED historical pairwise holdout comparison.
 
-``evidence/candidate_arms.json`` ranks every arm against its *own* matched
-random-line null.  That answers "is this geometry better than random?" but not
-"which geometry should be shipped?".  This script answers the second question
-with a paired block bootstrap between the leading arms themselves, and writes
-``evidence/arm_selection.json``.
-
-The shipped candidate is the arm with the highest HOLDOUT-DTI among arms that
-are not significantly worse than the best arm.
+This script would generate new HOLDOUT-DTI results from arms that did not pass
+the current strict pre-placement gate. The aggregate experiment budget is
+exhausted; existing results remain historical and the CLI is disabled.
 """
 from __future__ import annotations
 
@@ -102,4 +97,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: do not score legacy candidate arms on another holdout; the strict "
+        "pre-placement gate and experiment-budget stop apply."
+    )

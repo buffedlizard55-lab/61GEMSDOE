@@ -1,539 +1,489 @@
-#!/usr/bin/env python
-"""H61-L: lidar scarp inside gravity corridor (lane-consistent augmentation).
+#!/usr/bin/env python3
+"""H61-L: public USGS 3DEP scarp descriptors inside buried basement-step corridors.
 
-The lane's gravity step sets a +/-1 km corridor; the lidar (1 m DEM aggregated to 100 m)
-locates the scarp to 100 m inside it. This is the #1 hypothesis from
-hypotheses.html: "1 m lidar scarp detection restricted to gravity corridors".
-
-Uses the existing GP-1012-calibrated inversion from .cache/h61g (no re-fit).
-Compares lidar candidates against the same holdout instrument as H61-G and against
-the previous best (X2 slope-ridge) so the lift is measurable.
-
-Stages: lidar_screen -> holdout -> final -> unique -> card -> all
+The raw candidate surface is checked against the declared raster inventory BEFORE
+any placement. A literal duplicate/overlap stop terminates the run: no holdout,
+GeoTIFF, or submission-ready claim is produced. If that gate passes, the script
+uses the shared buffered hide-and-recover folds/evaluator and submission writer.
 """
 from __future__ import annotations
-import argparse, hashlib, json, shutil, sys, time, subprocess
+
+import hashlib
+import json
+import shutil
+import sys
+import time
 from pathlib import Path
-import numpy as np, rasterio
+
+import numpy as np
+import rasterio
 from scipy import ndimage as ndi
+
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT/"src"))
-from gems61 import buried as B, grid as gridmod, h61g as H, holdout_segmented as holdoutmod, submission_writer
-from gems61.metric import ALPHA, BETA, EPS, kernel
-from gems61.network import segments
-EVID=ROOT/"evidence"; OUT=ROOT/"out"; CACHE=ROOT/".cache"/"h61g"; DOWNLOADS=ROOT/"docs"/"downloads"
-REGISTRY_DIRS=[Path("/tmp/refs/registry"), ROOT/"docs"/"downloads"]
-BUDGETS=(20000,40000)
-PRUNE_PX=2.0
-SEEDS=(20,21)
-EVALUATOR="gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
+sys.path.insert(0, str(ROOT / "src"))
 
-def log(m): print(m, flush=True)
-def sha256(p:Path): 
-    import hashlib
-    h=hashlib.sha256()
-    with open(p,'rb') as fh:
-        for b in iter(lambda: fh.read(1<<20), b''): h.update(b)
+from gems61 import buried as B  # noqa: E402
+from gems61 import evaluate_holdout as evaluator  # noqa: E402
+from gems61 import gates  # noqa: E402
+from gems61 import grid as gridmod  # noqa: E402
+from gems61 import h61g as H  # noqa: E402
+from gems61 import holdout_segmented as holdoutmod  # noqa: E402
+from gems61 import metric  # noqa: E402
+from gems61 import network  # noqa: E402
+from gems61 import submission_writer  # noqa: E402
+
+EVID = ROOT / "evidence"
+OUT = ROOT / "out"
+DOWNLOADS = ROOT / "docs" / "downloads"
+CACHE = ROOT / ".cache" / "h61g"
+LIDAR = ROOT / ".cache" / "external" / "lidar_scarp_features_u8.tif"
+LIDAR_JSON = ROOT / "evidence" / "h61l_lidar_source.json"
+INDEX = EVID / "registry_accessible_index.json"
+EXPECTED_LIDAR_SHA256 = "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+UPSTREAM = "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features_u8.tif"
+UPSTREAM_META = "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json"
+UPSTREAM_COMMIT = "2e7bf080270493f77286fd62f2db958805053ba5"
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            h.update(block)
     return h.hexdigest()
-def write_json(n,o):
-    EVID.mkdir(exist_ok=True)
-    p=EVID/n
-    p.write_text(json.dumps(o, indent=2, default=lambda x: float(x) if isinstance(x, (np.floating, np.integer, np.bool_)) else str(x))+"\n")
-    log(f"wrote {p.relative_to(ROOT)}")
-    return p
-def _jsonable(o):
-    if isinstance(o,(np.floating,)): return float(o)
-    if isinstance(o,(np.integer,)): return int(o)
-    if isinstance(o,np.ndarray): return o.tolist()
-    if isinstance(o,(np.bool_,)): return bool(o)
-    return str(o)
 
-def load_base():
-    g=gridmod.load_grid()
-    grav=np.asarray(B.load_band(13), np.float64)
-    valid=g.footprint & np.isfinite(grav)
-    return g,grav,valid
 
-def decode_lidar():
-    # fetch quant json via codeload if needed
-    jpath=ROOT/"data/external/lidar_scarp_features.json"
-    if not jpath.exists():
-        tarball="https://codeload.github.com/buffedlizard55-lab/GEMSDOE24/tar.gz/main"
-        r=subprocess.run(["curl","-sL", tarball], stdout=subprocess.PIPE, timeout=120)
-        p=subprocess.run(["tar","-xzOf","-", "--wildcards", "*/data/external/lidar_scarp_features.json"], input=r.stdout, stdout=subprocess.PIPE)
-        j=json.loads(p.stdout)
-        jpath.write_text(json.dumps(j, indent=2))
+def _jsonable(value):
+    if isinstance(value, np.ndarray):
+        return _jsonable(value.tolist())
+    if isinstance(value, (np.floating,)):
+        value = float(value)
+    elif isinstance(value, (np.integer,)):
+        return int(value)
+    elif isinstance(value, (np.bool_,)):
+        return bool(value)
+    if isinstance(value, float):
+        return value if np.isfinite(value) else None
+    if isinstance(value, dict):
+        return {str(k): _jsonable(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_jsonable(v) for v in value]
+    if isinstance(value, Path):
+        return str(value)
+    if value is None or isinstance(value, (str, int, bool)):
+        return value
+    return str(value)
+
+
+def write_json(name: str, obj) -> Path:
+    EVID.mkdir(parents=True, exist_ok=True)
+    path = EVID / name
+    path.write_text(json.dumps(_jsonable(obj), indent=2, allow_nan=False) + "\n",
+                    encoding="utf-8")
+    print(f"wrote {path.relative_to(ROOT)}", flush=True)
+    return path
+
+
+def _decode_quantized(q: np.ndarray, xmax: float, mode: str) -> np.ndarray:
+    """Invert the upstream q=1+round(254*t(x/xmax)) encoding; 0 means no data."""
+    q = np.asarray(q, np.float32)
+    t = np.clip((q - 1.0) / 254.0, 0.0, 1.0)
+    if mode == "sqrt":
+        unit = t * t
+    elif mode == "linear":
+        unit = t
     else:
-        j=json.loads(jpath.read_text())
-    with rasterio.open(ROOT/"data/external/lidar_scarp_features_u8.tif") as src:
-        lidar=np.stack([src.read(i) for i in range(1,13)], axis=0)
-        descs=src.descriptions
-    # decode
-    decoded={}
-    for i,name in enumerate(descs):
-        if name=="valid":
-            # keep raw 0-255 as fraction
-            decoded[name]= (lidar[i].astype(np.float64)/255.0)
+        raise ValueError(f"unknown quantization mode: {mode}")
+    return np.where(q > 0, unit * np.float32(xmax), 0.0).astype(np.float32)
+
+
+def _record_lidar_provenance() -> dict:
+    if not LIDAR.is_file():
+        raise FileNotFoundError(
+            f"missing pinned public lidar descriptor {LIDAR}; check availability at {UPSTREAM} "
+            "and fetch the blob only through the repository's GitHub/API path"
+        )
+    digest = sha256_file(LIDAR)
+    if digest != EXPECTED_LIDAR_SHA256:
+        raise ValueError(f"lidar descriptor SHA-256 mismatch: {digest}")
+    with rasterio.open(LIDAR) as src:
+        record = dict(
+            source=UPSTREAM,
+            metadata_source=UPSTREAM_META,
+            upstream_repository="buffedlizard55-lab/GEMSDOE24",
+            upstream_commit=UPSTREAM_COMMIT,
+            upstream_git_blob_sha="da733b53147efad5c141ffdb96e469ec5b4da8b8",
+            local_sha256=digest,
+            bytes=LIDAR.stat().st_size,
+            shape=[src.height, src.width],
+            count=src.count,
+            dtype=list(src.dtypes),
+            crs=str(src.crs),
+            transform=list(src.transform)[:6],
+            nodata=src.nodata,
+            bands=list(src.descriptions),
+            method_note=("Twelve uint8 terrain-descriptor channels aggregated from 2 m work cells; "
+                         "upstream metadata identifies USGS 3DEP 1 m DEM tiles. Quantized descriptors "
+                         "are not fault labels or a fault-detection raster."),
+            rights_note=("Upstream metadata states USGS 3DEP products are available without use restrictions; "
+                         "the source feature file is a public sibling-repository derivative."),
+            caveats=[
+                "uncalibrated terrain descriptors, not fault detections",
+                "roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps",
+                "upstream metadata reports 10 failed tiles out of 716 and approximately 1-2 m datum offset",
+                "source is a sibling feature product; no sibling prediction raster is used",
+            ],
+            label="PUBLIC-REPOSITORY-DERIVATIVE; not organizer-provided and not an organizer score receipt",
+        )
+    write_json("h61l_lidar_source.json", record)
+    return record
+
+
+def _build_surface(g):
+    """Create one preregistered scarp-ribbon surface from cached basement depth + lidar."""
+    needed = ["depth_full.npy", "steps_full.npy", "hgm_full.npy", "throw_full.npy"]
+    missing = [name for name in needed if not (CACHE / name).is_file()]
+    if missing:
+        raise FileNotFoundError(f"missing cached inversion arrays {missing}; run scripts/run_h61g.py invert once")
+
+    depth = np.load(CACHE / "depth_full.npy", mmap_mode="r").astype(np.float32)
+    steps = np.load(CACHE / "steps_full.npy", mmap_mode="r").astype(bool)
+    hgm = np.load(CACHE / "hgm_full.npy", mmap_mode="r").astype(np.float32)
+    throw = np.load(CACHE / "throw_full.npy", mmap_mode="r").astype(np.float32)
+    if any(a.shape != g.shape for a in (depth, steps, hgm, throw)):
+        raise ValueError("cached basement surfaces differ from the competition grid")
+    valid = g.footprint & np.isfinite(depth)
+    corridor = H.corridor_mask(steps, H.CORRIDOR_PX)
+    basin = valid & (depth > H.BASIN_FLOOR_M)
+    working = valid & corridor & basin
+    concealment = B.concealment_prior(depth, floor_m=H.BASIN_FLOOR_M, cap_m=1500.0)
+
+    # Decode the documented upstream 12-band feature file. Bands are 1-based:
+    # 1 ex_max, 3 step_max, 4 lapneg_max, 5 lappos_max, 10 coh100, 12 valid.
+    with rasterio.open(LIDAR) as src:
+        if src.count != 12 or src.shape != g.shape:
+            raise ValueError(f"lidar feature grid/count mismatch: {src.shape}, {src.count}")
+        with rasterio.open(gridmod.DATA_DIR / "sample_submission.tif") as sample:
+            if src.crs != sample.crs or src.transform != sample.transform:
+                raise ValueError("lidar feature CRS/transform differs from the pinned competition template")
+        if tuple(src.descriptions) != ("ex_max", "ex_mean", "step_max", "lapneg_max",
+                                      "lappos_max", "downface_max", "upface_max", "cross_max",
+                                      "relief", "coh100", "strike", "valid"):
+            raise ValueError(f"unexpected lidar feature band descriptions: {src.descriptions}")
+        valid_fraction = _decode_quantized(src.read(12), 1.0, "linear")
+        ex = _decode_quantized(src.read(1), 1.5, "sqrt") / 1.5
+        step = _decode_quantized(src.read(3), 1.0, "sqrt")
+        crest = _decode_quantized(src.read(4), 0.05, "sqrt") / 0.05
+        base = _decode_quantized(src.read(5), 0.05, "sqrt") / 0.05
+        coherence = _decode_quantized(src.read(10), 1.0, "linear")
+
+    lidar_valid = valid_fraction > 0.0
+    # A scarp-like signature requires short-wavelength steepness, a sharp 10 m vs
+    # 50 m slope break, a convex crest + concave base, and coherent linear form.
+    # No catalogue values or hidden labels enter this feature surface.
+    scarp = np.sqrt(np.clip(ex * step, 0.0, 1.0))
+    scarp *= np.sqrt(np.clip(crest * base, 0.0, 1.0))
+    scarp *= np.clip(coherence, 0.0, 1.0)
+    scarp[~lidar_valid] = 0.0
+    scarp[~g.footprint] = 0.0
+
+    # Restrict the lidar locator to mapped basement-step corridors under basin fill;
+    # then emit three-cell-wide multi-line ribbons, not a set of isolated dots.
+    ridges = B.blakely_simpson_maxima(scarp) & (scarp > 0.0) & working & lidar_valid
+    ribbon = H.ribbon(ridges, 1) & working & lidar_valid
+    ridge_strength = ndi.maximum_filter(scarp, size=3, mode="nearest")
+    field = (ribbon.astype(np.float32) * ridge_strength *
+             (0.3 + 0.7 * concealment.astype(np.float32)))
+    field = np.where(working, field, 0.0).astype(np.float32)
+    field[~np.isfinite(field)] = 0.0
+    if field.min() < 0 or field.max() > 1:
+        raise ValueError("candidate scarp surface escaped [0,1]")
+
+    features = {
+        "inverted basement depth": np.where(valid, depth, 0.0).astype(np.float32),
+        "basement depth HGM": np.where(valid, hgm, 0.0).astype(np.float32),
+        "minimum step throw": np.where(valid, throw, 0.0).astype(np.float32),
+        "lidar shortwave excess slope": ex,
+        "lidar sharp step": step,
+        "lidar convex crest": crest,
+        "lidar concave base": base,
+        "lidar structure-tensor coherence": coherence,
+        "composite lidar scarp score": scarp,
+        "gravity-step corridor": corridor.astype(np.float32),
+        "basin interior": basin.astype(np.float32),
+    }
+    meta = dict(
+        candidate="H61-L: USGS 3DEP scarp-score maxima, emitted as 3-cell ribbons inside a basement-step corridor",
+        method="sqrt(ex_max_norm*step_max_norm) * sqrt(lapneg_max_norm*lappos_max_norm) * coh100; "
+               "local maxima; 3-cell ribbon; inverted depth > 100 m; within +/-1 km of >=80 m basement-depth HGM step",
+        n_valid_footprint=int(g.footprint.sum()),
+        n_lidar_cells=int(lidar_valid.sum()),
+        lidar_coverage_fraction_of_footprint=float((lidar_valid & g.footprint).sum() / g.footprint.sum()),
+        n_basin_corridor_cells=int(working.sum()),
+        n_lidar_scarp_ridge_centres=int(ridges.sum()),
+        n_ribbon_positive_pixels=int((field > 0).sum()),
+        max_score=float(field.max()),
+        ribbon_width_px=3,
+        corridor_px=H.CORRIDOR_PX,
+        corridor_width_m=2 * H.CORRIDOR_PX * 100,
+        depth_floor_m=H.BASIN_FLOOR_M,
+        minimum_basement_throw_m=H.MIN_THROW_M,
+        feature_stack="19 pinned competition bands plus public 12-band lidar descriptor raster",
+        catalogue_used_in_feature_generation=False,
+    )
+    return field, features, meta
+
+
+def _feature_canary(features, folds, valid, seed=6101):
+    rng = np.random.default_rng(seed)
+    pos_parts: dict[str, list[np.ndarray]] = {name: [] for name in features}
+    neg_parts: dict[str, list[np.ndarray]] = {name: [] for name in features}
+    for fold in folds:
+        active = valid & np.asarray(fold["region"], bool) & ~np.asarray(fold["masked_known"], bool)
+        truth = active & np.asarray(fold["truth"], bool)
+        background = active & ~truth
+        pi = np.flatnonzero(truth)
+        ni = np.flatnonzero(background)
+        if pi.size == 0 or ni.size == 0:
             continue
-        if name not in j["quantisation"]:
-            continue
-        xmax, typ = j["quantisation"][name]
-        q=lidar[i].astype(np.float64)
-        mask=q>0
-        out=np.zeros_like(q)
-        norm=np.zeros_like(q)
-        norm[mask]=(q[mask]-1)/254.0
-        if typ=="sqrt":
-            out[mask]=xmax*(norm[mask]**2)
-        else:
-            out[mask]=xmax*norm[mask]
-        decoded[name]=out
-        decoded[name+"_mask"]=mask
-        decoded[name+"_u8"]=lidar[i]
-    # valid lidar mask
-    valid_lidar = lidar[11]>0
-    decoded["_valid_lidar"]=valid_lidar
-    decoded["_descs"]=descs
-    decoded["_quant"]=j["quantisation"]
-    return decoded
+        nneg = min(20_000, ni.size)
+        ni = rng.choice(ni, size=nneg, replace=False)
+        for name, feature in features.items():
+            pos_parts[name].append(np.asarray(feature, np.float32).ravel()[pi])
+            neg_parts[name].append(np.asarray(feature, np.float32).ravel()[ni])
+    out = {}
+    for name in features:
+        pos = np.concatenate(pos_parts[name]) if pos_parts[name] else np.zeros(0, np.float32)
+        neg = np.concatenate(neg_parts[name]) if neg_parts[name] else np.zeros(0, np.float32)
+        auc = H.auc_rank(pos, neg)
+        out[name] = dict(auc=float(auc), n_pos=int(pos.size), n_neg=int(neg.size),
+                         threshold=0.90, passed=bool(np.isfinite(auc) and auc <= 0.90))
+    return dict(threshold=0.90, passed=bool(all(row["passed"] for row in out.values())),
+                worst_auc=max((r["auc"] for r in out.values() if np.isfinite(r["auc"])), default=None),
+                features=out)
 
-def lidar_screen(_a):
-    g,grav,valid=load_base()
-    cat=g.catalogue
-    dcat=ndi.distance_transform_edt(~cat)
-    kcat=kernel(dcat)
-    dec=decode_lidar()
-    depth=np.load(CACHE/"depth_full.npy")
-    steps=np.load(CACHE/"steps_full.npy")
-    corr=H.corridor_mask(steps, H.CORRIDOR_PX)
-    basin=valid & (depth > H.BASIN_FLOOR_M)
-    rows=[]
-    def add(name, mask):
-        n=int(mask.sum())
-        if n==0: return
-        rows.append(dict(candidate=name, n=n, within_3px=float((dcat[mask]<=3).mean()), mean_kernel=float(kcat[mask].mean())))
-    base = valid & dec["_valid_lidar"]
-    add("RANDOM lidar-valid pixel", base)
-    add("RANDOM inside corridor (lidar-valid)", base & corr)
-    for name in ["ex_max","ex_mean","step_max","lapneg_max","lappos_max","downface_max","upface_max","cross_max","relief","coh100"]:
-        arr=dec[name]
-        msk=dec[name+"_mask"] & valid
-        if msk.sum()==0: continue
-        thr=np.percentile(arr[msk], 50)
-        top= msk & (arr>=thr)
-        add(f"{name} top50% all", top)
-        add(f"{name} top50% inside corridor", top & corr)
-        add(f"{name} top50% inside corridor+basin", top & corr & basin)
-        add(f"{name} top50% outside corridor", top & ~corr)
-        # top 25%
-        thr75=np.percentile(arr[msk],75)
-        top25= msk & (arr>=thr75)
-        add(f"{name} top25% inside corridor", top25 & corr)
-    # also combo: relief * step_max rank?
-    # simple combined score: average rank of relief, ex_max, lappos
-    # build normalized rank inside valid lidar
-    def rank01(vals, mask):
-        out=np.zeros(vals.shape, np.float32)
-        idx=np.flatnonzero(mask.ravel())
-        if idx.size==0: return out
-        v=vals.ravel()[idx]
-        order=np.argsort(v, kind="stable")
-        r=np.empty(idx.size, np.float32)
-        r[order]=(np.arange(1, idx.size+1, dtype=np.float32))/np.float32(idx.size)
-        out.ravel()[idx]=r
-        return out
-    # combined: relief + ex_max + lappos + step_max
-    valid_mask = dec["_valid_lidar"] & valid
-    ranks=[]
-    for n in ["relief","ex_max","step_max","lappos_max"]:
-        ranks.append(rank01(dec[n], valid_mask))
-    combo=np.mean(ranks, axis=0) if ranks else None
-    if combo is not None:
-        # threshold at median
-        thr=np.median(combo[valid_mask])
-        top= valid_mask & (combo>=thr)
-        add("COMBO relief+ex_max+step+lappos top50% inside corridor", top & corr)
-        add("COMBO top25% inside corridor", valid_mask & (combo>=np.percentile(combo[valid_mask],75)) & corr)
-    for r in rows:
-        log(f"  {r['candidate']:55s} n={r['n']:7d} within3={r['within_3px']:.4f} k={r['mean_kernel']:.4f}")
-    write_json("h61l_lidar_screen.json", dict(evidence_class="MEASURED lidar screen", rows=rows))
 
-def _candidate_fields_lidar(g, valid):
-    depth_full=np.load(CACHE/"depth_full.npy").astype(np.float64)
-    steps_full=np.load(CACHE/"steps_full.npy")
-    corr=H.corridor_mask(steps_full, H.CORRIDOR_PX)
-    basin=valid & (depth_full > H.BASIN_FLOOR_M)
-    conceal=B.concealment_prior(depth_full, floor_m=H.BASIN_FLOOR_M, cap_m=1500.0)
-    # slope ridge baseline (band19) for comparison
-    b19=np.asarray(B.load_band(19), np.float64)
-    ridge, slope = H.slope_ridges(b19, valid)
-    dec=decode_lidar()
-    valid_lidar=dec["_valid_lidar"] & valid
-    # helpers
-    def rank01(vals,mask):
-        out=np.zeros(vals.shape, np.float32)
-        idx=np.flatnonzero(mask.ravel())
-        if idx.size==0: return out
-        v=vals.ravel()[idx]
-        order=np.argsort(v, kind="stable")
-        r=np.empty(idx.size, np.float32)
-        r[order]=(np.arange(1, idx.size+1, dtype=np.float32))/np.float32(idx.size)
-        out.ravel()[idx]=r
-        return out
-    # lidar decoded arrays
-    relief=dec["relief"]
-    ex_max=dec["ex_max"]
-    step_max=dec["step_max"]
-    lappos=dec["lappos_max"]
-    upface=dec["upface_max"]
-    downface=dec["downface_max"]
-    cross=dec["cross_max"]
-    # Build combined lidar scarp likelihood: weighted sum of top indicators
-    # Following the screen, relief was best (0.074), upface 0.071, lappos 0.069
-    # We combine relief, ex_max, step_max, lappos equally, then rank
-    # Only where lidar valid
-    r_relief=rank01(relief, valid_lidar)
-    r_ex=rank01(ex_max, valid_lidar)
-    r_step=rank01(step_max, valid_lidar)
-    r_lappos=rank01(lappos, valid_lidar)
-    r_upface=rank01(upface, valid_lidar)
-    r_downface=rank01(downface, valid_lidar)
-    combo_mean = (r_relief + r_ex + r_step + r_lappos)/4.0
-    combo_best = (r_relief*0.35 + r_upface*0.25 + r_ex*0.20 + r_lappos*0.20)
-    # ridge-like maxima for lidar? Instead of maxima, we can just threshold combo
-    # But to mimic slope_ridges maxima, we take Blakely-Simpson maxima of combo
-    combo_filled=np.where(valid_lidar, combo_mean, np.nanmedian(combo_mean))
-    combo_mx = B.blakely_simpson_maxima(combo_filled) & valid_lidar
-    combo_best_filled=np.where(valid_lidar, combo_best, np.nanmedian(combo_best))
-    combo_best_mx = B.blakely_simpson_maxima(combo_best_filled) & valid_lidar
-    # also maxima of relief alone
-    relief_mx = B.blakely_simpson_maxima(np.where(valid_lidar, relief, np.nanmedian(relief))) & valid_lidar
-    # candidate fields
-    fields={}
-    # Baseline: previous best X2 for calibration
-    sl_rank=H.rank01(slope, ridge & valid)
-    w=np.minimum(sl_rank,0.9)*(0.5+0.5*conceal)
-    fields["X2 slope-ridge inside corridor basin (baseline)"]=np.where(ridge & corr & basin, w, 0.0)
-    fields["X2 slope-ridge inside corridor any depth"]=np.where(ridge & corr, np.minimum(sl_rank,0.9), 0.0)
-    # Lidar candidates
-    # L1: relief maxima inside corridor
-    r_relief_rank=H.rank01(relief, relief_mx & valid)
-    w_relief=np.minimum(r_relief_rank,0.9)*(0.5+0.5*conceal)
-    fields["L1 relief maxima inside corridor+basin"]=np.where(relief_mx & corr & basin & valid_lidar, w_relief, 0.0)
-    fields["L1 relief maxima inside corridor any depth"]=np.where(relief_mx & corr & valid_lidar, np.minimum(r_relief_rank,0.9), 0.0)
-    # L2: combo_mean maxima inside corridor
-    r_combo=rank01(combo_mean, combo_mx & valid)
-    w_combo=np.minimum(r_combo,0.9)*(0.5+0.5*conceal)
-    # need rank inside valid lidar for combo mean
-    r_combo_full=H.rank01(combo_mean, combo_mx & valid_lidar)
-    w_combo=np.minimum(r_combo_full,0.9)*(0.5+0.5*conceal)
-    fields["L2 combo(relief+ex+step+lappos) maxima inside corridor+basin"]=np.where(combo_mx & corr & basin, w_combo, 0.0)
-    fields["L2b combo_best(relief+upface+ex+lappos) maxima inside corridor+basin"]=np.where(combo_best_mx & corr & basin, np.minimum(H.rank01(combo_best, combo_best_mx & valid_lidar),0.9)*(0.5+0.5*conceal), 0.0)
-    # L3: dense lidar: thresholded combo (not maxima) - top 30% inside corridor
-    # This is more like a field, packed per tile max
-    thr70=np.percentile(combo_mean[valid_lidar], 70)
-    dense = valid_lidar & (combo_mean>=thr70)
-    # rank dense by combo value
-    dense_rank=H.rank01(combo_mean, dense)
-    fields["L3 dense top30% lidar combo inside corridor+basin"]=np.where(dense & corr & basin, dense_rank*(0.5+0.5*conceal), 0.0)
-    # L4: ex_max + relief top50% outside corridor control
-    fields["C lidar outside corridor (relief maxima)"]=np.where(relief_mx & ~corr & basin, w_relief, 0.0)
-    # L5: lidar-only without corridor (to measure corridor lift)
-    fields["C lidar relief maxima basin (no corridor)"]=np.where(relief_mx & basin & valid_lidar, w_relief, 0.0)
-    # Piedmont variant: basin edge 0-2km from bedrock outcrop (depth=0 contour)
-    # depth=0 buffer 0-2km basinward
-    bedrock = depth_full <= 10  # outcrop approx
-    # distance to bedrock edge
-    # we want pixels 0-20 px (0-2km) basinward of bedrock
-    # compute distance to bedrock, and also depth>0
-    dist_bedrock=ndi.distance_transform_edt(~bedrock)
-    piedmont = valid & (depth_full>10) & (depth_full<1500) & (dist_bedrock>=1) & (dist_bedrock<=20)
-    # slope ridge in piedmont
-    fields["P piedmont slope-ridge (0-2km from bedrock)"]=np.where(ridge & piedmont, w, 0.0)
-    fields["P lidar relief piedmont"]=np.where(relief_mx & piedmont & valid_lidar, w_relief, 0.0)
-    meta=dict(corridor_fraction=float((corr&valid).sum()/valid.sum()), basin_fraction=float(basin.sum()/valid.sum()),
-              valid_lidar_fraction=float(valid_lidar.sum()/valid.sum()), n_slope_ridge=int((ridge&valid).sum()),
-              n_relief_mx=int((relief_mx&valid).sum()), n_combo_mx=int((combo_mx&valid).sum()))
-    aux=dict(corridor=corr, basin=basin, depth_full=depth_full, ridge=ridge, slope=slope, relief=relief, valid_lidar=valid_lidar, piedmont=piedmont)
-    return fields, meta, aux
+def _evaluate_arms(predictions, folds, g):
+    terms = {name: [] for name in predictions}
+    fold_scores = {name: [] for name in predictions}
+    withheld = 0
+    for fold in folds:
+        for name, pred in predictions.items():
+            result, block_terms = evaluator.evaluate(
+                pred, fold, g.footprint, block_side=200, origin=(0, 0), global_shape=g.shape)
+            terms[name].append(block_terms)
+            fold_scores[name].append(result)
+        withheld += int(np.asarray(fold["truth"], bool)[np.asarray(fold["region"], bool)].sum())
+    pooled_terms = {name: np.sum(np.stack(items, axis=0), axis=0)
+                    for name, items in terms.items()}
+    return pooled_terms, fold_scores, withheld
 
-def _per_cell_emit(field, cell, visible_full, budget_cell, random_kind=None, seed=0):
-    sl=cell.bbox
-    vis=visible_full[sl]
-    far=ndi.distance_transform_edt(~vis) > PRUNE_PX
-    allowed=cell.active & far
-    if random_kind=="lines":
-        return H.random_lines(allowed.shape, allowed, budget_cell, seed=seed)
-    if random_kind=="dots":
-        return H.random_dots(allowed, budget_cell, seed=seed)
-    if random_kind=="corridor":
-        return H.random_dots(allowed & field[sl], budget_cell, seed=seed)
-    return H.dot_thin(field[sl], allowed, budget_cell)
 
-def _score_crop(cell, p_crop):
-    p=p_crop & cell.active
-    n_emit=int(p.sum())
-    if n_emit==0 or cell.n_truth==0:
-        return dict(tp=0.0, fp=float(n_emit), fn=float(cell.n_truth), n_emit=n_emit), None
-    dp=ndi.distance_transform_edt(~p)
-    tp=float(kernel(dp[cell.truth_yx]).sum())
-    fn=float(cell.n_truth)-tp
-    fp=float((1.0-cell.k_dg[p]).sum())
-    return dict(tp=tp, fp=fp, fn=fn, n_emit=n_emit), dp
+def _segment_recovery(pred, folds, seg, depth, valid):
+    all_rows = []
+    for fold in folds:
+        region = np.asarray(fold["region"], bool)
+        known = np.asarray(fold["masked_known"], bool)
+        hidden = np.asarray(fold["truth"], bool) & region
+        prediction = (np.asarray(pred) > 0.0) & valid & region & ~known
+        distance = ndi.distance_transform_edt(~prediction)
+        ids = np.unique(seg[hidden])
+        ids = ids[ids > 0]
+        for sid in ids:
+            mask = (seg == sid) & hidden
+            if not mask.any():
+                continue
+            all_rows.append(dict(
+                fold=fold["name"], segment_id=int(sid), pixels=int(mask.sum()),
+                median_depth_m=float(np.median(depth[mask])),
+                recovered_300m=bool((distance[mask] <= 3.0).any()),
+            ))
+    basin = [row for row in all_rows if row["median_depth_m"] > 300.0]
+    return dict(
+        all=dict(withheld=len(all_rows), recovered=sum(r["recovered_300m"] for r in all_rows),
+                 rate=(sum(r["recovered_300m"] for r in all_rows) / len(all_rows)) if all_rows else None),
+        basin_interior_depth_gt_300m=dict(
+            withheld=len(basin), recovered=sum(r["recovered_300m"] for r in basin),
+            rate=(sum(r["recovered_300m"] for r in basin) / len(basin)) if basin else None,
+            ci95=list(H.wilson(sum(r["recovered_300m"] for r in basin), len(basin))) if basin else None),
+        rows=all_rows,
+    )
 
-def _pool(parts):
-    tp=sum(p["tp"] for p in parts); fp=sum(p["fp"] for p in parts); fn=sum(p["fn"] for p in parts)
-    return dict(pooled_dti=float(tp/(tp+ALPHA*fp+BETA*fn+EPS)), tp=tp, fp=fp, fn=fn, n_emitted=int(sum(p["n_emit"] for p in parts)), coverage=float(tp/max(tp+fn,1e-9)))
-def _boot_ci(parts, n_boot=2000, seed=7):
-    rng=np.random.default_rng(seed)
-    parts=list(parts)
-    vals=[]
-    for _ in range(n_boot):
-        pick=[parts[i] for i in rng.integers(len(parts), size=len(parts))]
-        vals.append(_pool(pick)["pooled_dti"])
-    return [float(np.percentile(vals,2.5)), float(np.percentile(vals,97.5))]
 
-def stage_holdout(_a):
-    t0=time.time()
-    g,grav,valid=load_base()
-    fields,meta,aux=_candidate_fields_lidar(g,valid)
-    log(f"corridor {meta['corridor_fraction']:.3f} basin {meta['basin_fraction']:.3f} valid_lidar {meta['valid_lidar_fraction']:.3f}")
-    ctx=holdoutmod.build_holdout(g, hide_frac=0.20, seeds=SEEDS, modes=("all",))
-    n_truth=sum(c.n_truth for c in ctx.cells)
-    log(f"holdout {len(ctx.cells)} cells {n_truth} withheld")
-    seg, n_seg = segments(g.catalogue, max_len_px=12)[:2]
-    depth_full=aux["depth_full"]
-    fp_px=float(g.footprint.sum())
-    refs={}
-    for d in REGISTRY_DIRS:
-        for p in sorted(d.glob("*.tif")):
-            if "gems61" in p.name: continue
-            try:
-                with rasterio.open(p) as src:
-                    if (src.height, src.width)!=g.shape: continue
-                    arr=src.read(1)
-                refs[p.name]=np.isfinite(arr)&(arr>0.5)
-            except Exception as e:
-                log(f" skip {p.name}: {e}")
-    results=[]
-    def run(name,kind,field=None,budget=None,fixed=None,seed=0):
-        parts,rec_rows=[],[]
-        for ci,cell in enumerate(ctx.cells):
-            if fixed is not None:
-                p_crop=fixed[cell.bbox]
-            else:
-                dom_px=float(cell.active.sum())
-                tot=sum(c.active.sum() for c in ctx.cells if c.seed==cell.seed)
-                b_cell=int(round(budget*dom_px/float(tot)))
-                p_crop=_per_cell_emit(field, cell, ctx.visible(cell.key), b_cell, random_kind=kind, seed=seed+ci)
-            part,dp=_score_crop(cell, p_crop)
-            part["cell"]=cell.key
-            parts.append(part)
-            hid=ctx.hidden_by_cell[cell.key][cell.bbox]
-            ids=np.unique(seg[cell.bbox][hid]); ids=ids[ids>0]
-            if dp is None: dp=np.full(hid.shape, np.inf)
-            near=dp<=3.0
-            segc=seg[cell.bbox]; dep=depth_full[cell.bbox]
-            for sid in ids:
-                m=(segc==sid)&hid
-                if not m.any(): continue
-                rec_rows.append((cell.key,int(sid),int(m.sum()),float(np.median(dep[m])), float(near[m].mean())))
-        pooled=_pool(parts)
-        rec=np.array([(r[2],r[3],r[4]) for r in rec_rows], np.float64) if rec_rows else np.zeros((0,3))
-        basin_mask=rec[:,1]>100.0 if rec.size else np.zeros(0,bool)
-        n_b=int(basin_mask.sum()); k_b=int((rec[basin_mask,2]>=0.5).sum()) if n_b else 0
-        n_all=int(rec.shape[0]); k_all=int((rec[:,2]>=0.5).sum()) if n_all else 0
-        pooled["n_emitted_per_draw"]=pooled["n_emitted"]/len(SEEDS)
-        row=dict(name=name, kind=kind or "candidate", budget=budget, **pooled, ci95_bootstrap_cells=_boot_ci(parts),
-                 per_cell_dti=[round(float(p["tp"]/(p["tp"]+ALPHA*p["fp"]+BETA*p["fn"]+EPS)),5) for p in parts],
-                 segments_withheld_total=n_all, segments_recovered_total=k_all,
-                 segments_withheld_basin_interior=n_b, segments_recovered_basin_interior=k_b,
-                 basin_recovery_rate=(k_b/n_b) if n_b else None,
-                 basin_recovery_ci95=list(H.wilson(k_b,n_b)) if n_b else None)
-        results.append(row)
-        log(f"  {name:65s} n/draw={row['n_emitted_per_draw']:8.0f} HOLDOUT-DTI={row['pooled_dti']:.4f} CI[{row['ci95_bootstrap_cells'][0]:.4f},{row['ci95_bootstrap_cells'][1]:.4f}] cov={row['coverage']:.3f} basin {k_b}/{n_b}")
-        return row
-    for name,m in refs.items():
-        run(f"REGISTRY {name}", "registry", fixed=m)
-    for budget in BUDGETS:
-        for name,field in fields.items():
-            run(f"{name} @ {budget}", None, field=field, budget=budget)
-        run(f"CONTROL random lines @ {budget}", "lines", field=None, budget=budget, seed=100)
-        run(f"CONTROL random dots inside corridor+basin @ {budget}", "corridor", field=aux["corridor"]&aux["basin"], budget=budget, seed=200)
-        run(f"CONTROL random dots lidar-valid @ {budget}", "dots", field=None, budget=budget, seed=300)
-    # leakage canary
-    rng=np.random.default_rng(3)
-    feats={"inverted depth":aux["depth_full"], "relief":aux["relief"] if "relief" in aux else np.zeros_like(valid,dtype=float),
-           "band19 slope": aux["slope"], "band13 gravity": grav,
-           "corridor": aux["corridor"].astype(float), "valid_lidar": aux["valid_lidar"].astype(float)}
-    canary={}
-    pos_idx, neg_idx=[],[]
-    for cell in ctx.cells:
-        sl=cell.bbox
-        yy,xx=cell.truth_yx
-        pos_idx.append((yy+sl[0].start, xx+sl[1].start))
-        act=np.argwhere(cell.active)
-        pick=act[rng.choice(act.shape[0], size=min(20000, act.shape[0]), replace=False)]
-        neg_idx.append((pick[:,0]+sl[0].start, pick[:,1]+sl[1].start))
-    py=np.concatenate([p[0] for p in pos_idx]); px=np.concatenate([p[1] for p in pos_idx])
-    ny=np.concatenate([p[0] for p in neg_idx]); nx=np.concatenate([p[1] for p in neg_idx])
-    for fname,f in feats.items():
-        pv=np.nan_to_num(f[py,px], nan=0.0); nv=np.nan_to_num(f[ny,nx], nan=0.0)
-        canary[fname]=dict(auc=H.auc_rank(pv,nv), n_pos=int(pv.size), n_neg=int(nv.size))
-        log(f"  canary {fname:28s} AUC={canary[fname]['auc']:.3f}")
-    worst=max(canary.values(), key=lambda r: r["auc"])["auc"]
-    cands=[r for r in results if r["kind"]=="candidate"]
-    best=max(cands, key=lambda r: r["pooled_dti"])
-    ctrl_lines={r["budget"]:r for r in results if r["name"].startswith("CONTROL random lines")}
-    ctrl_corr={r["budget"]:r for r in results if r["name"].startswith("CONTROL random dots inside corridor")}
-    reg_best=max([r for r in results if r["kind"]=="registry"], key=lambda r: r["pooled_dti"], default=None)
-    write_json("h61l_holdout.json", dict(evidence_class="HOLDOUT-DTI", evaluator=EVALUATOR, alpha=ALPHA, beta=BETA, kernel_m=300,
-        n_withheld_truth_px=int(n_truth), n_cells=len(ctx.cells), prune_px=PRUNE_PX, budgets=list(BUDGETS), fields_meta=meta,
-        results=results, best_candidate=best["name"],
-        best_vs_random_lines=dict(candidate=best["pooled_dti"], random_lines=ctrl_lines[best["budget"]]["pooled_dti"], ratio=best["pooled_dti"]/max(ctrl_lines[best["budget"]]["pooled_dti"],1e-9)),
-        registry_reference_best=(dict(name=reg_best["name"], pooled_dti=reg_best["pooled_dti"]) if reg_best else None),
-        leakage_canary=dict(threshold_auc=0.90, worst_auc=worst, passed=bool(worst<0.90), per_feature=canary),
-        note="Lidar holdout: same instrument as H61-G, adds lidar candidates; registry scored as-is", elapsed_s=round(time.time()-t0,1)))
+def _holdout(field, features, meta, lidar_source, surface_report, g):
+    folds, quad = holdoutmod.buffered_component_draw(
+        g, seed=61, hide_frac=0.20, buffer_px=3, boundary_px=holdoutmod.DOMAIN_ERODE)
+    candidate_name = "H61-L 3DEP scarp ribbons in basement-step corridors"
+    positive_count = int((field > 0).sum())
+    random_lines = H.random_lines(g.shape, g.footprint, positive_count, seed=6102)
+    if int(random_lines.sum()) != positive_count:
+        raise RuntimeError(f"shared random-line generator returned {int(random_lines.sum())}, expected {positive_count}")
 
-def stage_final(a):
-    g,grav,valid=load_base()
-    hold=json.loads((EVID/"h61l_holdout.json").read_text())
-    cands=[r for r in hold["results"] if r["kind"]=="candidate"]
-    chosen=max(cands, key=lambda r: r["pooled_dti"]) if not a.candidate else next(r for r in cands if r["name"]==a.candidate)
-    fname=chosen["name"].rsplit(" @ ",1)[0]
-    budget=int(chosen["budget"])
-    fields,meta,aux=_candidate_fields_lidar(g,valid)
-    field=fields[fname]
-    far=ndi.distance_transform_edt(~g.catalogue) > PRUNE_PX
-    allowed=valid & far & ~g.catalogue
-    dots=H.dot_thin(field, allowed, budget)
-    ctx=holdoutmod.build_holdout(g, hide_frac=0.20, seeds=SEEDS, modes=("all",))
-    ribbon_vs_dots={}
-    for label in ("dots (shipped)", "3x3 ribbons (not shipped)"):
-        parts=[]
-        for ci,cell in enumerate(ctx.cells):
-            dom_px=float(cell.active.sum())
-            b_cell=int(round(budget*dom_px/float(sum(c.active.sum() for c in ctx.cells if c.seed==cell.seed))))
-            d_crop=_per_cell_emit(field, cell, ctx.visible(cell.key), b_cell)
-            if label.startswith("3x3"):
-                vis=ctx.visible(cell.key)[cell.bbox]
-                far_c=ndi.distance_transform_edt(~vis)>PRUNE_PX
-                d_crop=H.ribbon(d_crop,1)&cell.active&far_c
-            part,_=_score_crop(cell, d_crop)
-            parts.append(part)
-        pooled=_pool(parts)
-        ribbon_vs_dots[label]=dict(pooled_dti=pooled["pooled_dti"], ci95=_boot_ci(parts), coverage=pooled["coverage"], emitted_per_draw=pooled["n_emitted"]/len(SEEDS), fp_mass=pooled["fp"], tp_mass=pooled["tp"])
-        log(f"  {label:28s} HOLDOUT-DTI={pooled['pooled_dti']:.4f} CI{ribbon_vs_dots[label]['ci95']} cov={pooled['coverage']:.3f}")
-    del ctx
-    values=dots.astype(np.float32)
-    n_dots=int(dots.sum())
-    dcat=ndi.distance_transform_edt(~g.catalogue)[dots]
-    stamp=time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-    digest=hashlib.sha256(values.tobytes()).hexdigest()[:12]
-    short_map={"X2 slope-ridge inside corridor basin (baseline)":"x2-baseline",
-               "X2 slope-ridge inside corridor any depth":"x2b-baseline-any",
-               "L1 relief maxima inside corridor+basin":"l1-relief-corr-basin",
-               "L1 relief maxima inside corridor any depth":"l1-relief-corr-any",
-               "L2 combo(relief+ex+step+lappos) maxima inside corridor+basin":"l2-combo-corr-basin",
-               "L2b combo_best(relief+upface+ex+lappos) maxima inside corridor+basin":"l2b-combo-best-corr-basin",
-               "L3 dense top30% lidar combo inside corridor+basin":"l3-dense-combo-corr-basin",
-               "C lidar outside corridor (relief maxima)":"c-lidar-outside",
-               "C lidar relief maxima basin (no corridor)":"c-lidar-basin-nocorr",
-               "P piedmont slope-ridge (0-2km from bedrock)":"p-piedmont-slope",
-               "P lidar relief piedmont":"p-lidar-piedmont"}
-    short=short_map.get(fname, fname[:20])
-    name=f"gems61-h61l-{short}-{n_dots}dots-{stamp}-{digest}-zeros"
-    note=f"H61-L: lidar scarp ({fname.split(' ')[0]}) inside GP-1012 gravity corridor; {n_dots} dots at 3 px; UNSCORED"
-    if len(note)>140: note=note[:140]
+    index = json.loads(INDEX.read_text())
+    best_reference = next((r for r in index["rasters"]
+                           if "gems19-h19-5-powerlaw-budget-multiline-corroborated" in r["file"]), None)
+    if best_reference is None:
+        raise RuntimeError("the declared inventory has no h19-5 comparator; cannot test against holdout best")
+    with rasterio.open(best_reference["cache_file"]) as src:
+        h19 = src.read(1).astype(np.float32)
+    h19 = np.where(np.isfinite(h19), h19, 0.0)
+    if h19.min() < 0 or h19.max() > 1:
+        raise ValueError("registry holdout comparator is outside [0,1]")
+
+    predictions = {
+        candidate_name: field,
+        "CONTROL random lines (matched positive-pixel count)": random_lines.astype(np.float32),
+        "HOLDOUT-DTI reference raster h19-5 (as-published)": h19,
+    }
+    pooled_terms, fold_scores, withheld = _evaluate_arms(predictions, folds, g)
+    summary = evaluator.pooled_summary(pooled_terms, draws=1000, seed=6103,
+                                       candidate=candidate_name)
+
+    # Whole catalogue segments are scored by proximity to each fold's prediction;
+    # depth > 300 m is the declared basin-interior subset.
+    seg, n_seg, _ = network.segments(g.catalogue, max_len_px=holdoutmod.MAX_SEG_PX)
+    valid = g.footprint
+    depth = np.load(CACHE / "depth_full.npy").astype(np.float32)
+    recovery = {name: _segment_recovery(pred, folds, seg, depth, valid)
+                for name, pred in predictions.items()}
+    canary = _feature_canary(features, folds, valid)
+
+    controls = [name for name in predictions if name != candidate_name]
+    best_control = max(controls, key=lambda name: summary["scores"][name]["dti"])
+    paired = summary["paired_differences"][best_control]
+    beats_best = bool(paired["ci95"][0] > 0.0)
+    result = dict(
+        evidence_class="HOLDOUT-DTI",
+        hypothesis=meta["candidate"],
+        evaluator="gems61.evaluate_holdout v2; buffered whole-component quadrant hide-and-recover",
+        evaluator_version=evaluator.VERSION,
+        alpha=metric.ALPHA, beta=metric.BETA, triangular_radius_m=metric.R_M,
+        n_withheld_positive_pixels=withheld,
+        fold_receipts=[fold["receipt"] for fold in folds],
+        pooled_summary=summary,
+        best_comparable_control=best_control,
+        candidate_beats_best_control_with_paired_95pct_ci=beats_best,
+        basin_interior_segment_recovery_vs_random_lines=dict(
+            candidate=recovery[candidate_name]["basin_interior_depth_gt_300m"],
+            random_lines=recovery["CONTROL random lines (matched positive-pixel count)"]["basin_interior_depth_gt_300m"],
+            reference_raster=recovery["HOLDOUT-DTI reference raster h19-5 (as-published)"]["basin_interior_depth_gt_300m"],
+        ),
+        segment_recovery=recovery,
+        feature_alone_leakage_canary=canary,
+        surface_uniqueness_verdict=surface_report["verdict"],
+        lidar_source_sha256=lidar_source["local_sha256"],
+        surface_metadata=meta,
+        fold_score_detail={name: rows for name, rows in fold_scores.items()},
+        promotion_eligibility=bool(beats_best and canary["passed"]),
+        organizer_confirmed_score=None,
+        caveat=("HOLDOUT-DTI estimates recovery of withheld mapped catalogue components, not organizer truth. "
+                "The h19-5 row is a fixed reference raster scored by this evaluator; its reported live score, "
+                "if any, is not used here and has no artifact-bound organizer receipt."),
+    )
+    write_json("h61l_holdout.json", result)
+    return result, field
+
+
+def _write_final(field, holdout_result, lidar_source, g):
+    candidate_name = "H61-L 3DEP scarp ribbons in basement-step corridors"
+    summary = holdout_result["pooled_summary"]
+    score = summary["scores"][candidate_name]
+    if not holdout_result["promotion_eligibility"]:
+        write_json("h61l_final.json", dict(
+            evidence_class="MEASURED / HOLDOUT-DTI",
+            file_created=False,
+            verdict="NEGATIVE — do not spend a weekly slot",
+            reason="candidate did not beat the best comparable holdout control with a paired 95% CI above zero, "
+                   "or the feature-alone leakage canary failed",
+            holdout_dti=score,
+            organizer_confirmed_score=None,
+            downloadable_submission=None,
+        ))
+        return
+
+    inventory = json.loads(INDEX.read_text())
+    final = np.asarray(field, np.float32)
+    final[~g.footprint] = 0.0
+    final_gate = gates.lane_uniqueness_report(
+        final, g.footprint, sample=gridmod.DATA_DIR / "sample_submission.tif",
+        phase="dots", registry_index=inventory,
+        log=lambda msg: print(msg, flush=True))
+    write_json("h61l_final_dots_uniqueness.json", final_gate)
+    if not final_gate["ok"]:
+        write_json("h61l_final.json", dict(file_created=False,
+            verdict="DUPLICATE — final-dot uniqueness stop", final_uniqueness=final_gate,
+            organizer_confirmed_score=None))
+        return
+
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    digest = sha256_bytes(final.tobytes())
+    npositive = int((final > 0).sum())
+    name = f"gems61-h61l-3dep-scarp-step-ribbons-{npositive}px-{stamp}-{digest[:12]}"
+    note = "H61-L: USGS 3DEP scarp ribbons inside GP-1012-calibrated basement-step corridors; HOLDOUT-DTI, live score pending"
+    if len(note) > 140:
+        raise AssertionError(f"submission note exceeds 140 characters: {len(note)}")
     OUT.mkdir(exist_ok=True)
-    rec=submission_writer.write_submission(OUT/f"{name}.tif", values, sample=gridmod.DATA_DIR/"sample_submission.tif", footprint=g.footprint, note=note, name=name[:140], catalogue=g.catalogue,
-        metadata=dict(method="H61-L", candidate=fname, budget=budget, n_dots=n_dots, holdout_dti=chosen["pooled_dti"], evaluator=EVALUATOR, prune_px=PRUNE_PX))
+    receipt = submission_writer.write_submission(
+        OUT / f"{name}.tif", final,
+        sample=gridmod.DATA_DIR / "sample_submission.tif", footprint=g.footprint,
+        note=note, name=name,
+        metadata=dict(hypothesis="H61-L", holdout_dti=score,
+                     evaluator=holdout_result["evaluator"],
+                     n_withheld_positive_pixels=holdout_result["n_withheld_positive_pixels"],
+                     lidar_sha256=lidar_source["local_sha256"],
+                     strict_surface_uniqueness=holdout_result["surface_uniqueness_verdict"],
+                     final_dot_uniqueness=final_gate["verdict"],
+                     approved_for_weekly_slot=False))
     DOWNLOADS.mkdir(parents=True, exist_ok=True)
-    for ext in (".tif",".zip",".json"):
-        shutil.copy2(OUT/f"{name}{ext}", DOWNLOADS/f"{name}{ext}")
-    rand=next(r for r in hold["results"] if r["name"]==f"CONTROL random lines @ {budget}")
-    reg=hold.get("registry_reference_best")
-    beats_random=chosen["pooled_dti"]>rand["pooled_dti"]
-    beats_group=(reg is None) or (chosen["pooled_dti"]>reg["pooled_dti"])
-    write_json("h61l_final.json", dict(evidence_class="MEASURED (file) + HOLDOUT-DTI", submission=name, note=note, note_chars=len(note), candidate=fname, budget=budget,
-        n_dots=n_dots, ribbon_vs_dots_holdout=ribbon_vs_dots, dots_distance_to_catalogue_px=dict(min=float(dcat.min()), median=float(np.median(dcat)), mean=float(dcat.mean()), frac_within_3px=float((dcat<=3).mean())),
-        tif=f"out/{name}.tif", zip=f"out/{name}.zip", receipt=f"out/{name}.json", download_tif=f"docs/downloads/{name}.tif", download_zip=f"docs/downloads/{name}.zip",
-        sha256=rec["sha256"], bytes=rec["bytes"], zip_sha256=rec["zip_sha256"], validator=rec["validator"]["checks"], validator_all_passed=rec["validator"]["all_checks_passed"],
-        holdout=dict(dti=chosen["pooled_dti"], ci95=chosen["ci95_bootstrap_cells"], random_lines=rand["pooled_dti"], beats_random_lines=beats_random, registry_reference_best=reg, beats_registry=beats_group, n_withheld_truth_px=hold["n_withheld_truth_px"], evaluator=EVALUATOR),
-        slot_recommendation=("PROMOTE-ELIGIBLE: beats both controls and registry on holdout" if (beats_random and beats_group) else "DO NOT SPEND A SLOT: file is valid and unique, but holdout does not put it above group's best-known file; keep as negative/diagnostic result"), organizer_receipt=None))
+    for suffix in (".tif", ".zip", ".json"):
+        shutil.copy2(OUT / f"{name}{suffix}", DOWNLOADS / f"{name}{suffix}")
+    write_json("h61l_final.json", dict(
+        evidence_class="MEASURED + HOLDOUT-DTI",
+        file_created=True, file=f"docs/downloads/{name}.tif", zip=f"docs/downloads/{name}.zip",
+        receipt=f"docs/downloads/{name}.json", sha256=receipt["sha256"],
+        bytes=receipt["bytes"], n_positive_pixels=npositive,
+        holdout_dti=score, note=note, note_chars=len(note),
+        validator=receipt["validator"], final_uniqueness=final_gate,
+        verdict="UNSCORED-LIVE; weekly-slot decision remains with selector",
+        organizer_confirmed_score=None,
+    ))
 
-def stage_unique(_a):
-    import rasterio
-    from scipy.stats import spearmanr
-    g=gridmod.load_grid()
-    fin=json.loads((EVID/"h61l_final.json").read_text())
-    with rasterio.open(ROOT/fin["tif"]) as src:
-        mine=src.read(1)
-    mine_dots=mine>0.5
-    rows=[]; seen=set()
-    for d in REGISTRY_DIRS:
-        for p in sorted(d.glob("*.tif")):
-            if p.name in seen or p.name==Path(fin["tif"]).name: continue
-            seen.add(p.name)
-            try:
-                with rasterio.open(p) as src:
-                    if (src.height, src.width)!=g.shape: continue
-                    other=src.read(1)
-            except Exception as e: rows.append(dict(file=p.name, error=str(e)[:100])); continue
-            o=np.where(np.isfinite(other), other, 0.0)
-            a_=mine[g.footprint]; b_=o[g.footprint]
-            rho=float(spearmanr(a_,b_).statistic) if a_.std()>0 and b_.std()>0 else float("nan")
-            od=o>0.5
-            near=ndi.distance_transform_edt(~od)<=3.0
-            frac=float(near[mine_dots].mean()) if mine_dots.any() else float("nan")
-            base=float(near[g.footprint].mean())
-            inter=int((mine_dots&od).sum()); union=int((mine_dots|od).sum())
-            jac=inter/max(union,1)
-            dense=int(od.sum())>5*int(mine_dots.sum())
-            gate_value=jac if dense else frac
-            gate_rule="Jaccard (reference is dense: >5x my support)" if dense else "one-sided 3 px overlap"
-            gate_limit=0.50 if dense else 0.70
-            rows.append(dict(file=p.name, sha256=sha256(p), spearman_footprint=rho, frac_my_dots_within_3px_of_theirs=frac, base_rate_within_3px=base, jaccard=jac, their_positive_px=int(od.sum()), overlap_gate_rule=gate_rule, overlap_gate_value=gate_value, overlap_gate_limit=gate_limit, overlap_gate_exceeded=bool(gate_value>gate_limit), byte_identical=(sha256(p)==fin["sha256"])))
-            log(f"  {p.name[:70]:70s} rho={rho:+.4f} overlap3px={frac:.3f} (base {base:.3f}) jaccard={jac:.4f} gate={gate_rule.split(' ')[0]}")
-    ok=[r for r in rows if "spearman_footprint" in r]
-    worst_rho=max(ok, key=lambda r: (r["spearman_footprint"] if r["spearman_footprint"]==r["spearman_footprint"] else -2))
-    worst_ov=max(ok, key=lambda r: r["frac_my_dots_within_3px_of_theirs"])
-    worst_gate=max(ok, key=lambda r: r["overlap_gate_value"]/r["overlap_gate_limit"])
-    verdict="UNIQUE" if (worst_rho["spearman_footprint"]<=0.90 and not any(r["overlap_gate_exceeded"] for r in ok) and not any(r["byte_identical"] for r in ok)) else "DUPLICATE -- lane drift, do not submit"
-    write_json("h61l_uniqueness.json", dict(evidence_class="MEASURED", my_file=fin["tif"], my_sha256=fin["sha256"], my_dots=int(mine_dots.sum()), n_registry_rasters_compared=len(ok), rho_limit=0.90, overlap_limit=0.70, worst_spearman=dict(file=worst_rho["file"], value=worst_rho["spearman_footprint"]), worst_overlap=dict(file=worst_ov["file"], value=worst_ov["frac_my_dots_within_3px_of_theirs"], base_rate=worst_ov["base_rate_within_3px"], gate_rule=worst_ov["overlap_gate_rule"], gate_value=worst_ov["overlap_gate_value"], gate_limit=worst_ov["overlap_gate_limit"]), worst_overlap_gate=dict(file=worst_gate["file"], rule=worst_gate["overlap_gate_rule"], value=worst_gate["overlap_gate_value"], limit=worst_gate["overlap_gate_limit"]), byte_identical_to_any=[r["file"] for r in ok if r["byte_identical"]], verdict=verdict, rows=rows))
 
-def stage_card(_a):
-    hold=json.loads((EVID/"h61l_holdout.json").read_text())
-    fin=json.loads((EVID/"h61l_final.json").read_text())
-    uni=json.loads((EVID/"h61l_uniqueness.json").read_text())
-    inv=json.loads((EVID/"h61g_invert.json").read_text())
-    chosen=next(r for r in hold["results"] if r["name"]==f"{fin['candidate']} @ {fin['budget']}")
-    rand=next(r for r in hold["results"] if r["name"]==f"CONTROL random lines @ {fin['budget']}")
-    reg=hold.get("registry_reference_best")
-    promote=fin["slot_recommendation"].startswith("PROMOTE")
-    card=dict(hypothesis="H61-L: buried fault = GP-1012-calibrated basement step (+/-1km corridor) + lidar scarp (1m 3DEP DEM aggregated to 100m) inside it; 1m data supplies the 100m positional accuracy gravity cannot.",
-        mechanism="Basement throw -> isostatic residual HGM (Parker/Oldenburg, Blakely-Simpson, throw>=80m) -> corridor -> lidarscars: relief/excess-slope/step + convexity maxima from 1m DEM detect 0.5-5m scarps in basin fill; corridor removes fan-toe/terrace mimics without basement step.",
-        named_non_fault_mimic="Intrabasement density contacts (same gravity step, no scarp) and terrace/incision scarps or fan toes (lidar scarp with no basement step); conjunction is the discriminator. Lidar valid only where 3DEP coverage exists (76% of footprint).",
-        holdout_dti=dict(value=chosen["pooled_dti"], ci95=chosen["ci95_bootstrap_cells"], evaluator=hold["evaluator"], n_withheld_positive_px=hold["n_withheld_truth_px"], n_dots_per_draw=chosen["n_emitted"]//len(SEEDS), random_lines_same_budget=rand["pooled_dti"], basin_interior_segments=f"{chosen['segments_recovered_basin_interior']}/{chosen['segments_withheld_basin_interior']} vs {rand['segments_recovered_basin_interior']}/{rand['segments_withheld_basin_interior']} by random lines", registry_reference_best=reg),
-        correlation_overlap_vs_registry=dict(worst_spearman=uni["worst_spearman"], worst_overlap=uni["worst_overlap"], n_compared=uni["n_registry_rasters_compared"], verdict=uni["verdict"]),
-        raster_sha256=fin["sha256"], validator_output=dict(checks=fin["validator"], all_passed=fin["validator_all_passed"]),
-        submission_name=fin["submission"], note=fin["note"], note_chars=fin["note_chars"],
-        leakage_canary=hold["leakage_canary"]["passed"], leakage_worst_auc=hold["leakage_canary"]["worst_auc"],
-        inversion=dict(z0_m=inv["inversion"]["z0_m"], delta_rho=inv["inversion"]["delta_rho"], regional_sigma_km=inv["inversion"]["regional_sigma_km"], fraction_deeper_than_1km=inv["depth_stats"]["fraction_gt_1km"], cross_check_r_vs_band15=inv["cross_check_vs_supplied_band15"]["pearson_r"]),
-        verdict="promote" if promote else "negative", verdict_reason=fin["slot_recommendation"],
-        candidate_selection=dict(rule="max pooled HOLDOUT-DTI", shipped=fin["candidate"], shipped_budget=fin["budget"], best_by_pooled_dti=hold["best_candidate"]),
-        organizer_confirmed_score=None, experiments_run=3, budget_experiments=3)
-    write_json("h61l_run_card.json", card)
-    log(json.dumps(card, indent=1, default=_jsonable)[:4000])
+def main() -> None:
+    g = gridmod.load_grid()
+    source = _record_lidar_provenance()
+    field, features, meta = _build_surface(g)
+    if not INDEX.is_file():
+        raise SystemExit("missing evidence/registry_accessible_index.json; inventory is required and must fail closed")
+    inventory = json.loads(INDEX.read_text())
+    surface_gate = gates.lane_uniqueness_report(
+        field, g.footprint, sample=gridmod.DATA_DIR / "sample_submission.tif",
+        phase="surface", registry_index=inventory,
+        log=lambda msg: print(msg, flush=True))
+    payload = dict(
+        evidence_class="MEASURED — pre-placement surface gate",
+        hypothesis=meta["candidate"], method=meta["method"],
+        source=source, surface_metadata=meta,
+        surface_sha256=sha256_bytes(field.tobytes()),
+        uniqueness=surface_gate,
+        action=("STOP: duplicate/lane-drift or inventory failure; do not place, score, or write a TIFF"
+                if not surface_gate["ok"] else "SURFACE CLEARED: proceed to shared spatial-blocked holdout"),
+        holdout_status=("NOT RUN — strict pre-placement uniqueness stop" if not surface_gate["ok"] else "pending"),
+        submission_slots_used=0,
+    )
+    write_json("h61l_surface.json", payload)
+    print(f"H61-L pre-placement result: {surface_gate['verdict']}", flush=True)
+    if not surface_gate["ok"]:
+        print("STOP: per the literal protocol, do not run holdout or place dots for this duplicate surface.", flush=True)
+        return
 
-STAGES=dict(lidar_screen=lidar_screen, holdout=stage_holdout, final=stage_final, unique=stage_unique, card=stage_card)
-def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("stage", choices=list(STAGES)+["all"])
-    ap.add_argument("--candidate", default=None)
-    a=ap.parse_args()
-    order=list(STAGES) if a.stage=="all" else [a.stage]
-    for s in order:
-        log(f"==== {s} ====")
-        STAGES[s](a)
-if __name__=="__main__": main()
+    holdout_result, field = _holdout(field, features, meta, source, surface_gate, g)
+    _write_final(field, holdout_result, source, g)
+
+
+if __name__ == "__main__":
+    main()

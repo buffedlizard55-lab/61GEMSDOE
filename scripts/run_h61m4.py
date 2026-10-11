@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""H61-M experiment 4 -- which locator actually generalises across space?
+"""RETIRED H61-M4 spatial-holdout runner; direct execution fails closed.
+
+The legacy experiment description below is retained for historical context only;
+the archived candidate fails strict final-dot uniqueness and the lineage budget is exceeded.
 
 Experiment 3 showed that the gradient-boosted habitat model's 0.901 canary AUC
 was adjacency, not skill: retrained with no training pixel inside the scored
@@ -47,6 +50,11 @@ def log(m):
 
 
 def main() -> int:
+    print("RETIRED: H61-M4 would create another spatial holdout after the lineage budget was exceeded; "
+          "the archived H61-MH TIFF fails strict final-dot uniqueness. No experiment may be run.",
+          file=sys.stderr)
+    return 2
+
     t0 = time.time()
     g = gridmod.load_grid()
     grav = np.asarray(B.load_band(13), np.float64)

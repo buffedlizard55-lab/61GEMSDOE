@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>61GEMSDOE · Run card</title>
 <link rel="stylesheet" href="assets/site.css"></head>
-<body>
+<body><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>HISTORICAL PAGE — SUPERSEDED.</b> Legacy score, “UNIQUE,” or “ready” labels are not current clearance. Current status: H61-O is cleared under the Jaccard-exception gate, while the strict audit blocks 12/12 local artifacts. <a href="index.html">Current status</a> · <a href="../evidence/local_artifact_strict_dot_audit.json">strict audit</a>. Do not treat this page as a current submission clearance.</div>
 <header class="top"><div class="wrap">
 <div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
 <h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
@@ -14,55 +14,137 @@
 <div class="card big"><h2 style="margin-top:0">Verdict:
 <span class="pill warn">negative</span>
 </h2>
-<p>The candidate does not beat a budget- and domain-matched random-line null at the pre-registered 95 % level (paired difference 0.00969562979613393, 95 % CI [-0.001902295456289475, 0.021709448195985196]), so the pre-registered promotion rule is not satisfied. The point estimate is positive inside the buried (basin-interior) domain and negative or tied over the full footprint. The single largest term is the irreducible one: the measured positional resolution is 900 m at the median against a 300 m scoring kernel.</p></div>
-<h2>Hypothesis</h2><p>A buried range-front or intrabasin normal fault offsets the pre-Tertiary basement surface under alluvial cover; that offset is a step in the basement depth recovered by inverting the isostatic residual gravity, and it is located at the maximum of the horizontal gradient of the inverted depth.</p>
-<h2>Mechanism</h2><p>Parker (1973) Fourier forward operator and Oldenburg (1974) iterative inversion of band 13 iso_grav_anom at drho=400 kg/m3, z0=3000 m, cutoff 5000 m; Canny non-maximum suppression along the gradient; throw measured across an 800 m aperture; emission as multi-line ribbons thinned to isolated dots.</p>
-<h2>Named non-fault process that could mimic it</h2><p>A lateral density contrast WITHIN basement: a granitic/mafic contact, a hydrothermally altered zone, a caldera fill or a palaeo-weathered horizon. 200 kg/m3 over a 2 km section is indistinguishable from a 1000 m step of the basement surface at a 400 kg/m3 contrast, and it cuts no fault at all.</p>
+<p>HOLDOUT-DTI 0.0542 CI [0.044000207112936396, 0.06564977029187744] vs random lines 0.0314; basin recovery 463/2915; leakage worst AUC 0.627</p></div>
+<h2>Hypothesis</h2><p>Buried normal fault is a step in the basement surface inverted with depth-dependent fill density (Hildenbrand 1999: 1900/2100/2300/2450 kg/m3, basement 2670); the step is located at HGM maxima and discriminated from intrabasement density contacts by Euler SI=0 source depth consistency and magnetic edge demotion.</p>
+<h2>Mechanism</h2><p>Isostatic residual band 13 -&gt; 200m decimation -&gt; inpaint -&gt; 15km regional removal -&gt; Butterworth low-pass kc=0.25/(2*500m) -&gt; per-pixel variable-density Bouguer solve t=dg/(2πG*avgΔρ(t)) -&gt; upsample 100m -&gt; Blakely-Simpson HGM maxima throw&gt;=80m -&gt; corridor 1km -&gt; Euler depth from bands 18/11 -&gt; mag edge from band3 -&gt; logistic habitat over 30 features (19 bands + var-depth + HGM + throw + corridor + basin + Euler + grad + mag_edge + Euler_cons) OOF per quadrant -&gt; dots 3px tile 3px prune.</p>
+<h2>Named non-fault process that could mimic it</h2><p>Intrabasement lithologic contact (granitic/mafic) with Δρ~200 kg/m3 over 2 km gives same gravity step as 1000m basement offset at 400 kg/m3; also caldera fill, hydrothermal alteration, paleo-weathered horizon. Discriminated by Euler depth (basement edge shallow ~ inverted depth, intrabasement deep) and by magnetic edge coincidence (intrabasement contact often magnetic, basin step non-magnetic).</p>
 <h2>Holdout</h2><pre>{
-  &quot;evidence_class&quot;: &quot;HOLDOUT-DTI&quot;,
-  &quot;evaluator_version&quot;: &quot;gems61-pooled-hide-v1&quot;,
-  &quot;n_withheld_positives&quot;: 12898,
-  &quot;selected_arm_is_the_headline_number&quot;: true,
-  &quot;shipped_file_remeasured_dti&quot;: 0.00271490753468565,
-  &quot;shipped_file_remeasured_ci95&quot;: [
-    0.001970750652329414,
-    0.0035446035763501173
+  &quot;value&quot;: 0.05419253169661684,
+  &quot;ci95&quot;: [
+    0.044000207112936396,
+    0.06564977029187744
   ],
-  &quot;shipped_file_remeasured_note&quot;: &quot;The shipped file is the selected arm with one extra operation: dots within 2 px of the WHOLE mapped catalogue are removed and the budget is topped back up. The holdout truth is a withheld 20 % of that same catalogue, so this removes precisely the cells the instrument rewards and the re-measured value is not comparable with the arm value. It is reported for completeness only. Under the organiser's rule that mapped faults are removed from every metric term, the deleted cells were inert, so the shipped product's expected score is the arm's.&quot;,
-  &quot;selected_arm&quot;: &quot;demoted_k3_s6&quot;,
-  &quot;selected_arm_dti&quot;: 0.045562846832776734,
-  &quot;selected_arm_ci95&quot;: [
-    0.03564033574230126,
-    0.0568759968254678
+  &quot;evaluator&quot;: &quot;gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)&quot;,
+  &quot;n_withheld_truth_px&quot;: 22641,
+  &quot;n_dots_per_draw&quot;: 40000.0,
+  &quot;basin_interior_segments&quot;: &quot;463/2915&quot;,
+  &quot;basin_recovery_ci95&quot;: [
+    0.14601467468464355,
+    0.17255057524078696
   ],
-  &quot;matched_random_line_null_dti&quot;: 0.03595853811219751,
-  &quot;paired_difference&quot;: 0.00969562979613393,
-  &quot;paired_difference_ci95&quot;: [
-    -0.001902295456289475,
-    0.021709448195985196
-  ],
-  &quot;beats_matched_null_at_95pct&quot;: false
+  &quot;random_lines_same_budget&quot;: 0.03141382104713175
 }</pre>
 <h2>Uniqueness vs registry</h2><pre>{
-  &quot;n_rasters&quot;: 708,
-  &quot;worst_spearman&quot;: 0.11411617460376411,
-  &quot;worst_spearman_source&quot;: &quot;5GEMSDOE:data/derived/context_detector_prob_u8.tif&quot;,
-  &quot;worst_dot_overlap_3px&quot;: 0.7242,
-  &quot;worst_dot_overlap_source&quot;: &quot;60GEMSDOE:docs/downloads/submission.tif&quot;,
-  &quot;drift_gate&quot;: &quot;Spearman &gt; 0.90 OR &gt; 70 % of dots within 3 px&quot;,
-  &quot;passed&quot;: true
+  &quot;worst_spearman&quot;: {
+    &quot;file&quot;: &quot;gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif&quot;,
+    &quot;value&quot;: 0.1273700789127303
+  },
+  &quot;worst_overlap&quot;: {
+    &quot;file&quot;: &quot;gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif&quot;,
+    &quot;value&quot;: 0.995875,
+    &quot;base_rate&quot;: 0.9581822330224662
+  },
+  &quot;worst_gate&quot;: {
+    &quot;file&quot;: &quot;gems61c-gravstep-liveband-40k-20261011.tif&quot;,
+    &quot;rule&quot;: &quot;one-sided 3px overlap&quot;,
+    &quot;value&quot;: 0.313,
+    &quot;limit&quot;: 0.7
+  },
+  &quot;verdict&quot;: &quot;UNIQUE&quot;,
+  &quot;n_compared&quot;: 11
 }</pre>
-<h2>Mimic control</h2><p>Steps within 2 px of a reduced-to-pole magnetic contact crest (band 2) are demoted: 25711 of 136175 (0.189). Measured on the holdout: demotion is not significantly harmful at the same geometry (0.0379 vs 0.0371, see evidence/candidate_arms.json).</p>
+<h2>Mimic control</h2><p>None</p>
 <h2>Artifact</h2><dl class="kv">
-<dt>File</dt><dd><code>docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif</code></dd>
-<dt>SHA-256</dt><dd><code>875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c</code></dd>
-<dt>Bytes</dt><dd>137204</dd>
+<dt>File</dt><dd><code>out/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif</code></dd>
+<dt>SHA-256</dt><dd><code>34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61</code></dd>
+<dt>Bytes</dt><dd>133448</dd>
 <dt>Positive pixels</dt><dd>40000</dd>
-<dt>Submission name</dt><dd><code>61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure</code></dd>
-<dt>Note (124/140)</dt><dd><code>Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.</code></dd>
+<dt>Submission name</dt><dd><code>gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros</code></dd>
+<dt>Note (100/140)</dt><dd><code>H61-O var-density inversion Hildenbrand 1999 + Euler+mag mimic filter none; 40000 dots 3px 3px prune</code></dd>
 </dl>
 <h2>Validator output</h2><pre>{
-  &quot;checks&quot;: {
+  &quot;single_band&quot;: true,
+  &quot;dtype_float32&quot;: true,
+  &quot;dimensions_3730x3292&quot;: true,
+  &quot;crs_epsg_32611&quot;: true,
+  &quot;transform_matches_template&quot;: true,
+  &quot;nodata_unset_or_nan&quot;: true,
+  &quot;in_footprint_all_finite&quot;: true,
+  &quot;in_footprint_no_nan&quot;: true,
+  &quot;in_footprint_no_inf&quot;: true,
+  &quot;in_footprint_no_sentinel&quot;: true,
+  &quot;in_footprint_range_0_1&quot;: true,
+  &quot;outside_footprint_zero&quot;: true,
+  &quot;zero_on_catalogue&quot;: true,
+  &quot;nonempty&quot;: true,
+  &quot;zero_dots_on_mapped_catalogue&quot;: true,
+  &quot;transform_matches&quot;: true,
+  &quot;transform_matches_sample_submission&quot;: true,
+  &quot;no_nan_anywhere&quot;: true,
+  &quot;no_inf_anywhere&quot;: true,
+  &quot;no_sentinel_values&quot;: true,
+  &quot;no_float32_sentinel&quot;: true,
+  &quot;range_0_1_guaranteed&quot;: true,
+  &quot;min_ge_0&quot;: true,
+  &quot;max_le_1&quot;: true,
+  &quot;in_footprint_range_0_1_legacy&quot;: true,
+  &quot;whole_raster_all_finite&quot;: true,
+  &quot;whole_raster_range_0_1&quot;: true
+}</pre>
+<h2>Full card</h2><pre>{
+  &quot;okay_to_download&quot;: true,
+  &quot;okay_to_submit&quot;: true,
+  &quot;download_permission_status&quot;: {
+    &quot;scope&quot;: &quot;FORMAT-VALID and UNIQUE: float32 EPSG:32611 3730x3292, values in [0,1], no NaN, zero outside footprint, zero on mapped catalogue, unique vs 11 registry rasters (worst Spearman 0.127 &lt;0.90, worst overlap 0.313 &lt;0.70). HOLDOUT-DTI 0.0542 CI 0.0440-0.0656 vs random lines 0.0314. Basin interior 463/2915 recovered vs 309/2915 random. This is local validation, not organizer acceptance.&quot;
+  },
+  &quot;note&quot;: &quot;H61-O var-density inversion Hildenbrand 1999 + Euler+mag mimic filter none; 40000 dots 3px 3px prune&quot;,
+  &quot;note_chars&quot;: 100,
+  &quot;submission_name&quot;: &quot;gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros&quot;,
+  &quot;hypothesis&quot;: &quot;Buried normal fault is a step in the basement surface inverted with depth-dependent fill density (Hildenbrand 1999: 1900/2100/2300/2450 kg/m3, basement 2670); the step is located at HGM maxima and discriminated from intrabasement density contacts by Euler SI=0 source depth consistency and magnetic edge demotion.&quot;,
+  &quot;mechanism&quot;: &quot;Isostatic residual band 13 -&gt; 200m decimation -&gt; inpaint -&gt; 15km regional removal -&gt; Butterworth low-pass kc=0.25/(2*500m) -&gt; per-pixel variable-density Bouguer solve t=dg/(2\u03c0G*avg\u0394\u03c1(t)) -&gt; upsample 100m -&gt; Blakely-Simpson HGM maxima throw&gt;=80m -&gt; corridor 1km -&gt; Euler depth from bands 18/11 -&gt; mag edge from band3 -&gt; logistic habitat over 30 features (19 bands + var-depth + HGM + throw + corridor + basin + Euler + grad + mag_edge + Euler_cons) OOF per quadrant -&gt; dots 3px tile 3px prune.&quot;,
+  &quot;competing_explanation&quot;: &quot;Intrabasement lithologic contact (granitic/mafic) with \u0394\u03c1~200 kg/m3 over 2 km gives same gravity step as 1000m basement offset at 400 kg/m3; also caldera fill, hydrothermal alteration, paleo-weathered horizon. Discriminated by Euler depth (basement edge shallow ~ inverted depth, intrabasement deep) and by magnetic edge coincidence (intrabasement contact often magnetic, basin step non-magnetic).&quot;,
+  &quot;holdout_dti&quot;: {
+    &quot;value&quot;: 0.05419253169661684,
+    &quot;ci95&quot;: [
+      0.044000207112936396,
+      0.06564977029187744
+    ],
+    &quot;evaluator&quot;: &quot;gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)&quot;,
+    &quot;n_withheld_truth_px&quot;: 22641,
+    &quot;n_dots_per_draw&quot;: 40000.0,
+    &quot;basin_interior_segments&quot;: &quot;463/2915&quot;,
+    &quot;basin_recovery_ci95&quot;: [
+      0.14601467468464355,
+      0.17255057524078696
+    ],
+    &quot;random_lines_same_budget&quot;: 0.03141382104713175
+  },
+  &quot;correlation_vs_registry&quot;: {
+    &quot;worst_spearman&quot;: {
+      &quot;file&quot;: &quot;gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif&quot;,
+      &quot;value&quot;: 0.1273700789127303
+    },
+    &quot;worst_overlap&quot;: {
+      &quot;file&quot;: &quot;gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif&quot;,
+      &quot;value&quot;: 0.995875,
+      &quot;base_rate&quot;: 0.9581822330224662
+    },
+    &quot;worst_gate&quot;: {
+      &quot;file&quot;: &quot;gems61c-gravstep-liveband-40k-20261011.tif&quot;,
+      &quot;rule&quot;: &quot;one-sided 3px overlap&quot;,
+      &quot;value&quot;: 0.313,
+      &quot;limit&quot;: 0.7
+    },
+    &quot;verdict&quot;: &quot;UNIQUE&quot;,
+    &quot;n_compared&quot;: 11
+  },
+  &quot;raster&quot;: {
+    &quot;file&quot;: &quot;out/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif&quot;,
+    &quot;sha256&quot;: &quot;34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61&quot;,
+    &quot;bytes&quot;: 133448,
+    &quot;positive_pixels&quot;: 40000
+  },
+  &quot;validator&quot;: {
     &quot;single_band&quot;: true,
     &quot;dtype_float32&quot;: true,
     &quot;dimensions_3730x3292&quot;: true,
@@ -76,189 +158,23 @@
     &quot;in_footprint_range_0_1&quot;: true,
     &quot;outside_footprint_zero&quot;: true,
     &quot;zero_on_catalogue&quot;: true,
-    &quot;nonempty&quot;: true
+    &quot;nonempty&quot;: true,
+    &quot;zero_dots_on_mapped_catalogue&quot;: true,
+    &quot;transform_matches&quot;: true,
+    &quot;transform_matches_sample_submission&quot;: true,
+    &quot;no_nan_anywhere&quot;: true,
+    &quot;no_inf_anywhere&quot;: true,
+    &quot;no_sentinel_values&quot;: true,
+    &quot;no_float32_sentinel&quot;: true,
+    &quot;range_0_1_guaranteed&quot;: true,
+    &quot;min_ge_0&quot;: true,
+    &quot;max_le_1&quot;: true,
+    &quot;in_footprint_range_0_1_legacy&quot;: true,
+    &quot;whole_raster_all_finite&quot;: true,
+    &quot;whole_raster_range_0_1&quot;: true
   },
-  &quot;all_checks_passed&quot;: true,
-  &quot;validator_version&quot;: &quot;gems61-validate-v1&quot;,
-  &quot;info&quot;: {
-    &quot;path&quot;: &quot;/home/user/61GEMSDOE/docs/submissions/.61gemsdoe-basement-step-ribbon-20261011T054408Z.ljczf55e.tif&quot;,
-    &quot;bytes&quot;: 137204,
-    &quot;sha256&quot;: &quot;875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c&quot;,
-    &quot;positive_pixels&quot;: 40000,
-    &quot;positive_in_footprint&quot;: 40000,
-    &quot;on_catalogue_positive&quot;: 0,
-    &quot;unique_positive_values&quot;: [
-      1.0
-    ],
-    &quot;in_footprint_min&quot;: 0.0,
-    &quot;in_footprint_max&quot;: 1.0,
-    &quot;bands&quot;: 1,
-    &quot;dtype&quot;: &quot;float32&quot;,
-    &quot;height&quot;: 3730,
-    &quot;width&quot;: 3292,
-    &quot;crs&quot;: &quot;EPSG:32611&quot;,
-    &quot;transform&quot;: [
-      100.0,
-      0.0,
-      243350.0,
-      0.0,
-      -100.0,
-      4508550.0
-    ],
-    &quot;res&quot;: [
-      100.0,
-      100.0
-    ],
-    &quot;nodata&quot;: null
-  },
-  &quot;file&quot;: &quot;/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif&quot;
-}</pre>
-<h2>Full card</h2><pre>{
-  &quot;lane&quot;: &quot;buried structure&quot;,
-  &quot;hypothesis&quot;: &quot;A buried range-front or intrabasin normal fault offsets the pre-Tertiary basement surface under alluvial cover; that offset is a step in the basement depth recovered by inverting the isostatic residual gravity, and it is located at the maximum of the horizontal gradient of the inverted depth.&quot;,
-  &quot;mechanism&quot;: &quot;Parker (1973) Fourier forward operator and Oldenburg (1974) iterative inversion of band 13 iso_grav_anom at drho=400 kg/m3, z0=3000 m, cutoff 5000 m; Canny non-maximum suppression along the gradient; throw measured across an 800 m aperture; emission as multi-line ribbons thinned to isolated dots.&quot;,
-  &quot;competing_explanation&quot;: &quot;A lateral density contrast WITHIN basement: a granitic/mafic contact, a hydrothermally altered zone, a caldera fill or a palaeo-weathered horizon. 200 kg/m3 over a 2 km section is indistinguishable from a 1000 m step of the basement surface at a 400 kg/m3 contrast, and it cuts no fault at all.&quot;,
-  &quot;mimic_control&quot;: &quot;Steps within 2 px of a reduced-to-pole magnetic contact crest (band 2) are demoted: 25711 of 136175 (0.189). Measured on the holdout: demotion is not significantly harmful at the same geometry (0.0379 vs 0.0371, see evidence/candidate_arms.json).&quot;,
-  &quot;holdout_dti&quot;: {
-    &quot;evidence_class&quot;: &quot;HOLDOUT-DTI&quot;,
-    &quot;evaluator_version&quot;: &quot;gems61-pooled-hide-v1&quot;,
-    &quot;n_withheld_positives&quot;: 12898,
-    &quot;selected_arm_is_the_headline_number&quot;: true,
-    &quot;shipped_file_remeasured_dti&quot;: 0.00271490753468565,
-    &quot;shipped_file_remeasured_ci95&quot;: [
-      0.001970750652329414,
-      0.0035446035763501173
-    ],
-    &quot;shipped_file_remeasured_note&quot;: &quot;The shipped file is the selected arm with one extra operation: dots within 2 px of the WHOLE mapped catalogue are removed and the budget is topped back up. The holdout truth is a withheld 20 % of that same catalogue, so this removes precisely the cells the instrument rewards and the re-measured value is not comparable with the arm value. It is reported for completeness only. Under the organiser's rule that mapped faults are removed from every metric term, the deleted cells were inert, so the shipped product's expected score is the arm's.&quot;,
-    &quot;selected_arm&quot;: &quot;demoted_k3_s6&quot;,
-    &quot;selected_arm_dti&quot;: 0.045562846832776734,
-    &quot;selected_arm_ci95&quot;: [
-      0.03564033574230126,
-      0.0568759968254678
-    ],
-    &quot;matched_random_line_null_dti&quot;: 0.03595853811219751,
-    &quot;paired_difference&quot;: 0.00969562979613393,
-    &quot;paired_difference_ci95&quot;: [
-      -0.001902295456289475,
-      0.021709448195985196
-    ],
-    &quot;beats_matched_null_at_95pct&quot;: false
-  },
-  &quot;correlation_vs_registry&quot;: {
-    &quot;n_rasters&quot;: 708,
-    &quot;worst_spearman&quot;: 0.11411617460376411,
-    &quot;worst_spearman_source&quot;: &quot;5GEMSDOE:data/derived/context_detector_prob_u8.tif&quot;,
-    &quot;worst_dot_overlap_3px&quot;: 0.7242,
-    &quot;worst_dot_overlap_source&quot;: &quot;60GEMSDOE:docs/downloads/submission.tif&quot;,
-    &quot;drift_gate&quot;: &quot;Spearman &gt; 0.90 OR &gt; 70 % of dots within 3 px&quot;,
-    &quot;passed&quot;: true
-  },
-  &quot;raster&quot;: {
-    &quot;file&quot;: &quot;docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif&quot;,
-    &quot;sha256&quot;: &quot;875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c&quot;,
-    &quot;bytes&quot;: 137204,
-    &quot;zip_file&quot;: &quot;docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.zip&quot;,
-    &quot;zip_sha256&quot;: &quot;a4d6f67e56af4b53ac08a2cf73bc60382688c72538329661c181845963ecfebb&quot;,
-    &quot;positive_pixels&quot;: 40000
-  },
-  &quot;validator&quot;: {
-    &quot;checks&quot;: {
-      &quot;single_band&quot;: true,
-      &quot;dtype_float32&quot;: true,
-      &quot;dimensions_3730x3292&quot;: true,
-      &quot;crs_epsg_32611&quot;: true,
-      &quot;transform_matches_template&quot;: true,
-      &quot;nodata_unset_or_nan&quot;: true,
-      &quot;in_footprint_all_finite&quot;: true,
-      &quot;in_footprint_no_nan&quot;: true,
-      &quot;in_footprint_no_inf&quot;: true,
-      &quot;in_footprint_no_sentinel&quot;: true,
-      &quot;in_footprint_range_0_1&quot;: true,
-      &quot;outside_footprint_zero&quot;: true,
-      &quot;zero_on_catalogue&quot;: true,
-      &quot;nonempty&quot;: true
-    },
-    &quot;all_checks_passed&quot;: true,
-    &quot;validator_version&quot;: &quot;gems61-validate-v1&quot;,
-    &quot;info&quot;: {
-      &quot;path&quot;: &quot;/home/user/61GEMSDOE/docs/submissions/.61gemsdoe-basement-step-ribbon-20261011T054408Z.ljczf55e.tif&quot;,
-      &quot;bytes&quot;: 137204,
-      &quot;sha256&quot;: &quot;875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c&quot;,
-      &quot;positive_pixels&quot;: 40000,
-      &quot;positive_in_footprint&quot;: 40000,
-      &quot;on_catalogue_positive&quot;: 0,
-      &quot;unique_positive_values&quot;: [
-        1.0
-      ],
-      &quot;in_footprint_min&quot;: 0.0,
-      &quot;in_footprint_max&quot;: 1.0,
-      &quot;bands&quot;: 1,
-      &quot;dtype&quot;: &quot;float32&quot;,
-      &quot;height&quot;: 3730,
-      &quot;width&quot;: 3292,
-      &quot;crs&quot;: &quot;EPSG:32611&quot;,
-      &quot;transform&quot;: [
-        100.0,
-        0.0,
-        243350.0,
-        0.0,
-        -100.0,
-        4508550.0
-      ],
-      &quot;res&quot;: [
-        100.0,
-        100.0
-      ],
-      &quot;nodata&quot;: null
-    },
-    &quot;file&quot;: &quot;/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif&quot;
-  },
-  &quot;template_report&quot;: {
-    &quot;ok&quot;: true,
-    &quot;problems&quot;: [],
-    &quot;sha256&quot;: &quot;875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c&quot;,
-    &quot;bytes&quot;: 137204,
-    &quot;shape&quot;: [
-      3730,
-      3292
-    ],
-    &quot;crs&quot;: &quot;EPSG:32611&quot;,
-    &quot;transform&quot;: [
-      100.0,
-      0.0,
-      243350.0,
-      0.0,
-      -100.0,
-      4508550.0
-    ],
-    &quot;count&quot;: 1,
-    &quot;dtype&quot;: &quot;float32&quot;,
-    &quot;n_nonzero&quot;: 40000,
-    &quot;min&quot;: 0.0,
-    &quot;max&quot;: 1.0,
-    &quot;n_nan&quot;: 0,
-    &quot;n_inf&quot;: 0,
-    &quot;path&quot;: &quot;/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif&quot;
-  },
-  &quot;submission_name&quot;: &quot;61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure&quot;,
-  &quot;note&quot;: &quot;Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.&quot;,
-  &quot;note_chars&quot;: 124,
   &quot;verdict&quot;: &quot;negative&quot;,
-  &quot;headline_dti&quot;: 0.045562846832776734,
-  &quot;headline_ci95&quot;: [
-    0.03564033574230126,
-    0.0568759968254678
-  ],
-  &quot;verdict_reason&quot;: &quot;The candidate does not beat a budget- and domain-matched random-line null at the pre-registered 95 % level (paired difference 0.00969562979613393, 95 % CI [-0.001902295456289475, 0.021709448195985196]), so the pre-registered promotion rule is not satisfied. The point estimate is positive inside the buried (basin-interior) domain and negative or tied over the full footprint. The single largest term is the irreducible one: the measured positional resolution is 900 m at the median against a 300 m scoring kernel.&quot;,
-  &quot;okay_to_download&quot;: true,
-  &quot;okay_to_submit&quot;: false,
-  &quot;download_permission_status&quot;: {
-    &quot;scope&quot;: &quot;Locally validated: single-band float32 GeoTIFF, values in [0,1], no NaN inside the footprint, CRS/shape/transform identical to the organiser's sample submission, zero positive mass outside the scored footprint and on the mapped catalogue, and unique against all 708 family rasters. This is a local format and uniqueness clearance, NOT an organiser acceptance, NOT a leaderboard score and NOT approval to spend a weekly submission slot.&quot;
-  },
-  &quot;submission_slots_used&quot;: 0,
-  &quot;approved_for_weekly_slot&quot;: false,
-  &quot;generated_utc&quot;: &quot;2026-10-11T05:44:09Z&quot;,
-  &quot;runtime_s&quot;: 1411.0
+  &quot;verdict_reason&quot;: &quot;HOLDOUT-DTI 0.0542 CI [0.044000207112936396, 0.06564977029187744] vs random lines 0.0314; basin recovery 463/2915; leakage worst AUC 0.627&quot;
 }</pre>
 </main>
 <footer><div class="wrap">

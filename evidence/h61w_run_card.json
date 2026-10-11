@@ -1,0 +1,372 @@
+{
+  "evidence_class": "RUN-CARD",
+  "arm": "P60",
+  "submission": "gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros",
+  "note": "H61-W buried-structure lane: Parker/Oldenburg basement steps from isostatic gravity, dip-projected to the surface trace; dots, catalogue-pru",
+  "note_len": 140,
+  "raster_sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
+  "hypothesis": "the surface fault trace of a normal fault lies z_b*cot(dip) toward the footwall from the horizontal-gradient maximum of the inverted basement depth, so projecting the step by that distance places the emitted dots on the trace the metric scores",
+  "mechanism": "planar normal fault: the basement step sits at x = z_b*cot(dip) from the surface trace; z_b from the Parker/Oldenburg inversion, dip from the Basin-and-Range literature",
+  "competing_process": "density contrasts within the basement (igneous contacts, pluton margins, buried volcanic centres) produce an identical horizontal-gradient maximum with no surface scarp; measured with the independent lidar scarp conjunction, which is scored as its own arm",
+  "holdout": {
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all) -- the shared instrument, unmodified",
+    "n_withheld_truth_px": 22641,
+    "primary": {
+      "name": "P60 dip-projected trace 60deg [PRIMARY]",
+      "dti": 0.014911525617533596,
+      "ci95": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "coverage": 0.015852540837949416,
+      "basin_segments": "0/8"
+    },
+    "ablation_unprojected": {
+      "name": "P0 unprojected step lines [ablation]",
+      "dti": 0.009283531611397609,
+      "ci95": [
+        0.008366527428455145,
+        0.01021421623935553
+      ]
+    },
+    "control_random_lines": {
+      "dti": 0.022697571294249645,
+      "ci95": [
+        0.019103244021927535,
+        0.025991969127208765
+      ]
+    },
+    "instrument_reproduction": {
+      "name": "X2 corridor x slope-ridge (basin) [instrument reproduction]",
+      "dti": 0.02669999356337286,
+      "ci95": [
+        0.024013398939206794,
+        0.029436965864819864
+      ]
+    },
+    "scarp_conjunction": {
+      "name": "S60 projected trace(+/-1px) x strong scarp [competing-explanation test]",
+      "dti": 0.0025849609964611804,
+      "ci95": [
+        0.001277958141348143,
+        0.003789899852570256
+      ]
+    },
+    "scarp_only_lane_drift_control": {
+      "dti": 0.0274222151223567,
+      "ci95": [
+        0.022508150610609325,
+        0.03372436885170176
+      ]
+    },
+    "matched_control": {
+      "name": "CONTROL random lines @ 14835 [emission-matched to the primary]",
+      "dti": 0.011171183864852448,
+      "ci95": [
+        0.009181039214594061,
+        0.01302716104725067
+      ],
+      "n_emitted": 7417.0,
+      "primary_ladder": [
+        {
+          "budget": 10000,
+          "n": 4999.0,
+          "dti": 0.007406320018185173,
+          "ci95": [
+            0.006522529019043824,
+            0.008279848720628062
+          ]
+        },
+        {
+          "budget": 20000,
+          "n": 10000.0,
+          "dti": 0.011358631068586717,
+          "ci95": [
+            0.010144048224811462,
+            0.012705810313595673
+          ]
+        },
+        {
+          "budget": 40000,
+          "n": 14835.5,
+          "dti": 0.014911525617533596,
+          "ci95": [
+            0.012249801927232988,
+            0.017337173227935525
+          ]
+        },
+        {
+          "budget": 80000,
+          "n": 14835.5,
+          "dti": 0.014911525617533596,
+          "ci95": [
+            0.012249801927232988,
+            0.017337173227935525
+          ]
+        }
+      ],
+      "reading": "diagnostic only. The driver's random-lines control realises half the nominal budget, so this arm requested 14,835 and emitted 7,417 dots -> HOLDOUT-DTI 0.0112 (0.0092-0.0130). At that count the primary's own ladder gives 0.0074 at 4,999 dots and 0.0114 at 10,000 dots, i.e. the two are indistinguishable to within 2e-4 once the emitted counts are comparable. The pre-registered verdict above still uses the @ 40000 control; the per-dot reading is that the step field adds no measurable locational information at 100 m sampling."
+    },
+    "budget_sweep": {
+      "P60 dip-projected trace 60deg [PRIMARY]": [
+        {
+          "budget": 10000,
+          "pooled_dti": 0.007406320018185173,
+          "ci95": [
+            0.006522529019043824,
+            0.008279848720628062
+          ],
+          "coverage": 0.006582623079815191,
+          "n_per_draw": 4999.0
+        },
+        {
+          "budget": 20000,
+          "pooled_dti": 0.011358631068586717,
+          "ci95": [
+            0.010144048224811462,
+            0.012705810313595673
+          ],
+          "coverage": 0.01110174691946321,
+          "n_per_draw": 10000.0
+        },
+        {
+          "budget": 40000,
+          "pooled_dti": 0.014911525617533596,
+          "ci95": [
+            0.012249801927232988,
+            0.017337173227935525
+          ],
+          "coverage": 0.015852540837949416,
+          "n_per_draw": 14835.5
+        },
+        {
+          "budget": 80000,
+          "pooled_dti": 0.014911525617533596,
+          "ci95": [
+            0.012249801927232988,
+            0.017337173227935525
+          ],
+          "coverage": 0.015852540837949416,
+          "n_per_draw": 14835.5
+        }
+      ],
+      "S60 projected trace(+/-1px) x strong scarp [competing-explanation test]": [
+        {
+          "budget": 10000,
+          "pooled_dti": 0.0025849609964611804,
+          "ci95": [
+            0.001277958141348143,
+            0.003789899852570256
+          ],
+          "coverage": 0.0021161806884851617,
+          "n_per_draw": 1045.0
+        },
+        {
+          "budget": 20000,
+          "pooled_dti": 0.0025849609964611804,
+          "ci95": [
+            0.001277958141348143,
+            0.003789899852570256
+          ],
+          "coverage": 0.0021161806884851617,
+          "n_per_draw": 1045.0
+        },
+        {
+          "budget": 40000,
+          "pooled_dti": 0.0025849609964611804,
+          "ci95": [
+            0.001277958141348143,
+            0.003789899852570256
+          ],
+          "coverage": 0.0021161806884851617,
+          "n_per_draw": 1045.0
+        },
+        {
+          "budget": 80000,
+          "pooled_dti": 0.0025849609964611804,
+          "ci95": [
+            0.001277958141348143,
+            0.003789899852570256
+          ],
+          "coverage": 0.0021161806884851617,
+          "n_per_draw": 1045.0
+        }
+      ]
+    },
+    "prune_sensitivity": [
+      {
+        "prune_px": 0.0,
+        "pooled_dti": 0.016101689515387724,
+        "ci95": [
+          0.013877385255831085,
+          0.018103072677890113
+        ]
+      },
+      {
+        "prune_px": 2.0,
+        "pooled_dti": 0.014911525617533596,
+        "ci95": [
+          0.012249801927232988,
+          0.017337173227935525
+        ]
+      },
+      {
+        "prune_px": 3.0,
+        "pooled_dti": 0.013444041681702266,
+        "ci95": [
+          0.011063865673391302,
+          0.015699480963814048
+        ]
+      },
+      {
+        "prune_px": 5.0,
+        "pooled_dti": 0.009307304563874366,
+        "ci95": [
+          0.00693298786400089,
+          0.011568961748106019
+        ]
+      }
+    ],
+    "leakage_canary": {
+      "threshold_auc": 0.9,
+      "worst_auc": 0.5576993057395875,
+      "passed": true,
+      "per_feature": {
+        "inverted depth": {
+          "auc": 0.5076084219447021,
+          "n_pos": 22641,
+          "n_neg": 160000
+        },
+        "projected trace 60 deg": {
+          "auc": 0.49972124837131754,
+          "n_pos": 22641,
+          "n_neg": 160000
+        },
+        "strong lidar scarp": {
+          "auc": 0.4983107469579524,
+          "n_pos": 22641,
+          "n_neg": 160000
+        },
+        "step indicator": {
+          "auc": 0.501260262355903,
+          "n_pos": 22641,
+          "n_neg": 160000
+        },
+        "band 19 slope": {
+          "auc": 0.5576993057395875,
+          "n_pos": 22641,
+          "n_neg": 160000
+        },
+        "band 13 gravity": {
+          "auc": 0.4776175523662824,
+          "n_pos": 22641,
+          "n_neg": 160000
+        }
+      }
+    }
+  },
+  "uniqueness": {
+    "verdict": "UNIQUE",
+    "n_comparators": 33,
+    "worst_coverage_within_3px": 0.9886942109624719,
+    "worst_lift": 6.531899904065086
+  },
+  "validator": {
+    "all_checks_passed": true,
+    "failed": [],
+    "positive_pixels": 16894,
+    "crs": "EPSG:32611",
+    "shape": [
+      3730,
+      3292
+    ],
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0
+  },
+  "label_aware_screen": {
+    "evidence_class": "LABEL-AWARE-SCREEN (uses the mapped catalogue; a diagnostic, never a score)",
+    "random_pixels": {
+      "n": 200000,
+      "within_3px": 0.087105,
+      "within_10px": 0.254535,
+      "median_dist_cat_px": 23.08679276123039
+    },
+    "step_pixels": {
+      "label": "unprojected step pixels",
+      "n": 120432,
+      "within_3px": 0.1007622558788362,
+      "within_10px": 0.2894164341703202,
+      "median_dist_cat_px": 20.12461179749811
+    },
+    "projected_60": {
+      "label": "dip-projected trace at 60 deg",
+      "n": 103622,
+      "within_3px": 0.10326957595877323,
+      "within_10px": 0.30281214413927543,
+      "median_dist_cat_px": 19.313207915827967
+    },
+    "strong_scarp": {
+      "label": "lidar scarp, top 5 %",
+      "n": 259427,
+      "within_3px": 0.09392237508046579,
+      "within_10px": 0.2911107941733127,
+      "median_dist_cat_px": 18.973665961010276
+    },
+    "projected_x_scarp": {
+      "label": "projected trace x strong scarp (+/-1 px)",
+      "n": 12896,
+      "within_3px": 0.1367090570719603,
+      "within_10px": 0.3962468982630273,
+      "median_dist_cat_px": 15.297058540778355
+    },
+    "projected_45": {
+      "label": "dip-projected trace at 45 deg",
+      "n": 92964,
+      "within_3px": 0.1073748978099049,
+      "within_10px": 0.30636590508153694,
+      "median_dist_cat_px": 19.235384061671343
+    },
+    "projected_55": {
+      "label": "dip-projected trace at 55 deg",
+      "n": 100396,
+      "within_3px": 0.10380891668990797,
+      "within_10px": 0.30467349296784735,
+      "median_dist_cat_px": 19.313207915827967
+    },
+    "projected_65": {
+      "label": "dip-projected trace at 65 deg",
+      "n": 106434,
+      "within_3px": 0.10354773850461318,
+      "within_10px": 0.3009658567750907,
+      "median_dist_cat_px": 19.4164878389476
+    },
+    "projected_75": {
+      "label": "dip-projected trace at 75 deg",
+      "n": 110835,
+      "within_3px": 0.10395633148373709,
+      "within_10px": 0.2976406369829025,
+      "median_dist_cat_px": 19.697715603592208
+    }
+  },
+  "verdict": "negative: the dip projection did not beat its own unprojected ablation and/or random lines on the shared holdout",
+  "okay_to_download": true,
+  "okay_to_submit": false,
+  "submission_slots_used": 0,
+  "approved_for_weekly_slot": false,
+  "download_permission_status": {
+    "verdict": "safe to download; NOT recommended for a weekly submission slot",
+    "scope": "Locally validated: single-band float32 GeoTIFF, values in [0, 1], no NaN and no Inf anywhere inside the footprint, CRS / shape / transform identical to the organiser's sample submission, zero positive mass on the mapped catalogue and outside the scored footprint, and unique against all 33 comparators. This is a local format and uniqueness clearance, NOT an organiser acceptance, NOT a leaderboard score and NOT approval to spend a weekly submission slot.",
+    "why_not_submitted": "negative: the dip projection did not beat its own unprojected ablation and/or random lines on the shared holdout"
+  },
+  "best_validated_file": {
+    "submission_name": "gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros",
+    "holdout_dti": 0.06063316101428559,
+    "holdout_ci95": [
+      0.04940904516967584,
+      0.07271191816446657
+    ],
+    "note": "the best HOLDOUT-DTI this lane has measured (the H61-MH habitat model, previous session). It is named here so that a selector does not have to choose this session's weaker file by default."
+  }
+}

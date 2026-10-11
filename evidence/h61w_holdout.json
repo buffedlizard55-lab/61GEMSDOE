@@ -1,0 +1,1010 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all) -- the shared instrument, unmodified",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "prune_px": 2.0,
+  "budget": 40000,
+  "fields_meta": {
+    "n_step_px": 120432,
+    "n_trace60_px": 103973,
+    "n_strong_scarp_px": 259427,
+    "strong_scarp_fraction_of_valid": 0.050234571420162064,
+    "basin_fraction_of_valid": 0.737714142755124,
+    "projected_in_basin": 82547,
+    "projected_in_basin_x_scarp": 6425,
+    "corr_base_fraction_of_valid": 0.19251025112347975
+  },
+  "instrument_check": {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "recorded": 0.10106964768349222,
+    "exact_reproduction": {
+      "source": "h61g_holdout.json",
+      "recorded_name": "X2 corridor x slope-ridge (basin interior) @ 20000",
+      "recorded": 0.02669999356337286,
+      "reproduced": 0.02669999356337286,
+      "difference": 0.0,
+      "per_cell_equal": true
+    },
+    "note": "two independent checks: the registry file re-scored in place, and the X2 arm reproducing the previous session's recorded row bit for bit, per cell"
+  },
+  "results": [
+    {
+      "name": "X2 corridor x slope-ridge (basin) [instrument reproduction]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.02669999356337286,
+      "tp": 698.6657965143046,
+      "fp": 39573.6572265625,
+      "fn": 21942.334203485698,
+      "n_emitted": 40000,
+      "coverage": 0.030858433660805817,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.024013398939206794,
+        0.029436965864819864
+      ],
+      "per_cell_dti": [
+        0.02667,
+        0.0195,
+        0.02281,
+        0.02688,
+        0.027,
+        0.03259,
+        0.03112,
+        0.02681
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P0 unprojected step lines [ablation]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.009283531611397609,
+      "tp": 195.89795246436066,
+      "fp": 14748.415405273438,
+      "fn": 22445.102047535638,
+      "n_emitted": 14875,
+      "coverage": 0.008652354245146444,
+      "n_emitted_per_draw": 7437.5,
+      "ci95_bootstrap_cells": [
+        0.008366527428455145,
+        0.01021421623935553
+      ],
+      "per_cell_dti": [
+        0.00805,
+        0.00946,
+        0.00965,
+        0.00729,
+        0.01212,
+        0.00807,
+        0.01065,
+        0.00901
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 dip-projected trace 60deg [PRIMARY]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "tp": 358.91737711201273,
+      "fp": 29426.061767578125,
+      "fn": 22282.08262288799,
+      "n_emitted": 29671,
+      "coverage": 0.015852540837949416,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "per_cell_dti": [
+        0.01233,
+        0.01623,
+        0.01544,
+        0.00905,
+        0.01124,
+        0.02035,
+        0.01915,
+        0.01419
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60r dip-projected 3-line ribbon 60deg [lane literal]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "tp": 358.91737711201273,
+      "fp": 29426.061767578125,
+      "fn": 22282.08262288799,
+      "n_emitted": 29671,
+      "coverage": 0.015852540837949416,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "per_cell_dti": [
+        0.01233,
+        0.01623,
+        0.01544,
+        0.00905,
+        0.01124,
+        0.02035,
+        0.01915,
+        0.01419
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60t dip-projected 60deg, throw-only weight [ablation]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.015091243066358707,
+      "tp": 363.2357847875503,
+      "fp": 29419.306640625,
+      "fn": 22277.764215212454,
+      "n_emitted": 29671,
+      "coverage": 0.01604327480179984,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.01253763265385656,
+        0.01752958765616654
+      ],
+      "per_cell_dti": [
+        0.01286,
+        0.01609,
+        0.0153,
+        0.00922,
+        0.01168,
+        0.02148,
+        0.01868,
+        0.01459
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60 projected trace(+/-1px) x strong scarp [competing-explanation test]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60t projected trace x strong scarp (thin)",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "SCARP-ONLY strong scarp in basin [lane-drift control]",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0274222151223567,
+      "tp": 717.8055547388086,
+      "fp": 39598.49560546875,
+      "fn": 21923.19444526119,
+      "n_emitted": 40000,
+      "coverage": 0.03170379200295078,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.022508150610609325,
+        0.03372436885170176
+      ],
+      "per_cell_dti": [
+        0.03967,
+        0.01999,
+        0.02283,
+        0.04168,
+        0.03219,
+        0.01968,
+        0.02202,
+        0.02612
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 40000",
+      "kind": "lines",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.022697571294249645,
+      "tp": 593.9272305082158,
+      "fp": 39677.046875,
+      "fn": 22047.07276949178,
+      "n_emitted": 40000,
+      "coverage": 0.026232376242578324,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.019103244021927535,
+        0.025991969127208765
+      ],
+      "per_cell_dti": [
+        0.01265,
+        0.02539,
+        0.02771,
+        0.02337,
+        0.01902,
+        0.01799,
+        0.02032,
+        0.03024
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 14835 [emission-matched to the primary]",
+      "kind": "lines",
+      "budget": 14835,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.011171183864852448,
+      "tp": 235.7309820717305,
+      "fp": 14708.774169921875,
+      "fn": 22405.269017928273,
+      "n_emitted": 14834,
+      "coverage": 0.010411685971102445,
+      "n_emitted_per_draw": 7417.0,
+      "ci95_bootstrap_cells": [
+        0.009181039214594061,
+        0.01302716104725067
+      ],
+      "per_cell_dti": [
+        0.00586,
+        0.01633,
+        0.01319,
+        0.01227,
+        0.00664,
+        0.01247,
+        0.00887,
+        0.0116
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 @ budget 10000",
+      "kind": "candidate",
+      "budget": 10000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.007406320018185173,
+      "tp": 149.0371691500957,
+      "fp": 9901.822021484375,
+      "fn": 22491.9628308499,
+      "n_emitted": 9998,
+      "coverage": 0.006582623079815191,
+      "n_emitted_per_draw": 4999.0,
+      "ci95_bootstrap_cells": [
+        0.006522529019043824,
+        0.008279848720628062
+      ],
+      "per_cell_dti": [
+        0.00669,
+        0.00792,
+        0.00806,
+        0.00589,
+        0.00526,
+        0.00953,
+        0.00676,
+        0.00867
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 @ budget 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.011358631068586717,
+      "tp": 251.35465200356657,
+      "fp": 19829.427490234375,
+      "fn": 22389.645347996437,
+      "n_emitted": 20000,
+      "coverage": 0.01110174691946321,
+      "n_emitted_per_draw": 10000.0,
+      "ci95_bootstrap_cells": [
+        0.010144048224811462,
+        0.012705810313595673
+      ],
+      "per_cell_dti": [
+        0.01011,
+        0.01145,
+        0.01078,
+        0.00891,
+        0.01021,
+        0.01564,
+        0.01276,
+        0.01089
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 @ budget 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "tp": 358.91737711201273,
+      "fp": 29426.061767578125,
+      "fn": 22282.08262288799,
+      "n_emitted": 29671,
+      "coverage": 0.015852540837949416,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "per_cell_dti": [
+        0.01233,
+        0.01623,
+        0.01544,
+        0.00905,
+        0.01124,
+        0.02035,
+        0.01915,
+        0.01419
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 @ budget 80000",
+      "kind": "candidate",
+      "budget": 80000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "tp": 358.91737711201273,
+      "fp": 29426.061767578125,
+      "fn": 22282.08262288799,
+      "n_emitted": 29671,
+      "coverage": 0.015852540837949416,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "per_cell_dti": [
+        0.01233,
+        0.01623,
+        0.01544,
+        0.00905,
+        0.01124,
+        0.02035,
+        0.01915,
+        0.01419
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60 @ budget 10000",
+      "kind": "candidate",
+      "budget": 10000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60 @ budget 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60 @ budget 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "S60 @ budget 80000",
+      "kind": "candidate",
+      "budget": 80000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.0025849609964611804,
+      "tp": 47.912446967992544,
+      "fp": 2063.4645385742188,
+      "fn": 22593.087553032005,
+      "n_emitted": 2090,
+      "coverage": 0.0021161806884851617,
+      "n_emitted_per_draw": 1045.0,
+      "ci95_bootstrap_cells": [
+        0.001277958141348143,
+        0.003789899852570256
+      ],
+      "per_cell_dti": [
+        0.00185,
+        0.0,
+        0.0017,
+        0.00356,
+        0.00139,
+        0.00044,
+        0.00547,
+        0.0038
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 at prune 0 px",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 0.0,
+      "pooled_dti": 0.016101689515387724,
+      "tp": 390.8510084767,
+      "fp": 30414.71337890625,
+      "fn": 22250.148991523303,
+      "n_emitted": 30700,
+      "coverage": 0.017262974624649968,
+      "n_emitted_per_draw": 15350.0,
+      "ci95_bootstrap_cells": [
+        0.013877385255831085,
+        0.018103072677890113
+      ],
+      "per_cell_dti": [
+        0.0136,
+        0.01662,
+        0.01684,
+        0.01107,
+        0.01277,
+        0.02079,
+        0.01944,
+        0.01627
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 at prune 2 px",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "tp": 358.91737711201273,
+      "fp": 29426.061767578125,
+      "fn": 22282.08262288799,
+      "n_emitted": 29671,
+      "coverage": 0.015852540837949416,
+      "n_emitted_per_draw": 14835.5,
+      "ci95_bootstrap_cells": [
+        0.012249801927232988,
+        0.017337173227935525
+      ],
+      "per_cell_dti": [
+        0.01233,
+        0.01623,
+        0.01544,
+        0.00905,
+        0.01124,
+        0.02035,
+        0.01915,
+        0.01419
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 at prune 3 px",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 3.0,
+      "pooled_dti": 0.013444041681702266,
+      "tp": 321.2649046689334,
+      "fp": 28596.998046875,
+      "fn": 22319.735095331067,
+      "n_emitted": 28806,
+      "coverage": 0.014189519220393685,
+      "n_emitted_per_draw": 14403.0,
+      "ci95_bootstrap_cells": [
+        0.011063865673391302,
+        0.015699480963814048
+      ],
+      "per_cell_dti": [
+        0.01058,
+        0.01525,
+        0.01399,
+        0.0086,
+        0.00911,
+        0.01929,
+        0.01662,
+        0.01284
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    },
+    {
+      "name": "P60 at prune 5 px",
+      "kind": "candidate",
+      "budget": 40000,
+      "tile_px": 3,
+      "prune_px": 5.0,
+      "pooled_dti": 0.009307304563874366,
+      "tp": 218.78169701445802,
+      "fp": 26749.472412109375,
+      "fn": 22422.21830298554,
+      "n_emitted": 26892,
+      "coverage": 0.009663075704008569,
+      "n_emitted_per_draw": 13446.0,
+      "ci95_bootstrap_cells": [
+        0.00693298786400089,
+        0.011568961748106019
+      ],
+      "per_cell_dti": [
+        0.00631,
+        0.01175,
+        0.00761,
+        0.00577,
+        0.00342,
+        0.0151,
+        0.01254,
+        0.0106
+      ],
+      "segments_withheld_total": 8,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 8,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.3244075649867445
+      ]
+    }
+  ],
+  "budget_sweep": {
+    "P60 dip-projected trace 60deg [PRIMARY]": [
+      {
+        "budget": 10000,
+        "pooled_dti": 0.007406320018185173,
+        "ci95": [
+          0.006522529019043824,
+          0.008279848720628062
+        ],
+        "coverage": 0.006582623079815191,
+        "n_per_draw": 4999.0
+      },
+      {
+        "budget": 20000,
+        "pooled_dti": 0.011358631068586717,
+        "ci95": [
+          0.010144048224811462,
+          0.012705810313595673
+        ],
+        "coverage": 0.01110174691946321,
+        "n_per_draw": 10000.0
+      },
+      {
+        "budget": 40000,
+        "pooled_dti": 0.014911525617533596,
+        "ci95": [
+          0.012249801927232988,
+          0.017337173227935525
+        ],
+        "coverage": 0.015852540837949416,
+        "n_per_draw": 14835.5
+      },
+      {
+        "budget": 80000,
+        "pooled_dti": 0.014911525617533596,
+        "ci95": [
+          0.012249801927232988,
+          0.017337173227935525
+        ],
+        "coverage": 0.015852540837949416,
+        "n_per_draw": 14835.5
+      }
+    ],
+    "S60 projected trace(+/-1px) x strong scarp [competing-explanation test]": [
+      {
+        "budget": 10000,
+        "pooled_dti": 0.0025849609964611804,
+        "ci95": [
+          0.001277958141348143,
+          0.003789899852570256
+        ],
+        "coverage": 0.0021161806884851617,
+        "n_per_draw": 1045.0
+      },
+      {
+        "budget": 20000,
+        "pooled_dti": 0.0025849609964611804,
+        "ci95": [
+          0.001277958141348143,
+          0.003789899852570256
+        ],
+        "coverage": 0.0021161806884851617,
+        "n_per_draw": 1045.0
+      },
+      {
+        "budget": 40000,
+        "pooled_dti": 0.0025849609964611804,
+        "ci95": [
+          0.001277958141348143,
+          0.003789899852570256
+        ],
+        "coverage": 0.0021161806884851617,
+        "n_per_draw": 1045.0
+      },
+      {
+        "budget": 80000,
+        "pooled_dti": 0.0025849609964611804,
+        "ci95": [
+          0.001277958141348143,
+          0.003789899852570256
+        ],
+        "coverage": 0.0021161806884851617,
+        "n_per_draw": 1045.0
+      }
+    ]
+  },
+  "prune_sensitivity": [
+    {
+      "prune_px": 0.0,
+      "pooled_dti": 0.016101689515387724,
+      "ci95": [
+        0.013877385255831085,
+        0.018103072677890113
+      ]
+    },
+    {
+      "prune_px": 2.0,
+      "pooled_dti": 0.014911525617533596,
+      "ci95": [
+        0.012249801927232988,
+        0.017337173227935525
+      ]
+    },
+    {
+      "prune_px": 3.0,
+      "pooled_dti": 0.013444041681702266,
+      "ci95": [
+        0.011063865673391302,
+        0.015699480963814048
+      ]
+    },
+    {
+      "prune_px": 5.0,
+      "pooled_dti": 0.009307304563874366,
+      "ci95": [
+        0.00693298786400089,
+        0.011568961748106019
+      ]
+    }
+  ],
+  "best_declared_arm": "SCARP-ONLY strong scarp in basin [lane-drift control]",
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.5576993057395875,
+    "passed": true,
+    "per_feature": {
+      "inverted depth": {
+        "auc": 0.5076084219447021,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "projected trace 60 deg": {
+        "auc": 0.49972124837131754,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "strong lidar scarp": {
+        "auc": 0.4983107469579524,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "step indicator": {
+        "auc": 0.501260262355903,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 19 slope": {
+        "auc": 0.5576993057395875,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 13 gravity": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "note": "HOLDOUT-DTI is an evaluator-version index on withheld catalogue traces, not a competition score.  Selection among the declared arms uses this instrument; the dip sweep is reported in full and the primary arm is the literature dip, not the best-sweeping one.",
+  "elapsed_s": 95.7
+}

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Instrument calibration: score hash-pinned registry artifacts on this repo's
-hide-and-recover frame, under both DTI conventions, and compare the ranking with
-the owner-reported live scores.
+"""RETIRED historical holdout/instrument calibration.
 
-Every "live" number below is OWNER-REPORTED (from the group's own site ledger);
-none of them is an organiser-confirmed receipt.  Every number computed here is
-HOLDOUT-DTI.
+The prior analysis compared proxy holdout rankings with unverified owner-reported
+scores. It is not a competition score, and the current experiment budget is
+exhausted. The CLI is disabled; retained outputs are historical only.
 """
 from __future__ import annotations
 
@@ -115,4 +113,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this historical instrument calibration compares HOLDOUT-DTI to "
+        "owner-reported scores and is not authorized for a new experiment."
+    )

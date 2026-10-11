@@ -1,23 +1,13 @@
 {
-  "file": "61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
-  "path": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
-  "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
-  "bytes": 137204,
-  "positive_pixels": 40000,
-  "submission_name": "61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure",
-  "note": "Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.",
-  "verdict": "negative",
-  "okay_to_submit": false,
   "files": {
     "tif": {
-      "name": "submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
-      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
-      "bytes": 137204,
+      "name": "downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif",
+      "sha256": "34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61",
       "positive_pixels": 40000
     },
     "zip": {
-      "name": "submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.zip",
-      "sha256": "a4d6f67e56af4b53ac08a2cf73bc60382688c72538329661c181845963ecfebb"
+      "name": "downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.zip",
+      "sha256": "eee5c7babdf31d22f208f9438a5351ddd3747ecb3f17723ce587c307a4b8f0ab"
     }
   },
   "validation": {
@@ -49,47 +39,6 @@
       "in_footprint_range_0_1_legacy": true,
       "whole_raster_all_finite": true,
       "whole_raster_range_0_1": true
-    },
-    "all_checks_passed": true,
-    "validator_version": "gems61-validate-v1",
-    "info": {
-      "path": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
-      "bytes": 137204,
-      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
-      "positive_pixels": 40000,
-      "positive_in_footprint": 40000,
-      "on_catalogue_positive": 0,
-      "unique_positive_values": [
-        1.0
-      ],
-      "in_footprint_min": 0.0,
-      "in_footprint_max": 1.0,
-      "n_nan": 0,
-      "n_inf": 0,
-      "min": 0.0,
-      "max": 1.0,
-      "bands": 1,
-      "dtype": "float32",
-      "height": 3730,
-      "width": 3292,
-      "crs": "EPSG:32611",
-      "transform": [
-        100.0,
-        0.0,
-        243350.0,
-        0.0,
-        -100.0,
-        4508550.0
-      ],
-      "res": [
-        100.0,
-        100.0
-      ],
-      "nodata": null
-    },
-    "n_nan": 0,
-    "n_inf": 0,
-    "min": 0.0,
-    "max": 1.0
+    }
   }
 }

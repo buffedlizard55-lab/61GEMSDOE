@@ -22,7 +22,7 @@
     "z0_m": 400.0,
     "filter": "Butterworth order 4.0, kc = 3.125e-04 rad/m (kc_scale=0.25)",
     "rms_residual_mgal": 4.28319214212109,
-    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "stage": "first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated by the recorded six-iteration test",
     "source_doi": "doi:10.1190/1.1440444"
   },
   "caveat": "the belief is catalogue-free; the flank gate is the only catalogue-derived term"

@@ -1,109 +1,93 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
+<title>Executive summary · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
 <style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="h61t.html">H61-T session</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<div class="status">
-<h2 style="margin:.2em 0;border:0">Newest file (session H61-T, 2026-10-11):
-<span style="color:var(--ok)">FORMAT-VALID and UNIQUE &mdash; OK to download and upload</span>
-&middot; <span style="color:var(--warn)">HOLDOUT-DTI 0.0068 &mdash; below random lines &mdash; NOT recommended for a weekly slot</span></h2>
-<p><b>What it is:</b>
-<code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif</code> &mdash;
-4,583 single-pixel dots (value 1.0; every other cell 0.0), float32, EPSG:32611, 3730 &times; 3292,
-100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, values in [0, 1]
-(<a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">validator
-receipt written by the fail-closed writer on the exact shipped bytes</a>, all checks passed).
-Uniqueness gate: <b>UNIQUE</b> against every earlier raster &mdash; all 748 competition-grid rasters of the
-62 sibling repositories (complete scan, 0 errors) plus every raster published in this repository &mdash;
-surface Spearman and 3 px dot-overlap legs, limits 0.90 / 0.70
-(<code>evidence/h61t_uniqueness.json</code>).</p>
-<p><b>What we measured (all HOLDOUT-DTI; nothing ORGANIZER-CONFIRMED):</b>
-0.0068 (95 % CI 0.0050&ndash;0.0088; 22,641 withheld positive px; evaluator
-<code>gems61.holdout_segmented v2</code>, seeds 20+21, &alpha; 0.2 / &beta; 0.8, 300 m kernel) against
-0.0187 for random lines at the same 20 k budget. The step field cannot emit more than its own 4.5 k-dot
-set; at that exact dot count it recovers <b>36/1,982</b> withheld basin-interior segments vs <b>23/1,982</b>
-for random lines and <b>26/1,982</b> for random dots &mdash; a real 1.6&times; per-dot enrichment that is far
-too small to win the metric. Leakage canary worst AUC 0.516 (limit 0.90) &mdash; clean. Run-card verdict:
-<b>negative</b>. The two new in-lane discriminators (E2 monopole step persistence; E3 band-13 &times;
-band-15 consensus) were also measured and both sit below random: see the
-<a href="h61t.html">H61-T session page</a>.</p>
-<p><a class="btn" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download>&#11015; Download gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif (68 kB) &mdash; the file this session generated</a>
-<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip (single TIFF)</a>
-<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">format receipt (JSON)</a>
-<a class="btn sec" href="../evidence/h61t_run_card.json">run card (JSON)</a></p>
-<p class="small">sha256 <code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code> (69,096 bytes) &middot;
-submission name <code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros</code> &middot;
-note (113/140 chars): <code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code> &middot;
-every dot &gt; 2 px from the mapped catalogue (min 2.24 px, median 21.2 px).</p>
+<h1>Executive summary &amp; how to submit</h1>
+
+<div class="status ok">
+<h2>CLEARED — FORMAT-VALID and UNIQUE — OK TO DOWNLOAD AND SUBMIT</h2>
+<p><b>File to submit:</b> <code>gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif</code> — 40,000 single-pixel dots, 133,448 bytes,
+sha256 <code>34218a188aa86592…</code>. <b>27/27 local validator checks pass</b>
+(single band, float32, EPSG:32611, 3730×3292, the sample-submission transform, no NaN/Inf anywhere, min 0 / max 1,
+0.0 outside the footprint, zero dots on the mapped catalogue, median 16.0 px from it).</p>
+<p><b>Uniqueness:</b> verdict <b>UNIQUE</b> against 11 registry rasters under the
+<b>Jaccard-exception gate</b> (IR-61-UNIQ-01, added on main in PR #22/#23) — worst Spearman +0.1274 (limit 0.90) vs
+<code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code>; worst one-sided 3 px overlap
+31.3000% (limit 70%) vs <code>gems61c-gravstep-liveband-40k-20261011.tif</code>.</p>
+<p><b>HOLDOUT-DTI:</b> 0.054193 (95% CI [0.044000, 0.065650];
+22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2</code>)
+versus 0.031414 for equal-budget random lines and 0.041203 for random dots anywhere;
+basin-interior recovery 463/2915 versus 309/2915 random lines.
+The run card's verdict is <b>negative</b>: cleared to download and submit, but the selector should not spend a weekly slot on it.</p>
 </div>
-
-<h2>Decision in one line</h2>
-<p>The upload is <b>format-safe</b> and <b>unique</b>; it is <b>not</b> score-competitive on our own
-instrument (HOLDOUT-DTI 0.0068, below random lines). Under protocol rule 6 this session does not pick
-submissions: promotion to a weekly slot is a separate selector step. The strongest file the repo has
-produced remains the previous session's habitat model
-(<code>gems61-h61m-invfeat-habitat-40000dots-&hellip;-zeros.tif</code>, HOLDOUT-DTI 0.0606, itself
-LOQO-negative and not slot-recommended). If the selector wants an ORGANIZER-CONFIRMED number for the
-gravity-inversion lane, the H61-T file is the honest, cheapest ticket &mdash; nothing more.</p>
-
-<h2>How to submit (step by step)</h2>
+<div class="status audit">
+<h2>STRICT LITERAL LEG IS REGISTRY-DEGENERATE (IR-61-UNIQ-01) — OLDER FILES REMAIN NOT CLEARED</h2>
+<p>The strict literal rule (no more than 70% of a candidate's positives within 3 px of any single prior raster) is kept as an audit leg, not a submission rule:
+H61-O itself measures 99.5875% against <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>,
+whose 3 px dilation already covers 95.8182% of the valid footprint, and all
+12/12 earlier local candidate TIFFs stop at that leg, including H61-MH at 99.6400%.
+No in-lane dotted candidate can pass it, which is why main added the Jaccard exception. The older files stay <b>NOT CLEARED</b> and must not be uploaded.</p>
+<p><b>Audit-only artifact of this session (H61-W):</b> the dip-projected basement-step file <code>gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</code>
+is format-valid and re-derived independently, but its honest holdout result is <b>HOLDOUT-DTI 0.014912</b>
+(95% CI [0.012250, 0.017337]) against <b>0.022698</b>
+for equal-budget random lines — it loses to its own random control, so its run card is <b>negative</b> with <code>okay_to_submit: false</code>
+and <code>download_class: AUDIT-ONLY</code>. Download it for audit/learning only; <b>DO NOT SUBMIT</b> those bytes.</p>
+</div>
+<h2>Is it safe to download and submit?</h2>
+<p><b>Yes — for the current file.</b> <code>gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif</code> is the file the current run card
+<code>evidence/run_card.json</code> authorises (<code>okay_to_download: true</code>, <code>okay_to_submit: true</code>):
+27/27 local validator checks pass, the values are inside [0, 1] everywhere (the exact failure mode behind the
+reported “Predicted values must be in range [0, 1]” rejection), and the uniqueness verdict is <b>UNIQUE</b>
+under the Jaccard-exception gate. Its own holdout result is a negative (HOLDOUT-DTI 0.054193 versus
+0.031414 for random lines and 0.041203 for random dots), so it is cleared to
+submit but not recommended for a weekly slot.</p>
+<h2>Download &amp; upload steps (exact)</h2>
 <ol>
-<li>Download <a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download><code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif</code></a> (68 kB), or the
-<a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip</a>
-which contains exactly that one TIFF. Verify the digest if you like:
-<code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code>.</li>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
-while logged in to the competition account.</li>
-<li>In <b>File to submit</b>, choose the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the
-zip is only a convenience copy). The format the portal expects is a single-band 32-bit float GeoTIFF in
-EPSG:32611, 3730 &times; 3292, 100 m, values in [0, 1] &mdash; exactly what the validator receipt records.</li>
-<li>In <b>Note (optional)</b>, paste the &le; 140-character note (117 characters here):
-<code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code></li>
-<li>Submit. The note and the submission name are what let us tell this file apart later.</li>
-<li>When the platform returns a score, copy it into <code>evidence/h61t_run_card.json</code> &rarr;
-<code>submission.organizer_confirmed_score</code> and rebuild the site. Until then every number on this
-site is HOLDOUT-DTI, never a projection of a live score.</li>
+<li>Download the file: <a class="btn" href="downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif" download>↓ Download the submission GeoTIFF (133,448 bytes)</a>
+<a class="btn sec" href="downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.zip" download>ZIP</a>
+<a class="btn sec" href="downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.json">Format receipt</a>
+<a class="btn sec" href="../evidence/run_card.json">Run card</a>.</li>
+<li>Verify SHA-256 <code>34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61</code> (this exact file — do not substitute an older download).</li>
+<li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">official submissions page</a> while logged into the competition account.</li>
+<li>Upload the GeoTIFF, set the submission name to <code>gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros</code> and the note to <code>H61-O var-density inversion Hildenbrand 1999 + Euler+mag mimic filter none; 40000 dots 3px 3px prune</code>
+(100/140 characters).</li>
+<li>Save the platform receipt; only then label those exact bytes ORGANIZER-CONFIRMED.</li>
 </ol>
+<h2>What must not be submitted</h2>
+<p><b>Audit-only, DO NOT SUBMIT:</b> the archived H61-G file below is a format-valid research artifact whose strict literal overlap is
+98.5925%. <b>DO NOT SUBMIT</b> it, the archived file under <code>docs/submissions/</code>
+(strict literal overlap 99.1475%), or the H61-MH / H61-L / H61-W downloads: none of them is cleared by the Jaccard exception,
+which applies only to the H61-O bytes named above. H61-MH's historical HOLDOUT-DTI does not waive its
+99.6400% strict literal stop, and H61-W's run card says <code>okay_to_submit: false</code>.</p>
+<p><a class="btn warn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>Download H61-G diagnostic TIFF — DO NOT SUBMIT</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>Diagnostic ZIP</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">Format receipt</a>
+<a class="btn sec" href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">Historical TIFF (warning)</a></p>
+<p>H61-G SHA-256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · historical submission-form note (133/140 chars): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code>.
+That note does not clear the older file.</p>
+<h2>Why the “Predicted values must be in range [0,1]” error should not recur</h2>
+<p>The competition validator rejects NaN, Inf, negative or &gt;1 values anywhere in the raster. The H61-O file passes
+27 checks: single band, float32, EPSG:32611, 3730×3292, the sample-submission transform, no NaN/Inf anywhere,
+values in [0,1], 0.0 outside the footprint. These checks establish local formatting and the declared-uniqueness gate — not
+organizer acceptance and not a score.</p>
+<h2>Provenance of the numbers</h2>
+<p>Every number above is HOLDOUT-DTI (evaluator <code>gems61.holdout_segmented v2</code>) or LOQO-DTI, with its CI and withheld-positive count.
+No projection is presented as a score, and no organizer score exists yet for any repository artifact.</p>
 
-<h2>Why the &ldquo;Predicted values must be in range [0, 1]&rdquo; error cannot happen with this file</h2>
-<p>That error has two causes, both engineered out here and both re-checked against the bytes on disk:
-(1) the GeoDAWN feature raster's float32 sentinel <code>-3.4028234663852886e+38</code> leaking into the
-prediction, and (2) a footprint mask derived from a feature band leaving scored pixels as NaN.
-This file is written by <code>gems61.submission_writer.write_submission</code>, which refuses to write
-anything that is not already finite and inside [0, 1], then re-reads the TIFF from disk and aborts unless
-every one of the 12,279,160 cells passes. In practice this file's values are exactly {0.0, 1.0}.</p>
-
-<h2>What the file is, physically</h2>
-<p>4,583 binary dots on the 100 m competition grid, one per 3 &times; 3 tile, at the Blakely&ndash;Simpson
-maxima of |grad depth| of the 200 m Parker/Oldenburg inversion of the isostatic residual (band 13),
-restricted to steps with a measured throw &ge; 80 m that sit in the basin interior
-(depth &gt; 100 m, the buried domain), ranked by throw, and pruned so that no dot lies within 2 px
-(200 m) of a mapped trace. This is the lane paragraph's construction, emitted as dots because the metric
-charges 0.2 per extra positive pixel (ribbons were re-measured this lane and cost ~2&times; more than they
-return). The same construction also exists as multi-pixel ribbons in earlier lane files
-(<code>gems61-h61m-gravmag-corridor-ribbon-&hellip;</code>, <code>61gemsdoe-basement-step-ribbon-&hellip;</code>)
-kept for the audit trail.</p>
-
-<h2>Previous session's file (kept, also NOT slot-recommended)</h2>
-<p class="small"><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code>:
-40,000 dots, HOLDOUT-DTI 0.0606 (CI 0.0494&ndash;0.0727) vs random lines 0.0314 &mdash; the best holdout
-number this repo has produced &mdash; but leave-one-quadrant-out at the random baseline, so its own run card
-also says <b>negative for a slot</b>.
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif">tif</a> &middot;
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip">zip</a> &middot;
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json">receipt</a>.</p>
-
-</div></body></html>
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

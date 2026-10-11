@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""H61-M experiment 3 -- final configuration sweep + spatial generalization test.
+"""RETIRED H61-M3 tuning runner; direct execution fails closed.
+
+The legacy sweep description below is retained for historical context only; the
+archived candidate fails strict final-dot uniqueness and the lineage budget is exceeded.
 
 Two things, both required before a file is written:
 
@@ -235,6 +238,11 @@ def stage_sweep() -> dict:
 
 
 def main() -> int:
+    print("RETIRED: H61-M3 would create additional tuning/LOQO holdouts after the lineage budget was exceeded; "
+          "the archived H61-MH TIFF fails strict final-dot uniqueness. No experiment may be run.",
+          file=sys.stderr)
+    return 2
+
     t0 = time.time()
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("loqo", "all"):

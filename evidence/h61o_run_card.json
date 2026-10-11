@@ -1,0 +1,180 @@
+{
+  "session": "H61-O arena/ac3f2948-61gemsdoe 2026-10-11 variable-density inversion",
+  "hypothesis": "Buried normal fault is a step in the basement surface inverted with depth-dependent fill density (Hildenbrand 1999: 1900/2100/2300/2450 kg/m3, basement 2670); the step is located at HGM maxima and discriminated from intrabasement density contacts by Euler SI=0 source depth consistency and magnetic edge demotion.",
+  "mechanism": "Isostatic residual band 13 -> 200m decimation -> inpaint -> 15km regional removal -> Butterworth low-pass kc=0.25/(2*500m) -> per-pixel variable-density Bouguer solve t=dg/(2\u03c0G*avg\u0394\u03c1(t)) -> upsample 100m -> Blakely-Simpson HGM maxima throw>=80m -> corridor 1km -> Euler depth from bands 18/11 -> mag edge from band3 -> logistic habitat over 30 features (19 bands + var-depth + HGM + throw + corridor + basin + Euler + grad + mag_edge + Euler_cons) OOF per quadrant -> dots 3px tile 3px prune.",
+  "named_non_fault_mimic": "Intrabasement lithologic contact (granitic/mafic) with \u0394\u03c1~200 kg/m3 over 2 km gives same gravity step as 1000m basement offset at 400 kg/m3; also caldera fill, hydrothermal alteration, paleo-weathered horizon. Discriminated by Euler depth (basement edge shallow ~ inverted depth, intrabasement deep) and by magnetic edge coincidence (intrabasement contact often magnetic, basin step non-magnetic).",
+  "holdout_dti": {
+    "value": 0.05419253169661684,
+    "ci95": [
+      0.044000207112936396,
+      0.06564977029187744
+    ],
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "n_withheld_truth_px": 22641,
+    "n_dots_per_draw": 40000.0,
+    "basin_interior_segments": "463/2915",
+    "basin_recovery_ci95": [
+      0.14601467468464355,
+      0.17255057524078696
+    ],
+    "random_lines_same_budget": 0.03141382104713175
+  },
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.6269256597544278,
+    "passed": true,
+    "per_feature": {
+      "habitat OOF prob": {
+        "auc": 0.6269256597544278,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "var-depth": {
+        "auc": 0.5117866485303211,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "var-depth HGM": {
+        "auc": 0.5160479060388233,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "throw": {
+        "auc": 0.4999777748332671,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "corridor": {
+        "auc": 0.49960302741707524,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "euler": {
+        "auc": 0.4929085828806148,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "euler_cons": {
+        "auc": 0.4998593824532927,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "mag_edge": {
+        "auc": 0.5029250288470032,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band13 grav": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band19 slope": {
+        "auc": 0.5576993057395875,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "correlation_overlap_vs_registry": {
+    "worst_spearman": {
+      "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+      "value": 0.1273700789127303
+    },
+    "worst_overlap": {
+      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "value": 0.995875,
+      "base_rate": 0.9581822330224662
+    },
+    "worst_gate": {
+      "file": "gems61c-gravstep-liveband-40k-20261011.tif",
+      "rule": "one-sided 3px overlap",
+      "value": 0.313,
+      "limit": 0.7
+    },
+    "verdict": "UNIQUE",
+    "n_compared": 11
+  },
+  "raster_sha256": "34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61",
+  "raster_bytes": 133448,
+  "validator_output": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_template": true,
+      "nodata_unset_or_nan": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_no_nan": true,
+      "in_footprint_no_inf": true,
+      "in_footprint_no_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_on_catalogue": true,
+      "nonempty": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "no_float32_sentinel": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_range_0_1_legacy": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true
+    },
+    "all_passed": true
+  },
+  "submission_name": "gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros",
+  "note": "H61-O var-density inversion Hildenbrand 1999 + Euler+mag mimic filter none; 40000 dots 3px 3px prune",
+  "note_chars": 100,
+  "inversion": {
+    "n": 1288826,
+    "p50": 670.610218154254,
+    "p90": 1378.7113962892727,
+    "p99": 2311.5776380383995,
+    "mean": 774.7627088404587,
+    "vmax": 2862.299436069961,
+    "fraction_gt_1km": 0.23762866360548282,
+    "fraction_gt_2km": 0.026449652629602444
+  },
+  "variable_density": {
+    "profile": [
+      [
+        0.0,
+        200.0,
+        -770.0
+      ],
+      [
+        200.0,
+        600.0,
+        -570.0
+      ],
+      [
+        600.0,
+        1200.0,
+        -370.0
+      ],
+      [
+        1200.0,
+        8000.0,
+        -220.0
+      ]
+    ],
+    "basement_density": 2670.0,
+    "source": "Hildenbrand et al. 1999 USGS OFR 99-49 doi:10.3133/ofr9949"
+  },
+  "experiments_run": 41,
+  "organizer_confirmed_score": null,
+  "verdict": "negative",
+  "verdict_reason": "HOLDOUT-DTI 0.0542 CI [0.044000207112936396, 0.06564977029187744] vs random lines 0.0314; basin recovery 463/2915; leakage worst AUC 0.627",
+  "download": {
+    "tif": "docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif",
+    "zip": "docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.zip",
+    "sha256": "34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61"
+  }
+}

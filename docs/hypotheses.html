@@ -1,56 +1,77 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Next hypotheses · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
+<title>Next hypotheses · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
 <style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html" class=active>Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html" class=active>Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<h2>Candidate geological hypotheses not yet tried</h2>
-<p>Ranked by expected DTI improvement and implementation cost. Every "gain" is a projection, never a
-score; nothing here has been validated on the holdout unless it says so.</p>
+<h1>Ranked novel candidate hypotheses</h1>
+<p>These are 3–5 unimplemented or materially distinct buried-structure hypotheses, ranked by expected gain relative to effort.
+All gain language is a PROJECTION, never a score. The top candidate is screened against the strict registry gate before any holdout or placement.
+</p>
 
-<div class="status">
-<p><b>Session H61-T addendum (arena/f1bed08d, 2026-10-11).</b> This session's own ranked board is
-<code>evidence/h61t_hypotheses.json</code>. Of its five hypotheses, the top two were
-<b>validated this session and came back negative</b>: <b>H61-T2</b> independent-depth consensus
-(band-13 inversion &times; supplied band-15 depth surface, &plusmn;5 px): HOLDOUT-DTI 0.0021 at 1,438
-dots, 12/1,982 basin-interior segments &mdash; below random. <b>H61-T1</b> monopole step persistence
-(far-field vs near-field offset along the gradient): 0.0007 at 125 dots, 0 segments. The scientific
-finding behind both: only 2.5 % of the lane's 22,316 step pixels are monopole-persistent; the rest are
-regional-dip gradients (IR-61-DIPDOM-01). Still open from that board: <b>H61-T5</b>
-upward-continuation persistence of gravity steps (FFT chain, low cost), <b>H61-T3</b>
-conductivity-edge coincidence inside the step corridor (band 17, low cost), and <b>H61-T4</b> geodetic
-strain gate (bands 4/7/8, lane-drift risk). All five are validatable on data already cached here.
-The board below (H61-N/Q/R/P/S) remains the cross-session list.</p>
-</div>
+<section><h2>#1 H61-L — 1 m lidar scarp detection restricted to gravity corridors</h2>
+<p class="callout"><b>Measured pre-placement outcome:</b> DUPLICATE_LANE_DRIFT — STOP; 94.6692% one-sided overlap; this current run stopped before holdout/placement and emitted no TIFF. A separate archived main-branch H61-L TIFF exists but fails the strict final-dot gate.</p><table>
+<tr><th>Layers</th><td>USGS 3DEP 1 m DEM (organiser&#x27;s 1m_DEM_links.csv; public domain) → scarp-likelihood raster; this session&#x27;s ±1 km basement-step corridor and basin mask as prior.</td></tr>
+<tr><th>Physical signature</th><td>Metre-scale topographic steps (scarp height 0.5–5 m, slope break, curvature couplet) — the primary evidence the test-set mappers used.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>The 1:24k–1:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.</td></tr>
+<tr><th>Difference from implemented work</th><td>Unlike archived H61-G, which used band-19 slope-ridge dots, this tests 3DEP-derived scarp morphology as multi-line ribbons inside an inverted basement-step corridor. The merged main branch also tested H61-MH, a gravity/inversion-feature out-of-fold habitat model; it did not test this 3DEP scarp-ribbon surface. The terrain raster is a public sibling derivative, not raw DEM/lidar tiles.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Highest expected value by expert prior (PROJECTION, not a score); PRE-PLACEMENT UNIQUENESS STOP: 94.6692% of positive scarp-ribbon surface pixels are within 3 px of the prior near-blanket raster, above the literal 70% threshold. HOLDOUT NOT RUN.</td></tr>
+<tr><th>Cost / data</th><td>High data volume; public sibling-derived 12-band descriptor file already fetched and SHA-256 verified. One candidate surface built; no holdout or submission slot used.</td></tr></table></section>
 
-<table><tr><th>hypothesis</th><th>layers</th><th>physical signature</th><th>why it catches a fault the catalogue lacks</th><th>difference from this repo</th><th>expected gain</th><th>cost</th></tr>
-<tr><td><b>H61-N</b> 1 m lidar scarp detection inside the 200 m basement-step corridor</td><td>USGS 3DEP 1 m DEM (free public domain, The National Map Download Client https://apps.nationalmap.gov/downloader/ or LidarExplorer https://www.usgs.gov/tools/lidarexplorer) -&gt; scarp-likelihood raster (slope break, crest-toe curvature couplet, local relief model); this session&#x27;s 200 m Parker/Oldenburg basement-step corridor and basin mask as the prior.</td><td>Metre-scale topographic steps: scarp height 0.5-5 m, a slope break and a curvature couplet along strike. This is the primary evidence a field mapper uses and it is invisible on the 100 m grid.</td><td>The 1:24k-1:250k catalogue missed low scarps in Quaternary fans and bajadas; 1 m data resolves them. The corridor removes the fan-toe, terrace-riser and incised-channel mimics that have no basement step, and the basin mask removes the range-front scarps already in the catalogue.</td><td>No session in this repository has used lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.0430 live) scanned the whole area with no gravity prior and no basin gate.</td><td>Highest. The blocked tests this session show that every 100 m locator we have sits at the random baseline, so the only remaining lever is resolution the supplied grid does not contain. PROJECTION ONLY - not validated.</td><td>High (data volume). Obtainable without a sandbox change: fetch the tiles on an unrestricted machine, mirror them into a GitHub repository, and pin them by sha256 in scripts/prepare_data.py exactly as the feature stack is pinned. usgs.gov, apps.nationalmap.gov and prd-tnm.s3.amazonaws.com are all outside this sandbox&#x27;s egress allow-list (IR-61-NET-01), so this session names the source rather than claiming it. NOTE (IR-61-SRC-01): the competition data tab ships exactly three rasters (training_features.tif, labels.tif, sample_submission.tif) - see the bridge manifest - so the 1 m tiles must be fetched from USGS directly, not from the organiser.</td></tr>
-<tr><td><b>H61-Q</b> Geodetic strain-rate locator: bands 4 (second invariant), 7 (shear rate), 8 (dilatation rate)</td><td>Bands 4, 7 and 8 of the supplied stack: band04 geod_2ndinv (geodetic second invariant, the strain-rate tensor magnitude), band07 geod_shearrate (shear rate, angular deformation from GPS/InSAR), band08 geod_dilaterate (volumetric strain). These measure present-day deformation rather than a re-expression of topography or gravity.</td><td>A fault that is accumulating slip has a geodetic strain-rate maximum across it; the second invariant localises the deformation and the dilatation rate separates opening (normal-fault) from closing regimes.</td><td>An actively slipping fault that has not produced a mappable scarp is exactly the class the catalogue misses, and geodesy sees it through the regolith. The measured logistic weights are the third and seventh largest of all 28 channels (band07 +0.889, band04 -0.628), so the supplied stack already carries the signal and no session has used it as a primary locator.</td><td>Every previous locator in this repository is topographic, magnetic or gravity-derived. No session has built a candidate field from the geodetic bands, and the sign of band04 (negative) means the naive &#x27;high strain = fault&#x27; reading is wrong and needs the tensor decomposition.</td><td>Moderate. Blocked canary AUC for a single geodetic band is untested; the model weight says the information is there. PROJECTION ONLY.</td><td>Low - all inputs are already cached. One holdout run.</td></tr>
-<tr><td><b>H61-R</b> Seismicity-nucleation locator: bands 10 (distance to earthquake) and 16 (earthquake intensity)</td><td>Bands 10 and 16 of the supplied stack: band10 deq_n100a15 (distance to the nearest earthquake within a 100 km radius, 15-degree azimuth parameterisation) and band16 ieq_n100a15 (earthquake intensity or density, same parameterisation).</td><td>Microseismicity nucleates on the faults that are critically stressed and weak. A cluster of small events with no mapped trace is a direct indication of an unmapped, currently active fault.</td><td>This is the only supplied layer that measures present-day fault slip rather than a geological or geophysical proxy for it, so it is the closest available analogue to &#x27;a fault exists here now&#x27;. band16 carries the second-largest logistic weight of all 28 channels (+0.890, behind only band19 detrended-elevation slope at +1.343).</td><td>No session in this repository has used the seismicity bands as a primary locator; they have only ever entered as two of nineteen channels.</td><td>Moderate. The azimuth/radius parameterisation of the supplied bands is coarse, so the resolution may be kilometres. PROJECTION ONLY.</td><td>Low - cached inputs, one holdout run.</td></tr>
-<tr><td><b>H61-P</b> Gravity-step x magnetic-edge conjunction at 100 m (GeoDAWN line spacing)</td><td>This session&#x27;s 200 m basement-step corridor; band 3 (TMI horizontal gradient) automatic maxima; band 6 (tilt zero-crossings); band 9 (TMI vertical gradient).</td><td>A normal fault that offsets magnetised basement or a volcanic flow gives a sharp magnetic edge co-located with the gravity step. GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.</td><td>Concealed under alluvium and invisible to surface mapping. Co-location rejects intrabasement density contacts that have no magnetic expression - which is exactly the competing explanation the lane names and which this session&#x27;s model could not separate (euler_depth weight -0.053).</td><td>Earlier sessions proposed magnetic fabric as an oracle but never implemented a conjunction; sibling magnetic-edge files were standalone and scored 0.03-0.10 live.</td><td>Low-moderate: precision x1.5 plausible, recall small. PROJECTION ONLY.</td><td>Low - cached inputs, one holdout run.</td></tr>
-<tr><td><b>H61-S</b> Ensemble of decorrelated locators with a disagreement-weighted emission</td><td>All of the above, plus the logistic habitat model and the lane corridor x slope locator.</td><td>Not a new physical signature: an emission rule. Emit dots where at least two decorrelated locators agree, and weight the budget by their disagreement.</td><td>This session&#x27;s central measurement is that single locators do not generalise across space (blocked AUC 0.56-0.59) while the group&#x27;s 0.26-0.28 files are conjunctions. If two locators fail independently, their agreement is more informative than either alone.</td><td>Every previous session fused lines of evidence inside one model. No session has measured the blocked generalisation of each locator separately and then emitted only on their intersection.</td><td>Uncertain; could be negative if the locators&#x27; errors are correlated. PROJECTION ONLY.</td><td>Medium - needs the blocked test for each locator first (already built this session as scripts/run_h61m4.py).</td></tr>
-</table>
-<h3>What this session ruled out</h3>
-<ul>
-<li><b>A hard basement-step corridor as the candidate gate.</b> 0.0364–0.0409 gated vs 0.0606 ungated
-at the same budget; the corridor indicator's canary AUC against withheld faults is 0.510.</li>
-<li><b>Gradient boosting on the same 28 features.</b> 0.1599 on the
-non-blocked holdout, but blocked AUC 0.518–0.618 and LOQO-DTI
-0.0140–0.0718: adjacency, not skill (IR-61-LEAK-01).</li>
-<li><b>Soft step / throw priors on the logistic model.</b> 0.0489–0.0522 vs 0.0606 with no prior.</li>
-<li><b>3 × 3 ribbons instead of dots.</b> 0.0184 vs 0.0409; 256,096 emitted px vs 39,794.</li>
-</ul>
+<section><h2>#2 H61-I — Piedmont belt: basinward of the inverted bedrock–fill contact</h2>
+<table>
+<tr><th>Layers</th><td>Inverted depth = 0 contour (bedrock outcrop boundary) buffered 0–2 km basinward; band 12 detrended elevation curvature; band 19 slope ridges.</td></tr>
+<tr><th>Physical signature</th><td>Range-front normal faults step basinward through time; young splays and antithetic strands sit 0–2 km in front of the mapped range-front trace as low scarps across fans.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>The catalogue holds the main range-front trace; piedmont splays are the commonest unmapped class in Basin-and-Range compilations.</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH included a basin indicator and step/corridor features in a learned model, but did not isolate an explicit 0–2 km basinward piedmont belt as its own spatial hypothesis or emit ribbons there.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Moderate. The screen&#x27;s highest prior-only enrichment (1.7× random for pixels inside the gravity corridor, all depths) sits at the range fronts. PROJECTION.</td></tr>
+<tr><th>Cost / data</th><td>Low (all inputs cached). One holdout run.</td></tr></table></section>
 
-</div></body></html>
+<section><h2>#3 H61-H — Gravity-step × magnetic-edge conjunction (intrabasin faults offsetting magnetic basement or flows)</h2>
+<table>
+<tr><th>Layers</th><td>Corridor from the inversion; band 3 TMI horizontal-gradient maxima; band 6 tilt zero-crossings; band 9 vertical gradient.</td></tr>
+<tr><th>Physical signature</th><td>A normal fault that offsets magnetised basement or volcanic flows gives a sharp magnetic edge co-located with the gravity step; GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>Concealed under alluvium; surface mapping cannot see them. Co-location rejects intrabasement density contacts that have no magnetic expression (the lane&#x27;s named mimic).</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH used the 19 supplied bands in a learned habitat model, but did not implement this explicit gravity-step × magnetic-edge conjunction as a test of the intrabasement-contact mimic; H61-C only proposed magnetic fabric as an oracle.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Low–moderate: precision ×1.5 plausible, recall small (few magnetic basins). PROJECTION.</td></tr>
+<tr><th>Cost / data</th><td>Low.</td></tr></table></section>
+
+<section><h2>#4 H61-J — Source-depth consistency filter (Euler SI = 0) to reject intrabasement contacts</h2>
+<table>
+<tr><th>Layers</th><td>Band 13 gravity, band 5 horizontal gradient, band 11 vertical gradient → contact-depth estimate; compare with inverted basin depth.</td></tr>
+<tr><th>Physical signature</th><td>A basement step has source depth ≈ fill thickness; an intrabasement density contrast has source depth ≫ fill thickness.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>Directly tests the lane&#x27;s competing explanation; improves the purity of X1-type candidates.</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH included Euler SI=0 source depth as a weak model feature, but did not implement a hard source-depth-versus-inverted-fill-thickness consistency filter; this decision rule remains untested.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Low: raises precision of a candidate family whose recall is already tiny (X1a 0.023). PROJECTION.</td></tr>
+<tr><th>Cost / data</th><td>Medium.</td></tr></table></section>
+
+<section><h2>#5 H61-K — Scale-persistent paired-flank basement-step ribbons with magnetic corroboration</h2>
+<table>
+<tr><th>Layers</th><td>Supplied isostatic gravity → provisional inverted basement depth and its horizontal gradients at 200/400/800 m; supplied TMI/tilt/vertical-gradient magnetic bands as corroboration only. GP-1012 calibrates the regional depth scale.</td></tr>
+<tr><th>Physical signature</th><td>A candidate step has paired cross-profile gradient flanks of opposite sign, coherent strike, and a persistent location across scales; a co-located magnetic edge supports but is not required for the ribbon.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>Buried basin-interior faults can be omitted or fragmented in the mapped catalogue. Pairing, strike continuity, and scale persistence may suppress isolated density contacts/noise while allowing multi-line fault ribbons under alluvium; magnetics provide an independent but imperfect corroborating signature.</td></tr>
+<tr><th>Difference from implemented work</th><td>Distinct from H61-MH, which used supplied bands and inversion-derived variables in a learned habitat model, and from H61-H, which proposed simple gravity/magnetic edge conjunction. This untested rule matches paired flank geometry and scale persistence before ribbon emission; it uses no catalogue-derived candidate features.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Low-to-moderate expected gain, PROJECTION ONLY: paired-flank geometry may improve precision, while requiring magnetic corroboration can lose faults without magnetised offsets. No measured DTI.</td></tr>
+<tr><th>Cost / data</th><td>Medium-high: compute multi-scale derivatives, orientation-aware cross-profile pairs, and pre-placement registry gates; run one holdout only if the surface first clears.</td></tr></table></section>
+
+<h2>Selection rule</h2>
+<p>A hypothesis may proceed to holdout only after its pre-placement surface passes the declared-uniqueness gate against every raster in the declared inventory:
+signed Spearman &le; 0.90, one-sided 3 px overlap &le; 70 %, with the Jaccard exception (IR-61-UNIQ-01) waived only where the comparator is itself a near-blanket.
+A passing surface would then be tested by the shared spatially blocked hide-and-recover evaluator, with a feature-alone leakage canary and a matched random-line control.
+Weekly promotion is a separate selector decision. The current-run H61-L candidate failed before holdout, so no score or TIFF is imputed for that run. A separate archived main-branch H61-L TIFF is retained as historical, and fails the strict final-dot gate.</p>
+
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

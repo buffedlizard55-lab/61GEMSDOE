@@ -1,129 +1,42 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Holdout evidence · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
+<title>Holdout evidence · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
 <style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html" class=active>Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html" class=active>Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<h2>Holdout evidence</h2>
-<p>Protocol (parallel-run rule 2): withhold <b>whole</b> fault segments (≤ 12 px chunks between
-intersections) inside four spatially eroded quadrants, with two independent draws; derive every
-catalogue-based quantity only from the <b>visible</b> faults; mask visible fault pixels pixel-exactly;
-score pooled DTI with α = 0.2, β = 0.8 and a 300 m triangular kernel. Withheld positives:
-22,641 px over 8 cells.</p>
+<h1>Holdout evidence: current H61-O file, legacy H61-G and controls</h1>
+<p>All numerical rows below are <b>HOLDOUT-DTI</b> under <code>gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)</code>, with
+22,641 withheld positive pixels, α=0.2, β=0.8, 300 m triangular kernel, and the listed 95% CI.
+These are proxy scores on withheld catalogue segments, not live organizer scores.</p>
+<table><tr><th>Arm</th><th>Positive pixels per draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th><th>Basin-interior segment recovery</th></tr>
+<tr><td>O2 habitat no gate (prune 3px) @ 40000 — H61-O session</td><td>40,000</td><td>0.054193</td><td>[0.044000, 0.065650]</td><td>0.0820</td><td>463/2,915 (15.9%)</td></tr><tr><td>CONTROL random lines @ 40000 — H61-O session</td><td>40,000</td><td>0.031414</td><td>[0.028243, 0.034092]</td><td>0.0475</td><td>309/2,915 (10.6%)</td></tr><tr><td>CONTROL random dots anywhere @ 40000 — H61-O session</td><td>40,000</td><td>0.041203</td><td>[0.036647, 0.045305]</td><td>0.0624</td><td>441/2,915 (15.1%)</td></tr>
+<tr><td>X2 corridor x slope-ridge (basin interior) @ 40000</td><td>40,000</td><td>0.046505</td><td>[0.042143, 0.050660]</td><td>0.0703</td><td>351/1,999 (17.6%)</td></tr><tr><td>CONTROL random lines @ 40000</td><td>40,000</td><td>0.031414</td><td>[0.028243, 0.034092]</td><td>0.0475</td><td>215/1,999 (10.8%)</td></tr><tr><td>REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif</td><td>41,194</td><td>0.101070</td><td>[0.086503, 0.117340]</td><td>0.1560</td><td>681/1,999 (34.1%)</td></tr><tr><td>REGISTRY gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif</td><td>113,106</td><td>0.071206</td><td>[0.061585, 0.082364]</td><td>0.1992</td><td>739/1,999 (37.0%)</td></tr></table>
+<p>The historical H61-G construction is below the as-published dotted H19-5 reference and is not eligible for a slot. Its strict final-dot uniqueness verdict is
+<code>DUPLICATE_LANE_DRIFT</code>. The current-run H61-L surface stopped before holdout, so that run has no H61-L HOLDOUT-DTI. A separate archived main-branch H61-L variant was measured at <b>HOLDOUT-DTI 0.044330</b> (95% CI [0.041405, 0.047832]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2</code>), but its final TIFF has 98.6375% strict one-sided overlap and is not eligible for a slot. The archived H61-MH inversion-feature variant measured <b>HOLDOUT-DTI 0.060633</b> (95% CI [0.049409, 0.072712]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2 (whole segments &lt;=12 px, four eroded quadrants, seeds 20+21, mode all)</code>) and recovered 353/1982 basin-interior segments (recovery-rate 95% CI [0.161887, 0.195565]) versus 213/1982 for equal-budget random lines (recovery-rate 95% CI [0.094584, 0.121869]), but its TIFF fails the strict gate at 99.6400%. The separate spatially blocked LOQO-DTI logistic mean is 0.039489 (range across four quadrants 0.032545–0.054939; evaluator <code>gems61.holdout_segmented v2</code>, 22,641 withheld positives); the historical receipt reports no 95% CI for this mean or range. Feature-model canary AUC is 0.559341. The archived multi-line comparison is also labelled: 3×3 ribbon HOLDOUT-DTI 0.018372 (95% CI [0.016155, 0.021061]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)</code>; 256,096 emitted pixels/draw) versus dots HOLDOUT-DTI 0.040910 (95% CI [0.035859, 0.047073]; same evaluator/count; 39,794 emitted pixels/draw). These are historical diagnostics, not an organizer result or submission clearance.</p>
+<p>On the same 1,999 withheld basin-interior segments, historical H61-G recovered 351 (17.6%) versus 215 (10.8%) for equal-budget random lines. This is proxy recovery, not hidden organizer truth.</p>
+<p><b>Current submission file H61-O (variable-density inversion):</b> HOLDOUT-DTI 0.054193
+(95% CI [0.044000, 0.065650]; 40,000 emitted pixels/draw;
+evaluator <code>gems61.holdout_segmented v2</code>) versus random lines 0.031414 and random dots anywhere
+0.041203 at the same 40,000-dot budget; basin-interior recovery
+463/2,915 versus
+309/2,915 for random lines;
+LOQO-DTI mean 0.037596 (four quadrants 0.031509–0.050270).
+Format-valid and unique, and an honest negative on the selector's bar.</p>
+<p>Feature-alone canary on the historical H61-G holdout: worst AUC 0.558, threshold 0.90.
+The current-run H61-L surface did not reach holdout, so no canary or DTI is claimed for that run. The separate main-branch H61-L variant's historical HOLDOUT-DTI is documented above and does not clear its strict final-dot failure.</p>
 
-<h3>Leakage canary (protocol rule 4)</h3>
-<table><tr><th>feature</th><th>AUC (withheld truth vs random active px)</th></tr>
-<tr><td>habitat OOF probability</td><td>0.626</td></tr>
-<tr><td>inverted depth (200 m)</td><td>0.505</td></tr>
-<tr><td>inverted-depth HGM</td><td>0.520</td></tr>
-<tr><td>step throw</td><td>0.500</td></tr>
-<tr><td>corridor indicator</td><td>0.510</td></tr>
-<tr><td>Euler source depth</td><td>0.493</td></tr>
-<tr><td>band 13 gravity</td><td>0.478</td></tr>
-<tr><td>band 19 slope</td><td>0.558</td></tr>
-</table>
-<p>Worst AUC 0.626 (limit 0.90) — the shipped logistic model passes
-the canary with no caveat. The gradient-boosted variant's 0.901 does
-not; see below.</p>
-
-<h3>Model class and prior shape (experiment 2)</h3>
-<table><tr><th>row</th><th>dots / draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th><th>basin-interior segments</th></tr>
-<tr><td>E2 logistic no-prior prune2 @ 40000</td><td>40,000</td><td>0.0606</td><td>0.0494–0.0727</td><td>0.092</td><td>353/1982</td></tr>
-<tr><td>E2 logistic no-prior prune3 @ 40000</td><td>40,000</td><td>0.0546</td><td>0.0448–0.0654</td><td>0.083</td><td>322/1982</td></tr>
-<tr><td>E2 gbm no-prior prune2 @ 40000</td><td>40,000</td><td>0.1599</td><td>0.1517–0.1681</td><td>0.243</td><td>1040/1982</td></tr>
-<tr><td>E2 gbm no-prior prune3 @ 40000</td><td>40,000</td><td>0.1458</td><td>0.1368–0.1542</td><td>0.222</td><td>952/1982</td></tr>
-<tr><td>E2 logistic prior=step k=0.5 prune3 @ 40000</td><td>40,000</td><td>0.0522</td><td>0.0420–0.0636</td><td>0.079</td><td>344/1982</td></tr>
-<tr><td>E2 logistic prior=step k=2.0 prune3 @ 40000</td><td>40,000</td><td>0.0510</td><td>0.0411–0.0619</td><td>0.077</td><td>368/1982</td></tr>
-<tr><td>E2 logistic prior=throw k=1.0 prune3 @ 40000</td><td>40,000</td><td>0.0489</td><td>0.0408–0.0579</td><td>0.074</td><td>336/1982</td></tr>
-<tr><td>E2 gbm prior=step k=0.5 prune3 @ 40000</td><td>40,000</td><td>0.1416</td><td>0.1330–0.1497</td><td>0.215</td><td>963/1982</td></tr>
-<tr><td>E2 gbm prior=step k=2.0 prune3 @ 40000</td><td>40,000</td><td>0.1272</td><td>0.1196–0.1348</td><td>0.193</td><td>942/1982</td></tr>
-<tr><td>E2 gbm prior=throw k=1.0 prune3 @ 40000</td><td>40,000</td><td>0.1431</td><td>0.1344–0.1519</td><td>0.218</td><td>983/1982</td></tr>
-<tr><td>E2 gbm prior=None k=1.0 prune2 @ 30000</td><td>30,001</td><td>0.1486</td><td>0.1405–0.1567</td><td>0.199</td><td>887/1982</td></tr>
-<tr><td>E2 gbm prior=None k=1.0 prune2 @ 60000</td><td>60,000</td><td>0.1651</td><td>0.1575–0.1731</td><td>0.310</td><td>1250/1982</td></tr>
-<tr><td>E2 gbm prior=None k=1.0 prune2 tile2 @ 40000</td><td>40,000</td><td>0.1322</td><td>0.1240–0.1400</td><td>0.199</td><td>825/1982</td></tr>
-<tr><td>E2 gbm prior=None k=1.0 prune2 tile4 @ 40000</td><td>40,000</td><td>0.1670</td><td>0.1579–0.1753</td><td>0.255</td><td>1200/1982</td></tr>
-</table>
-
-<h3>Configuration sweep (experiment 3)</h3>
-<table><tr><th>row</th><th>dots / draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th><th>basin-interior segments</th></tr>
-<tr><td>S gbm prune2 tile3 @ 40000</td><td>40,000</td><td>0.1599</td><td>0.1517–0.1681</td><td>0.243</td><td>1040/1982</td></tr>
-<tr><td>S gbm prune2 tile3 @ 60000</td><td>60,000</td><td>0.1651</td><td>0.1575–0.1731</td><td>0.310</td><td>1250/1982</td></tr>
-<tr><td>S gbm prune2 tile4 @ 40000</td><td>40,000</td><td>0.1670</td><td>0.1579–0.1753</td><td>0.255</td><td>1200/1982</td></tr>
-<tr><td>S gbm prune2 tile4 @ 60000</td><td>60,000</td><td>0.1693</td><td>0.1601–0.1793</td><td>0.319</td><td>1438/1982</td></tr>
-<tr><td>S gbm prune2 tile5 @ 40000</td><td>40,000</td><td>0.1617</td><td>0.1539–0.1709</td><td>0.247</td><td>1278/1982</td></tr>
-<tr><td>S gbm prune2 tile5 @ 60000</td><td>60,000</td><td>0.1578</td><td>0.1473–0.1687</td><td>0.298</td><td>1472/1982</td></tr>
-<tr><td>S gbm prune3 tile3 @ 40000</td><td>40,000</td><td>0.1458</td><td>0.1368–0.1542</td><td>0.222</td><td>952/1982</td></tr>
-<tr><td>S gbm prune3 tile3 @ 60000</td><td>60,000</td><td>0.1498</td><td>0.1433–0.1562</td><td>0.281</td><td>1134/1982</td></tr>
-<tr><td>S gbm prune3 tile4 @ 40000</td><td>40,000</td><td>0.1520</td><td>0.1437–0.1594</td><td>0.232</td><td>1068/1982</td></tr>
-<tr><td>S gbm prune3 tile4 @ 60000</td><td>60,000</td><td>0.1532</td><td>0.1467–0.1607</td><td>0.289</td><td>1287/1982</td></tr>
-<tr><td>S gbm prune3 tile5 @ 40000</td><td>40,000</td><td>0.1459</td><td>0.1395–0.1533</td><td>0.223</td><td>1130/1982</td></tr>
-<tr><td>S gbm prune3 tile5 @ 60000</td><td>60,000</td><td>0.1415</td><td>0.1343–0.1492</td><td>0.267</td><td>1316/1982</td></tr>
-</table>
-
-<h3>Leave-one-quadrant-out retest (experiments 3 and 4)</h3>
-<p>Retrain with <b>no</b> training pixel inside the scored quadrant, then score that quadrant. This is
-the instrument that decides whether a locator has skill or is merely sitting next to visible traces.</p>
-<table><tr><th>quadrant</th><th>locator</th><th>blocked canary AUC</th><th>LOQO-DTI</th><th>coverage</th><th>basin-interior segments</th></tr>
-<tr><td>NW</td><td>logistic</td><td>0.557</td><td>0.0325</td><td>0.057</td><td>27/298</td></tr>
-<tr><td>NW</td><td>gbm</td><td>0.575</td><td>0.0307</td><td>0.053</td><td>19/298</td></tr>
-<tr><td>NW</td><td>slope19</td><td>0.593</td><td>0.0216</td><td>0.038</td><td>24/298</td></tr>
-<tr><td>NW</td><td>corridor</td><td>0.618</td><td>0.0302</td><td>0.053</td><td>34/298</td></tr>
-<tr><td>NE</td><td>logistic</td><td>0.558</td><td>0.0338</td><td>0.059</td><td>35/338</td></tr>
-<tr><td>NE</td><td>gbm</td><td>0.525</td><td>0.0140</td><td>0.025</td><td>4/338</td></tr>
-<tr><td>NE</td><td>slope19</td><td>0.548</td><td>0.0169</td><td>0.030</td><td>14/338</td></tr>
-<tr><td>NE</td><td>corridor</td><td>0.588</td><td>0.0342</td><td>0.055</td><td>46/338</td></tr>
-<tr><td>SW</td><td>logistic</td><td>0.518</td><td>0.0367</td><td>0.051</td><td>80/692</td></tr>
-<tr><td>SW</td><td>gbm</td><td>0.531</td><td>0.0340</td><td>0.047</td><td>58/692</td></tr>
-<tr><td>SW</td><td>slope19</td><td>0.540</td><td>0.0230</td><td>0.032</td><td>41/692</td></tr>
-<tr><td>SW</td><td>corridor</td><td>0.540</td><td>0.0274</td><td>0.035</td><td>39/692</td></tr>
-<tr><td>SE</td><td>logistic</td><td>0.606</td><td>0.0549</td><td>0.074</td><td>89/654</td></tr>
-<tr><td>SE</td><td>gbm</td><td>0.608</td><td>0.0718</td><td>0.097</td><td>75/654</td></tr>
-<tr><td>SE</td><td>slope19</td><td>0.576</td><td>0.0210</td><td>0.028</td><td>31/654</td></tr>
-<tr><td>SE</td><td>corridor</td><td>0.613</td><td>0.0340</td><td>0.046</td><td>84/654</td></tr>
-</table>
-
-<h3>Mean logistic coefficients (the lane's instruments inside the model)</h3>
-<table><tr><th>feature</th><th>mean coefficient</th></tr>
-<tr class=""><td>band19</td><td>+1.343</td></tr>
-<tr class=""><td>band16</td><td>+0.890</td></tr>
-<tr class=""><td>band07</td><td>+0.889</td></tr>
-<tr class=""><td>band12</td><td>-0.853</td></tr>
-<tr class=""><td>band06</td><td>-0.826</td></tr>
-<tr class=""><td>band13</td><td>-0.717</td></tr>
-<tr class=""><td>band04</td><td>-0.628</td></tr>
-<tr class=""><td>band10</td><td>-0.617</td></tr>
-<tr class=""><td>band05</td><td>+0.570</td></tr>
-<tr class=""><td>basin_indicator</td><td>+0.371</td></tr>
-<tr class=""><td>band02</td><td>+0.292</td></tr>
-<tr class=""><td>depth_grad_y</td><td>-0.254</td></tr>
-<tr class="hl"><td>inv_depth_hgm</td><td>-0.204</td></tr>
-<tr class="hl"><td>corridor_indicator</td><td>+0.194</td></tr>
-<tr class="hl"><td>inv_depth</td><td>-0.172</td></tr>
-<tr class=""><td>band11</td><td>+0.155</td></tr>
-<tr class=""><td>band14</td><td>-0.147</td></tr>
-<tr class=""><td>band09</td><td>-0.141</td></tr>
-<tr class=""><td>band17</td><td>+0.069</td></tr>
-<tr class=""><td>band03</td><td>-0.062</td></tr>
-<tr class="hl"><td>euler_depth</td><td>-0.053</td></tr>
-<tr class="hl"><td>step_throw</td><td>-0.046</td></tr>
-<tr class=""><td>band15</td><td>-0.036</td></tr>
-<tr class=""><td>depth_grad_x</td><td>-0.034</td></tr>
-<tr class=""><td>band01</td><td>+0.015</td></tr>
-<tr class=""><td>band08</td><td>+0.006</td></tr>
-<tr class="hl"><td>step_indicator</td><td>-0.006</td></tr>
-<tr class=""><td>band18</td><td>+0.002</td></tr>
-</table>
-
-</div></body></html>
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

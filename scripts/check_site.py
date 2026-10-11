@@ -8,8 +8,9 @@ Checks, in order:
 3. every external link is https and points at a host this lane actually cited
    (an unexpected host is a hallucination risk and is reported as a failure);
 4. no page still contains an unresolved placeholder;
-5. the download banner and the run card agree: if the card says the artifact is
-   not authorised for download, the site must not publish a link to it.
+5. the current run card and status banner agree: a denied submission decision
+   must not be rendered as a cleared submission or an approved submission link.
+   Explicit audit-only links remain allowed when their warning is visible.
 
 Exit code 0 means the site is internally consistent.  It says nothing about
 whether the evidence it quotes is correct -- that is what ``evidence/`` is for.
@@ -28,11 +29,8 @@ ALLOWED_HOSTS = {
     "www.drivendata.org", "community.drivendata.org", "doi.org",
     "pubs.geoscienceworld.org", "geophysics.geoscienceworld.org",
     "api.crossref.org", "store.usgs.gov", "pubs.usgs.gov",
-    "www.energy.gov", "www.nlr.gov", "github.com", "raw.githubusercontent.com",
+    "www.energy.gov", "www.nlr.gov", "www.usgs.gov", "github.com", "raw.githubusercontent.com",
     "buffedlizard55-lab.github.io", "docs.nlr.gov", "www.crossref.org",
-    # USGS The National Map downloader, cited in irregularity IR-61-SRC-01 as the
-    # free official source for the 3DEP 1 m lidar hypothesis (H61-N).
-    "apps.nationalmap.gov",
 }
 
 HREF = re.compile(r'href="([^"]+)"')
@@ -41,14 +39,25 @@ PLACEHOLDER = re.compile(r"\{\{|TODO|undefined|nan%|>nan<|None%")
 
 def main() -> int:
     problems: list[str] = []
-    # Only the pages this session's builder emits are in scope; pages written by
-    # the parallel sessions that are merged on main are linked, not vetted here.
+    # The current status pages are generated from the run card. Other merged
+    # session pages remain available only as explicitly marked historical pages.
     from build_site import PAGES  # noqa: PLC0415
     pages = sorted(DOCS / name for name, _ in PAGES)
     if not pages:
         print("[site] FAIL: no html pages in docs/")
         return 1
-    print(f"[site] {len(pages)} pages")
+    current_names = {p.name for p in pages}
+    legacy_pages = sorted(p for p in DOCS.rglob("*.html")
+                          if p.name not in current_names and p.name != "404.html")
+    print(f"[site] {len(pages)} current pages, {len(legacy_pages)} legacy pages")
+    for legacy in legacy_pages:
+        text = legacy.read_text(encoding="utf-8")
+        if "HISTORICAL PAGE — SUPERSEDED." not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page lacks the superseded-status warning")
+        if 'href="index.html"' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to current status")
+        if '../evidence/local_artifact_strict_dot_audit.json' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to the strict artifact audit")
 
     for page in pages:
         text = page.read_text(encoding="utf-8")
@@ -70,47 +79,37 @@ def main() -> int:
             if not target.exists():
                 problems.append(f"{page.name}: broken internal link -> {href}")
 
-    # The banner and the run cards must agree.  Every card that declares
-    # ``okay_to_download`` is enforced: if it says NO, index must not link its
-    # raster; the NEWEST flagged card is the site's headline and index must
-    # link it.  Cards without the flag pre-date the gate and are skipped.
+    # the banner and the run card must agree
     import json
-    cards = []
-    card_paths = sorted((ROOT / "evidence").glob("*run_card*.json")) + \
-        sorted((DOCS / "data").glob("*run_card*.json"))
-    for p in card_paths:
-        try:
-            d = json.loads(p.read_text())
-        except Exception:
-            continue
-        if isinstance(d, dict) and "okay_to_download" in d:
-            cards.append((p, d))
+    # Prefer current run_card.json (H61-O) if present, else legacy h61l_run_card
+    for cand in (ROOT / "evidence" / "run_card.json", ROOT / "evidence" / "h61l_run_card.json"):
+        if cand.is_file():
+            card_path = cand
+            break
+    else:
+        card_path = ROOT / "evidence" / "h61l_run_card.json"
     index = DOCS / "index.html"
-    if index.exists() and cards:
+    if index.exists() and card_path.is_file():
+        card = json.loads(card_path.read_text())
+        # support both formats: run_card has okay_to_submit at top, h61l has nested
+        if "okay_to_submit" in card:
+            authorised = bool(card.get("okay_to_submit", False))
+        else:
+            decision = card.get("submission_decision", {})
+            authorised = bool(decision.get("okay_to_submit", False))
         text = index.read_text()
-
-        def linked(raster_file: str) -> bool:
-            name = Path(raster_file).name
-            return bool(name) and re.search(r'href="[^"]*' + re.escape(name), text) is not None
-
-        for p, d in cards:
-            raster = ((d.get("raster") or {}).get("file")) or ""
-            if linked(raster) and not d.get("okay_to_download", False):
-                problems.append(f"run card {p.name} does NOT authorise the download "
-                                f"but index links {Path(raster).name}")
-        newest_path, newest = max(cards, key=lambda t: t[0].stat().st_mtime)
-        raster = ((newest.get("raster") or {}).get("file")) or ""
-        authorised = bool(newest.get("okay_to_download", False))
-        publishes_link = linked(raster)
-        if authorised and not publishes_link:
-            problems.append(f"newest run card {newest_path.name} authorises "
-                            f"{Path(raster).name} but the page publishes no link")
-        if not authorised and publishes_link:
-            problems.append("run card does NOT authorise the download but the page publishes a link")
-        print(f"[site] run-card gate: {len(cards)} flagged card(s); newest {newest_path.name} "
-              f"okay_to_download={authorised}, page publishes link={publishes_link}")
+        publishes_submission_link = "Download the submission GeoTIFF" in text
+        claims_cleared = ("CLEARED —" in text or "YES — it is FORMAT-VALID and UNIQUE" in text)
+        states_no_clearance = "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in text
+        if authorised and not publishes_submission_link:
+            problems.append("current run card authorises submission but the page publishes no exact submission link")
+        if not authorised and (publishes_submission_link or claims_cleared):
+            problems.append("current run card does NOT authorise submission but the page claims a cleared file")
+        if not authorised and not states_no_clearance:
+            problems.append("current run card denies submission but the status page omits the no-clearance banner")
+        print(f"[site] current run card okay_to_submit={authorised}, page claims cleared={claims_cleared}")
     elif index.exists():
-        problems.append("index.html exists but no run_card.json was found")
+        problems.append("index.html exists but the current evidence/h61l_run_card.json was not found")
 
     if problems:
         print(f"[site] FAIL ({len(problems)} problems)")

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Build the submission GeoTIFF the site offers for download, then validate it.
+"""RETIRED legacy submission writer.
 
-Operating point comes from reports/experiment.json (the best holdout configuration),
-so the raster that ships is the raster the holdout measured -- there is no separate
-hand-tuned path that could drift from the evidence.
-
-    python scripts/make_submission.py --data data --out docs/downloads
+This older pipeline uses a partial registry and does not enforce the current
+complete-inventory, pre-placement strict gate. Its CLI is disabled; preserve the
+implementation only as historical provenance. Use the current strict-gated
+H61-G/H61-L workflows if a future eligible experiment is authorized.
 """
 
 from __future__ import annotations
@@ -212,4 +211,7 @@ def _ctxs(folds, valid):
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this legacy writer does not apply the complete-inventory strict "
+        "pre-placement gate. Do not generate or submit a TIFF from this entrypoint."
+    )

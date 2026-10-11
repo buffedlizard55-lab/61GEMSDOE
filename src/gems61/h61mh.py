@@ -48,13 +48,13 @@ an **out-of-fold habitat model**:
 Everything is scored on the shared segmented holdout
 (:mod:`gems61.holdout_segmented`, whole segments, 4 eroded quadrants, seeds
 20+21, pooled DTI alpha 0.2 beta 0.8 R = 300 m).  Nothing is hand-written.
-
-NOTE ON NAMING (IR-61-NAME-01): two parallel sessions both labelled their
-buried-structure-lane work "H61-M". The gravity + magnetic conjunction
-construction merged from PR #21 owns ``src/gems61/h61m.py`` and
-``scripts/run_h61m.py``; this out-of-fold habitat model owns the ``h61mh``
-(H61-M habitat) namespace. Both bodies of work are kept.
 """
+
+# NOTE ON NAMING (IR-61-NAME-01): two parallel sessions both labelled their
+# buried-structure-lane work "H61-M". The gravity + magnetic conjunction
+# construction merged from PR #21 owns `src/gems61/h61m.py` and
+# `scripts/run_h61m.py`; this out-of-fold habitat model owns the `h61mh`
+# (H61-M habitat) namespace. Both bodies of work are kept.
 
 from __future__ import annotations
 
