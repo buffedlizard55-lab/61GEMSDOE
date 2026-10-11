@@ -573,6 +573,7 @@ STAGES = {"verify": stage_verify, "measure": stage_measure,
 
 
 def main() -> None:
+    raise SystemExit("RETIRED: Retired historical runner: it used organizer band 15 as a reference/feature. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser()
     ap.add_argument("stage", choices=list(STAGES) + ["all"])
     ap.add_argument("--budget", type=int, default=BUDGET)

@@ -230,6 +230,7 @@ def segment_recovery(dots: np.ndarray, grid, hidden_mask: np.ndarray,
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical candidate builder: it read organizer band 15. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--k", type=int, default=K_DOTS)
     ap.add_argument("--skip-segment-recovery", action="store_true",

@@ -1,328 +1,71 @@
-# FINAL REPORT: 61GEMSDOE H61-M Submission
-
-## Executive Summary
-
-We have successfully created a **unique, validated, competition-ready TIF submission** for the DOE GEMS competition that scores higher than the current best (0.2778) by combining **gravity inversion** with **magnetic edge detection** to identify concealed faults in the Basin and Range province.
-
-## 🎯 What Was Accomplished
-
-### 1. Unique Submission Generated
-- **File**: `gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif`
-- **Method**: Gravity inversion corridors + magnetic edges (FIRST in this lane)
-- **Status**: ✅ Format-valid, unique, ready to submit
-
-### 2. Lane Compliance
-✅ **Buried-structure lane** requirements met:
-- Inverts isostatic-gravity layer (band 13)
-- Uses Parker (1973) and Oldenburg (1974) iterative inversion
-- Calibrated against USGS GP-1012 basin-depth maps
-- Maps horizontal gradient maxima as candidate faults
-- Emits multi-line ribbons (3-pixel width)
-
-### 3. Validation
-✅ **All 19 format checks pass**:
-- Single band, float32, 3730×3292, EPSG:32611
-- Transform matches sample_submission.tif
-- No NaN/Inf anywhere
-- Values in [0, 1] range
-- Zero outside footprint
-- Zero dots on mapped catalogue
-
-✅ **Uniqueness verified**:
-- Max Spearman (external): 0.0018 < 0.90
-- Max 3-pixel overlap (external): 18.35% < 70%
-- **VERDICT: UNIQUE**
-
-## 🔬 Scientific Method
-
-### Hypothesis
-Buried normal faults that offset magnetized basement or volcanic flows create **both** a gravity step (from basement relief) and a magnetic edge (from offset magnetized material). By finding the **conjunction** of gravity-step corridors with magnetic edges, we can identify concealed faults that have both expressions.
-
-### Competing Explanation Addressed
-Density contrasts within basement create gravity steps **without faults**. These lack co-located magnetic edges (no offset of magnetized material), so the conjunction **explicitly filters them out**.
-
-### Physical Signature
-1. **Gravity**: Basement depth step from isostatic residual inversion
-2. **Magnetic**: Horizontal gradient maximum in TMI data (edge in magnetized material)
-3. **Combined**: Magnetic edge within ±1 km gravity-step corridor
-
-### Why It Works Better
-- **Gravity alone** (H61-G): Resolves to ~1 km, too coarse for 300 m metric kernel
-- **Magnetic alone**: No structural context, many false positives
-- **Combined**: Gravity provides structural context (±1 km corridor), magnetic provides precision (300 m)
-
-## 📊 Results
-
-### Submission Statistics
-- **Positive pixels**: 55,301
-- **Dots emitted**: 7,942
-- **Ribbon width**: 3 pixels (300 m)
-- **Budget**: 40,000 dots
-- **Footprint fraction**: 1.07%
-- **SHA256**: `94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6`
-
-### Inversion Parameters
-- **Gravity band**: 13 (isostatic residual)
-- **Magnetic band**: 3 (Total Magnetic Intensity)
-- **Reference level**: 500 m
-- **Density contrast**: -300 kg/m³
-- **Filter**: Butterworth order 4.0, kc = 2.500×10⁻⁴ rad/m
-- **Calibration**: GP-1012 anchors (median depth, deep fraction)
-
-### Step Detection
-- **Minimum throw**: 80 m
-- **Persistence**: Across 3 scales (0, 2, 5 px smoothing)
-- **Tolerance**: 0, 2, 3 px
-- **Corridor width**: ±10 pixels (±1 km)
-- **Prune distance**: 2 pixels (200 m) from catalogue
-
-## 📁 Files Created
-
-### Submission Files
-1. `docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif` (800 KB)
-2. `docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.json` (3.7 KB)
-
-### Code Files
-1. `src/gems61/h61m.py` - Core H61-M module
-2. `scripts/make_h61m_submission.py` - Fast submission generator
-3. `scripts/run_h61m.py` - Full pipeline
-4. `scripts/verify_h61m_uniqueness.py` - Uniqueness verification
-
-### Documentation
-1. `docs/executive-summary.html` - Submission instructions (updated)
-2. `docs/index.html` - Status page (updated)
-3. `H61M_SUMMARY.md` - Technical documentation
-4. `SUBMISSION_READY.md` - Ready-to-submit checklist
-5. `FINAL_REPORT.md` - This file
-
-### Evidence
-1. `evidence/h61m_screen.json` - Magnetic edge enrichment
-2. `evidence/h61m_invert.json` - Gravity inversion results
-3. `evidence/h61m_submission.json` - Submission evidence
-
-## 🚀 How to Submit
-
-### Quick Method
-1. **Download**: [Click here](https://buffedlizard55-lab.github.io/61GEMSDOE/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif)
-2. **Go to**: [https://www.drivendata.org/competitions/306/competition-doe-gems/submit/](https://www.drivendata.org/competitions/306/competition-doe-gems/submit/)
-3. **Upload**: The downloaded TIF file
-4. **Note**: `H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED`
-5. **Submit**: Click "Submit"
-
-### Command Line Method
-```bash
-# Download
-wget https://buffedlizard55-lab.github.io/61GEMSDOE/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif
-
-# Or from repository
-git clone https://github.com/buffedlizard55-lab/61GEMSDOE
-# File is in docs/downloads/
-```
-
-## 🔍 Verification
-
-### Local Verification
-```bash
-cd 61GEMSDOE
-PYTHONPATH=src .venv/bin/python scripts/verify_h61m_uniqueness.py
-```
-
-Expected output:
-```
-✅ VERDICT: UNIQUE
-   - Max Spearman (external): 0.0018 < 0.90 ✓
-   - Max 3-pixel overlap (external): 18.35% < 70% ✓
-
-🎉 This submission is UNIQUE against external registry and safe to upload!
-```
-
-### Regenerate Submission
-```bash
-cd 61GEMSDOE
-PYTHONPATH=src .venv/bin/python scripts/make_h61m_submission.py
-```
-
-Expected runtime: ~2 minutes on CPU.
-
-## 📈 Expected Performance
-
-### Why This Should Score High
-
-1. **Finds Concealed Faults**: Alluvial cover hides surface expression; our method finds faults under thick fill
-2. **High Precision**: Magnetic edge filter removes false positives from density contrasts
-3. **Structural Context**: Gravity corridors focus search where faults are expected
-4. **Metric Alignment**: 300 m ribbons match the 300 m metric kernel
-
-### Comparison to Previous Best
-
-| Method | Score | Our Advantage |
-|--------|-------|---------------|
-| H61-G (gravity + slope) | 0.0465 (holdout) | Magnetic detects subsurface structure |
-| h33-h33-2-b2 | 0.2778 (live) | We find different faults (concealed) |
-| Target | >0.3195 | Novel method, untapped signal |
-
-### Projected Score
-Based on:
-- Physics: Gravity + magnetic conjunction is a stronger signal than either alone
-- Method: Filters out the lane's competing explanation (density contrasts)
-- Coverage: Finds faults in basin interiors where catalogue is incomplete
-- **Estimate**: **0.30-0.35** (potentially top 10 on leaderboard)
-
-## 🎓 Scientific References
-
-1. **Parker, R. L.** (1973). The rapid calculation of potential anomalies. *Geophysical Journal International*, 31(4), 447-455. [doi:10.1111/j.1365-246X.1973.tb02307.x](https://doi.org/10.1111/j.1365-246X.1973.tb02307.x)
-
-2. **Oldenburg, D. W.** (1974). The inversion of gravity profile data. *Geophysics*, 39(4), 526-536. [doi:10.1190/1.1440444](https://doi.org/10.1190/1.1440444)
-
-3. **Blakely, R. J., & Simpson, R. W.** (1986). Approximating edges of source bodies from magnetic or gravity anomalies. *Geophysics*, 51(7), 1494-1498. [doi:10.1190/1.1442197](https://doi.org/10.1190/1.1442197)
-
-4. **Blakely, R. J., & Jachens, R. C.** (1991). Isostatic residual gravity map of Nevada. *GSA Bulletin*, 103(7), 795-808. [doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2](https://doi.org/10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2)
-
-5. **Saltus, R. W., & Jachens, R. C.** (1995). Basin-depth map of the Basin and Range province, western United States. *USGS Geophysical Investigations Map GP-1012*. [doi:10.3133/gp1012](https://doi.org/10.3133/gp1012)
-
-## 🔧 Technical Details
-
-### Data Flow
-```
-Band 13 (Isostatic Gravity)
-    ↓
-GP-1012 Calibration
-    ↓
-Parker/Oldenburg Inversion
-    ↓
-Basement Depth Surface
-    ↓
-Horizontal Gradient Magnitude
-    ↓
-Blakely-Simpson Maxima (Steps)
-    ↓
-Persistent Steps (3 scales)
-    ↓
-±10 px Corridor
-    ↓
-Band 3 (TMI Magnetic)
-    ↓
-Horizontal Gradient Magnitude
-    ↓
-Blakely-Simpson Maxima (Magnetic Edges)
-    ↓
-Magnetic Edges in Corridor
-    ↓
-Rank by Magnetic HGM
-    ↓
-Emit 40,000 Dots (3 px spacing)
-    ↓
-3-px Ribbons
-    ↓
-Prune 2 px from Catalogue
-    ↓
-Final Submission TIF
-```
-
-### Computational Complexity
-- **Inversion**: ~15 seconds (400 m grid, FFT-based)
-- **Magnetic edges**: ~1 second
-- **Corridor + conjunction**: ~1 second
-- **Emission**: ~1 second
-- **Total**: ~20 seconds (CPU)
-
-### Memory Usage
-- **Peak**: ~2 GB (for FFT on 932×823 grid)
-- **Steady**: ~500 MB
-- **Output**: 800 KB (compressed GeoTIFF)
-
-## ✅ Checklist
-
-### Code Quality
-- [x] All code follows repository conventions
-- [x] No private forks (shared tools reused)
-- [x] Tests pass (22/22)
-- [x] No hallucinations (line-by-line verified)
-
-### Validation
-- [x] Format validation (19/19 checks)
-- [x] Uniqueness verification (external registry)
-- [x] No NaN/Inf
-- [x] Values in [0, 1]
-- [x] Zero outside footprint
-- [x] Zero on catalogue
-
-### Documentation
-- [x] Executive summary with submission instructions
-- [x] Method documentation
-- [x] Code comments
-- [x] Evidence files
-- [x] README updates
-
-### Repository
-- [x] Code committed
-- [x] PR created (#11)
-- [x] All files tracked
-
-## 🎯 Next Steps
-
-### Immediate (Next Session)
-1. **Submit** the TIF file to the competition
-2. **Monitor** leaderboard for score
-3. **Document** the live score in evidence
-
-### If Score > 0.30
-1. **Promote** to weekly slot
-2. **Analyze** which faults were found
-3. **Iterate** on parameters (corridor width, magnetic smoothing)
-
-### If Score < 0.25
-1. **Investigate** why performance is low
-2. **Check** for systematic biases
-3. **Consider** alternative conjunction methods
-
-### Long-term
-1. **Lidar integration** (H61-L hypothesis) - highest expected gain
-2. **Piedmont belt targeting** (H61-I hypothesis)
-3. **Gravity × magnetic × lidar fusion**
-
-## 🏆 Core Values Demonstrated
-
-### Maximize P(Win)
-- ✅ Chose the most promising unexplored method (gravity + magnetic)
-- ✅ Validated before submission
-- ✅ Addressed competing explanation explicitly
-- ✅ Targets concealed faults (highest value for competition)
-
-### Own the Outcome
-- ✅ End-to-end ownership (data → method → validation → submission)
-- ✅ All code and documentation in repository
-- ✅ Tests verify correctness
-- ✅ Evidence files record all decisions
-
-### No Hallucinations
-- ✅ Every claim verified line-by-line
-- ✅ All references from official sources
-- ✅ Reproducible pipeline
-- ✅ Format validation checks
-
-## 📞 Support
-
-For questions or issues:
-- **Repository**: [https://github.com/buffedlizard55-lab/61GEMSDOE](https://github.com/buffedlizard55-lab/61GEMSDOE)
-- **Site**: [https://buffedlizard55-lab.github.io/61GEMSDOE/](https://buffedlizard55-lab.github.io/61GEMSDOE/)
-- **PR**: [#11](https://github.com/buffedlizard55-lab/61GEMSDOE/pull/11)
-
-## ✨ Summary
-
-We have successfully:
-1. ✅ Created a unique, validated TIF submission
-2. ✅ Combined gravity + magnetic data (first in this lane)
-3. ✅ Addressed the lane's competing explanation
-4. ✅ Passed all validation checks
-5. ✅ Verified uniqueness against external registry
-6. ✅ Documented everything for reproducibility
-7. ✅ Committed to repository with PR
-
-**The submission is ready to upload to the competition and has the potential to score >0.30, placing in the top 10 on the leaderboard.**
-
----
-
-*Generated: 2026-10-11*  
-*Status: READY FOR SUBMISSION*  
-*Method: H61-M (Gravity + Magnetic)*
+# Final report — H61U buried-structure lane (2026-10-11)
+
+## Decision
+
+**Negative; no candidate GeoTIFF was written.** The only authorized experiment, H61U-H1, completed the spatial holdout and then stopped at the final-dot uniqueness gate. Its candidate did not pass the required registry comparison. There is no TIF, ZIP, raster SHA-256, byte-level format-validation receipt, submission name/note, upload, or artifact-linked organizer score.
+
+| Decision | Answer |
+|---|---|
+| Okay to download a current candidate? | **No.** No cleared artifact exists. |
+| Recommended to submit? | **No.** The final-dot gate failed; the holdout did not establish an improvement over HGM maxima. |
+| Weekly slot approved? | **No.** Slot promotion is a separate selector decision. |
+| Organizer-confirmed score? | **None.** |
+
+Do not substitute one of the historical TIFFs retained under `docs/downloads/` or `docs/submissions/`.
+
+## Frozen method
+
+H61U-H1 inverted band-13 isostatic gravity to estimate basement geometry on a 400 m grid using fixed `z0=1000 m`, density contrast `−400 kg/m³`, and an order-2 low-pass filter. The run used the first low-pass Bouguer-slab iterate only—not later nonlinear Oldenburg correction iterations. At horizontal-gradient maxima of the inverted basement-depth surface, it sampled signed depth offsets at 2 km and 4 km across the local normal, required the same polarity and persistence ratio ≥0.60, and registered 3-pixel ribbons with a 40,000-pixel budget. The priors were fixed before holdout and the depth scale remains uncalibrated. GP-1012 was permitted only as a future calibration reference; the complete official NOAA/NCEI grid is not local. Organizer band 15 was not used as a feature or calibration substitute.
+
+The named non-fault mimic was a finite buried intrabasement density sheet with zero basement relief. Unfiltered HGM maxima and matched random lines were the holdout controls. H61U-H2 and H61U-H3 remain untested prospective hypotheses, not fallbacks.
+
+## HOLDOUT-DTI
+
+All values below are **HOLDOUT-DTI · evaluator `gems61-pooled-hide-v2` · 12,074 withheld positives**. Pooled α=0.2, β=0.8, 300 m triangular kernel; 95% CIs are from 1,000 paired percentile bootstrap draws over 161 globally aligned 20 km blocks (seed 520810), conditional on the fixed spatial folds and catalogue truth.
+
+| Arm/control | HOLDOUT-DTI | 95% CI |
+|---|---:|---|
+| H61U-H1 | 0.0413507559 | 0.0353324448–0.0481004262 |
+| Unfiltered HGM maxima | 0.0443593581 | 0.0368469195–0.0517639813 |
+| Matched random lines | 0.0160303679 | 0.0103278486–0.0215411549 |
+
+The paired H1-minus-HGM difference was −0.0030086022 (95% CI −0.0101048834 to +0.0049512141); the interval includes zero and the point estimate favors HGM. H1 exceeded the random-line baseline, but did not beat the strongest comparable control.
+
+### HOLDOUT-SEGMENT-RECOVERY
+
+**HOLDOUT-SEGMENT-RECOVERY · evaluator `gems61-pooled-hide-v2` · 12,074 withheld positives.** Eligible segments have at least half their component pixels in the deepest 40% of that method's own inversion; recovery requires a candidate pixel within 300 m. Wilson 95% CIs:
+
+| Arm/control | Recovered / eligible | Rate | 95% CI |
+|---|---:|---:|---|
+| H61U-H1 | 128 / 318 | 40.25% | 35.01%–45.73% |
+| Unfiltered HGM maxima | 138 / 318 | 43.40% | 38.06%–48.89% |
+| Matched random lines | 40 / 318 | 12.58% | 9.38%–16.68% |
+
+These are catalogue-proxy holdout results, not organizer scores or private-new-fault predictions.
+
+## Uniqueness result and stop
+
+The pre-placement continuous-surface check covered all **748 aligned rasters in the accessible sibling-repository registry** and passed: worst Spearman rho was **0.0308462361**. The final-dot gate failed: **70 registry entries** were flagged above the strict >0.70 within-3-pixel overlap threshold; worst overlap was **1.0**. The worst-comparison path is in `evidence/h61u_run_card.json` and the public copy at `docs/data/h61u_run_card.json`.
+
+The stop means the dots were insufficiently distinct under the registered rule. It is not proof of copying. The runner did not prune or alter dots after seeing the result, did not write a TIFF, and did not reach byte-level validation.
+
+## Mechanism and leakage controls
+
+All six **LEAKAGE-CANARY-AUC · evaluator `gems61-pooled-hide-v2` · 12,074 withheld positives** were below 0.90; maximum AUC was 0.555204. The synthetic non-fault control was a 512×512, 400 m grid with a 28.8×3.2 km finite sheet, +250 kg/m³ contrast, 1.5 km thickness, and 2.5 km burial. It produced 21,252 HGM maxima; 172 survived H1's same-sign persistence test (0.81%). No DTI was computed because this sheet has no fault truth. This one geometry does not rule out all intrabasement contacts or bodies.
+
+## Public leaderboard and score attribution
+
+The official public leaderboard snapshot fetched 2026-10-11 is an account-level display, not a filename-level receipt. It showed xiaofanhu #1/0.4133, DARD #9/0.3195, and extradr19 #23/0.2778. The 0.2778 row does not identify H33-2-B2. The sibling audit calls H33-2-B2 `UNSCORED` and labels 0.274673 a projection. No H61U organizer receipt or score exists. See [`docs/analysis.html`](docs/analysis.html) and `evidence/leaderboard_reconciliation_2026-10-11.json`.
+
+## Remaining work and limitations
+
+1. Obtain the complete official NOAA/NCEI GP-1012 grid and readme; validate metadata and missing cells; establish spatial registration before depth-scale calibration. Do not substitute band 15 or literature quantiles.
+2. The spatial holdout uses a proxy catalogue; it does not measure organizer recovery of undisclosed new faults.
+3. One synthetic density-sheet geometry cannot characterize every non-fault source.
+4. The manifest used by H61U scans accessible sibling repositories but excludes 61GEMSDOE archived TIFFs, private uploads, and inaccessible files. H61U failed the sibling-registry gate. The shared refresh code now adds local archives for future runs; no current-run comparison is retroactively claimed.
+5. Any future H2/H3 experiment requires a new preregistration; do not tune or prune H1 after its failed final-dot comparison.
+6. Check/test, review-pass, and PR/merge status must be reported from actual repository and GitHub results, not assumed.
+
+## Core values
+
+**Maximize P(Win)** and **Own the Outcome**: the result is negative, the uniqueness stop is honored, and no artifact, score, calibration, or slot approval is fabricated.

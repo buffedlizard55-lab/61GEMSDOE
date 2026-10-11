@@ -19,8 +19,12 @@ by path: an input cannot be a previous prediction.  A single-band 3730x3292
 EPSG:32611 raster that is not an input is kept, including dense soft fields --
 a dense prior is exactly what can block a candidate.
 
-Outputs ``evidence/registry_refreshed.json`` and a ``registry/cache`` of
-immutable copies (never committed).
+The sibling scan excludes the current checkout to avoid cloning the worktree.
+Its prior prediction rasters are scanned separately from ``docs/downloads/``,
+``docs/submissions/``, ``out/``, ``evidence/``, and ``reports/``; input rasters
+remain excluded by path. The combined inventory is written to
+``evidence/registry_refreshed.json`` with immutable raster copies in
+``registry/cache`` (never committed).
 """
 from __future__ import annotations
 
@@ -46,6 +50,7 @@ INPUT_PATTERNS = (
     "lidar_scarp", "topo_u8", "h52_scarp", "geodawn_rad", "sgmc_faults",
     "derived_sgmc", "depth_to_base", "quarantine",
 )
+LOCAL_PREDICTION_ROOTS = ("docs/downloads", "docs/submissions", "out", "evidence", "reports")
 
 SHAPE = (3730, 3292)
 TRANSFORM = (100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
@@ -86,6 +91,28 @@ def clone_repo(repo: str, scratch: Path) -> tuple[str, str]:
 def is_input(rel: str) -> bool:
     low = rel.lower()
     return any(p.lower() in low for p in INPUT_PATTERNS)
+
+
+def local_prediction_rasters(root: Path = ROOT) -> list[Path]:
+    """List archived prediction TIFFs in this checkout, excluding known inputs.
+
+    Keeping this local scan separate from the sibling clone avoids cloning the
+    current worktree while ensuring prior submissions cannot evade the common
+    uniqueness manifest just because they live in this repository.
+    """
+    root = Path(root)
+    found: list[Path] = []
+    for rel_root in LOCAL_PREDICTION_ROOTS:
+        base = root / rel_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*")):
+            if not path.is_file() or path.suffix.lower() not in {".tif", ".tiff"}:
+                continue
+            rel = path.relative_to(root).as_posix()
+            if not is_input(rel):
+                found.append(path)
+    return sorted(set(found), key=lambda path: path.relative_to(root).as_posix())
 
 
 def classify(path: Path) -> tuple[bool, str]:
@@ -135,6 +162,10 @@ def refresh(root: Path = ROOT, workers: int = 6, scratch: Path = SCRATCH) -> dic
                     continue
                 found.append(dict(repo=repo, path=rel, abs=str(p)))
 
+    local_history = local_prediction_rasters(root)
+    for p in local_history:
+        found.append(dict(repo=SELF, path=p.relative_to(root).as_posix(), abs=str(p)))
+
     usable: list[dict] = []
     rejected: list[dict] = []
     skipped: list[dict] = []
@@ -167,8 +198,10 @@ def refresh(root: Path = ROOT, workers: int = 6, scratch: Path = SCRATCH) -> dic
     out = dict(evidence_class="DATA-INVENTORY",
                generated_utc=datetime.now(timezone.utc).isoformat(timespec="seconds"),
                owner=OWNER, self_repo=SELF,
-               method="git sparse clone (--depth 1 --filter=blob:none --sparse '*.tif')",
+               method=("git sparse clone of accessible sibling repositories plus local historical "
+                       "prediction TIFFs from docs/downloads, docs/submissions, out, evidence, and reports"),
                repos_scanned=repos, snapshots=sorted(snapshots, key=lambda s: s["repo"]),
+               self_repo_files_scanned=[p.relative_to(root).as_posix() for p in local_history],
                repos_unreachable_or_missing=sorted({e.get("repo", "") for e in errors if e.get("repo")}),
                errors=errors,
                grid=dict(shape=list(SHAPE), crs="EPSG:32611", transform=list(TRANSFORM)),
@@ -177,8 +210,10 @@ def refresh(root: Path = ROOT, workers: int = 6, scratch: Path = SCRATCH) -> dic
                skipped_inputs=skipped,
                rejected_not_competition_grid=rejected,
                rasters=usable,
-               scope=("every accessible sibling GEMSDOE repository reachable from main; "
-                      "single-band 3730x3292 EPSG:32611 rasters only; inputs excluded by path"))
+               scope=("every accessible sibling GEMSDOE repository reachable from main plus local historical "
+                      "prediction TIFFs in docs/downloads, docs/submissions, out, evidence, and reports; "
+                      "single-band 3730x3292 EPSG:32611 rasters only; known inputs excluded by path; "
+                      "private/inaccessible submissions are not covered"))
     (root / "evidence").mkdir(exist_ok=True)
     (root / "evidence/registry_refreshed.json").write_text(
         json.dumps(out, indent=2, allow_nan=False) + "\n")

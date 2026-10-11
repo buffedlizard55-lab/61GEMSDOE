@@ -1,18 +1,20 @@
 """Pre-placement surface gate and final-dot drift gate against every earlier
 raster in the family registry.
 
-Two legs, exactly as the parallel-run protocol specifies:
+Two fail-closed legs are used by :func:`check`:
 
-1. **Surface leg (before placement).**  Full-footprint Spearman rank
-   correlation between the candidate's *soft* surface and every registry
-   raster.  ``> 0.90`` with any earlier raster means the candidate has drifted
-   into another lane.
-2. **Dot leg (final dots).**  The fraction of the candidate's emitted dots that
-   fall within Euclidean 3 px of *one* registry raster's positive cells.
-   ``> 0.70`` is a duplicate.
+1. **Surface leg (before placement).** Spearman rank correlation over a fixed
+   lattice subsample of the valid footprint, with full-footprint confirmation
+   for near-threshold rows. ``> 0.90`` against any accessible registry raster
+   stops placement.
+2. **Dot leg (final dots).** The fraction of candidate dots within Euclidean
+   3 px of any positive cell in each registry raster. ``> 0.70`` against any
+   comparator stops writing. No base-rate, density, enrichment, or Jaccard
+   exemption modifies this rule.
 
-The candidate's own repository is excluded from the registry by construction
-(:mod:`scripts.refresh_registry` skips ``61GEMSDOE``).
+The refreshed inventory combines accessible sibling-repository rasters with
+local historical prediction TIFFs scanned by :mod:`scripts.refresh_registry`.
+Private, inaccessible, and unlisted submissions remain outside its scope.
 """
 
 from __future__ import annotations
@@ -34,21 +36,6 @@ from scipy.ndimage import distance_transform_edt
 SPEARMAN_LIMIT = 0.90
 OVERLAP_LIMIT = 0.70
 OVERLAP_RADIUS_PX = 3.0
-# The dot-overlap leg is only meaningful against a raster that does not already
-# cover the footprint: ``DOT_LEG_MAX_BASELINE`` is the fraction of the scored
-# footprint that already lies within 3 px of the comparator's positives -- i.e.
-# the score a random candidate would get.  At or above the 70 % overlap limit
-# the test cannot discriminate, so the surface leg decides instead.
-DOT_LEG_MAX_BASELINE = 0.70
-# A candidate only counts as a duplicate of a comparator if it is both mostly
-# covered by it (> 70 % of dots within 3 px) AND specifically aligned with it --
-# the lift over a random placement of the same number of dots must be large.
-# Without the second condition the coverage test cannot tell "this is a copy"
-# from "this comparator already covers half the map": our worst comparator is a
-# continuous surface covering 45 % of the footprint within 3 px, against which a
-# random placement already scores 0.45.
-DUPLICATE_LIFT = 3.0
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -155,124 +142,139 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
           footprint: np.ndarray, root: Path | None = None,
           limit: int | None = None, progress=None,
           surface_stride: int | None = None) -> dict:
-    """Run both gate legs against every registry raster."""
+    """Compare against every accessible registry raster using the strict stop rule.
+
+    A candidate is a duplicate if ANY comparator has Spearman rho > 0.90 or
+    more than 70% of candidate dots within 3 px. Dot overlap is evaluated for
+    every comparator with positives; no density/base-rate exception relaxes the
+    user's declared threshold. The surface correlation uses the recorded fixed
+    lattice subsample for runtime; near-threshold rows must be confirmed on a
+    full-footprint calculation before promotion.
+    """
     import rasterio
 
     root = Path(root) if root else REPO_ROOT
+    fp = np.asarray(footprint, bool)
+    if fp.ndim != 2:
+        raise ValueError("footprint must be 2-D")
+    surface = None if candidate_surface is None else np.asarray(candidate_surface, np.float64)
+    dots = None if candidate_dots is None else np.asarray(candidate_dots, bool)
+    if surface is not None and surface.shape != fp.shape:
+        raise ValueError("candidate surface and footprint shape mismatch")
+    if dots is not None and dots.shape != fp.shape:
+        raise ValueError("candidate dots and footprint shape mismatch")
+    if dots is not None and np.any(dots & ~fp):
+        raise ValueError("candidate dots outside the valid footprint")
     rasters = load_registry(root)
-    if limit:
-        rasters = rasters[:limit]
+    complete_scan = limit is None
+    if limit is not None:
+        if limit < 1:
+            raise ValueError("limit must be positive when supplied")
+        rasters = rasters[:int(limit)]
     if surface_stride is None:
-        surface_stride = (spearman_stride(int(np.asarray(footprint).sum()))
-                          if candidate_surface is not None else 1)
-    worst_rho, worst_rho_id = -1.0, None
-    worst_ov, worst_ov_id = -1.0, None
-    n_dense = n_sparse = 0
-    worst_lift, worst_lift_id = 0.0, None
+        surface_stride = spearman_stride(int(fp.sum())) if surface is not None else 1
+    if surface_stride < 1:
+        raise ValueError("surface_stride must be >=1")
+    lattice = stride_grid(fp.shape, int(surface_stride)) if surface is not None else None
+    worst_rho, worst_rho_id = -np.inf, None
+    worst_ov, worst_ov_id = -np.inf, None
+    n_surface = n_dots = 0
     duplicates: list[dict] = []
     rows = []
     for i, rec in enumerate(rasters):
         path = root / rec["cache_file"]
-        if not path.exists():
+        if not path.is_file():
             raise FileNotFoundError(f"registry raster missing: {path}")
+        if sha256(path) != rec.get("sha256"):
+            raise ValueError(f"registry raster hash mismatch: {path}")
         with rasterio.open(path) as src:
             arr = src.read(1)
+            if arr.shape != fp.shape:
+                raise ValueError(f"registry raster shape mismatch: {path}: {arr.shape} != {fp.shape}")
         finite = np.isfinite(arr)
-        row = dict(sources=rec["sources"][:3], sha256=rec["sha256"])
-        if candidate_surface is not None:
-            m = footprint & finite
-            if surface_stride > 1:
-                m &= stride_grid(m.shape, surface_stride)
-            rho = spearman(candidate_surface, np.where(finite, arr, 0.0), m)
-            row["spearman"] = rho
+        row = dict(sources=rec.get("sources", [])[:3], sha256=rec["sha256"],
+                   cache_file=rec["cache_file"])
+        rho = None
+        overlap = None
+        if surface is not None:
+            m = fp & finite & lattice
+            rho_sample = spearman(surface, np.where(finite, arr, 0.0), m)
+            rho = rho_sample
+            rho_full = None
+            # Confirm only ambiguous rows at full footprint resolution. A
+            # sampled value already over the stop threshold is conservatively
+            # treated as duplicate; a far-below value needs no expensive rerank.
+            if np.isfinite(rho_sample):
+                n_surface += 1
+                if 0.895 <= rho_sample <= SPEARMAN_LIMIT:
+                    rho_full = spearman(surface, np.where(finite, arr, 0.0), fp & finite)
+                    rho = rho_full
+            row["spearman_lattice_sample"] = float(rho_sample)
+            row["spearman_full_confirmation"] = (float(rho_full) if rho_full is not None else None)
+            row["spearman_sample_stride_px"] = int(surface_stride)
             if np.isfinite(rho) and rho > worst_rho:
-                worst_rho, worst_rho_id = float(rho), rec["sources"][0]
-        if candidate_dots is not None:
-            pos = finite & (arr > 0)
-            density = float(pos.sum()) / max(int(np.asarray(footprint).sum()), 1)
-            # How much of the scored footprint already lies within 3 px of this
-            # raster's positives.  That is the score a *random* candidate would
-            # get, so if it already reaches the 70 % limit the overlap test
-            # cannot discriminate and must not be used.  This catches both
-            # continuous probability maps (density ~1) and uniform lattices
-            # (e.g. a 5 px lattice is only 4 % dense but covers ~100 % of the
-            # footprint within 3 px).
-            if not pos.any():
-                row["dot_overlap_3px"] = None
-                row["dot_leg"] = "not_applicable_no_positives"
-                n_dense += 1
-                continue_row = True
-            else:
-                continue_row = False
-            baseline = 0.0
-            if not continue_row:
-                dpos = distance_transform_edt(~pos)
-                baseline = float((dpos[np.asarray(footprint, bool)] <= OVERLAP_RADIUS_PX).mean())
-            row["positive_fraction_of_footprint"] = density
-            row["footprint_coverage_within_3px"] = baseline
-            if continue_row or not (baseline < DOT_LEG_MAX_BASELINE):
-                row.setdefault("dot_overlap_3px", None)
-                row.setdefault("dot_leg", "not_applicable_vacuous_comparator")
-                n_dense += 1
-            else:
-                ov = dot_overlap_stats(candidate_dots, pos)
-                row["dot_overlap_3px"] = ov["fraction"]
-                row["dot_leg"] = "applicable"
-                # Lift = observed overlap / the overlap a random placement of the
-                # same number of dots would get, i.e. the comparator's own 3 px
-                # coverage of the footprint.  A copy has a large lift; a
-                # candidate that merely lives in the same part of the map as a
-                # broad surface has a lift near 1.
-                lift = ov["fraction"] / baseline if baseline > 0 else float("inf")
-                row["dot_overlap_lift"] = lift
-                if lift > worst_lift:
-                    worst_lift, worst_lift_id = lift, rec["sources"][0]
-                if ov["fraction"] > OVERLAP_LIMIT and lift >= DUPLICATE_LIFT:
-                    duplicates.append(dict(source=rec["sources"][0],
-                                           overlap=ov["fraction"], lift=lift))
-                n_sparse += 1
-                if ov["fraction"] > worst_ov:
-                    worst_ov, worst_ov_id = ov["fraction"], rec["sources"][0]
+                worst_rho, worst_rho_id = float(rho), rec.get("sources", [None])[0]
+        if dots is not None:
+            n_dots += 1
+            pos = fp & finite & (arr > 0)
+            ov = dot_overlap_stats(dots, pos, radius_px=OVERLAP_RADIUS_PX)
+            overlap = float(ov["fraction"])
+            row["dot_overlap_3px"] = overlap
+            row["candidate_dots"] = int(dots.sum())
+            row["registry_positive_pixels"] = int(pos.sum())
+            if overlap > worst_ov:
+                worst_ov, worst_ov_id = overlap, rec.get("sources", [None])[0]
+        reason = []
+        if rho is not None and np.isfinite(rho) and rho > SPEARMAN_LIMIT:
+            reason.append("spearman_gt_0.90")
+        if overlap is not None and overlap > OVERLAP_LIMIT:
+            reason.append("dot_overlap_gt_0.70")
+        row["duplicate"] = bool(reason)
+        row["duplicate_reasons"] = reason
+        if reason:
+            duplicates.append(dict(source=rec.get("sources", [None])[0],
+                                   sha256=rec["sha256"], reasons=reason,
+                                   spearman=rho, dot_overlap_3px=overlap))
         rows.append(row)
         if progress and (i + 1) % 50 == 0:
             progress(i + 1, len(rasters))
-    surface_pass = worst_rho <= SPEARMAN_LIMIT
-    dot_pass_literal = worst_ov <= OVERLAP_LIMIT
-    dot_pass = not duplicates
-    # Fail closed: if no registry raster was sparse enough for the dot leg the
-    # gate has not been run, and that is a failure, not a pass.
-    if candidate_dots is not None and n_sparse == 0:
-        dot_pass = False
-        worst_ov, worst_ov_id = float("nan"), "no sparse registry raster: gate not run"
+
+    surface_pass = (bool(n_surface == len(rasters) and worst_rho <= SPEARMAN_LIMIT)
+                    if surface is not None and rows else None)
+    dot_pass = (bool(n_dots == len(rasters) and worst_ov <= OVERLAP_LIMIT)
+                if dots is not None and rows else None)
+    stage = ("final" if surface is not None and dots is not None else
+             "preplacement" if surface is not None else "dots-only")
+    unique = (bool(surface_pass and dot_pass and complete_scan)
+              if surface_pass is not None and dot_pass is not None else None)
+    if not complete_scan:
+        surface_pass = False if surface is not None else surface_pass
+        dot_pass = False if dots is not None else dot_pass
+        unique = False
     return dict(
         evidence_class="UNIQUENESS-CHECK",
+        registry_complete=bool(complete_scan), stage=stage,
         n_registry_rasters=len(rasters),
-        worst_spearman=worst_rho, worst_spearman_source=worst_rho_id,
-        worst_dot_overlap_3px=worst_ov, worst_dot_overlap_source=worst_ov_id,
-        thresholds=dict(spearman=SPEARMAN_LIMIT, dot_overlap=OVERLAP_LIMIT),
-        surface_leg_subsample=dict(stride_px=int(surface_stride),
-                                   approx_samples=int(np.asarray(footprint).sum()
-                                                      / max(surface_stride, 1) ** 2),
-                                   note=("lattice subsample of the surface leg; the dot leg "
-                                         "is computed on every candidate dot")),
+        comparison_scope="all accessible aligned registry rasters",
+        worst_spearman=worst_rho if surface is not None else None,
+        worst_spearman_source=worst_rho_id,
+        worst_dot_overlap_3px=worst_ov if dots is not None else None,
+        worst_dot_overlap_source=worst_ov_id,
+        thresholds=dict(spearman_strictly_greater_than=SPEARMAN_LIMIT,
+                        dot_overlap_strictly_greater_than=OVERLAP_LIMIT,
+                        dot_radius_px=OVERLAP_RADIUS_PX),
+        surface_method=(dict(method="fixed lattice subsample of full footprint",
+                             stride_px=int(surface_stride),
+                             sample_count=int((fp & lattice).sum()),
+                             near_threshold_full_scan_required=True)
+                        if surface is not None else None),
         duplicate_flags=duplicates,
-        dot_gate_pass_literal=bool(dot_pass_literal),
-        dot_gate_literal_note=("the stated rule (> 70 % of dots within 3 px) applied "
-                               "without the lift condition; reported because broad "
-                               "continuous-surface comparators can satisfy it by "
-                               "coverage alone"),
-        worst_dot_overlap_lift=worst_lift,
-        worst_dot_overlap_lift_source=worst_lift_id,
-        duplicate_lift_threshold=DUPLICATE_LIFT,
-        dot_leg_scope=dict(applicable=n_sparse, vacuous_excluded=n_dense,
-                           max_baseline_coverage=DOT_LEG_MAX_BASELINE,
-                           note=("a comparator whose positives already lie within 3 px of "
-                                 ">= 70 % of the scored footprint (continuous probability "
-                                 "maps, uniform lattices) would flag a random candidate as a "
-                                 "duplicate; those rasters are compared on the surface leg")),
-        surface_gate_pass=bool(surface_pass),
-        dot_gate_pass=bool(dot_pass),
-        unique=bool(surface_pass and dot_pass),
+        surface_gate_pass=surface_pass,
+        dot_gate_pass=dot_pass,
+        preplacement_pass=(surface_pass is True),
+        final_uniqueness_pass=unique,
+        unique=unique,
+        stop=bool(duplicates or not complete_scan or surface_pass is False or dot_pass is False),
         per_raster=rows)
 
 
@@ -289,13 +291,13 @@ def _pearson(a, b):
 
 def compare(mine: np.ndarray, other: np.ndarray, footprint: np.ndarray,
             px: int = 3, eligible: np.ndarray | None = None) -> dict:
-    """Overlap + rank correlation, with the base rate made explicit.
+    """Return diagnostic overlap, rank correlation, and geometric base rate.
 
-    ``frac_dots_within_3px`` is only interpretable next to the base rate: the
-    fraction of the *eligible area* that is itself within ``px`` of the other
-    raster.  Against a very dense raster the base rate approaches 1 and the raw
-    fraction carries no duplication evidence, so the enrichment
-    (fraction / base rate) is reported as well.
+    This legacy reporting helper does not clear a candidate and its enrichment
+    statistic is never a uniqueness exemption. Promotion decisions must use
+    :func:`check` or :func:`compare_array_to_registry`, which apply the literal
+    ``rho > 0.90 OR raw dot overlap > 0.70`` stop rule regardless of base rate.
+    The base-rate fields are retained only for archived diagnostic reports.
     """
     m = mine[footprint].astype(np.float64)
     o = other[footprint].astype(np.float64)
@@ -359,37 +361,98 @@ def surface_rho(mine: np.ndarray, other: np.ndarray, footprint: np.ndarray,
 
 
 def compare_array_to_registry(candidate: np.ndarray, manifest: dict,
-                              footprint: np.ndarray, px: int = OVERLAP_PX) -> dict:
-    """Apply the protocol screen to every raster named in ``manifest``.
+                              footprint: np.ndarray, px: int = OVERLAP_PX, *,
+                              expected_grid=None, progress=None,
+                              phase: str = "both") -> dict:
+    """Apply the literal rho / forward 3 px overlap stop rules to a manifest.
 
-    Stop rules: |full-footprint Spearman| > RHO_LIMIT, or forward dot overlap >
-    OVERLAP_LIMIT, against any single registry raster.  Jaccard is reported and
-    flagged, never a stop rule.
+    ``phase`` may be ``surface`` (Spearman only), ``dots`` (dot overlap only),
+    or ``both``. Missing rasters, bad hashes, incomplete manifests, and grid
+    mismatches fail closed. Jaccard is diagnostic only; it is not a stop rule.
     """
-    rows, dupes = [], 0
-    for item in manifest.get("rasters", []):
-        path = item.get("cache_file")
-        if not path or not pathlib.Path(path).exists():
-            continue
+    arr = np.asarray(candidate)
+    fp = np.asarray(footprint, bool)
+    if arr.ndim != 2 or fp.shape != arr.shape:
+        raise ValueError("candidate and footprint must be matching 2-D arrays")
+    if phase not in {"surface", "dots", "both"}:
+        raise ValueError("phase must be 'surface', 'dots', or 'both'")
+    if px != OVERLAP_PX:
+        raise ValueError("the uniqueness overlap radius is fixed at 3 px")
+    if not manifest.get("complete_accessible_scan", False):
+        raise ValueError("registry manifest is incomplete; uniqueness cannot be cleared")
+    items = manifest.get("rasters")
+    if not isinstance(items, list) or not items:
+        raise ValueError("registry manifest has no rasters")
+    rows, duplicates = [], []
+    if np.any((arr > 0) & ~fp):
+        raise ValueError("candidate positive mass outside the footprint")
+    candidate_dots = (arr > 0) & fp
+    candidate_surface = arr.astype(np.float64, copy=False)
+    root = REPO_ROOT
+    for i, item in enumerate(items):
+        raw_path = item.get("cache_file")
+        if not raw_path:
+            raise ValueError(f"registry record {i} has no cache_file")
+        path = pathlib.Path(raw_path)
+        if not path.is_absolute():
+            path = root / path
+        if not path.is_file():
+            raise FileNotFoundError(f"registry raster missing: {path}")
+        actual_sha = sha256(path)
+        if item.get("sha256") and actual_sha != item["sha256"]:
+            raise ValueError(f"registry raster hash mismatch: {path}")
         with rasterio.open(path) as src:
             other = src.read(1)
-        st = surface_rho(candidate, other, footprint, px=px)
-        ov = dot_overlap(candidate, other, px=px)
-        dup_rho = abs(st["spearman_full_footprint"]) > RHO_LIMIT
-        dup_ov = ov > OVERLAP_LIMIT
-        if dup_rho or dup_ov:
-            dupes += 1
-        rows.append(dict(file=pathlib.Path(path).name, source=item.get("sources", []),
-                         sha256=item.get("sha256"),
-                         spearman_full_footprint=st["spearman_full_footprint"],
-                         spearman_on_dot_union=st["spearman_on_dot_union"],
-                         my_dots_within_3px_of_theirs=ov,
-                         jaccard_dot_sets=st["jaccard_dot_sets"],
-                         duplicate_by_rho=dup_rho, duplicate_by_overlap=dup_ov,
-                         duplicate_by_jaccard=st["jaccard_dot_sets"] > JACCARD_LIMIT))
-    return dict(evidence_class="MEASURED", rows=rows, duplicate_count=dupes,
-                unique=dupes == 0, jaccard_diagnostic_only=True,
-                limits=dict(rho=RHO_LIMIT, overlap=OVERLAP_LIMIT, jaccard=JACCARD_LIMIT))
+            shape = src.shape
+            crs = src.crs
+            transform = src.transform
+        if shape != arr.shape:
+            raise ValueError(f"registry raster grid shape mismatch: {path}: {shape} != {arr.shape}")
+        if expected_grid is not None:
+            exp_shape, exp_crs, exp_transform = expected_grid
+            if shape != tuple(exp_shape) or crs != exp_crs or transform != exp_transform:
+                raise ValueError(f"registry raster grid metadata mismatch: {path}")
+        finite = np.isfinite(other)
+        row = dict(file=path.name, source=item.get("sources", []), sha256=actual_sha)
+        rho = None
+        overlap = None
+        st = None
+        if phase in {"surface", "both"}:
+            st = surface_rho(candidate_surface, other, fp & finite, px=px)
+            rho = float(st["spearman_full_footprint"])
+            row.update(spearman_full_footprint=rho,
+                       spearman_on_dot_union=st["spearman_on_dot_union"],
+                       jaccard_dot_sets=st["jaccard_dot_sets"])
+        if phase in {"dots", "both"}:
+            other_dots = fp & finite & (other > 0.0)
+            overlap = dot_overlap(candidate_dots, other_dots, px=px)
+            row["my_dots_within_3px_of_theirs"] = float(overlap)
+            if st is None:
+                inter = int((candidate_dots & other_dots & fp).sum())
+                union = int(((candidate_dots | other_dots) & fp).sum())
+                row["jaccard_dot_sets"] = inter / union if union else float("nan")
+        dup_rho = bool(rho is not None and np.isfinite(rho) and rho > RHO_LIMIT)
+        dup_ov = bool(overlap is not None and overlap > OVERLAP_LIMIT)
+        dup = dup_rho or dup_ov
+        row.update(duplicate_by_rho=dup_rho, duplicate_by_overlap=dup_ov,
+                   duplicate_by_jaccard=(row.get("jaccard_dot_sets", 0.0) > JACCARD_LIMIT),
+                   duplicate=dup)
+        if dup:
+            duplicates.append(dict(file=path.name, source=item.get("sources", []),
+                                   sha256=actual_sha, rho=rho,
+                                   dot_overlap_3px=overlap,
+                                   duplicate_by_rho=dup_rho,
+                                   duplicate_by_overlap=dup_ov))
+        rows.append(row)
+        if progress:
+            progress(i + 1, len(items), row)
+    return dict(evidence_class="UNIQUENESS-CHECK", phase=phase,
+                registry_complete=True, n_registry_rasters=len(items), rows=rows,
+                duplicate_count=len(duplicates), duplicates=duplicates,
+                unique=(len(duplicates) == 0), jaccard_diagnostic_only=True,
+                limits=dict(spearman_strictly_greater_than=RHO_LIMIT,
+                            dot_overlap_strictly_greater_than=OVERLAP_LIMIT,
+                            dot_radius_px=OVERLAP_RADIUS_PX))
 
 
 
@@ -397,11 +460,11 @@ def compare_array_to_registry(candidate: np.ndarray, manifest: dict,
 
 def dot_overlap(mine: np.ndarray, other: np.ndarray, px: int = OVERLAP_PX) -> float:
     """Fraction of MY dots that fall within ``px`` of any dot of ``other``."""
-    mine_b = np.asarray(mine) > 0.5
+    mine_b = np.asarray(mine) > 0
     n = int(mine_b.sum())
     if n == 0:
         return 0.0
-    other_b = np.asarray(other) > 0.5
+    other_b = np.asarray(other) > 0
     if not other_b.any():
         return 0.0
     d = ndimage.distance_transform_edt(~other_b)

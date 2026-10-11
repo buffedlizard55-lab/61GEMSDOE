@@ -650,6 +650,7 @@ STAGES = dict(screen=stage_screen, invert=stage_invert, holdout=stage_holdout,
 
 
 def main() -> None:
+    raise SystemExit("RETIRED: Retired historical runner: it read organizer band 15. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("stage", choices=list(STAGES) + ["all"])
     ap.add_argument("--candidate", default=None, help="override the holdout's choice (name without ' @ budget')")

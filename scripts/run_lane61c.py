@@ -263,7 +263,7 @@ def _fold_terms(g, belief, budget, min_sep):
     """Per-fold prediction+evaluation for the candidate and both controls."""
     fp = np.asarray(g.footprint, bool)
     cat = np.asarray(g.catalogue, bool)
-    folds = H.make_folds(fp, cat, n_folds=4, collar_px=3, min_px=20)
+    folds = H.make_folds(cat, fp, fraction=0.20, buffer_px=3, seed=20261011, n_folds=4, min_component_px=20)
     rng = np.random.default_rng(61)
     arms = {"shipped_rule_lane10": [], "uniform_flank": [], "lane_only": [],
             "random_lines": []}

@@ -115,23 +115,52 @@ def invert_basement(g_mgal: np.ndarray, valid: np.ndarray, z0: float, drho: floa
 
 def calibrate_z0(g_mgal, valid, reference, z0_grid, drho, cutoff_m, sigma_reg,
                  sigma_step, **kw):
-    """Choose the mean interface depth by agreement with a regional basement map.
+    """Calibrate a depth scale from the complete official GP-1012 XYZ grid.
 
-    ``reference`` is the regional basin-depth layer (competition band 15, itself the
-    Saltus & Jachens 1995 1:2.5 M product regridded by the organisers).  Only the
-    *depth scale* is calibrated here; the reference is never used to place a fault.
+    ``reference`` must be a parsed ``GP1012Grid``. Because the 1995 2 km grid's
+    published header does not declare a geodetic datum, this legacy inversion
+    path compares global depth summaries only; it will not align, correlate, or
+    regress against organizer band 15. The returned scale statistics do not
+    validate local candidate-fault geometry.
     """
-    from scipy.stats import spearmanr
+    from .gp1012 import GP1012Grid
 
-    m = valid & np.isfinite(reference)
+    if not isinstance(reference, GP1012Grid):
+        raise RuntimeError(
+            "GP-1012 calibration blocked: provide a complete read_gp1012_xyz() grid; "
+            "organizer band 15 is prohibited"
+        )
+    target = reference.summary()
+    target_p50 = float(target["p50_m"])
+    target_p90 = float(target["p90_m"])
+    target_deep = float(target["fraction_gt_1km"])
+    m = np.asarray(valid, bool)
+    if m.shape != np.asarray(g_mgal).shape:
+        raise ValueError("valid mask shape does not match gravity")
     out = []
     for z0 in z0_grid:
-        r = invert_basement(g_mgal, valid, z0=z0, drho=drho, cutoff_m=cutoff_m,
+        r = invert_basement(g_mgal, m, z0=z0, drho=drho, cutoff_m=cutoff_m,
                             sigma_reg=sigma_reg, sigma_step=sigma_step, **kw)
-        rho = float(spearmanr(r.depth[m].ravel()[::7], reference[m].ravel()[::7]).statistic)
-        # amplitude calibration: D_ref ~ a + b * D_inv  ->  b is the depth-scale factor
-        b, a = np.polyfit(r.depth[m][::7], reference[m][::7], 1)
-        out.append(dict(z0=float(z0), spearman=rho, scale=float(b), offset=float(a),
+        depth = np.maximum(np.asarray(r.depth, np.float64), 0.0)
+        values = depth[m & np.isfinite(depth)]
+        if values.size == 0:
+            raise ValueError("no valid inverted depths for GP-1012 calibration")
+        stats = dict(p50_m=float(np.median(values)), p90_m=float(np.percentile(values, 90)),
+                     fraction_gt_1km=float((values > 1000.0).mean()))
+        penalties = dict(
+            p50=abs(np.log(max(stats["p50_m"], 1.0) / max(target_p50, 1.0))),
+            p90=abs(np.log(max(stats["p90_m"], 1.0) / max(target_p90, 1.0))),
+            fraction_gt_1km=abs(np.log(max(stats["fraction_gt_1km"], 1e-6) /
+                                       max(target_deep, 1e-6))),
+        )
+        out.append(dict(z0_m=float(z0), stats=stats, penalties=penalties,
+                        penalty=float(sum(penalties.values())),
                         rms_mgal=r.po.log.get("rms_mgal"),
                         h_std=r.po.log.get("h_std")))
-    return out
+    return dict(status="CALIBRATED-TO-OFFICIAL-GP1012-GRID-WIDE-SUMMARIES",
+                best=min(out, key=lambda item: item["penalty"]), candidates=out,
+                reference=target,
+                calibration_scope="grid-wide p50, p90, fraction >1 km; no spatial alignment",
+                limitations=["GP-1012 is a 2 km low-pass model, not a 100 m label",
+                             "no geodetic datum is specified; no pixelwise comparison",
+                             "scale fit does not validate local fault geometry"])

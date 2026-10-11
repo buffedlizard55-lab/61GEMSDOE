@@ -23,11 +23,13 @@ an **out-of-fold habitat model**:
    buffered to +/- 1 km -- exactly the buried range-front / intrabasin step the
    lane asks for.
 3. **Habitat model.**  L2 logistic regression, trained on the *visible* mapped
-   faults as positives and random footprint pixels as negatives, over 25
-   catalogue-independent features: the 19 supplied bands (rank-normalised) plus
-   the lane's own inverted depth, depth gradient, step throw, step indicator,
-   corridor indicator and basin indicator.  **No feature derived from the
-   position of the mapped catalogue enters the model** -- that is what makes the
+   faults as positives and random footprint pixels as negatives, over the catalogue-independent feature stack: the 18 permitted supplied
+   bands (rank-normalised; organizer band 15 excluded) plus the lane's own
+   inverted depth, depth gradient, step throw, step indicator, corridor
+   indicator, basin indicator, Euler source-depth estimate, and depth-gradient
+   components.
+   Historical band-15 runs are retired. **No feature derived from the position
+   of the mapped catalogue enters the model** -- that is what makes the
    prediction an off-catalogue habitat estimate rather than a distance-to-map
    proxy, and it is why the model can be applied to the pixels the metric
    actually scores.
@@ -50,11 +52,16 @@ Everything is scored on the shared segmented holdout
 20+21, pooled DTI alpha 0.2 beta 0.8 R = 300 m).  Nothing is hand-written.
 """
 
-NOTE ON NAMING (IR-61-NAME-01): two parallel sessions both labelled their
-buried-structure-lane work "H61-M". The gravity + magnetic conjunction
-construction merged from PR #21 owns `src/gems61/h61m.py` and
-`scripts/run_h61m.py`; this out-of-fold habitat model owns the `h61mh`
-(H61-M habitat) namespace. Both bodies of work are kept.
+# NOTE ON NAMING (IR-61-NAME-01): two parallel sessions both labelled their
+# buried-structure-lane work "H61-M". The gravity + magnetic conjunction
+# construction merged from PR #21 owns `src/gems61/h61m.py` and
+# `scripts/run_h61m.py`; this out-of-fold habitat model owns the `h61mh`
+# (H61-M habitat) namespace. Both bodies of work are kept.
+#
+# RETIREMENT NOTICE: historical receipts from this module included organizer
+# band 15. That path is invalid for the current task. It is not a current
+# candidate or a verified GP-1012 calibration; the shared calibrator now fails
+# closed unless supplied the complete official GP-1012 source grid.
 
 from __future__ import annotations
 
@@ -79,7 +86,7 @@ REGIONAL_SIGMA_KM = 15.0
 TILE_PX = 3                    # dot spacing (one dot per TILE_PX x TILE_PX tile)
 
 # The 25 habitat features.  Order is fixed so receipts are comparable.
-BAND_FEATURES = list(range(1, 20))          # bands 1..19 of training_features.tif
+BAND_FEATURES = [b for b in range(1, 20) if b != 15]  # band 15 is prohibited
 DERIVED_FEATURES = ("inv_depth", "inv_depth_hgm", "step_throw", "step_indicator",
                     "corridor_indicator", "basin_indicator", "euler_depth",
                     "depth_grad_x", "depth_grad_y")

@@ -63,7 +63,13 @@ class Grid:
     def band(self, name: str) -> np.ndarray:
         if name not in self.names:
             raise KeyError(f"unknown band {name!r}; have {self.names}")
-        return np.asarray(self.bands[:, :, self.names.index(name)], dtype=np.float32)
+        index = self.names.index(name)
+        if index == 14:
+            raise PermissionError(
+                "organizer band 15 (depth_to_base_surf) is prohibited for calibration "
+                "and prediction features; use the official GP-1012 grid only for depth-scale calibration"
+            )
+        return np.asarray(self.bands[:, :, index], dtype=np.float32)
 
     def index(self, name: str) -> int:
         return self.names.index(name)

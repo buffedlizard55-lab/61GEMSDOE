@@ -40,6 +40,20 @@ def test_withheld_segments_are_never_split():
         assert (comp & hidden).sum() in (0, int(comp.sum()))
 
 
+def test_legacy_make_folds_order_keywords_and_fold_mapping_are_compatible():
+    """Old footprint-first callers retain their buffer/min-size and field API."""
+    catalogue = np.zeros((20, 20), bool)
+    catalogue[2, 2:5] = True       # excluded by historical min_px=5
+    catalogue[10, 2:12] = True     # eligible 8-connected segment
+    footprint = np.ones_like(catalogue)
+    folds = ho.make_folds(footprint, catalogue, fraction=1.0, n_folds=4,
+                          collar_px=1, min_px=5, seed=7)
+    hidden = np.logical_or.reduce([fold["hidden"] for fold in folds])
+    assert np.array_equal(hidden, catalogue & (np.indices(catalogue.shape)[0] == 10))
+    assert all(np.array_equal(fold["domain"], fold.region) for fold in folds)
+    assert all(fold["n_hidden"] == int(fold.hidden.sum()) for fold in folds)
+
+
 def test_folds_cover_the_whole_grid():
     """Regression: the four quadrants must tile the grid.
 
@@ -162,3 +176,49 @@ def test_basin_interior_mask_selects_the_deep_tail():
     m = ho.basin_interior_mask(depth, valid, depth_quantile=0.60)
     assert m.mean() == pytest.approx(0.40, abs=0.01)
     assert depth[m].min() >= np.quantile(depth, 0.60) - 1e-3
+
+
+def test_basin_interior_segment_rule_is_component_based_and_recovery_uses_300m():
+    catalogue = np.zeros((100, 100), bool)
+    catalogue[30, 20:40] = True       # exactly half in deep mask: eligible
+    catalogue[70, 20:40] = True       # only 20% in deep mask: ineligible
+    footprint = np.ones_like(catalogue)
+    folds = ho.make_folds(catalogue, footprint, fraction=1.0,
+                          buffer_px=3, seed=14, n_folds=4)
+    deep = np.zeros_like(catalogue)
+    deep[30, 20:30] = True
+    deep[70, 20:24] = True
+    eligibility = ho.basin_interior_segments(
+        np.logical_or.reduce([f.hidden_all for f in folds]), deep, min_deep_fraction=0.5)
+    assert eligibility["n_components"] == 2
+    assert eligibility["n_eligible"] == 1
+    assert eligibility["component_stats"][0]["deep_fraction"] == pytest.approx(0.5)
+
+    candidate = np.zeros_like(catalogue)
+    candidate[30, 32] = True    # 2 px = 200 m from an in-mask segment pixel
+    rec = ho.segment_recovery(candidate, folds, R=300.0, res=100.0, restrict=deep)
+    assert rec["pooled"]["eligible_segments"] == 1
+    assert rec["pooled"]["recovered_segments"] == 1
+    assert rec["pooled"]["frac"] == pytest.approx(1.0)
+    assert rec["pooled"]["eligibility_rule"] == ">=50% component pixels in deepest 40%"
+
+
+def test_pooled_holdout_summary_labels_version_count_and_block_ci():
+    truth = np.zeros((80, 80), bool)
+    truth[20, 5:60] = True
+    truth[60, 10:70] = True
+    candidate = np.zeros((80, 80), np.float32)
+    candidate[20, 5:60] = 1.0
+    random = np.zeros_like(candidate)
+    random[10, 5:60] = 1.0
+    terms_candidate, _ = eh.terms_for(candidate, truth, block_side=20)
+    terms_random, _ = eh.terms_for(random, truth, block_side=20)
+    pooled = eh.pooled_summary({"candidate": terms_candidate, "random": terms_random},
+                               draws=100, seed=123, candidate="candidate")
+    row = pooled["scores"]["candidate"]
+    assert row["evidence_class"] == "HOLDOUT-DTI"
+    assert row["evaluator_version"] == eh.VERSION
+    assert row["withheld_positive_count"] == int(truth.sum())
+    assert len(row["ci95"]) == 2
+    assert row["ci95"][0] <= row["dti"] <= row["ci95"][1]
+    assert pooled["bootstrap"]["cluster_size_m"] == 20000

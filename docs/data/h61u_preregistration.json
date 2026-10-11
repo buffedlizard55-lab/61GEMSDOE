@@ -1,0 +1,174 @@
+{
+  "evidence_class": "PRE-REGISTRATION",
+  "registered_utc": "2026-10-11T16:01:52Z",
+  "session_branch": "arena/dfa55ee1-61gemsdoe",
+  "parent_commit": "3a6d36b4708f68e89ac33ba6aa6e66e278d1e277",
+  "status": "FROZEN; candidate-specific H61U code and holdout results did not exist when registered; shared-tool repairs after registration are separately version-hashed.",
+  "scope": "buried-structure lane only: invert band 13 isostatic gravity for basement geometry, locate depth-step gradients, and emit multi-line ribbons",
+  "novelty_scope_and_prior_art": {
+    "reviewed": [
+      "local source, tests, README, docs/data/hypotheses.json, and existing H61 lane evidence",
+      "GEMSDOE52 R2 implementation inspected directly in src/gems52/structural.py, docs/data/features_r2.json, and docs/data/r2_preregistration.json. R2 uses signed gravity-gradient versus organizer band-15 cover-gradient anti-alignment at Gaussian scales 1/3/8 px, vector-orientation persistence, and cover-conditioned cross-view features in a multi-view learner. H61U-H1 instead inverts band 13 alone and tests same-polarity basement-depth differences at fixed 2 km/4 km flank apertures; band 15 is prohibited here.",
+      "the complete accessible sibling raster registry freshly refreshed at 2026-10-11T15:58:37Z (748 unique aligned rasters); raster identity does not prove feature-level novelty",
+      "Post-registration local source audit found src/gems61/h61g.py::persistent_steps already tests HGM-step survival at Gaussian scales 0/2/5 px; that directly overlaps the former H61U-H4 and H4 is withdrawn. GEMSDOE52 H53/H54 strike-continuation artifacts were also checked; the revised H61U-H2 tests a different physical quantity (signed throw taper, not trace continuation alone). The frozen H61U-H1 transform and thresholds were not changed."
+    ],
+    "explicit_prior_art": "HGM maxima, throw thresholds, ordinary ribbons, gravity-magnetic conjunctions, Euler source-depth, corridor x slope/LiDAR, and multi-scale step persistence have already been implemented or proposed locally and are not claimed as novel. GEMSDOE52 R2 uses signed gravity-versus-band-15 cover-normal anti-alignment and 1/3/8-pixel orientation persistence; GEMSDOE52 H53/H54 also use strike-continuation ideas. H61U-H1 is distinct: it inverts band 13 alone and samples same-polarity basement-depth differences at fixed 2 km/4 km flank apertures.",
+    "claim_limit": "The exact H61U-H1 flank-offset operator was not found in this repository or the reviewed GEMSDOE52 R2 implementation. H61U-H2 and H61U-H3 are prospective, untested alternatives. This is a bounded implementation-novelty claim, not proof of global scientific priority or an exhaustive line-by-line review of every sibling repository."
+  },
+  "forbidden_inputs": [
+    "organizer band 15 depth_to_base_surf: neither a calibration target nor a prediction feature",
+    "catalogue labels or visible/hidden status as a candidate feature",
+    "any previous submission raster as an inference base or prediction feature",
+    "unverified literature-derived depth quantiles presented as GP-1012 measurements"
+  ],
+  "data_obtainability": {
+    "band_13": "Available in .cache/features/band-13.npy and the 19-band training raster. Local evidence pins the public bridge bytes, but does not authenticate an organizer download.",
+    "GP_1012": {
+      "role": "depth-scale calibration only; never a prediction feature",
+      "official_directory": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/",
+      "official_depth_grid": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz",
+      "official_readme": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/readme.txt",
+      "availability_check": "The NOAA directory/readme and a partial br_depth.xyz response were verified in the browser. The complete grid is not present locally; the sandbox cannot fetch NOAA hosts from the execution environment. No GP-1012 statistics have been calculated.",
+      "calibration_gate": "No output or report may be called GP-1012-calibrated in this run. The inversion uses a frozen, explicitly uncalibrated physical prior only to test scale-invariant step geometry. A future calibration requires the full official grid and documented spatial registration."
+    },
+    "additional_external_layers": "None required for the three hypotheses listed; only frozen H61U-H1 is authorized for this run."
+  },
+  "evaluation_protocol": {
+    "evaluator": "gems61-pooled-hide-v2",
+    "fold_generator": "gems61.holdout.make_folds; hide 20% of whole 8-connected catalogue components, 3 px context buffer, four spatial quadrants, seed 20261011",
+    "catalogue_features": "None are used by the candidate. In every fold the visible catalogue is masked pixel-exactly in the scored domain; any future catalogue-derived feature may use visible faults only.",
+    "metric": "pooled DTI, alpha=0.2, beta=0.8, 300 m triangular kernel",
+    "interval": "paired percentile bootstrap of globally aligned 20 km spatial blocks, 1,000 draws, seed 520810; conditional on fixed folds and catalogue truth, not a leaderboard interval",
+    "controls": [
+      "random straight lines at the same emitted-pixel budget and footprint",
+      "unfiltered HGM step maxima at the same budget",
+      "synthetic buried intrabasement-density body with no fault displacement"
+    ],
+    "lane_recovery": "Count withheld 8-connected fault components for which at least 50% of component pixels fall in the deepest 40% of the candidate's own inversion. A segment is recovered when at least one of its pixels inside that deep mask lies within 300 m of a candidate pixel. Compare against matched random lines. No band 15 is used.",
+    "leakage_canary": "Run each registered feature alone against withheld catalogue pixels; any AUC > 0.90 is leakage-suspect and blocks promotion until resolved.",
+    "uniqueness": "Fresh full-registry Spearman surface comparison before placement and 3 px dot-overlap comparison on the final output. Follow the standing stop limits: rho > 0.90 or >70% of candidate dots within 3 px of any registry raster is a duplicate and stops promotion.",
+    "run_limit": "At most three experiments or two hours, whichever comes first. Slot recommendation is a separate selector decision.",
+    "random_line_seed": 20261012,
+    "evaluator_version": "gems61-pooled-hide-v2"
+  },
+  "frozen_primary": {
+    "id": "H61U-H1",
+    "name": "Signed one-sided flank-offset persistence of inverted basement steps",
+    "layers": [
+      "band 13: iso_grav_anom only"
+    ],
+    "inversion_prior": {
+      "grid_spacing_m": 400,
+      "reference_depth_z0_m": 1000,
+      "density_contrast_fill_minus_basement_kg_m3": -400,
+      "stabilizer": "W(k)=1/(1+(k/kc)^2), Oldenburg/Wiener low-pass; filter_order=2, kc_scale=1.0, kc=1/(2*z0); first Parker-Oldenburg slab iterate only",
+      "calibration_status": "uncalibrated; fixed before holdout, not fitted against band 15, GP-1012, or labels"
+    },
+    "physical_signature": "At a horizontal-gradient maximum of the inverted depth surface, sample the signed depth difference on opposite sides of the local gradient normal at 2 km and 4 km. Require the same downthrow sign at both apertures and a predeclared persistence ratio min(|delta_2km|, |delta_4km|)/(max(|delta_2km|, |delta_4km|)+epsilon) >= 0.60. Emit a 3-pixel ribbon around surviving step crests; thin to 40,000 positive pixels with 3-pixel minimum separation.",
+    "catalogue_missing_fault_rationale": "A concealed normal-fault block boundary can lack a mapped surface scarp while retaining a persistent one-sided offset in the basement interface. This tests displacement continuity, not simple gradient strength.",
+    "named_non_fault_mimic": "A finite-width intrabasement mafic/granitic density body or intrusive contact can create a gravity edge without any fault. Its paired opposite-polarity edges should lose same-sign flank contrast as the sampling aperture spans the body; the control will include a synthetic buried density sheet with no basement displacement.",
+    "difference_from_existing": "Local H61 methods already locate HGM maxima, measure throw and dilate ribbons. Sibling GEMSDOE52 R2 uses gradient-normal anti-alignment between band 13 gravity and band 15 cover at 1/3/8 px, plus cross-view interactions. H61U-H1 uses band 13 only, inverts it to basement depth, then samples signed depth displacement on the HGM normal at 2 km and 4 km; it uses no band 15 and no learned cross-layer feature.",
+    "expected_dti_cost_rank": {
+      "expected_gain_rank": 1,
+      "expected_direction": "medium potential, uncertain; no numerical DTI forecast",
+      "implementation_cost": "low (one shared inversion, two normal-profile samples, one holdout pass)"
+    },
+    "synthetic_density_mimic_control": {
+      "evidence_class": "SYNTHETIC-NONFAULT-MIMIC-CONTROL",
+      "grid_shape_cells": [
+        512,
+        512
+      ],
+      "grid_spacing_m": 400,
+      "geometry": "centered finite rectangular sheet 72 cells (28.8 km) along strike by 8 cells (3.2 km) across strike",
+      "density_contrast_kg_m3": 250,
+      "thickness_m": 1500,
+      "burial_depth_m": 2500,
+      "basement_relief_m": 0,
+      "forward_operator": "gems61.buried.buried_density_sheet_gravity, periodic FFT; the sheet is the only source",
+      "inversion_prior": "same fixed z0=1000 m, delta_rho=-400 kg/m3, 400 m cell, order-2 filter and kc_scale=1.0 as H61U-H1",
+      "reported_diagnostics": [
+        "HGM maxima count",
+        "same-sign flank count",
+        "persistence-threshold survivors",
+        "retention fraction",
+        "emitted ribbon pixels"
+      ],
+      "score_policy": "No DTI is computed because this synthetic sheet has no fault truth; this is a false-positive mechanism control, not a leaderboard score."
+    }
+  },
+  "ranked_hypotheses": [
+    {
+      "id": "H61U-H1",
+      "rank": 1,
+      "layers": [
+        "band 13: iso_grav_anom only"
+      ],
+      "physical_signature": "Signed basement-depth contrast at 2 km and 4 km across each HGM crest; same polarity and >=0.60 magnitude persistence; emit a 3-pixel ribbon.",
+      "why_catalogue_misses_it": "A buried basin-interior fault can offset basement without preserving an exposed scarp; persistent one-sided displacement is the target.",
+      "named_non_fault_mimic": "Finite-width intrabasement mafic/granitic body or intrusive contact; paired edges can imitate a local step.",
+      "difference_from_existing": "Not another HGM/throw threshold and not sibling R2's band-13/band-15 normal anti-alignment. Use sign-consistent 2 km/4 km cross-step flank persistence from the band-13-only inverted depth surface.",
+      "expected_dti_rank": "1 of 3; medium potential, unquantified",
+      "implementation_cost": "low"
+    },
+    {
+      "id": "H61U-H2",
+      "rank": 2,
+      "name": "Along-strike basement-throw taper at concealed fault tips",
+      "layers": [
+        "band 13: iso_grav_anom only; derived inverted basement depth"
+      ],
+      "physical_signature": "For each connected depth-HGM step segment at least 20 km long, sample signed 2 km normal throw every 400 m along strike. Require one polarity over the central 60% and a monotone or single-hump displacement envelope whose median absolute throw in each terminal 20% is <=0.20 of the segment maximum; do not use catalogue traces to define or orient segments.",
+      "why_catalogue_misses_it": "A fault buried beneath basin fill can have a real basement displacement tapering to subsurface tips even when no surface rupture or scarp is mapped; the scale-space tip geometry is present in the inverted interface.",
+      "named_non_fault_mimic": "A finite intrusive body or density sheet can produce edge responses that taper near its ends; this is an explicit ambiguity, not a claim that taper proves faulting.",
+      "difference_from_existing": "Local H61 code thresholds pointwise throw and tests persistence across Gaussian scales 0/2/5; GEMSDOE52 R2 tests cross-layer normal orientation at 1/3/8 px, and H53/H54 test trace continuation. H61U-H2 instead tests the along-strike envelope of signed basement displacement at subsurface step tips, without band 15 or catalogue geometry.",
+      "expected_dti_rank": "2 of 3; low-to-medium potential, uncertain and unquantified",
+      "implementation_cost": "medium (component graph plus fixed along-strike displacement-profile test)",
+      "data_obtainability": "Only cached band 13 and the pinned competition grid are required locally; GP-1012 remains the separate, unavailable depth-scale calibration reference."
+    },
+    {
+      "id": "H61U-H3",
+      "rank": 3,
+      "name": "Local gravity source-class comparison: basement step versus buried density sheet",
+      "layers": [
+        "band 13: iso_grav_anom only; derived inverted basement depth for candidate normals"
+      ],
+      "physical_signature": "At each candidate depth-HGM normal, fit the preregistered one-dimensional band-13 gravity profile with two label-free forward models: a Parker basement-interface step and a finite buried density-sheet/contact model. Retain a fault-step candidate only when the step model wins by a fixed information-criterion margin (BIC difference >=10), with all nuisance ranges frozen before any holdout evaluation.",
+      "why_catalogue_misses_it": "A real basement offset under alluvial cover is not necessarily mapped at the surface; the gravity profile can still contain its source-shape signature.",
+      "named_non_fault_mimic": "A finite-width mafic/granitic intrusive body or lithologic contact inside basement; the competing density-sheet forward model is intended to reject this non-fault cause.",
+      "difference_from_existing": "Existing H61 methods detect, threshold, corridor, or corroborate depth-HGM edges; none compares raw gravity profiles against competing basement-interface-relief and intrabasement-density forward models. It uses no band 15 and no catalogue-derived feature.",
+      "expected_dti_rank": "3 of 3; uncertain/low potential because gravity source non-uniqueness may dominate",
+      "implementation_cost": "high (two physical forward models, nuisance bounds, model-selection validation)",
+      "data_obtainability": "Only cached band 13 and the pinned competition grid are required locally; GP-1012 is still needed for any depth-scale calibration and is not currently available in full."
+    }
+  ],
+  "selection_rule": "Test only frozen H61U-H1 with the shared evaluator. Report the fixed HGM-only, random-line and synthetic-density-body controls in the same paired run. H61U-H2 and H61U-H3 are untested alternatives, not fallback arms; do not substitute them based on H1 results. Any follow-up requires a new preregistration and remaining experiment budget. The random-line control uses the fixed seed in evaluation_protocol; the density-sheet mimic uses the geometry and physical values frozen under frozen_primary.synthetic_density_mimic_control.",
+  "post_registration_shared_tool_repairs": [
+    {
+      "recorded_utc": "2026-10-11T17:01:00Z",
+      "module": "src/gems61/buried.py::signed_flank_persistence",
+      "finding": "The maxima mask had incorrectly been reused as the interpolation-valid mask, forcing flank samples at 2/4 km to also be maxima and eliminating every profile.",
+      "fix": "Separate the candidate-center mask from the full valid sampling domain; added a regression test proving the flanks need not themselves be maxima.",
+      "primary_hypothesis_or_threshold_changed": false,
+      "invalid_attempt_receipt": "evidence/h61u_first_attempt.json"
+    },
+    {
+      "recorded_utc": "2026-10-11T17:01:00Z",
+      "module": "scripts/run_h61u.py",
+      "finding": "An empty candidate was previously allowed to reach registry/holdout processing and produced a non-JSON infinity in the failed diagnostic receipt.",
+      "fix": "Add a pre-placement empty-surface stop and strict-JSON normalization for non-finite diagnostics.",
+      "primary_hypothesis_or_threshold_changed": false
+    }
+  ],
+  "organizer_score_forecast": null,
+  "slot_selection": "not performed; separate selector responsibility",
+  "registered_before_candidate_implementation": true,
+  "shared_tool_repairs_after_registration": true,
+  "prior_art_audit_addendum": {
+    "recorded_utc": "2026-10-11T16:27:00Z",
+    "candidate_holdout_or_raster_results_seen": false,
+    "primary_H1_changed": false,
+    "action": "Withdrew H61U-H4 because local H61G already implements multi-scale basement-step persistence; replaced non-distinct alternates with prospective signed-throw-tip taper and explicit gravity source-class model comparison. H1 remains the only arm authorized for this run.",
+    "implementation_status": "Runner source had been drafted, but no candidate was emitted, placed, evaluated, or scored when this audit was recorded."
+  }
+}

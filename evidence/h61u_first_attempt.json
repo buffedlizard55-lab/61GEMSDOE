@@ -1,0 +1,39 @@
+{
+  "evidence_class": "INVALID-EXPERIMENT-ATTEMPT",
+  "attempt": 1,
+  "registered_hypothesis": "H61U-H1",
+  "started_utc": "2026-10-11T16:58:27Z",
+  "failed_utc_approx": "2026-10-11T17:00:40Z",
+  "status": "ABORTED-NO-CANDIDATE-ARTIFACT",
+  "observations": {
+    "inversion_grid_spacing_m": 400,
+    "valid_inversion_cells": 324231,
+    "HGM_maxima_cells": 78132,
+    "signed_flank_profile_valid_cells": 0,
+    "same_sign_flank_cells": 0,
+    "persistence_threshold_survivors": 0,
+    "candidate_ribbon_pixels": 0,
+    "candidate_tif_written": false,
+    "raster_sha256": null,
+    "organizer_score": null
+  },
+  "root_cause": {
+    "module": "src/gems61/buried.py::signed_flank_persistence",
+    "defect": "When maxima was supplied, the helper intersected the valid interpolation domain with the maxima mask. It then required the 2 km and 4 km flank interpolation stencils themselves to consist of HGM maxima, which necessarily invalidated all samples.",
+    "correction": "Separated the center-candidate mask from the flank-sample-valid mask. The gradient normal is evaluated only at maxima; both flanks are validated against the full finite/valid basement-depth domain.",
+    "regression_test": "tests/test_buried.py::test_signed_flank_maxima_do_not_require_the_flank_samples_to_be_maxima"
+  },
+  "invalidated_actions": [
+    "An all-zero pre-placement surface was sent through the registry comparator before the empty-surface guard existed; its apparent clearance is invalid and is not counted as a uniqueness result.",
+    "An empty candidate and zero-budget controls were passed through the holdout code path; those transient metrics are discarded and are not reported as HOLDOUT-DTI.",
+    "Strict JSON serialization failed on the no-candidate recovery diagnostic infinity; no run card, candidate TIFF, ZIP, or submission receipt was written."
+  ],
+  "budget_accounting": {
+    "valid_experiments_completed": 0,
+    "attempts_used": 1,
+    "maximum_attempts_or_experiments": 3,
+    "runtime_minutes_approx": 2.2,
+    "no_parameters_or_thresholds_changed": true
+  },
+  "follow_up": "The shared helper was fixed in place, a regression test was added, and an explicit empty-surface guard plus strict-JSON normalization were added before retrying the same frozen H61U-H1 parameters."
+}

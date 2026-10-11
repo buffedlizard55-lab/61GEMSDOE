@@ -41,7 +41,7 @@ REGISTRY = {
 def main() -> int:
     t0 = time.time()
     grid = gio.load_grid(verify=False)
-    folds = ho.make_folds(grid.footprint, grid.catalogue, n_folds=4, collar_px=3, min_px=20)
+    folds = ho.make_folds(grid.catalogue, grid.footprint, fraction=0.20, buffer_px=3, seed=20261011, n_folds=4, min_component_px=20)
     # distance from every pixel to the nearest catalogue pixel (all of it)
     d_cat = ndimage.distance_transform_edt(~grid.catalogue, sampling=100.0)
 

@@ -1,49 +1,23 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Next steps · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
-<style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html" class=active>Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
-
-<h2>What is still blocking a top-of-leaderboard score</h2>
-<ol>
-<li><b>No locator generalises across space.</b> All four locators tested sit at 0.02–0.05 LOQO-DTI and
-0.56–0.59 blocked canary AUC. Until that changes, no file from this lane can be expected to beat
-0.2778.</li>
-<li><b>Metre-scale topography is the named obtainable source.</b> USGS 3DEP 1 m DEM tiles over the
-high-prior zones (free public domain from USGS The National Map, <a
-href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader</a>). The sandbox
-egress allow-list blocks <code>prd-tnm.s3.amazonaws.com</code> and <code>usgs.gov</code>, so the tiles
-must be fetched on an unrestricted machine and mirrored into a GitHub repository that
-<code>scripts/prepare_data.py</code> can pin by sha256 — exactly the pattern already used for the
-feature stack.</li>
-<li><b>The hidden truth is not observable.</b> The public <code>labels.tif</code> is byte-identical to
-<code>existing_faults.tif</code> (the mapped catalogue), so every number we produce is a
-hide-and-recover index on catalogue traces, not a score. The single highest-value action is to record
-one ORGANIZER-CONFIRMED score for a lane file so the proxy can be calibrated against the real metric.</li>
-<li><b>Weekly submission slots are capped</b> (see the submission page). Promotion of any file is a
-separate selector step; this session's card records a negative verdict and does not spend a slot.</li>
-</ol>
-<h2>Limitations of this session's evidence</h2>
-<ul>
-<li>The group's own scores are owner reports (IR-61-SCORE-01); the public leaderboard belongs to other
-teams.</li>
-<li>The holdout withholds catalogue segments, which are adjacent to visible traces by construction; the
-leave-one-quadrant-out test is the correction, and it is harsher than the live problem in one respect
-(it removes all faults from a quadrant).</li>
-<li>The habitat model's negatives are random footprint pixels, so the model learns
-"fault-like habitat", not "fault absent from the catalogue".</li>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Remaining work and limitations · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head><body>
+<header class="top"><div class="wrap"><p class="sub">Remaining work · no unrecorded claims</p><h1>What remains after the local evaluation</h1>
+<nav class="main"><a href="index.html">Overview</a><a href="executive-summary.html">Executive guide</a><a href="run-card.html">Run card</a><a href="analysis.html">Score audit</a><a href="irregularities.html">Irregularities</a><a href="next-steps.html" class="active">Next steps</a><a href="review-passes.html">Review passes</a></nav></div></header>
+<main class="wrap">
+<div class="banner no"><strong>Immediate decision:</strong> there is no H61U raster to download, and submission is not recommended. The run stopped after a final-dot registry duplicate flag; do not prune or tune the observed dots and retry post hoc.</div>
+<div class="card"><h2 style="margin-top:0">Required external/data work</h2><ol>
+<li>Obtain the complete official NOAA/NCEI <code>br_depth.xyz</code> GP-1012 grid and readme, validate all declared dimensions/metadata/missing cells, and resolve a defensible spatial registration before fitting the depth scale. Do not substitute organizer band 15 or literature quantiles.</li>
+<li>No H61U artifact passed uniqueness, so the current download permission is <strong>NO</strong> and no submission file exists. A later experiment would require a new preregistration and must not tune H61U-H1 from this failed final-dot result.</li>
+<li>If a future, separately selected candidate passes holdout, uniqueness, and byte-level format validation, the selector may separately choose a weekly slot. Retain the artifact-linked receipt and SHA-256 and label any returned score as ORGANIZER-CONFIRMED only when tied to that artifact. No upload or slot selection is performed by this repository.</li>
+</ol></div>
+<h2>Final H61U evidence summary</h2><p><strong>HOLDOUT-DTI · evaluator <code>gems61-pooled-hide-v2</code> · 12,074 withheld positives:</strong> H61U-H1 = 0.041351 (95% CI 0.035332–0.048100), unfiltered HGM maxima = 0.044359 (0.036847–0.051764), matched random lines = 0.016030 (0.010328–0.021541). The paired H1-minus-HGM difference was -0.003009 (95% CI -0.010105–0.004951); the result did not show a gain over the strongest simple control. The final-dot uniqueness gate independently stopped writing a file.</p>
+<h2>Known scientific and evaluation limitations</h2><ul>
+<li>The inversion prior's absolute depth scale is uncalibrated until GP-1012 is obtained and registered. H61U's same-sign persistence is intended to be scale-invariant, but the final geophysical depth/throw values are not calibrated.</li>
+<li>The available catalogue is a proxy. Whole-component hide-and-recover tests do not reveal performance on the organizer's undisclosed, newly identified faults.</li>
+<li>Basement-depth HGM maxima are not uniquely faulted. The finite density-sheet control tests one named non-fault mechanism, not all intrusive contacts, plutons, alteration zones, or source depths.</li>
+<li>The public registry contains only accessible aligned rasters. A pass does not prove uniqueness against private or inaccessible submissions.</li>
+<li>The public leaderboard exposes account-best rows, not TIFF identity. H33-2-B2's reported 0.2778 attribution remains unverified.</li>
 </ul>
-
-</div></body></html>
+<h2>Stop discipline</h2><p>H61U-H1 is the single authorized experiment. H61U-H2 and H61U-H3 remain prospective, not post-hoc fallbacks. Do not exceed three experiments or two hours without a new registration. Any weekly-slot decision is separate from the local promotion verdict.</p>
+<p>Official references: <a href="https://pubs.usgs.gov/publication/gp1012">USGS GP-1012</a> · <a href="https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz">NOAA/NCEI grid</a> · <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a>.</p>
+</main><footer><div class="wrap">Remaining work is explicit; no performance or calibration claim is inferred from it.</div></footer></body></html>

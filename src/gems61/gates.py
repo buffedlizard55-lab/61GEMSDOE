@@ -168,7 +168,7 @@ def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
     if np.asarray(candidate).shape != expected[0]:
         raise ValueError('candidate shape differs from reference')
     report = compare_array_to_registry(candidate, registry_index, footprint,
-        expected_grid=expected,
+        expected_grid=expected, phase=phase,
         progress=(lambda i, n, row: log(f'{phase} registry gate {i}/{n}')) if log else None)
     return dict(report, phase=phase, ok=report['unique'], duplicate=report['duplicate_count'] > 0,
                 policy_exemptions=[], rule='literal finite >0 support at BOTH phases; no alternate policy')

@@ -29,6 +29,7 @@ SIGMA_STEP = 3.0    # px (300 m) - the gravity resolution floor
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical inversion: it calibrated against organizer band 15. GP-1012 alone is permitted for depth-scale calibration.")
     t0 = time.time()
     grid = gio.load_grid(verify=True)
     g = np.asarray(grid.band("isostatic_gravity_anomaly"), dtype=np.float32)

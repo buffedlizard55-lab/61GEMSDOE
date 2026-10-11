@@ -1,0 +1,94 @@
+[
+  {
+    "id": "IR-61U-01",
+    "severity": "blocker for depth-scale claims",
+    "title": "Complete GP-1012 reference grid is not locally available",
+    "detail": "The official NOAA/NCEI br_depth.xyz source is identified and its partial header was inspected; the excerpt describes a 596 x 504 grid at 2 km spacing, depth values in km, and a 9999 missing flag. The complete grid is absent from this checkout, and no verified coordinate datum/registration to the competition grid is available.",
+    "action": "scripts/calibrate_depth_scale.py was run and wrote evidence/gp1012_calibration.json with status BLOCKED-MISSING-COMPLETE-OFFICIAL-GP1012-GRID. H61U uses a fixed, explicitly uncalibrated prior; organizer band 15 and literature quantiles are prohibited substitutes.",
+    "source": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz",
+    "status": "open"
+  },
+  {
+    "id": "IR-61U-02",
+    "severity": "major provenance restriction",
+    "title": "Historical band-15 calibration and feature callers are retired",
+    "detail": "Older local scripts and run receipts used organizer band 15 depth_to_base_surf as a calibration target, predictor, or diagnostic. That product is derived from the same contest geophysics and cannot serve as the independent GP-1012 calibration required here.",
+    "action": "buried.load_band(15), grid.load_band(15), and gems61.io.Grid.band() for the 15th band now fail closed; the optional geo feature set no longer exposes the band-15 gradient; historical runner entrypoints that used it exit with RETIRED. Archived reports remain historical evidence and are not reused.",
+    "status": "resolved in code; historical artifacts remain explicitly noncompliant with current policy"
+  },
+  {
+    "id": "IR-61U-03",
+    "severity": "major evaluation limitation",
+    "title": "Withheld catalogue faults are a proxy, not the organizer's new-fault truth",
+    "detail": "The shared holdout hides whole connected catalogue segments and masks visible catalogue pixels, but the organizer's private set includes newly identified faults that are not in the catalogue. HOLDOUT-DTI therefore measures recovery of withheld mapped segments, not private leaderboard performance.",
+    "action": "Every DTI result includes evaluator version, withheld-positive count, and a 95% spatial-block interval. No projection is called a score; only an artifact-linked organizer receipt can support ORGANIZER-CONFIRMED.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "status": "known limitation"
+  },
+  {
+    "id": "IR-61U-04",
+    "severity": "major score-attribution uncertainty",
+    "title": "H33-2-B2 cannot be tied to the official 0.2778 row",
+    "detail": "The 2026-10-11 official page lists extradr19 at rank 23 with public DW-Tversky 0.2778 and 15 submissions. The page gives no TIFF name. GEMSDOE32's H33-2-B2 owner audit labels the file UNSCORED and calls 0.274673 a model projection, not an organizer score.",
+    "action": "Do not explain 0.2778 as an H33-2-B2 artifact score unless an artifact-linked submission receipt is obtained. Evidence is in evidence/leaderboard_reconciliation_2026-10-11.json and docs/analysis.html.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "status": "open"
+  },
+  {
+    "id": "IR-61U-05",
+    "severity": "major geological non-uniqueness",
+    "title": "Intrabasement density contrasts can mimic basement relief",
+    "detail": "A mafic/granitic body, intrusive contact, or altered basement zone can generate a gravity edge without any fault displacement. H61U includes a finite buried density-sheet synthetic control with zero basement relief, but one geometry cannot cover all lithologies or source depths.",
+    "action": "Interpret a recovered HGM crest only as a buried-structure candidate; retain the density sheet as an explicit named mimic and report its response separately from DTI.",
+    "status": "known limitation"
+  },
+  {
+    "id": "IR-61U-06",
+    "severity": "major uniqueness scope",
+    "title": "Current H61U registry covered sibling repositories only; private uploads remain outside scope",
+    "detail": "The manifest used for H61U contains 748 unique-grid rasters from accessible sibling repositories and declares complete_accessible_scan=true only for that sibling scan. It excluded 61GEMSDOE historical TIFFs; private or inaccessible submissions remain outside any public registry.",
+    "action": "The shared refresh_registry.py has now been updated to combine sibling repositories with local historical predictions from docs/downloads, docs/submissions, out, evidence, and reports on future refreshes. The recorded H61U comparison is unchanged and must still be described as sibling-only; do not claim organizer/private completeness.",
+    "status": "current-run scope limitation; future refresh includes local archives"
+  },
+  {
+    "id": "IR-61U-07",
+    "severity": "minor metric-data mismatch",
+    "title": "The public page exposes account best scores, not submission files",
+    "detail": "The previous dated snapshot listed DARD at 0.3195 rank 1; the 2026-10-11 page lists the same value at rank 9 and xiaofanhu at 0.4133 rank 1. Owner-reported 0.2708 and 0.2600 values numerically match current rows for different displayed participants, but this does not identify the owner files.",
+    "action": "Use a dated public snapshot only for current leaderboard context; never infer file attribution from a numeric match.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "status": "documented"
+  },
+  {
+    "id": "IR-61U-08",
+    "severity": "major run-validity correction",
+    "title": "Invalid first attempt discarded after shared flank-mask defect",
+    "detail": "The first H61U attempt produced zero valid flank profiles because the maxima mask was incorrectly reused as the valid sample domain. Its empty-surface uniqueness clearance and transient holdout calculations are invalid and must not be reported.",
+    "action": "No candidate raster was written. The shared helper was fixed in place and regression-tested before the retry; see evidence/h61u_first_attempt.json.",
+    "status": "resolved before valid H61U evaluation"
+  },
+  {
+    "id": "IR-61U-09",
+    "severity": "major provenance restriction",
+    "title": "Competition feature bytes are from a public bridge copy",
+    "detail": "The DrivenData data tab is login-walled. The local pin receipt proves identity to the public bridge bytes but not a fresh organizer-authenticated download.",
+    "action": "Describe the source as a pinned bridge copy and preserve that provenance caveat.",
+    "status": "known limitation"
+  },
+  {
+    "id": "IR-61U-10",
+    "severity": "terminal duplicate stop; no candidate or download authorization",
+    "title": "Final-dot registry comparison stopped H61U-H1",
+    "detail": "The pre-placement surface comparison passed against all 748 aligned rasters in the accessible sibling-repository registry (which excludes 61GEMSDOE historical TIFFs) (worst Spearman rho 0.030846). After the holdout, the final-dot comparison flagged 70 registry raster entries above the strict >0.70 overlap limit; the maximum 3-pixel overlap was 1.0 against 17GEMSDOE:docs/downloads/17GEMSDOE_E-proba-multiscale_20260930T044527Z.tif. The run stopped before writing a new TIFF. This overlap stop does not establish that a file was copied; no candidate file exists.",
+    "action": "Do not link, download, or submit a H61U artifact. Do not prune or alter the observed dots and retry post hoc. The fixed H1 experiment also failed the promotion comparison against unfiltered HGM maxima: candidate-minus-HGM HOLDOUT-DTI delta -0.0030086022, 95% CI [-0.0101048834, 0.0049512141], evaluator gems61-pooled-hide-v2, 12,074 withheld positives. See evidence/h61u_run_card.json and docs/data/h61u_outcome_summary.json.",
+    "status": "closed by fail-closed stop; submission and weekly slot not approved"
+  },
+  {
+    "id": "IR-61U-11",
+    "severity": "major uniqueness-scope limitation",
+    "title": "The H61U run used a registry that omitted this repository’s historical TIFFs",
+    "detail": "At the time of the H61U run, evidence/registry_refreshed.json contained 748 accessible sibling-repository rasters and excluded 61GEMSDOE. Thus the recorded pre-placement and final-dot checks did not compare the candidate surface/dots against older TIFFs in docs/downloads/ or docs/submissions/. The shared refresh tool has since been fixed to include those local prediction archives on a future refresh; the current run was not rerun.",
+    "action": "Preserve the current negative stop; no candidate was written. For future work, refresh the combined inventory before any pre-placement check and again compare the final dots. Keep the strict thresholds unchanged and record both registry sources.",
+    "status": "current-run limitation; refresh-code correction added for future runs"
+  }
+]

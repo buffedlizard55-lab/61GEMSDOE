@@ -1,51 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How to submit - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>SUPERSEDED PAGE.</b> This page describes an earlier session of this repository. The current status, download and evidence are on <a href="index.html">index.html</a> (session arena/c57b45ae, H61-G).</div><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-<h1>How to submit</h1>
-<div class="card hero">
-<h2>Step 1 &mdash; download the file</h2>
-<p><a class="btn" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">&#11015; gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.sha256">SHA-256</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.json">Checks</a></p>
-<p>Optionally verify the bytes: <code>sha256sum gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code> should print
-<span class="mono-sm">a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2</span></p>
-</div>
-<div class="card">
-<h2>Step 2 &mdash; open the submission page</h2>
-<p><code>https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></p>
-<p class="dim">You must be logged in. The data and submission tabs require an account.</p>
-</div>
-<div class="card">
-<h2>Step 3 &mdash; choose the file, paste the note</h2>
-<p>The form asks for a "File to submit" and an optional "Note". Paste exactly this into
-the Note field (122 of the 140 allowed characters):</p>
-<pre>Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.</pre>
-<p>Then press submit.</p>
-</div>
-<div class="card">
-<h2>Step 4 &mdash; read the receipt</h2>
-<p>The page returns a score. That number, on that page, is an
-<strong>organizer receipt</strong> and is the only kind of score this project will
-report as confirmed. Every other score you will see in the group's repositories is a
-claim. See <a href="evidence.html">Evidence</a> for why that distinction is enforced here.</p>
-</div>
-<h2>If the form complains</h2>
-<table><thead><tr><th>Message</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td>Predicted values must be in range [0, 1]</td><td>The raster contained NaN outside the study footprint. The example submission ships with NaN, which is legal under the metric but rejected by the form.</td><td>This repository emits all-finite rasters: 0.0 outside the footprint. Re-check with <code>python scripts/validate_submission.py</code>.</td></tr><tr><td>Raster does not match the submission format</td><td>CRS, shape or geotransform differs from <code>sample_submission.tif</code>.</td><td>The writer copies the profile from <code>sample_submission.tif</code> and the validator asserts equality on all three.</td></tr><tr><td>File must be single-band GeoTIFF</td><td>A multi-band or zipped raster.</td><td>The writer always emits <code>count=1</code>, float32.</td></tr></tbody></table>
-<h2>What is safe to do</h2>
-<ul>
-<li><strong>Downloading and submitting the file on this site is expected and fine.</strong>
-It was produced by the code in this repository from the official competition rasters.</li>
-<li>It is not a copy of another team's submission and not a copy of any earlier
-submission of ours. The uniqueness check that demonstrates this runs against the
-registry and its output is on <a href="evidence.html">Evidence</a>.</li>
-<li>Do not submit a raster you have not validated. Run
-<code>python scripts/validate_submission.py</code> first; it is what the
-"format validated" pill on the home page reflects.</li>
-</ul>
-<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
-</div></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Download and submit decision · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head><body>
+<header class="top"><div class="wrap"><p class="sub">Artifact authorization · current H61U outcome</p><h1>No GeoTIFF is approved for download or submission</h1>
+<nav class="main"><a href="index.html">Overview</a><a href="executive-summary.html">Executive guide</a><a href="run-card.html">Run card</a><a href="holdout.html">Holdout results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method</a><a href="analysis.html">Score audit</a><a href="irregularities.html">Irregularities</a><a href="review-passes.html">Review passes</a><a href="next-steps.html">Next steps</a></nav></div></header>
+<main class="wrap">
+<div class="banner no"><strong>No one-click download is available.</strong> The final-dot uniqueness gate stopped H61U-H1 before the submission writer ran. Do not download an older raster from the repository and treat it as the current candidate.</div>
+<table><tbody><tr><th>Is there a current H61U TIF?</th><td>No; no candidate file was written.</td></tr><tr><th>Raster SHA-256</th><td>None; no candidate bytes exist.</td></tr><tr><th>Format validator</th><td>Not run; there is no candidate to validate.</td></tr><tr><th>Okay to download?</th><td><strong>No.</strong> There is no current artifact cleared for download.</td></tr><tr><th>Submission recommendation</th><td><strong>Not recommended.</strong> Strict final-dot uniqueness failed; H1 also did not demonstrate an improvement over the unfiltered HGM holdout control.</td></tr><tr><th>Submission name / short note</th><td>None; no submission payload was prepared.</td></tr><tr><th>Weekly slot approved?</th><td>No. Weekly-slot selection is separate and no selector approval is recorded.</td></tr><tr><th>Organizer-confirmed score?</th><td>No. No upload or artifact-linked organizer receipt exists.</td></tr></tbody></table>
+<h2>Why this is a hard stop</h2><p>All 748 aligned rasters in the accessible sibling-repository registry were checked (this registry excludes 61GEMSDOE's historical TIFFs and private/inaccessible submissions). The continuous-surface gate passed (worst Spearman rho 0.030846), but the final-dot gate failed: 70 registry entries exceeded the strict 70% overlap threshold and the maximum three-pixel overlap was 100%. The implementation stopped rather than altering dots after seeing this result. This is the required fail-closed behavior; it is not a finding that any file was copied.</p>
+<h2>Archived files are not current candidates</h2><p>The repository retains historical TIF/ZIP outputs under <code>docs/downloads/</code> and <code>docs/submissions/</code> for traceability. They are not H61U artifacts, are not linked as downloads here, and are not recommended for the current submission. A one-click link will be added only after a new, properly registered run creates a distinct raster and all format and uniqueness checks pass.</p>
+<p>See the <a href="run-card.html">run card</a> for the evidence and the <a href="next-steps.html">next-step guide</a> for the remaining official-data and selector work.</p>
+</main><footer><div class="wrap">Download permission is distinct from submission recommendation and weekly-slot approval.</div></footer></body></html>

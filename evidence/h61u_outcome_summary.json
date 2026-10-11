@@ -1,0 +1,212 @@
+{
+  "evidence_class": "H61U-FINAL-OUTCOME",
+  "registered_hypothesis": "H61U-H1",
+  "status": "STOP-DUPLICATE-OR-UNCLEARED-FINAL-DOTS",
+  "candidate_tif_created": false,
+  "raster_path": null,
+  "raster_sha256": null,
+  "format_validator": {
+    "status": "NOT_RUN_NO_CANDIDATE",
+    "exit_code": 2,
+    "all_passed": null,
+    "report_path": "evidence/h61u_format_validation.json",
+    "reason": "No candidate TIFF was written after the strict final-dot uniqueness stop; the expected no-candidate path was checked without substituting any historical raster."
+  },
+  "download_permission": "NO_CANDIDATE_ARTIFACT; no TIF was written after the final-dot gate stopped the run.",
+  "submit_recommendation": "NOT_RECOMMENDED: final-dot uniqueness threshold failed and the frozen primary did not beat the unfiltered HGM control on paired HOLDOUT-DTI.",
+  "weekly_slot_approved": false,
+  "organizer_confirmed_score": null,
+  "verdict": "NEGATIVE",
+  "experiment_budget": {
+    "valid_experiments_completed": 1,
+    "attempts_used": 2,
+    "invalid_attempts": 1,
+    "elapsed_seconds": 1173.8687450885773,
+    "maximum_experiments": 3,
+    "maximum_hours": 2,
+    "candidate_parameter_search": false
+  },
+  "holdout_dti": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "withheld_positive_count": 12074,
+    "alpha": 0.2,
+    "beta": 0.8,
+    "triangular_kernel_radius_m": 300.0,
+    "candidate": {
+      "dti": 0.04135075588703079,
+      "ci95": [
+        0.03533244482179879,
+        0.04810042622616244
+      ]
+    },
+    "unfiltered_hgm_maxima": {
+      "dti": 0.044359358086403136,
+      "ci95": [
+        0.036846919539234635,
+        0.05176398134054996
+      ]
+    },
+    "matched_random_lines": {
+      "dti": 0.016030367861701252,
+      "ci95": [
+        0.010327848638068007,
+        0.02154115490317586
+      ]
+    },
+    "paired_delta_candidate_minus_hgm": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems61-pooled-hide-v2",
+      "delta": -0.003008602199372344,
+      "ci95": [
+        -0.010104883362903862,
+        0.004951214062013972
+      ],
+      "withheld_positive_count": 12074,
+      "candidate": "H61U-H1",
+      "reference": "unfiltered-HGM-maxima"
+    },
+    "paired_delta_candidate_minus_random": {
+      "evidence_class": "HOLDOUT-DTI",
+      "evaluator_version": "gems61-pooled-hide-v2",
+      "delta": 0.02532038802532954,
+      "ci95": [
+        0.01761103974591787,
+        0.03315457716470033
+      ],
+      "withheld_positive_count": 12074,
+      "candidate": "H61U-H1",
+      "reference": "matched-random-lines"
+    },
+    "spatial_blocks": 161,
+    "bootstrap_draws": 1000,
+    "bootstrap_seed": 520810
+  },
+  "holdout_segment_recovery": {
+    "evidence_class": "HOLDOUT-SEGMENT-RECOVERY",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "withheld_positive_count": 12074,
+    "H61U-H1": {
+      "recovered_segments": 128,
+      "eligible_segments": 318,
+      "fraction": 0.4025157232704403,
+      "ci95_wilson": [
+        0.35008923421500726,
+        0.457269332244444
+      ]
+    },
+    "unfiltered-HGM-maxima": {
+      "recovered_segments": 138,
+      "eligible_segments": 318,
+      "fraction": 0.4339622641509434,
+      "ci95_wilson": [
+        0.38059757427110436,
+        0.48890339010465295
+      ]
+    },
+    "matched-random-lines": {
+      "recovered_segments": 40,
+      "eligible_segments": 318,
+      "fraction": 0.12578616352201258,
+      "ci95_wilson": [
+        0.09374976477562474,
+        0.16675570002033335
+      ]
+    }
+  },
+  "leakage_canaries": {
+    "evidence_class": "LEAKAGE-CANARY-AUC",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "withheld_positive_count": 12074,
+    "threshold": 0.9,
+    "features": {
+      "inverted_depth_band13": {
+        "auc": 0.5552040221398393,
+        "leakage_suspect": false
+      },
+      "basement_depth_hgm": {
+        "auc": 0.5523334384835183,
+        "leakage_suspect": false
+      },
+      "signed_flank_persistence": {
+        "auc": 0.5032271323712109,
+        "leakage_suspect": false
+      },
+      "same_sign_flank": {
+        "auc": 0.5023299364336591,
+        "leakage_suspect": false
+      },
+      "hgm_only_maxima": {
+        "auc": 0.5064217860692397,
+        "leakage_suspect": false
+      },
+      "h1_filtered_ribbon": {
+        "auc": 0.5042585947076362,
+        "leakage_suspect": false
+      }
+    },
+    "max_auc": 0.5552040221398393,
+    "any_leakage_suspect": false
+  },
+  "synthetic_nonfault_mimic": {
+    "evidence_class": "SYNTHETIC-NONFAULT-MIMIC-CONTROL",
+    "forward_operator": "thin buried density sheet; periodic FFT; no fault displacement or basement relief",
+    "grid_shape_cells": [
+      512,
+      512
+    ],
+    "grid_spacing_m": 400.0,
+    "sheet_geometry_cells": "rows 220:292, columns 252:260; centered finite sheet",
+    "sheet_dimensions_m": [
+      28800.0,
+      3200.0
+    ],
+    "density_contrast_kg_m3": 250.0,
+    "thickness_m": 1500.0,
+    "burial_depth_m": 2500.0,
+    "basement_relief_m": 0.0,
+    "hgm_maxima_centres": 21252,
+    "same_sign_persistence_survivors": 172,
+    "retention_fraction": 0.008093355919442876,
+    "persistence_threshold": 0.6,
+    "apertures_m": [
+      2000.0,
+      4000.0
+    ],
+    "dti_computed": false,
+    "dti_reason": "The synthetic sheet has no fault truth; this is a false-positive mechanism control, not a score.",
+    "limitation": "A finite sheet is one named non-fault mimic, not a complete model of intrabasement geology."
+  },
+  "uniqueness": {
+    "evidence_class": "UNIQUENESS-CHECK",
+    "registry_complete": true,
+    "n_registry_rasters": 748,
+    "comparison_scope": "all 748 aligned rasters in accessible sibling GEMS DOE repositories; 61GEMSDOE historical rasters were excluded by the refresh inventory; not complete for private, inaccessible, or current-repository artifacts",
+    "preplacement_pass": true,
+    "preplacement_worst_spearman": 0.030846236073520297,
+    "preplacement_source": "55GEMSDOE:evidence/parallel_session_16/tensor-continuous-1875224px-20261009T202053Z-nan.tif",
+    "final_pass": false,
+    "final_worst_spearman": 0.030846236073520297,
+    "final_worst_spearman_source": "55GEMSDOE:evidence/parallel_session_16/tensor-continuous-1875224px-20261009T202053Z-nan.tif",
+    "final_worst_dot_overlap_3px": 1.0,
+    "final_worst_dot_overlap_source": "17GEMSDOE:docs/downloads/17GEMSDOE_E-proba-multiscale_20260930T044527Z.tif",
+    "duplicate_flag_count": 70,
+    "thresholds": {
+      "spearman_strictly_greater_than": 0.9,
+      "dot_overlap_strictly_greater_than": 0.7,
+      "dot_radius_px": 3.0
+    },
+    "stop": true,
+    "self_repository_rasters_included": false,
+    "protocol_scope_deviation": {
+      "status": "KNOWN_SCOPE_LIMITATION",
+      "preregistration": "full accessible registry",
+      "actual_scope": "all 748 aligned rasters in accessible sibling GEMS DOE repositories; 61GEMSDOE historical rasters were excluded; private/inaccessible submissions are outside scope",
+      "self_repo_excluded": true,
+      "effect": "No candidate was written because the final-dot gate failed on the sibling registry; no global uniqueness claim is made."
+    }
+  },
+  "official_leaderboard_context": "The 2026-10-11 public page is account-level; the extradr19 0.2778 row does not identify H33-2-B2. No artifact-linked organizer receipt exists for this run.",
+  "gp1012_calibration": "Not performed: full official NOAA grid not locally available; band 15 and literature quantiles were not substituted.",
+  "source_run_card": "../../evidence/h61u_run_card.json"
+}

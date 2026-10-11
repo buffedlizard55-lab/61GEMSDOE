@@ -17,7 +17,7 @@ features -- but the leakage canary is still run on every column, as required.
 Band numbers are 1-based positions in ``training_features.tif`` as verified with
 rasterio on the pinned bytes (2026-10-09):
 
-    1 mag_anom            8 geod_dilaterate       15 depth_to_base_surf
+    1 mag_anom            8 geod_dilaterate       15 depth_to_base_surf (forbidden by lane policy)
     2 rtp                 9 tmi_vg                16 ieq_n100a15
     3 tmi_hg             10 deq_n100a15           17 cond_surf
     4 geod_2ndinv        11 iso_grav_anom_vg      18 iso_grav_anom_hg
@@ -40,7 +40,7 @@ FEATURES_PATH = DATA_DIR / "training_features.tif"
 # 1-based band indices in training_features.tif
 _BAND = {
     "tmi_hg": 3, "geod_2ndinv": 4, "iso_grav_anom_slope": 5, "tc": 6,
-    "geod_shearrate": 7, "det_elev": 12, "depth_to_base_surf": 15,
+    "geod_shearrate": 7, "det_elev": 12,
     "cond_surf": 17, "iso_grav_anom_hg": 18, "det_elev_slope": 19,
 }
 
@@ -53,7 +53,6 @@ GEO_FEATURES = (
     "g_curv",       # H57-G1: curvature (Laplacian of detrended elevation)
     "g_edge_max",   # H57-G1: multi-method edge consensus (max of the four)
     "g_cond",       # H57-G2: conductivity surface (clay-cap / alteration)
-    "g_base_edge",  # H57-G3: gradient magnitude of depth-to-basement
     "g_strain",     # H57-G5: geodetic second invariant (strain-rate magnitude)
 )
 
@@ -119,10 +118,6 @@ def load_planes(footprint: np.ndarray, path: Path | None = None) -> dict[str, np
     elev = _clean(raw["det_elev"])
     lap = ndi.laplace(elev)
     planes["g_curv"] = _robust_z(lap, fp)
-    # basement-cover contrast: gradient magnitude of the depth-to-basement surface
-    base = _clean(raw["depth_to_base_surf"])
-    gy, gx = np.gradient(base)
-    planes["g_base_edge"] = _robust_z(np.hypot(gy, gx), fp)
     # multi-method edge consensus: max of the four robust-z edge planes
     planes["g_edge_max"] = np.maximum.reduce(
         [planes["g_tmi_hg"], planes["g_tc"], planes["g_slope"], planes["g_grav_hg"]])

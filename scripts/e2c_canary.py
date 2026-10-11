@@ -24,10 +24,11 @@ Z0, DRHO = 600, 222
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical canary: it treated organizer band 15 as a prediction feature. Band 15 is prohibited.")
     grid = gio.load_grid(verify=True)
     z = np.load(ROOT / "data" / "cache" / f"basement_z{Z0}_dr{DRHO}.npz")
     depth, depth_hp, hgm = z["depth"], z["depth_hp"], z["hgm"]
-    folds = ho.make_folds(grid.footprint, grid.catalogue, n_folds=4, collar_px=3, min_px=20)
+    folds = ho.make_folds(grid.catalogue, grid.footprint, fraction=0.20, buffer_px=3, seed=20261011, n_folds=4, min_component_px=20)
     truth = np.zeros_like(grid.footprint)
     domain = np.zeros_like(grid.footprint)
     for f in folds:

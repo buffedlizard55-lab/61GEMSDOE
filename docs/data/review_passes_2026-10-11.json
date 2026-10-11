@@ -1,0 +1,143 @@
+{
+  "evidence_class": "REVIEW-PASSES",
+  "review_date": "2026-10-11",
+  "review_scope": "H61U-H1 evidence, code paths, current static site, and fail-closed artifact policy",
+  "reviewer_type": "single-agent self-review; not an independent human or third-party peer review",
+  "passes_completed": 3,
+  "final_decision": {
+    "verdict": "NEGATIVE",
+    "candidate_tif_created": false,
+    "raster_sha256": null,
+    "download_permission": "NO_CANDIDATE_ARTIFACT",
+    "submit_recommendation": "NOT_RECOMMENDED",
+    "weekly_slot_approved": false,
+    "organizer_confirmed_score": null
+  },
+  "passes": [
+    {
+      "number": 1,
+      "title": "Hypothesis, physical mechanism, and preregistration",
+      "status": "PASS_WITH_LIMITATIONS",
+      "reviewed": [
+        "evidence/h61u_preregistration.json",
+        "scripts/run_h61u.py",
+        "README.md",
+        "docs/hypotheses.html",
+        "docs/method.html"
+      ],
+      "findings": [
+        "H61U-H1 uses band 13 only to invert basement depth, then tests basement-depth horizontal-gradient maxima and same-sign flank offsets at 2 km and 4 km before proposing 3-pixel ribbons.",
+        "Organizer band 15 is not used as a calibration reference or prediction feature.",
+        "GP-1012 is reserved only for depth-scale calibration; the complete official grid is unavailable locally, so no calibration or absolute-depth claim is made.",
+        "The named non-fault mimic is a finite intrabasement density sheet/contact with zero basement relief. H61U-H2 and H61U-H3 remain prospective, not post-hoc fallbacks."
+      ],
+      "limitation": "Only the authorized H61U-H1 experiment was run; catalogued faults are proxy truth rather than undisclosed organizer truth."
+    },
+    {
+      "number": 2,
+      "title": "Execution, spatial holdout, leakage, controls, and stop decision",
+      "status": "NEGATIVE_STOP_CONFIRMED",
+      "reviewed": [
+        "evidence/h61u_run_card.json",
+        "evidence/h61u_outcome_summary.json",
+        "evidence/h61u_first_attempt.json",
+        "evidence/registry_refreshed.json",
+        "scripts/run_h61u.py",
+        "src/gems61/uniqueness.py"
+      ],
+      "findings": {
+        "holdout_dti_evaluator": "gems61-pooled-hide-v2",
+        "withheld_positive_count": 12074,
+        "alpha": 0.2,
+        "beta": 0.8,
+        "kernel_radius_m": 300,
+        "h61u_h1_dti": 0.0413507559,
+        "h61u_h1_ci95": [
+          0.0353324448,
+          0.0481004262
+        ],
+        "unfiltered_hgm_dti": 0.0443593581,
+        "unfiltered_hgm_ci95": [
+          0.0368469195,
+          0.0517639813
+        ],
+        "matched_random_lines_dti": 0.0160303679,
+        "matched_random_lines_ci95": [
+          0.0103278486,
+          0.0215411549
+        ],
+        "paired_h1_minus_hgm": -0.0030086022,
+        "paired_h1_minus_hgm_ci95": [
+          -0.0101048834,
+          0.0049512141
+        ],
+        "accessible_registry_rasters": 748,
+        "preplacement_worst_spearman": 0.030846236073520297,
+        "final_dot_overlap_limit_strictly_greater_than": 0.7,
+        "final_dot_overlap_radius_px": 3,
+        "final_dot_duplicate_flags": 70,
+        "final_dot_max_overlap": 1.0,
+        "final_uniqueness_pass": false,
+        "candidate_writer_reached": false,
+        "candidate_tif_created": false,
+        "format_validation": "NOT_RUN_NO_CANDIDATE",
+        "registry_scope": "all 748 aligned rasters in accessible sibling GEMS DOE repositories; 61GEMSDOE historical rasters were excluded; private/inaccessible submissions are outside scope",
+        "self_repository_rasters_included": false,
+        "preregistration_scope_deviation": "The frozen preregistration called for the full accessible registry, but refresh_registry.py excludes 61GEMSDOE. The reviewer recorded this scope limitation; the sibling-registry stop still blocks the run and no candidate exists."
+      },
+      "decision": "The HGM comparison does not show a gain and the strict final-dot gate stops file writing. The reviewer also recorded that the scan omitted this repository's historical TIFFs; consequently no exhaustive uniqueness claim is made. No post-hoc pruning, threshold adjustment, TIF, or organizer score was produced."
+    },
+    {
+      "number": 3,
+      "title": "Shared code, compatibility, static site, and artifact safety",
+      "status": "PASS_WITH_EXPECTED_NO_CANDIDATE_RESULT",
+      "reviewed": [
+        "src/gems61/holdout.py",
+        "src/gems61/uniqueness.py",
+        "scripts/check_submission.py",
+        "scripts/refresh_registry.py",
+        "scripts/check_site.py",
+        "tests/test_holdout.py",
+        "tests/test_check_submission.py",
+        "docs/verify.html",
+        "tests/test_check_site.py"
+      ],
+      "maintenance": [
+        "Removed obsolete unused base-rate/lift constants that described an alternate uniqueness exemption; documented the remaining base-rate comparison helper as diagnostic only.",
+        "Kept the strict accessible-registry stop as Spearman >0.90 OR raw within-3-pixel overlap >0.70, without a density or enrichment exception.",
+        "Preserved make_folds compatibility for legacy footprint-first ordering, collar_px/min_px keywords, and dictionary-style Fold access; updated stale repository callers and added regression coverage.",
+        "Changed the submission checker to refuse historical TIF substitution when the current run card has no candidate.",
+        "Recorded that the H61U run used a sibling-only manifest; updated scripts/refresh_registry.py so subsequent refreshes include local historical predictions from docs/downloads, docs/submissions, out, evidence, and reports. The existing run receipt was not recomputed."
+      ],
+      "checks": [
+        {
+          "command": "python -m pytest tests -q",
+          "exit_code": 0,
+          "result": "PASS — 87 tests"
+        },
+        {
+          "command": "python scripts/check_site.py",
+          "exit_code": 0,
+          "result": "PASS — 23 HTML pages, local links and external hosts checked, zero active TIFF/ZIP links"
+        },
+        {
+          "command": "python scripts/check_submission.py --report evidence/h61u_format_validation.json",
+          "exit_code": 2,
+          "result": "EXPECTED — NOT_RUN_NO_CANDIDATE; no GeoTIFF-format validation was possible"
+        },
+        {
+          "command": "python -m compileall -q src scripts tests",
+          "exit_code": 0,
+          "result": "PASS"
+        },
+        {
+          "command": "git diff --check",
+          "exit_code": 0,
+          "result": "PASS"
+        }
+      ],
+      "regression_check": "The no-candidate checker test supplies an archived TIFF explicitly and verifies it is not substituted or validated.",
+      "limitation": "Passing repository checks do not create, validate, or authorize a candidate GeoTIFF."
+    }
+  ]
+}

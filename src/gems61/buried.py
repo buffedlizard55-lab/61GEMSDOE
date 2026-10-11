@@ -1,40 +1,21 @@
-"""Buried-structure lane: basement relief from isostatic gravity, and the steps in it.
+"""Buried-structure lane: basement relief from isostatic gravity, and its steps.
 
-This module is the assigned lane's instrument.  It answers one question:
+This module supports the assigned lane: invert band 13 isostatic gravity,
+locate candidate basement-depth steps, and distinguish structural offset from
+intrabasement density contrasts. Parker (1973) / Oldenburg (1974) supply the
+potential-field model and its stabilizing filter; Blakely & Simpson (1986)
+supply the gradient-edge construction.
 
-    Where does the *basement surface* step, in places the mapped-fault catalogue
-    does not already cover?
+Calibration policy is fail-closed. The only permitted depth-scale reference is
+the actual official GP-1012 grid distributed by NOAA/NCEI (``br_depth.xyz``).
+The complete grid is not present in this checkout. The organizer's band 15 and
+static literature-derived quantiles are not substitutes and are not used by
+current methods. A fixed prior may be used to test scale-invariant step
+geometry, but it must be labelled uncalibrated.
 
-Method, in order, with the source that fixes each step:
-
-1. **Invert** the isostatic residual gravity field for depth to basement with the
-   Parker (1973) forward series / Oldenburg (1974) iteration.  Oldenburg's paper
-   is explicit that the iteration diverges without a low-pass filter; the filter
-   used here is a Gaussian tapering the high wavenumbers that the data cannot
-   resolve, in the Wiener sense (:func:`lowpass_wiener`).
-2. **Calibrate** the density contrast against the published Basin-and-Range
-   basin-depth scale of Saltus & Jachens (1995), USGS Geophysical Investigations
-   Map **GP-1012**, 1:2,500,000 -- i.e. the *shape* of the published depth
-   distribution (median, p90, and the fraction of the map deeper than 1 km,
-   which Blakely & Jachens 1991 report as "about 20%" of Nevada).
-3. **Find the step lines** as the automatic maxima of the horizontal gradient
-   magnitude of the basement surface -- the Blakely & Simpson (1986) procedure
-   for locating boundaries of gravity/magnetic sources, not a hand-picked mask.
-4. **Keep only real steps.**  A lineament is not a fault (DrivenData problem
-   statement, data-sources ledger row DD-ABOUT); a fault has displacement.  The
-   throw across each maximum is measured from the depth surface and the
-   candidate is kept only above a declared minimum.
-5. **Prefer concealed steps** -- the ones under a thick basin fill, i.e. the ones
-   the surface-based catalogue is least likely to already contain (this is the
-   lane's reason to exist: 80% of Nevada is covered by Cenozoic deposits,
-   Blakely & Jachens 1991).
-
-Why the inversion is done at all, rather than reading the supplied
-``depth_to_base_surf`` band: the supplied band is a first-order slab conversion
-of the same gravity; running the full non-linear series is what makes the
-*gradient* of the surface usable, and it lets the whole chain be re-derived and
-audited from the pinned gravity band alone.  The supplied band is used only as
-an independent check on the inversion (:func:`compare_to_published_depth`).
+Band 15 ``depth_to_base_surf`` is not a prediction feature and is not a
+calibration target. Older experiment receipts that compared to it are
+historical diagnostics only and must not be described as GP-1012 calibration.
 """
 
 from __future__ import annotations
@@ -63,7 +44,6 @@ BAND_CACHE = REPO_ROOT / ".cache" / "features"
 # Band numbers are 1-based, as used in evidence/feature_cache.json.
 BANDS = {
     13: "iso_grav_anom",
-    15: "depth_to_base_surf",
     18: "iso_grav_anom_hg",
     5: "iso_grav_anom_slope",
     11: "iso_grav_anom_vg",
@@ -71,7 +51,9 @@ BANDS = {
 
 
 def load_band(band: int) -> np.memmap:
-    """Memory-mapped float32 band of ``training_features.tif`` (1-based)."""
+    """Memory-mapped feature band, with organizer depth band 15 fail-closed."""
+    if int(band) == 15:
+        raise PermissionError("organizer band 15 is prohibited for calibration and prediction features")
     path = BAND_CACHE / f"band-{band:02d}.npy"
     if not path.exists():
         raise FileNotFoundError(f"{path} missing -- run scripts/prepare_data.py")
@@ -181,22 +163,16 @@ def parker_oldenburg(dg_mgal: np.ndarray, delta_rho: float, z0: float,
 
 
 # --------------------------------------------------------------------------- #
-# 2. Calibration against the published Basin-and-Range depth scale
+# 2. GP-1012 depth-scale calibration (requires the actual official grid)
 # --------------------------------------------------------------------------- #
-# Saltus & Jachens (1995), USGS GP-1012, doi:10.3133/gp1012, 1:2,500,000.
-# The anchors are the *shape* statistics of the published depth-to-basement
-# surface, used to pick the density contrast.  They are deliberately coarse:
-# GP-1012 is a 1:2.5M statewide map, so only its order of magnitude and its
-# deep-fraction can be transported to a 100 m grid.
-GP1012_ANCHORS = {
-    "deep_fraction_gt_1km": 0.20,   # Blakely & Jachens 1991: "thicker than 1 km over only about 20% of the state"
-    "median_depth_m_range": (250.0, 700.0),
-    "p90_depth_m_range": (900.0, 2000.0),
-}
+# The old static values below were not extracted from GP-1012 and are retired.
+# In particular, a literature statement about a regional deep fraction is not a
+# substitute for the official gridded reference.
+GP1012_ANCHORS = None
 
 
 def calibrate_depth_scale(depth_m: np.ndarray, mask: np.ndarray | None = None) -> dict:
-    """Statistics of a depth surface, for comparison with :data:`GP1012_ANCHORS`."""
+    """Summary statistics of an inverted depth surface; not a calibration."""
     d = np.asarray(depth_m, np.float64)
     m = np.isfinite(d) if mask is None else (np.asarray(mask, bool) & np.isfinite(d))
     if m.sum() == 0:
@@ -212,52 +188,25 @@ def calibrate_depth_scale(depth_m: np.ndarray, mask: np.ndarray | None = None) -
 def choose_density_contrast(gravity_mgal: np.ndarray, mask: np.ndarray,
                             z0: float, candidates=(-250.0, -300.0, -350.0, -400.0,
                                                   -450.0, -500.0, -600.0),
-                            dx: float = PIXEL_M) -> dict:
-    """Pick the density contrast whose inverted depth best matches GP-1012.
+                            dx: float = PIXEL_M, *, gp1012_reference=None) -> dict:
+    """Select density contrast only from an actual parsed GP-1012 grid.
 
-    Scoring is the absolute log-ratio error on the two anchors that can be
-    transported from a 1:2.5M map: the median depth and the >1 km fraction.
-    The published band ``depth_to_base_surf`` is *not* used to choose it (that
-    would defeat the point of an independent inversion); it is compared
-    afterwards, in :func:`compare_to_published_depth`.
+    The former hard-coded quantile anchors were not measured from GP-1012 and
+    are retired. Pass a complete :class:`gems61.gp1012.GP1012Grid`; passing band
+    15 or a hand-built anchor dictionary is rejected by the shared calibrator.
     """
-    rows = []
-    for dr in candidates:
-        inv = parker_oldenburg(np.asarray(gravity_mgal, np.float64), dr, z0, dx=dx)
-        st = calibrate_depth_scale(inv["depth_m"], mask)
-        lo, hi = GP1012_ANCHORS["median_depth_m_range"]
-        med_pen = 0.0 if lo <= st["p50"] <= hi else min(
-            abs(math.log(st["p50"] / lo)), abs(math.log(st["p50"] / hi)))
-        deep_pen = abs(math.log(max(st["fraction_gt_1km"], 1e-6) /
-                                GP1012_ANCHORS["deep_fraction_gt_1km"]))
-        rows.append(dict(delta_rho=dr, stats=st, median_penalty=med_pen,
-                         deep_fraction_penalty=deep_pen,
-                         penalty=med_pen + deep_pen,
-                         iterations=inv["iterations"], converged=inv["converged"],
-                         rms_residual_mgal=inv["rms_residual_mgal"]))
-    best = min(rows, key=lambda r: r["penalty"])
-    return dict(best=best, table=rows,
-                anchors=GP1012_ANCHORS,
-                source="USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); "
-                       "Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2")
+    if gp1012_reference is None:
+        raise RuntimeError("GP-1012 calibration blocked: pass the complete official br_depth.xyz grid")
+    return calibrate_density_scale(gravity_mgal, mask, z0=z0, dx=dx,
+                                   candidates=candidates,
+                                   gp1012_reference=gp1012_reference)
 
 
-def compare_to_published_depth(band15: np.ndarray, inverted_depth_m: np.ndarray,
-                               mask: np.ndarray) -> dict:
-    """Independent check of the inversion against the supplied depth band."""
-    a = np.asarray(band15, np.float64)
-    b = np.asarray(inverted_depth_m, np.float64)
-    m = np.asarray(mask, bool) & np.isfinite(a) & np.isfinite(b)
-    av, bv = a[m], b[m]
-    r = float(np.corrcoef(av, bv)[0, 1]) if av.size > 1 else float("nan")
-    # slope of the published band on the inverted one, forced through zero
-    slope = float((av * bv).sum() / max((bv * bv).sum(), 1e-9))
-    return dict(n=int(av.size), pearson_r=r, slope_published_on_inverted=slope,
-                published_p50=float(np.median(av)), inverted_p50=float(np.median(bv)),
-                published_p90=float(np.percentile(av, 90)),
-                inverted_p90=float(np.percentile(bv, 90)),
-                note="a high r with a slope near 1 says the inversion reproduces the "
-                     "supplied product; it is a check, not an input")
+def compare_to_published_depth(*_args, **_kwargs) -> dict:
+    """Retired band-15 comparator; band 15 is not a calibration reference or feature."""
+    raise RuntimeError(
+        "organizer band 15 is prohibited for calibration/features; use the official GP-1012 grid"
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -283,14 +232,20 @@ def blakely_simpson_maxima(hgm: np.ndarray, extra_directions: bool = True) -> np
     """
     f = np.asarray(hgm, np.float64)
     finite = np.isfinite(f)
-    safe = np.where(finite, f, -np.inf)
+    # Missing cells and off-grid neighbours are treated as unavailable, not as
+    # artificial low values that would create boundary maxima.
+    safe = np.where(finite, f, np.inf)
     directions = [(1, 0), (0, 1)]
     if extra_directions:
         directions += [(1, 1), (1, -1)]
     votes = np.zeros(f.shape, np.int8)
     for dy, dx in directions:
-        a = np.roll(safe, (-dy, -dx), axis=(0, 1))
-        b = np.roll(safe, (dy, dx), axis=(0, 1))
+        # Constant +inf padding prevents wraparound and prevents missing
+        # neighbours at grid edges from falsely counting as lower values.
+        a = ndi.shift(safe, shift=(-dy, -dx), order=0, mode="constant",
+                      cval=np.inf, prefilter=False)
+        b = ndi.shift(safe, shift=(dy, dx), order=0, mode="constant",
+                      cval=np.inf, prefilter=False)
         votes += ((safe > a) & (safe > b)).astype(np.int8)
     return (votes >= 2) & finite
 
@@ -316,6 +271,97 @@ def step_magnitude(depth_m: np.ndarray, maxima: np.ndarray,
     throw = mx - mn
     throw = np.where(np.isfinite(throw), throw, np.nan)
     return np.where(np.asarray(maxima, bool), throw, np.nan)
+
+
+def signed_flank_persistence(depth_m: np.ndarray, *, dx: float,
+                             apertures_m: tuple[float, ...] = (2000.0, 4000.0),
+                             valid: np.ndarray | None = None,
+                             maxima: np.ndarray | None = None) -> dict:
+    """Measure sign-consistent basement-depth offsets across HGM normals.
+
+    For each cell, the local gradient normal defines opposite flanks. At every
+    requested aperture ``r``, ``delta_r = D(x+r*n) - D(x-r*n)`` is sampled with
+    bilinear interpolation. ``persistence`` is ``min(abs(delta_r)) / max(abs(delta_r))``;
+    ``same_sign`` requires all apertures to have the same non-zero sign. Samples
+    whose interpolation stencil leaves ``valid`` are excluded. No catalogue or
+    band 15 values are read.
+
+    The returned arrays have the input shape; ``signed_deltas`` is stacked in
+    the same order as ``apertures_m``. This operator is scale-invariant under a
+    positive multiplicative depth-scale change, but its absolute relief remains
+    uncalibrated until the official GP-1012 grid is used.
+    """
+    d = np.asarray(depth_m, np.float64)
+    if d.ndim != 2 or not np.isfinite(dx) or dx <= 0:
+        raise ValueError("depth must be 2-D and dx must be positive")
+    apertures = tuple(float(r) for r in apertures_m)
+    if not apertures or any(not np.isfinite(r) or r <= 0 for r in apertures):
+        raise ValueError("apertures_m must contain positive finite distances")
+    finite = np.isfinite(d)
+    sample_domain = finite if valid is None else (np.asarray(valid, bool) & finite)
+    if sample_domain.shape != d.shape:
+        raise ValueError("valid mask shape does not match depth")
+    candidate = sample_domain
+    if maxima is not None:
+        mx = np.asarray(maxima, bool)
+        if mx.shape != d.shape:
+            raise ValueError("maxima mask shape does not match depth")
+        candidate = sample_domain & mx
+    # Compute a stable normal only at candidate cells with non-zero gradient.
+    safe = np.where(finite, d, 0.0)
+    gy, gx = np.gradient(safe, float(dx))
+    mag = np.hypot(gx, gy)
+    nz = mag > np.finfo(np.float64).eps
+    nx = np.divide(gx, mag, out=np.zeros_like(gx), where=nz)
+    ny = np.divide(gy, mag, out=np.zeros_like(gy), where=nz)
+    yy, xx = np.indices(d.shape, dtype=np.float32)
+    ds = np.where(finite, d, 0.0).astype(np.float32)
+    vm = sample_domain.astype(np.float32)
+    deltas = []
+    sample_valid = candidate & nz
+    for aperture in apertures:
+        off = np.float32(aperture / float(dx))
+        yp = yy + ny.astype(np.float32) * off
+        xp = xx + nx.astype(np.float32) * off
+        ym = yy - ny.astype(np.float32) * off
+        xm = xx - nx.astype(np.float32) * off
+        plus = ndi.map_coordinates(ds, [yp, xp], order=1, mode="constant", cval=0.0)
+        minus = ndi.map_coordinates(ds, [ym, xm], order=1, mode="constant", cval=0.0)
+        vp = ndi.map_coordinates(vm, [yp, xp], order=1, mode="constant", cval=0.0)
+        vmn = ndi.map_coordinates(vm, [ym, xm], order=1, mode="constant", cval=0.0)
+        sample_valid &= (vp >= 0.999) & (vmn >= 0.999)
+        deltas.append((plus - minus).astype(np.float32))
+    delta = np.stack(deltas, axis=0)
+    abs_delta = np.abs(delta)
+    max_abs = abs_delta.max(axis=0)
+    min_abs = abs_delta.min(axis=0)
+    same_sign = ((delta > 0).all(axis=0) | (delta < 0).all(axis=0)) & sample_valid
+    persistence = np.divide(min_abs, max_abs, out=np.zeros_like(max_abs),
+                            where=(max_abs > 1e-6) & sample_valid)
+    persistence[~same_sign] = 0.0
+    return dict(persistence=persistence.astype(np.float32), same_sign=same_sign,
+                valid=sample_valid, signed_deltas=delta,
+                gradient_magnitude=mag.astype(np.float32),
+                apertures_m=list(apertures))
+
+
+def buried_density_sheet_gravity(mask: np.ndarray, *, density_contrast_kg_m3: float,
+                                 thickness_m: float, depth_m: float,
+                                 dx: float) -> np.ndarray:
+    """Gravity of a laterally variable, buried thin density sheet (mGal).
+
+    This is a synthetic *non-fault* mimic: a sheet with no interface relief
+    produces ``F[g] = 2*pi*G*exp(-|k|*depth)*F[delta_rho*thickness]``. The
+    periodic FFT is appropriate for a centered, boundary-padded synthetic test;
+    this helper is not a forward model for the real survey.
+    """
+    m = np.asarray(mask, bool)
+    if m.ndim != 2 or dx <= 0 or thickness_m <= 0 or depth_m < 0:
+        raise ValueError("mask must be 2-D; dx/thickness must be positive and depth non-negative")
+    k = wavenumbers(m.shape, float(dx))
+    sheet_mass = m.astype(np.float64) * float(density_contrast_kg_m3) * float(thickness_m)
+    spectrum = 2.0 * np.pi * G_SI * np.exp(-k * float(depth_m)) * sfft.rfft2(sheet_mass)
+    return (sfft.irfft2(spectrum, s=m.shape) / MGAL).astype(np.float32)
 
 
 def ribbonize(mask: np.ndarray, half_width_px: int = 2) -> np.ndarray:
@@ -409,7 +455,7 @@ def inpaint_smooth(values: np.ndarray, known: np.ndarray,
 def robust_inversion(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float,
                      dx: float = PIXEL_M, n_terms: int = 6, max_iter: int = 40,
                      tol_m: float = 1.0, relief_clip_m: float = 8000.0,
-                     filter_order: float = 4.0, kc_scale: float = 0.5,
+                     filter_order: float = 2.0, kc_scale: float = 1.0,
                      relaxation: float = 0.7) -> dict:
     """Parker-Oldenburg inversion of a NaN-punched gravity grid.
 
@@ -422,7 +468,11 @@ def robust_inversion(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: fl
     * the low-pass gain reported per iteration, so divergence is visible rather
       than silent.
     """
+    if z0 <= 0 or dx <= 0 or kc_scale <= 0 or filter_order <= 0:
+        raise ValueError("z0, dx, kc_scale, and filter_order must be positive")
     known = np.asarray(known, bool)
+    if known.shape != np.asarray(dg).shape:
+        raise ValueError("known mask shape does not match gravity")
     filled = inpaint_smooth(np.asarray(dg, np.float64), known)
     shape = filled.shape
     k = wavenumbers(shape, dx)
@@ -460,8 +510,8 @@ def robust_inversion(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: fl
 
 
 def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float,
-                  dx: float = PIXEL_M, filter_order: float = 4.0,
-                  kc_scale: float = 0.25, *, _pre_filled: np.ndarray | None = None) -> dict:
+                  dx: float = PIXEL_M, filter_order: float = 2.0,
+                  kc_scale: float = 1.0, *, _pre_filled: np.ndarray | None = None) -> dict:
     """First iterate of the Oldenburg iteration: the low-passed Bouguer slab depth.
 
     **This is the operator the lane uses, and the reason is a measurement.**
@@ -474,22 +524,29 @@ def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float
     relief on one interface, so it does.  The first iterate is therefore kept and
     the non-linear correction is reported as rejected rather than hidden.
 
-    The low-pass is a Butterworth of ``filter_order`` with corner
-    ``kc = kc_scale / (2 z0)``; ``kc_scale`` < 1 is required and is calibrated
-    against USGS GP-1012 in :func:`calibrate_density_scale`.
+    The low-pass is the declared Wiener form
+    ``W(k)=1/(1+(k/kc)^order)``. For the preregistered candidate,
+    ``filter_order=2`` and ``kc_scale=1`` give ``kc=1/(2*z0)`` exactly.
+    A different corner or order is a different hypothesis and must be frozen
+    before evaluation. Only the absolute depth scale can be calibrated against
+    the actual official GP-1012 grid in :func:`calibrate_density_scale`.
     """
+    if z0 <= 0 or dx <= 0 or kc_scale <= 0 or filter_order <= 0:
+        raise ValueError("z0, dx, kc_scale, and filter_order must be positive")
+    if delta_rho == 0:
+        raise ValueError("density contrast must be nonzero")
     known = np.asarray(known, bool)
+    if known.shape != np.asarray(dg).shape:
+        raise ValueError("known mask shape does not match gravity")
     filled = _pre_filled if _pre_filled is not None else inpaint_smooth(np.asarray(dg, np.float64), known)
     shape = filled.shape
     k = wavenumbers(shape, dx)
     filt = 1.0 / (1.0 + (k / (kc_scale / (2.0 * z0))) ** filter_order)
     dgv = np.where(known, filled, 0.0)
-    # Sign convention, stated once and checked against the supplied product:
-    # a basin is a NEGATIVE isostatic residual and LESS dense than basement, so
-    # delta_rho < 0 and thickness t = dg * MGAL / (2 pi G delta_rho) is POSITIVE
-    # over it.  A stray leading minus here flips the whole surface and was caught
-    # by requiring corr(depth, iso_grav_anom) < 0, as the supplied band 15 is
-    # (-0.685 measured); see evidence/measure.json.
+    # Physical sign convention: a basin is a negative gravity anomaly and the
+    # fill is less dense than basement (delta_rho < 0), so the slab response has
+    # positive depth relief. This uses gravity physics only; organizer band 15
+    # is neither read nor used as a sign/calibration check.
     lead = sfft.rfft2(dgv) * np.exp(np.minimum(k * z0, 40.0)) * MGAL / (
         2.0 * np.pi * G_SI * delta_rho)
     relief = sfft.irfft2(lead * filt, s=shape)
@@ -498,8 +555,8 @@ def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float
     resid = (filled - fwd)[known] if known.any() else np.array([0.0])
     return dict(relief_m=relief.astype(np.float32), depth_m=depth.astype(np.float32),
                 delta_rho=float(delta_rho), z0_m=float(z0),
-                filter=f"Butterworth order {filter_order}, kc = {kc_scale/(2.0*z0):.3e} rad/m "
-                       f"(kc_scale={kc_scale})",
+                filter=f"Wiener order {filter_order}, kc = kc_scale/(2*z0) = "
+                       f"{kc_scale/(2.0*z0):.3e} rad/m (kc_scale={kc_scale})",
                 rms_residual_mgal=float(np.sqrt(np.mean(resid ** 2))),
                 stage="first iterate (low-passed Bouguer slab); non-linear correction rejected "
                       "because it diverges on an isostatic residual",
@@ -510,38 +567,66 @@ def calibrate_density_scale(dg: np.ndarray, known: np.ndarray, z0: float = 500.0
                             dx: float = PIXEL_M,
                             candidates=(-250.0, -300.0, -350.0, -400.0,
                                         -450.0, -500.0, -600.0),
-                            kc_scales=(0.5, 0.25, 0.125),
-                            z0_candidates=(300.0, 400.0, 500.0, 700.0)) -> dict:
-    """Choose (density contrast, filter corner) to match the published GP-1012 scale.
+                            kc_scales=(1.0,),
+                            z0_candidates=(300.0, 400.0, 500.0, 700.0),
+                            *, gp1012_reference=None) -> dict:
+    """Calibrate the inversion's depth scale against the complete official grid.
 
-    The two anchors that can be transported from a 1:2,500,000 statewide map are
-    the median depth band and the fraction of the province deeper than 1 km
-    (Blakely & Jachens 1991: "about 20%").  The penalty is the sum of a log-ratio
-    on the deep fraction and a log-ratio on the median outside its band.
-
-    ``z0`` is swept as well as the contrast because Oldenburg's non-uniqueness is
-    exactly the (contrast, reference level) pair: the reference level sets the
-    median and the contrast sets the amplitude.  Both are free here, so both are
-    fitted to the published map rather than assumed.
+    The comparison is intentionally distributional because the 2 km GP-1012
+    grid's header lacks a declared geodetic datum; pixel-exact reprojection and
+    correlation are not supportable from the published metadata. The tested
+    parameters are reference level, density contrast, and only the predeclared
+    filter scales supplied by the caller. Band 15 and static literature anchors
+    are never consulted. No calibration is possible without a parsed, complete
+    :class:`gems61.gp1012.GP1012Grid`.
     """
-    rows = []
-    lo, hi = GP1012_ANCHORS["median_depth_m_range"]
+    from .gp1012 import GP1012Grid
+    if not isinstance(gp1012_reference, GP1012Grid):
+        raise RuntimeError(
+            "GP-1012 calibration blocked: pass read_gp1012_xyz() of the complete official br_depth.xyz; "
+            "band 15 and static anchors are prohibited"
+        )
+    if not candidates or not kc_scales or not z0_candidates:
+        raise ValueError("calibration candidate grids must be non-empty")
+    reference = gp1012_reference.summary()
+    target_p50 = float(reference["p50_m"])
+    target_p90 = float(reference["p90_m"])
+    target_deep = float(reference["fraction_gt_1km"])
     pre_filled = inpaint_smooth(np.asarray(dg, np.float64), np.asarray(known, bool))
-    for z0 in z0_candidates:
-      for dr in candidates:
-        for ks in kc_scales:
-            sol = slab_solution(dg, known, dr, z0, dx=dx, kc_scale=ks, _pre_filled=pre_filled)
-            st = calibrate_depth_scale(sol["depth_m"], known)
-            med_pen = 0.0 if lo <= st["p50"] <= hi else min(
-                abs(math.log(max(st["p50"], 1e-6) / lo)),
-                abs(math.log(max(st["p50"], 1e-6) / hi)))
-            deep_pen = abs(math.log(max(st["fraction_gt_1km"], 1e-6) /
-                                    GP1012_ANCHORS["deep_fraction_gt_1km"]))
-            rows.append(dict(z0_m=z0, delta_rho=dr, kc_scale=ks, stats=st,
-                             median_penalty=med_pen, deep_fraction_penalty=deep_pen,
-                             penalty=med_pen + deep_pen,
-                             rms_residual_mgal=sol["rms_residual_mgal"]))
-    best = min(rows, key=lambda r: r["penalty"])
-    return dict(best=best, table=rows, anchors=GP1012_ANCHORS,
-                source="USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); "
-                       "Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2")
+    rows = []
+    for z_ref in z0_candidates:
+        for dr in candidates:
+            if float(dr) >= 0:
+                raise ValueError("basin fill-minus-basement density contrast must be negative")
+            for ks in kc_scales:
+                if float(ks) <= 0:
+                    raise ValueError("kc_scale must be positive")
+                sol = slab_solution(dg, known, float(dr), float(z_ref), dx=dx,
+                                    kc_scale=float(ks), _pre_filled=pre_filled)
+                # Depth is positive down; negative results are above the datum
+                # and are assigned zero basement depth only for grid-wide
+                # quantile comparison, never for candidate-feature generation.
+                depth_for_stats = np.maximum(np.asarray(sol["depth_m"], np.float64), 0.0)
+                st = calibrate_depth_scale(depth_for_stats, np.asarray(known, bool))
+                # Weighted log-ratio objective over the global depth-scale
+                # summary. It selects amplitude/scale, not pixelwise alignment.
+                penalties = dict(
+                    p50=abs(math.log(max(st["p50"], 1.0) / max(target_p50, 1.0))),
+                    p90=abs(math.log(max(st["p90"], 1.0) / max(target_p90, 1.0))),
+                    fraction_gt_1km=abs(math.log(max(st["fraction_gt_1km"], 1e-6) /
+                                                  max(target_deep, 1e-6))),
+                )
+                rows.append(dict(z0_m=float(z_ref), delta_rho_kg_m3=float(dr),
+                                 kc_scale=float(ks), stats=st, penalties=penalties,
+                                 penalty=float(sum(penalties.values())),
+                                 rms_residual_mgal=sol["rms_residual_mgal"]))
+    best = min(rows, key=lambda row: row["penalty"])
+    return dict(
+        status="CALIBRATED-TO-OFFICIAL-GP1012-GRID-WIDE-SUMMARIES",
+        best=best, table=rows, reference=reference,
+        calibration_scope="grid-wide p50, p90, and fraction >1 km; no pixel alignment",
+        source_url=reference["source_url"], source_sha256=reference["source_sha256"],
+        limitations=["GP-1012 is a 2 km low-pass regional model, not a 100 m label",
+                     "XYZ header gives Lambert parameters but no geodetic datum",
+                     "summary-distribution calibration does not validate local fault-step geometry"],
+    )

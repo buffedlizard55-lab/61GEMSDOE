@@ -1,0 +1,13 @@
+{
+  "evidence_class": "FORMAT-VALIDATION",
+  "status": "NOT_RUN_NO_CANDIDATE",
+  "reason": "The current run stopped before writing a candidate TIFF; historical rasters are not substituted.",
+  "candidate_tif_created": false,
+  "candidate_path": null,
+  "raster_sha256": null,
+  "checks": null,
+  "all_passed": null,
+  "download_permission": "NO_CANDIDATE_ARTIFACT",
+  "submit_recommendation": "NOT_RECOMMENDED: final-dot uniqueness threshold failed and the frozen primary did not beat the unfiltered HGM control on paired HOLDOUT-DTI.",
+  "weekly_slot_approved": false
+}

@@ -1,0 +1,13 @@
+{
+  "evidence_class": "CALIBRATION-STATUS",
+  "status": "BLOCKED-MISSING-COMPLETE-OFFICIAL-GP1012-GRID",
+  "generated_utc": "2026-10-11T16:58:04Z",
+  "required_source_url": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz",
+  "required_readme_url": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/readme.txt",
+  "expected_local_path": "/home/user/61GEMSDOE/data/external/gp1012/br_depth.xyz",
+  "calibration_performed": false,
+  "calibration_output": null,
+  "organizer_band_15_used": false,
+  "reason": "The complete official XYZ grid is not present locally and the sandbox cannot fetch NOAA/NCEI. No scale fit or GP-1012 statistics are asserted.",
+  "next_step": "Obtain the complete official br_depth.xyz outside this sandbox, place it at the expected path, then rerun this script; incomplete grids are rejected."
+}

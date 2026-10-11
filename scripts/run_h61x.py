@@ -796,6 +796,7 @@ STAGES = dict(invert=stage_invert, holdout=stage_holdout, final=stage_final,
 
 
 def main() -> None:
+    raise SystemExit("RETIRED: Retired historical runner: it read organizer band 15. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("stage", choices=list(STAGES) + ["all"])
     a = ap.parse_args()

@@ -1,105 +1,46 @@
-# Standing brief for 61GEMSDOE (verbatim, from the task prompt)
+# Standing brief — 61GEMSDOE buried-structure lane
 
-Read this at the start of every session on this repository. It is the contract this
-project is measured against.
+Read `README.md` and this brief before every work session. Current code and evidence receipts control; summaries must match `evidence/h61u_run_card.json` and `evidence/h61u_outcome_summary.json`.
 
----
+## Current run result
 
-## THE LANE (highest urgency)
+H61U-H1 was the only authorized experiment. It completed spatial holdout and stopped at the strict final-dot uniqueness gate. **No candidate TIFF exists.** Download permission is NO; submission is not recommended; weekly-slot approval is NO; no organizer receipt/score exists. Do not use or link an older archived TIFF as a replacement.
 
-MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION. DO NOT COPY A PREVIOUS
-SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION. BUT WE MUST GENERATE A UNIQUE TIF
-SUBMISSION. IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED
-TIF SUBMISSION.
+The pre-placement surface gate passed against 748 accessible sibling-repository rasters (worst Spearman rho 0.030846); the refresh excludes local historical TIFFs and private/inaccessible submissions. Final dots failed: 70 registry entries crossed the >70% within-3-px overlap limit; maximum overlap was 1.0. No post-hoc pruning or threshold change followed.
 
-There should be an easy to download submission tif file as described by the prompt.
+## Task
 
-**Buried-structure lane: basement-depth steps from gravity inversion.** Alluvial cover
-is one reason catalogues miss faults. Parker (1973) and Oldenburg (1974) give the
-standard iterative inversion of gravity to basement relief, and Blakely and Jachens
-(GSA Bulletin, 1991) applied it to isostatic residual gravity in Nevada to map the
-pre-Tertiary surface. Invert the provided isostatic-gravity layer. Use the USGS Basin
-and Range basin-depth maps (Saltus and Jachens, GP-1012, 1995) only to calibrate the
-density-contrast depth scale, since they are regional (1:2.5M). Map maxima of the
-horizontal gradient of basement depth as candidate buried range-front or intrabasin
-faults. Gravity resolves such steps only to a few hundred metres at best, so emit
-multi-line ribbons rather than thin lines. Report how many withheld basin-interior
-segments the steps recover versus random lines. Treat density contrasts within
-basement as the competing explanation. Output the standard validated GeoTIFF,
-uniqueness-checked against every earlier raster.
+Invert isostatic gravity for basement depth, use official GP-1012/NOAA-NCEI only to calibrate depth scale, identify basement-depth HGM maxima as candidate buried fault steps, emit multi-line ribbons, compare withheld basin-interior segment recovery against matched random lines, and test intrabasement density contrasts as a non-fault mimic.
 
-## PARALLEL-RUN PROTOCOL
+## Standing constraints
 
-1. **LANE.** Your lane is the single method paragraph above. Stay inside it. If your
-   raster's rank-correlation with any registry raster exceeds 0.90, or more than 70% of
-   your dots fall within 3 px of one registry raster's dots, you have drifted into
-   another lane: log it as a duplicate and stop. Check this on the surface before
-   placement AND on the final dots.
-2. **REUSE, DON'T REBUILD.** Use the template's cached feature stack,
-   `evaluate_holdout.py` and `submission_writer.py`. Holdout = hide-and-recover:
-   withhold whole fault segments with a buffer, derive every catalogue-based feature
-   only from the visible faults, mask visible faults pixel-exactly, score pooled DTI
-   (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it
-   once in the template and report it; never keep a private fork.
-3. **LABEL EVERY NUMBER** as HOLDOUT-DTI (evaluator version, number of withheld
-   positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt).
-   A projection is never written as a score.
-4. **LEAKAGE CANARY.** Test each feature alone on the holdout before trusting any
-   result. AUC above 0.90 means leakage until proven otherwise.
-5. **RUN CARD.** End with one JSON card: hypothesis; mechanism; the named non-fault
-   process that could mimic it; holdout DTI + CI; correlation/overlap vs registry;
-   raster sha256; validator output (no NaN inside the footprint, values in [0,1],
-   CRS/shape/transform match); submission name + note of at most 140 characters;
-   verdict promote / negative. Negative results are deliverables.
-6. **BUDGET.** Stop after 3 experiments or 2 hours. Do not pick submissions: promotion
-   to a real slot is a separate selector step, within the weekly cap shown on the
-   submission page.
+- Organizer band 15 (`depth_to_base_surf`) is prohibited as a calibration target/reference or prediction feature. Complete GP-1012 grid is not local; do not claim calibration or substitute band 15/literature quantiles.
+- Hide whole 8-connected catalogue components with buffer; derive any catalogue features only from visible faults; pixel-exactly mask visible faults during scoring; use `gems61-pooled-hide-v2`, pooled DTI α=0.2/β=0.8, 300 m triangular kernel, and spatial-block 95% CI.
+- Label every metric `HOLDOUT-DTI` with evaluator version, withheld-positive count, and CI, or `ORGANIZER-CONFIRMED` only from an artifact-linked official receipt. A projection is never a score. Single-feature AUC >0.90 is leakage-suspect.
+- For any future candidate, run Spearman against the full accessible sibling registry before placement, then strict dot overlap against that registry and all local historical TIFFs. Stop on rho >0.90 or >70% within 3 px; no global/private uniqueness claim.
+- Reuse shared cached features, `evaluate_holdout.py`, and `submission_writer.py`; fix shared-tool defects in place, preserve `make_folds` compatibility, and update stale callers.
+- Stop after three experiments or two hours. H2/H3 are prospective, not H1 fallbacks. Weekly slot selection is separate.
+- Run card includes hypothesis, mechanism, named mimic, HOLDOUT-DTI+CI, registry results, raster SHA-256, format validation, submission name/note, and verdict. If no artifact is written, hash/name/note are null and format validation is NOT RUN.
+- State download permission, submit recommendation, and slot approval separately. Never copy an earlier raster.
+- Preserve **Maximize P(Win)** and **Own the Outcome**; cite official data, flag irregularities, run three review passes and repository checks, and report limitations.
 
-## Standing requirements that apply to every session
+## H61U results
 
-- Work line by line verifying from official verified trusted sources; provide links for
-  manual review. No manual input; no hallucinations. Flag any irregularities.
-- The site must make the download obvious: an easy one-click TIF download in the
-  executive summary / at the very beginning of the site, with a clear statement of
-  whether it is OK to download and submit.
-- Give the submission a unique name and a short note (<= 140 characters) for the
-  submission form's Note field.
-- Explain exactly how to make a submission into the contest (executive-summary
-  subpage).
-- Generate 3-5 candidate geological hypotheses not yet tried, naming layers, physical
-  signature, why it catches a fault the catalogue lacks, and how it differs from
-  anything already implemented; rank by expected DTI improvement and implementation
-  cost; validate the top candidate on the spatially-blocked holdout before touching a
-  weekly submission slot.
-- Put this prompt into the repo README and read it every time we work on the project.
-- Core values: **Maximize P(Win)** and **Own the Outcome** - own results end to end,
-  treat failure and success as signals, stay accountable for the final outcome.
-- Before finishing: run the project's own check over the code you changed, and say what
-  you ran and what came back.
+**HOLDOUT-DTI · `gems61-pooled-hide-v2` · 12,074 withheld positives:** H1 0.041351 (95% CI 0.035332–0.048100); unfiltered HGM 0.044359 (0.036847–0.051764); matched random lines 0.016030 (0.010328–0.021541). Paired H1−HGM difference −0.003009 (95% CI −0.010105 to +0.004951), so no gain was demonstrated over the simple HGM control.
 
-## Official links for manual review
+**HOLDOUT-SEGMENT-RECOVERY · `gems61-pooled-hide-v2` · 12,074 withheld positives:** H1 128/318 (40.25%, Wilson 95% CI 35.01%–45.73%); HGM 138/318 (43.40%); random 40/318 (12.58%). These catalogue-holdout results are not organizer scores.
 
-| what | link |
-| --- | --- |
-| competition landing page | https://www.drivendata.org/competitions/306/competition-doe-gems/ |
-| problem description + submission format + metric | https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ |
-| about page / resources | https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/ |
-| data tab (login required) | https://www.drivendata.org/competitions/306/competition-doe-gems/data/ |
-| leaderboard | https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ |
-| official rules PDF | https://docs.nlr.gov/docs/fy26osti/96647.pdf |
-| reference solution | https://github.com/drivendataorg/gems-prize-reference-solution |
-| GeoDAWN airborne magnetic + radiometric surveys | https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and |
-| INGENIOUS (Great Basin conductivity / magnetotelluric project) | https://gbcge.org/current-projects/ingenious/ |
-| EPSG:32611 | https://epsg.io/32611 |
-| Tversky index | https://en.wikipedia.org/wiki/Tversky_index |
-| GDR submission 1391 (competition data mirror) | https://gdr.openei.org/submissions/1391 |
+**LEAKAGE-CANARY-AUC · `gems61-pooled-hide-v2` · 12,074 withheld positives:** maximum single-feature AUC 0.555204, below the 0.90 blocker. The synthetic density-sheet control retained 172/21,252 HGM maxima (0.81%); no DTI was computed because the control has no fault truth.
 
-## Sandbox limitation (measured, not assumed)
+## Official references
 
-Egress from the development sandbox admits only `github.com`, `api.github.com`,
-`codeload.github.com`, `registry.npmjs.org`, `pypi.org` and `files.pythonhosted.org`.
-`drivendata.org`, `docs.nlr.gov`, `usgs.gov`, `earthquake.usgs.gov` and
-`raw.githubusercontent.com` all fail (SSL_ERROR_SYSCALL / HTTP 000). The competition
-rasters are therefore obtained from the hash-pinned GitHub mirror
-`buffedlizard55-lab/6GEMSDOE@main:data/bridge/` and every digest is re-verified
-locally against the mirror manifest before use.
+- [Competition](https://www.drivendata.org/competitions/306/competition-doe-gems/)
+- [Problem and metric](https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/)
+- [Rules PDF](https://docs.nlr.gov/docs/fy26osti/96647.pdf)
+- [Leaderboard](https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/)
+- [USGS GP-1012](https://pubs.usgs.gov/publication/gp1012)
+- [NOAA/NCEI grid](https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz)
+- [NOAA/NCEI readme](https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/readme.txt)
+- [Parker (1973)](https://doi.org/10.1111/j.1365-246X.1973.tb02307.x) · [Oldenburg (1974)](https://doi.org/10.1190/1.1440444)
+
+The official page fetch on 2026-10-11 showed xiaofanhu #1/0.4133, DARD #9/0.3195, and extradr19 #23/0.2778. Those rows do not identify artifacts; H33-2-B2 remains unscored in its owner audit. See [score audit](analysis.html).

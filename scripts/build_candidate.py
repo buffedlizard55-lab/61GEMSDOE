@@ -132,6 +132,7 @@ def random_line_null(crest, footprint, exclude, target_dots, seed, n_rep=1,
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical builder: it used organizer band 15 as a feature. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--drho", type=float, default=400.0)
     ap.add_argument("--z0", type=float, default=3000.0)

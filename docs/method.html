@@ -1,65 +1,22 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Method · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
-<style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html" class=active>Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
-
-<h2>Method — H61-MH</h2>
-<ol>
-<li><b>Band-pass the isostatic residual.</b> The supplied band 13 (isostatic gravity anomaly) is
-decimated to the inversion cell, inpainted across the unsurveyed 58 % by multi-scale normalised
-convolution, and a 15 km Gaussian regional is removed — Blakely &amp; Jachens' (1991) separation of the
-basement field from the basin field before inversion.</li>
-<li><b>Invert for basement depth.</b> Parker (1973) forward series / Oldenburg (1974) first iterate
-(the low-passed Bouguer slab), with the density contrast, reference level and filter corner chosen
-against USGS GP-1012 (Saltus &amp; Jachens 1995, <i>Gravity and basin-depth maps of the Basin and
-Range Province, Western United States</i>, 1 : 2,500,000) only — median depth band and the ≈ 20 % of Nevada
-deeper than 1 km. Achieved: p50 458 m, p90
-1330 m, &gt;1 km fraction 0.198.
-Run twice, at 400 m and at <b>200 m</b>; the two agree at ρ = 0.999.
-Sign check: corr(depth, gravity) = -0.833.</li>
-<li><b>Find the steps.</b> Blakely–Simpson (1986) automatic maxima of |grad depth|, filtered by a
-measured throw ≥ 80 m across the 3 × 3 neighbourhood: 12,572 maxima →
-5,579 steps.</li>
-<li><b>Build the habitat stack.</b> 28 channels, all rank-normalised to [0, 1] over the footprint and
-none derived from the position of the mapped catalogue: the 19 supplied bands, plus inverted depth,
-inverted-depth HGM, step throw, step indicator, corridor indicator, basin indicator, Euler SI = 0
-source depth (band 18 as the field, band 11 as its vertical derivative) and the two directional
-components of the inverted-depth gradient.</li>
-<li><b>Train out-of-fold.</b> L2 logistic regression, positives = the <i>visible</i> mapped faults of
-the holdout cell, negatives = 4× random footprint pixels. Per-cell coefficients are in
-<code>evidence/h61m_holdout.json</code>; the mean coefficients are on the
-<a href="holdout.html">holdout page</a>.</li>
-<li><b>Emit.</b> Rank by out-of-fold probability, one dot per 3 × 3 tile, pruned to &gt; 3 px from
-every visible mapped trace, budget 40,000 dots. Dots, not ribbons: a 3 × 3 ribbon of the
-same dots scores 0.0184 against 0.0409 on the protocol holdout.</li>
-<li><b>Validate and check uniqueness.</b> <code>gems61.submission_writer</code> writes the TIFF and
-re-reads it from disk; <code>gems61.validate</code> runs 19 checks;
-<code>scripts/run_h61mh.py unique</code> compares against 28 registry
-rasters.</li>
-</ol>
-<h3>Sources</h3>
-<table><tr><th>what</th><th>link</th></tr>
-<tr><td>Parker, R.L. (1973), "The rapid calculation of potential anomalies", Geophysical Journal of the Royal Astronomical Society 31:447–455</td><td><a href="https://doi.org/10.1111/j.1365-246X.1973.tb02307.x">doi:10.1111/j.1365-246X.1973.tb02307.x</a></td></tr>
-<tr><td>Oldenburg, D.W. (1974), "The inversion and interpretation of gravity anomalies", Geophysics 39(4):526–536</td><td><a href="https://doi.org/10.1190/1.1440444">doi:10.1190/1.1440444</a></td></tr>
-<tr><td>Blakely, R.J. &amp; Simpson, R.W. (1986), "Approximating edges of source bodies from magnetic or gravity anomalies", Geophysics 51(7):1494–1498</td><td><a href="https://doi.org/10.1190/1.1442197">doi:10.1190/1.1442197</a></td></tr>
-<tr><td>Blakely, R.J. &amp; Jachens, R.C. (1991), "Regional study of mineral resources in Nevada: insights from three-dimensional analysis of gravity and magnetic anomalies", GSA Bulletin 103:795–803</td><td><a href="https://doi.org/10.1130/0016-7606(1991)103%3C0795:RSOMRI%3E2.3.CO;2">doi:10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2</a></td></tr>
-<tr><td>Saltus, R.W. &amp; Jachens, R.C. (1995), "Gravity and basin-depth maps of the Basin and Range Province, Western United States", USGS Geophysical Investigations Map 1012 (GP-1012), 1 : 2,500,000</td><td><a href="https://doi.org/10.3133/gp1012">doi:10.3133/gp1012</a></td></tr>
-<tr><td>Reid, A.B., Allsop, J.M., Granser, H., Millett, A.J. &amp; Somerton, I.W. (1990), "Magnetic interpretation in three dimensions using Euler deconvolution", Geophysics 55(1):80–91</td><td><a href="https://doi.org/10.1190/1.1442789">doi:10.1190/1.1442789</a></td></tr>
-<tr><td>competition problem description + metric</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">drivendata.org/competitions/306/…/page/967</a></td></tr>
-<tr><td>official reference solution (α = 0.2, β = 0.8 Tversky)</td><td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">github.com/drivendataorg/gems-prize-reference-solution</a></td></tr>
-</table>
-
-</div></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inversion and candidate method · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head><body>
+<header class="top"><div class="wrap"><p class="sub">H61U-H1 · frozen before candidate holdout</p><h1>From isostatic gravity to buried basement-step ribbons</h1>
+<nav class="main"><a href="index.html">Overview</a><a href="executive-summary.html">Executive guide</a><a href="method.html" class="active">Method</a><a href="hypotheses.html">Hypotheses</a><a href="holdout.html">Holdout</a><a href="run-card.html">Run card</a><a href="data-sources.html">Data</a><a href="irregularities.html">Irregularities</a></nav></div></header>
+<main class="wrap">
+<div class="banner no"><strong>Run outcome:</strong> H61U-H1's final dots failed the registered uniqueness threshold. No TIF was written; this page documents the frozen method and evaluation, not an available submission artifact.</div>
+<div class="card"><h2 style="margin-top:0">Input and inversion</h2><ol>
+<li>Read only training band 13, <code>iso_grav_anom</code>. Aggregate valid 100 m cells to 400 m finite block means for the inversion; use the shared pinned footprint.</li>
+<li>Apply the frozen <em>first, low-pass Bouguer-slab iterate</em> of the Parker/Oldenburg interface inversion, with a 1,000 m reference depth, fill-minus-basement density contrast −400 kg/m³, and order-2 stabilizing filter <code>W(k)=1/(1+(k/kc)^2)</code>, <code>kc=1/(2z0)</code>. H61U does not run the later nonlinear correction iterations. These fixed physical priors were not fitted to the holdout.</li>
+<li>Use the resulting basement-depth model to compute horizontal-gradient magnitude. Select local gradient maxima as candidate step crests.</li>
+</ol><p><strong>Calibration status:</strong> the prior is explicitly uncalibrated. The complete official GP-1012 grid is unavailable locally; no scale calibration is claimed. Organizer band 15 is fail-closed and is not read for calibration, candidate construction, validation, or diagnostics.</p></div>
+<h2>Registered physical signature</h2><p>At each basement-depth HGM maximum, sample the signed depth offset on opposing sides of the local gradient normal at fixed 2 km and 4 km apertures. Retain only centers with the same downthrow polarity at both apertures and persistence ratio <code>min(|Δz₂|,|Δz₄|)/(max(|Δz₂|,|Δz₄|)+ε) ≥ 0.60</code>. This favors a one-sided basement step persisting beyond a narrow density body, rather than gradient amplitude alone.</p>
+<h2>Registered line/ribbon emission (not written)</h2><p>The frozen output rule would expand surviving ridge centers to a 3-pixel ribbon on the native grid, thin with a fixed 3-pixel minimum separation, then cap candidate and controls at 40,000 positives. The planned submission dots would be zero on every mapped catalogue pixel and outside the scored footprint, encoded as a binary single-band float32 GeoTIFF matching the supplied template. The final-dot uniqueness stop occurred before the writer ran, so none of these planned output bytes exists for H61U.</p>
+<h2>What this does not establish</h2><ul>
+<li>A gravity edge is non-unique: a finite intrabasement density sheet, intrusive contact, or pluton margin can mimic a basement step.</li>
+<li>The inverted depth is not GP-1012-calibrated. Absolute depths, throws, and predictions of private-test performance must not be described as calibrated.</li>
+<li>The output's raster-level uniqueness is evaluated only over accessible aligned registry rasters. It does not prove no private submission is similar.</li>
+<li>Withheld catalogue recovery is local HOLDOUT-DTI, not organizer leaderboard DTI.</li>
+</ul>
+<h2>Shared implementation</h2><p>The run uses <code>gems61.buried</code>, shared holdout/fold tools, <code>gems61.evaluate_holdout</code>, and the strict pre-placement/final uniqueness gate. The shared submission writer is invoked only after uniqueness passes; it was not reached in this run. A shared signed-flank mask defect found in the invalid first attempt was repaired in place and regression-tested before the unchanged retry. See the <a href="review-passes.html">review record</a> and <a href="data-sources.html">source/access status</a>.</p>
+</main><footer><div class="wrap">Frozen H61U-H1 parameters and provenance are recorded in the run card and preregistration data.</div></footer></body></html>

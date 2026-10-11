@@ -92,6 +92,7 @@ def bootstrap_dti(all_tp, all_fp, all_gt, n_boot=2000, alpha=0.2, beta=0.8, seed
 
 
 def main():
+    raise SystemExit("RETIRED: Retired historical experiment runner: it included organizer band 15 as a feature. Band 15 is prohibited.")
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default="data")
     ap.add_argument("--out", default="reports")

@@ -142,6 +142,7 @@ def recovery_counts(dots: np.ndarray, hidden: np.ndarray, basin: np.ndarray) -> 
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical runner: it used organizer band 15 as a depth feature. Use scripts/run_h61u.py; band 15 is prohibited.")
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--drho", type=float, default=400.0)
     ap.add_argument("--z0", type=float, default=3000.0)

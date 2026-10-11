@@ -88,7 +88,9 @@ def load_grid(data_dir: Path | None = None) -> Grid:
 
 
 def load_band(number: int, root: Path | None = None) -> np.ndarray:
-    """Load a cached band of the pinned 19-band feature stack (float32, NaN outside)."""
+    """Load an allowed cached feature band; organizer band 15 is fail-closed."""
+    if int(number) == 15:
+        raise PermissionError("organizer band 15 is prohibited as a calibration target or prediction feature")
     root = Path(root) if root else REPO_ROOT
     path = root / ".cache" / "features" / f"band-{number:02d}.npy"
     if not path.exists():

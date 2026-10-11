@@ -32,7 +32,7 @@ For a binary dot field P and a surrogate truth density q (summing to N = |G|):
 exactly the algebra in ``src/gems61/metric.py``.  Because T is linear in q we can
 scan a one-parameter habitat family cheaply:
 
-    q_gamma(x) propto depth_to_base_surf(x)^gamma   on the eligible area
+    q_gamma(x) propto retired organizer depth-layer(x)^gamma   on the eligible area
 
 gamma = 0 is "truth uniformly spread over the eligible area"; gamma > 0 pushes it
 into deep basement (basin floor under alluvial cover).  We report, for each gamma,
@@ -89,13 +89,21 @@ def load_fields():
 
 
 def main() -> int:
+    raise SystemExit(
+        "RETIRED: this historical habitat instrument used organizer band 15 as a prediction feature. "
+        "Band 15 is prohibited; use the prospectively registered H61U runner instead."
+    )
     lab = rasterio.open(ROOT / "data/official/labels.tif").read(1)
     foot = lab >= 0
     cat = lab > 0.5
     dcat = distance_transform_edt(~cat)
     elig = foot & (dcat >= R)
 
-    depth = np.load(ROOT / ".cache/features/band-15.npy")   # depth_to_base_surf, m
+    raise SystemExit(
+        "RETIRED: this historical habitat instrument used organizer band 15 as a prediction feature. "
+        "Band 15 is prohibited; use the prospectively registered H61U runner instead."
+    )
+    depth = None  # unreachable legacy implementation retained for audit only
     if not np.isfinite(depth[foot]).any():
         raise ValueError("band 15 has no finite values inside the footprint")
 

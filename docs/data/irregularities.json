@@ -1,84 +1,94 @@
 [
   {
-    "id": "IR-1",
-    "severity": "blocker",
-    "title": "The prescribed calibration reference (GP-1012) is not obtainable from this sandbox",
-    "detail": "The lane prescribes the USGS Basin and Range basin-depth maps of Saltus & Jachens (1995), GP-1012, 1:2,500,000, to calibrate the density-contrast depth scale. The product page confirms the map is real and is sold as a paper, folded map only: no digital raster is published there. The USGS Store and the pubs.usgs.gov data endpoints are outside this sandbox's egress allowance, so the map could not be retrieved.",
-    "substitution": "Band 15 depth_to_base_surf (the organiser's own derived depth-to-basement product) is used as the depth-scale reference instead.",
-    "consequence": "Band 15 descends from the same gravity/ drill-hole inversion tradition as the map, so calibrating to it is partially circular: it fixes the metres-per-mGal scale but cannot independently validate either depth or position. Every depth number in this lane inherits that caveat.",
-    "source": "https://store.usgs.gov/product/23063",
-    "status": "open - permanent for this session"
+    "id": "IR-61U-01",
+    "severity": "blocker for depth-scale claims",
+    "title": "Complete GP-1012 reference grid is not locally available",
+    "detail": "The official NOAA/NCEI br_depth.xyz source is identified and its partial header was inspected; the excerpt describes a 596 x 504 grid at 2 km spacing, depth values in km, and a 9999 missing flag. The complete grid is absent from this checkout, and no verified coordinate datum/registration to the competition grid is available.",
+    "action": "scripts/calibrate_depth_scale.py was run and wrote evidence/gp1012_calibration.json with status BLOCKED-MISSING-COMPLETE-OFFICIAL-GP1012-GRID. H61U uses a fixed, explicitly uncalibrated prior; organizer band 15 and literature quantiles are prohibited substitutes.",
+    "source": "https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz",
+    "status": "open"
   },
   {
-    "id": "IR-2",
-    "severity": "major",
-    "title": "A linear Bouguer slab beats every iterative inversion against the depth reference",
-    "detail": "Across a 48-point grid over density contrast (300-650 kg/m3), reference depth (1000-3000 m) and taper cutoff (2000-5000 m), the best iterative Parker-Oldenburg field reaches Pearson 0.6575 against band 15. The trivial linear estimate depth = -g / (2*pi*G*400) reaches Pearson 0.7318 with a lower RMSE (220.7 m vs 286.5 m).",
-    "consequence": "The iterative inversion is retained because its regression slope against the reference is 0.958 (near unit, i.e. an unbiased scale) while the slab's is 0.540 (a systematic ~2x compression). The two criteria disagree, and the disagreement is not resolved by any measurement available here. The depth scale is reported with a factor-of-two systematic band attached.",
-    "status": "open - documented, not resolved"
+    "id": "IR-61U-02",
+    "severity": "major provenance restriction",
+    "title": "Historical band-15 calibration and feature callers are retired",
+    "detail": "Older local scripts and run receipts used organizer band 15 depth_to_base_surf as a calibration target, predictor, or diagnostic. That product is derived from the same contest geophysics and cannot serve as the independent GP-1012 calibration required here.",
+    "action": "buried.load_band(15), grid.load_band(15), and gems61.io.Grid.band() for the 15th band now fail closed; the optional geo feature set no longer exposes the band-15 gradient; historical runner entrypoints that used it exit with RETIRED. Archived reports remain historical evidence and are not reused.",
+    "status": "resolved in code; historical artifacts remain explicitly noncompliant with current policy"
   },
   {
-    "id": "IR-2b",
-    "severity": "minor",
-    "title": "The delivered inversion uses the runner-up density contrast, not the objective's argmin",
-    "detail": "At z0 = 3000 m and a 5000 m cutoff the calibration objective (|log slope| − Pearson r) is minimised by drho = 300 kg/m3: slope 1.0043, r 0.5481, RMSE 709.5 m. The delivered field uses drho = 400 kg/m3: slope 0.9578, r 0.5749, RMSE 631.1 m — the objective's runner-up (0.0043 against 0.0431 in |log slope|) but the better of the two on both correlation and RMSE.",
-    "consequence": "The two criteria disagree and nothing in this repository resolves them. Both rows are published in evidence/depth_scale_calibration.json. Because a change in drho mainly rescales the depth field, the crest positions move only slightly, but the delivered numbers were never recomputed at drho = 300 and that gap is stated rather than hidden.",
-    "status": "open - the drho = 300 run is the first thing a follow-up session should repeat"
+    "id": "IR-61U-03",
+    "severity": "major evaluation limitation",
+    "title": "Withheld catalogue faults are a proxy, not the organizer's new-fault truth",
+    "detail": "The shared holdout hides whole connected catalogue segments and masks visible catalogue pixels, but the organizer's private set includes newly identified faults that are not in the catalogue. HOLDOUT-DTI therefore measures recovery of withheld mapped segments, not private leaderboard performance.",
+    "action": "Every DTI result includes evaluator version, withheld-positive count, and a 95% spatial-block interval. No projection is called a score; only an artifact-linked organizer receipt can support ORGANIZER-CONFIRMED.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "status": "known limitation"
   },
   {
-    "id": "IR-3",
-    "severity": "major",
-    "title": "The measured positional resolution is three times the metric's kernel radius",
-    "detail": "Distance from catalogue pixels to the nearest detected step crest: p10 = 2.0 px, p50 = 9.0 px, p90 = 19.2 px (200 m / 900 m / 1900 m at the 100 m grid). The competition metric credits a prediction only inside a 300 m (3 px) triangular kernel.",
-    "consequence": "Most emitted cells fall outside the kernel entirely. This is a physical limit of potential-field inversion, not a code defect, and it is the single largest term in the lane's error budget. It is why the wide-ribbon arms exist and why none of them recovers the loss.",
-    "status": "open - physical, irreducible without new data"
+    "id": "IR-61U-04",
+    "severity": "major score-attribution uncertainty",
+    "title": "H33-2-B2 cannot be tied to the official 0.2778 row",
+    "detail": "The 2026-10-11 official page lists extradr19 at rank 23 with public DW-Tversky 0.2778 and 15 submissions. The page gives no TIFF name. GEMSDOE32's H33-2-B2 owner audit labels the file UNSCORED and calls 0.274673 a model projection, not an organizer score.",
+    "action": "Do not explain 0.2778 as an H33-2-B2 artifact score unless an artifact-linked submission receipt is obtained. Evidence is in evidence/leaderboard_reconciliation_2026-10-11.json and docs/analysis.html.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "status": "open"
   },
   {
-    "id": "IR-4",
-    "severity": "minor",
-    "title": "The sibling repository's data/official/labels.tif is byte-identical to existing_faults.tif",
-    "detail": "Both files are 425,830 bytes with SHA-256 7ba308cc... .",
-    "consequence": "It must not be described as an independent official label set. This lane's holdout is built from the mapped-fault catalogue only, and the two names are treated as the same raster throughout.",
+    "id": "IR-61U-05",
+    "severity": "major geological non-uniqueness",
+    "title": "Intrabasement density contrasts can mimic basement relief",
+    "detail": "A mafic/granitic body, intrusive contact, or altered basement zone can generate a gravity edge without any fault displacement. H61U includes a finite buried density-sheet synthetic control with zero basement relief, but one geometry cannot cover all lithologies or source depths.",
+    "action": "Interpret a recovered HGM crest only as a buried-structure candidate; retain the density sheet as an explicit named mimic and report its response separately from DTI.",
+    "status": "known limitation"
+  },
+  {
+    "id": "IR-61U-06",
+    "severity": "major uniqueness scope",
+    "title": "Current H61U registry covered sibling repositories only; private uploads remain outside scope",
+    "detail": "The manifest used for H61U contains 748 unique-grid rasters from accessible sibling repositories and declares complete_accessible_scan=true only for that sibling scan. It excluded 61GEMSDOE historical TIFFs; private or inaccessible submissions remain outside any public registry.",
+    "action": "The shared refresh_registry.py has now been updated to combine sibling repositories with local historical predictions from docs/downloads, docs/submissions, out, evidence, and reports on future refreshes. The recorded H61U comparison is unchanged and must still be described as sibling-only; do not claim organizer/private completeness.",
+    "status": "current-run scope limitation; future refresh includes local archives"
+  },
+  {
+    "id": "IR-61U-07",
+    "severity": "minor metric-data mismatch",
+    "title": "The public page exposes account best scores, not submission files",
+    "detail": "The previous dated snapshot listed DARD at 0.3195 rank 1; the 2026-10-11 page lists the same value at rank 9 and xiaofanhu at 0.4133 rank 1. Owner-reported 0.2708 and 0.2600 values numerically match current rows for different displayed participants, but this does not identify the owner files.",
+    "action": "Use a dated public snapshot only for current leaderboard context; never infer file attribution from a numeric match.",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
     "status": "documented"
   },
   {
-    "id": "IR-5",
-    "severity": "minor",
-    "title": "No leaderboard number in this repository can be ORGANIZER-CONFIRMED",
-    "detail": "The DrivenData data tab and submission pages are behind a login and no credentials exist in this sandbox. Every score quoted anywhere in this family is OWNER-REPORTED and is labelled as such.",
-    "consequence": "The 0.3195 target and the 0.2778 live reference are owner-reported. Nothing on this site is presented as a contest receipt.",
-    "status": "documented"
+    "id": "IR-61U-08",
+    "severity": "major run-validity correction",
+    "title": "Invalid first attempt discarded after shared flank-mask defect",
+    "detail": "The first H61U attempt produced zero valid flank profiles because the maxima mask was incorrectly reused as the valid sample domain. Its empty-surface uniqueness clearance and transient holdout calculations are invalid and must not be reported.",
+    "action": "No candidate raster was written. The shared helper was fixed in place and regression-tested before the retry; see evidence/h61u_first_attempt.json.",
+    "status": "resolved before valid H61U evaluation"
   },
   {
-    "id": "IR-6",
-    "severity": "minor",
-    "title": "The withheld positives are unevenly spread across the four spatial folds",
-    "detail": "After the fold-partition bug below was fixed, the four quadrants carry NW 6,073 / NE 3,320 / SW 1,732 / SE 1,773 of the 12,898 withheld positives: one quadrant holds 47 % of the truth.",
-    "consequence": "The block bootstrap resamples 20 km blocks and so is not dominated by any single fold, but the effective sample size is nearer three quadrants than four. Confidence intervals are reported with this stated rather than silently averaged away.",
-    "status": "documented"
+    "id": "IR-61U-09",
+    "severity": "major provenance restriction",
+    "title": "Competition feature bytes are from a public bridge copy",
+    "detail": "The DrivenData data tab is login-walled. The local pin receipt proves identity to the public bridge bytes but not a fresh organizer-authenticated download.",
+    "action": "Describe the source as a pinned bridge copy and preserve that provenance caveat.",
+    "status": "known limitation"
   },
   {
-    "id": "IR-6b",
-    "severity": "resolved",
-    "title": "The four spatial folds did not tile the grid",
-    "detail": "make_folds split the rows into n_folds bands and then used only the first two, so with n_folds = 4 the fold regions covered the northern half of the grid only and roughly half the catalogue could never be withheld. Caught by tests/test_holdout.py::test_folds_cover_the_whole_grid while the test suite was being written.",
-    "consequence": "Fixed: the quadrants are now 2 row bands x 2 column bands and tile the whole grid. The withheld set grew from 9,397 to 12,898 positives, and the ranking of the candidate arms changed materially (the selected arm moved from a statistically tied result against its null to a point estimate +0.0097 above it). Every number in this repository was recomputed after the fix.",
-    "status": "closed"
+    "id": "IR-61U-10",
+    "severity": "terminal duplicate stop; no candidate or download authorization",
+    "title": "Final-dot registry comparison stopped H61U-H1",
+    "detail": "The pre-placement surface comparison passed against all 748 aligned rasters in the accessible sibling-repository registry (which excludes 61GEMSDOE historical TIFFs) (worst Spearman rho 0.030846). After the holdout, the final-dot comparison flagged 70 registry raster entries above the strict >0.70 overlap limit; the maximum 3-pixel overlap was 1.0 against 17GEMSDOE:docs/downloads/17GEMSDOE_E-proba-multiscale_20260930T044527Z.tif. The run stopped before writing a new TIFF. This overlap stop does not establish that a file was copied; no candidate file exists.",
+    "action": "Do not link, download, or submit a H61U artifact. Do not prune or alter the observed dots and retry post hoc. The fixed H1 experiment also failed the promotion comparison against unfiltered HGM maxima: candidate-minus-HGM HOLDOUT-DTI delta -0.0030086022, 95% CI [-0.0101048834, 0.0049512141], evaluator gems61-pooled-hide-v2, 12,074 withheld positives. See evidence/h61u_run_card.json and docs/data/h61u_outcome_summary.json.",
+    "status": "closed by fail-closed stop; submission and weekly slot not approved"
   },
   {
-    "id": "IR-7",
-    "severity": "resolved",
-    "title": "3x3 plateau-break thinning deleted 98 % of the step crests",
-    "detail": "Requiring each crest pixel to be the maximum of its 3x3 neighbourhood reduced the crest from 128,323 px to 2,595 px and cut catalogue-within-3px coverage from 16.5 % to 1.5 %. On the smooth, band-limited depth field produced by this inversion the test destroys along-strike continuity.",
-    "consequence": "Reverted. The test is now opt-in (thin_plateaus=True) and off by default; redundancy is removed by dot thinning, which is the operation the metric actually rewards. A regression test pins the default to False.",
-    "status": "closed"
-  },
-  {
-    "id": "IR-8",
-    "severity": "resolved",
-    "title": "Oldenburg's pure cosine taper recovers only a third of the amplitude",
-    "detail": "With plateau_fraction = 0 the taper attenuates from the lowest wavenumbers and an infinite slab loses most of its response. With plateau_fraction = 0.5 the same slab is reproduced to 0.1 %.",
-    "consequence": "The plateau fraction is fixed at 0.5 everywhere and a test guards against zeroing it.",
-    "status": "closed"
+    "id": "IR-61U-11",
+    "severity": "major uniqueness-scope limitation",
+    "title": "The H61U run used a registry that omitted this repository’s historical TIFFs",
+    "detail": "At the time of the H61U run, evidence/registry_refreshed.json contained 748 accessible sibling-repository rasters and excluded 61GEMSDOE. Thus the recorded pre-placement and final-dot checks did not compare the candidate surface/dots against older TIFFs in docs/downloads/ or docs/submissions/. The shared refresh tool has since been fixed to include those local prediction archives on a future refresh; the current run was not rerun.",
+    "action": "Preserve the current negative stop; no candidate was written. For future work, refresh the combined inventory before any pre-placement check and again compare the final dots. Keep the strict thresholds unchanged and record both registry sources.",
+    "status": "current-run limitation; refresh-code correction added for future runs"
   }
 ]

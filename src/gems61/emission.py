@@ -32,6 +32,7 @@ competitive artifact in this family has shipped.
 from __future__ import annotations
 
 import numpy as np
+from scipy import ndimage
 from scipy.ndimage import distance_transform_edt, maximum_filter
 
 from .metric import RADIUS_PX
@@ -156,15 +157,27 @@ def ribbon_gain_table(sigma_px=(1.0, 1.5, 2.0, 2.5, 3.0), spacings=(3.0,),
 
 def thin(belief: np.ndarray, eligible: np.ndarray, min_sep_px: int,
          seed: int = 0) -> np.ndarray:
-    """Local-maximum thinning of a belief field inside ``eligible``."""
-    if min_sep_px <= 0:
-        return eligible.copy()
-    b = np.where(eligible, belief, -np.inf)
-    size = 2 * int(min_sep_px) + 1
-    mx = ndimage.maximum_filter(b, size=size, mode="constant", cval=-np.inf)
+    """Local-maximum thinning with Euclidean separation and deterministic ties."""
+    b = np.asarray(belief, np.float32)
+    m = np.asarray(eligible, bool)
+    if b.shape != m.shape:
+        raise ValueError("belief and eligibility masks must have matching shapes")
+    if min_sep_px < 0:
+        raise ValueError("min_sep_px must be non-negative")
+    if not m.any():
+        return np.zeros_like(m)
+    if min_sep_px == 0:
+        return m.copy()
     rng = np.random.default_rng(seed)
-    jitter = rng.random(belief.shape).astype(np.float64) * 1e-9
-    return eligible & ((b + jitter) >= (mx + jitter))
+    ranked = np.full(b.shape, -np.inf, np.float64)
+    # Scale the seeded tie jitter to float32 score resolution; a fixed 1e-6
+    # vanishes when scores are large, leaving whole plateaus unthinned.
+    scale = max(1.0, float(np.max(np.abs(b[m]))))
+    jitter = rng.random(int(m.sum())) * (np.finfo(np.float32).eps * scale)
+    ranked[m] = b[m].astype(np.float64) + jitter
+    peaks = ndimage.maximum_filter(ranked, footprint=disk(float(min_sep_px)),
+                                   mode="constant", cval=-np.inf)
+    return m & (ranked >= peaks)
 
 
 def emit(belief: np.ndarray, eligible: np.ndarray, budget: int, min_sep_px: int,

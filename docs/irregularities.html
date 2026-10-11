@@ -1,68 +1,22 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Irregularities · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
-<style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html" class=active>Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
-
-<h2>Irregularities and limitations found this session</h2>
-<table><tr><th>id</th><th>severity</th><th>statement</th></tr>
-<tr><td>IR-61-LEAK-01</td><td>high</td><td>A gradient-boosted habitat model reached HOLDOUT-DTI 0.1599
-and a canary AUC of 0.901, above the protocol's 0.90 leakage line. The leave-one-quadrant-out retest
-shows the AUC falls to 0.518–0.618 across all 16 blocked retests, with no
-training pixel inside the scored quadrant, and the DTI to the random baseline: the skill was adjacency to visible traces, not generalisation. The shipped file uses
-the L2 logistic model (canary AUC 0.626).</td></tr>
-<tr><td>IR-61-PRUNE-01</td><td>high</td><td>The catalogue prune has conflicting evidence. On the
-hide-and-recover holdout a 2 px prune beats 3 px (0.1599 vs
-0.1458 for the same model) because the
-withheld truth is adjacent to visible traces. On the live metric the group's own controlled pair
-(<code>gems25-dotted-h19-5-d2-8</code> 0.2600 → <code>gemsdoe32-h33-h33-2-b2</code> 0.2778, an exact
-set difference deleting every dot within 3 px of the catalogue) says 3 px wins. The shipped file
-follows the live evidence (3 px) and the holdout cost is reported.</td></tr>
-<tr><td>IR-61-BUDGET-01</td><td>medium</td><td>The holdout prefers more dots monotonically
-(random lines 0.0220 → 0.0434 from 20 k to 80 k), while the group's live ladder prefers ~38–40 k. The
-holdout's withheld-truth set is small and catalogue-adjacent, so it cannot see the false-positive mass
-that extra dots create against the full hidden fault population. Shipped at 40 k.</td></tr>
-<tr><td>IR-61-MEM-01</td><td>medium</td><td>The development sandbox has ~3.9 GB of RAM and 2 cores. The
-28-channel habitat stack (1.38 GB float32) is written channel-by-channel into a memmap and predictions
-are computed in 400 k-row chunks; an earlier version materialised all 19 bands as float64 and was
-killed by the OOM reaper. No result was lost.</td></tr>
-<tr><td>IR-61-SCORE-01</td><td>high</td><td>Every score attributed to the group's own files
-(0.2778, 0.2750, 0.2708, …) is an owner report on the group's pages. None is an organizer receipt
-linking those bytes to a leaderboard row. The public leaderboard rows belong to other teams.</td></tr>
-<tr><td>IR-61-PROVENANCE-01</td><td>high</td><td>The competition rasters come from a hash-pinned public
-GitHub mirror (<code>buffedlizard55-lab/6GEMSDOE</code>); the DrivenData data page is login-walled and
-unreachable from this sandbox. All three digests match the mirror's pins, but they are not
-organizer-authenticated.</td></tr>
-<tr><td>IR-61-FOOTPRINT-01</td><td>medium</td><td>The 200 m inversion grid loses
-24,274 footprint cells that the 100 m grid has (block means
-across the survey boundary are NaN). All correlations are taken on the common finite support and the
-erosion is reported in <code>evidence/h61m_features.json</code>.</td></tr>
-<tr><td>IR-61-SRC-01</td><td>high</td><td>An earlier session asserted that the competition ships a
-<code>1m_DEM_links.csv</code> of 1 m DEM tile URLs. The hash-pinned bridge manifest
-(<code>buffedlizard55-lab/6GEMSDOE@e2fe3f41&#8230;:data/bridge/manifest.json</code>) lists exactly three
-files &mdash; <code>gems-geodawn-numerical-features.tif</code>, <code>existing_faults.tif</code> and
-<code>example_submission.tif</code> &mdash; so the claim is <b>false</b> and is corrected here and in
-<code>evidence/h61g_hypotheses.json</code>. The 1 m lidar hypothesis (H61-N) is unaffected in substance:
-USGS 3DEP is free public-domain data obtainable from The National Map
-(<a href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader</a>); it simply has to
-be fetched from USGS, not from the organiser. drivendata.org is unreachable from this sandbox, so no
-direct check of the data tab was possible.</td></tr>
-<tr><td>IR-61-NET-01</td><td>medium</td><td>Egress admits only github.com, api.github.com,
-codeload.github.com, registry.npmjs.org, pypi.org and files.pythonhosted.org. usgs.gov,
-drivendata.org and the 3DEP S3 endpoint all fail, so no new external raster was fetched this session;
-the one named obtainable source (3DEP 1 m DEM) is listed as a next step, not claimed as used.</td></tr>
-</table>
-
-</div></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Irregularities and provenance · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head><body>
+<header class="top"><div class="wrap"><p class="sub">Known blockers, attribution limits, and run corrections</p><h1>Irregularities and provenance flags</h1>
+<nav class="main"><a href="index.html">Overview</a><a href="executive-summary.html">Executive guide</a><a href="run-card.html">Run card</a><a href="holdout.html">Holdout results</a><a href="hypotheses.html">Hypotheses</a><a href="method.html">Method</a><a href="analysis.html">Score audit</a><a href="irregularities.html" class="active">Irregularities</a><a href="review-passes.html">Review passes</a><a href="next-steps.html">Next steps</a></nav></div></header>
+<main class="wrap">
+<div class="banner no"><strong>Terminal H61U status:</strong> final-dot uniqueness failed, so no candidate TIF was written. Do not download or submit an earlier archive as a substitute.</div>
+<h2>Current-run stop</h2><section class="card"><p>The refreshed sibling-repository registry contained 748 aligned rasters. H61U passed the pre-placement surface comparison (worst Spearman rho 0.030846), then failed the final-dot test: 70 registry entries exceeded 70% overlap within three pixels; worst overlap was 1.0. The run stopped before file writing. This indicates insufficient dot novelty under the declared test, not proof of copying. The inventory excludes this repository's historical TIFFs, private submissions, and inaccessible rasters; this is an explicit scope limitation, not a uniqueness claim.</p><p>In addition, <strong>HOLDOUT-DTI · <code>gems61-pooled-hide-v2</code> · 12,074 withheld positives</strong> was 0.041351 (95% CI 0.035332–0.048100) versus 0.044359 for unfiltered HGM (95% CI 0.036847–0.051764). The paired H1-minus-HGM difference was -0.003009 (95% CI -0.010105–0.004951), so no improvement is demonstrated. Full details are in the <a href="run-card.html">run card</a>.</p><p>Current permissions: no artifact to download; not recommended to submit; no weekly slot approved; no organizer score.</p></section>
+<h2>Calibration and source-data flags</h2><ul>
+<li><strong>GP-1012 scale calibration remains blocked.</strong> NOAA/NCEI official depth grid <code>br_depth.xyz</code> and readme are identified; only a partial response/header was inspected (596×504 grid, 2 km spacing, depths in km, 9999 missing flag). The complete file is not available locally, and a verified spatial registration to the competition grid is not in hand. No calibration statistics were computed. See <a href="data/gp1012_calibration.json">the calibration receipt</a>, the <a href="https://pubs.usgs.gov/publication/gp1012">USGS publication</a>, and <a href="https://www.ngdc.noaa.gov/mgg/gravity/1999/data/grids/basinrng/br_depth.xyz">NOAA/NCEI grid</a>.</li>
+<li><strong>Organizer band 15 is prohibited.</strong> Historical scripts and artifacts used <code>depth_to_base_surf</code> as target, predictor, or diagnostic; that is not the independent GP-1012 calibration requested. Band-15 APIs now fail closed for the H61U workflow, optional feature callers omit it, and historical claims are not reused.</li>
+<li><strong>Competition-data provenance is a bridge copy.</strong> The DrivenData data tab is login-walled. The local pin receipt identifies bytes matching a public bridge copy, not a fresh organizer-authenticated download.</li>
+</ul>
+<h2>Scoring and attribution flags</h2><ul>
+<li><strong>IR-61U-11 — current-run local archive omission.</strong> The 748-entry manifest used by H61U excluded 61GEMSDOE's historical TIFFs. The shared <code>scripts/refresh_registry.py</code> has since been fixed to include local prediction archives on a future refresh, but the H61U run was not rerun and its receipt remains sibling-only. This omission does not reverse the existing final-dot stop; no candidate was written.</li>
+<li>The official <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">2026-10-11 leaderboard</a> lists <em>extradr19</em> at rank 23 with 0.2778 but does not identify a TIFF. The public sibling audit labels H33-2-B2 UNSCORED and 0.274673 a projection. Do not claim the public row belongs to H33-2-B2 without an artifact-linked receipt.</li>
+<li>Public ranks and scores are account-level bests, not artifact-linked organizer receipts. H61U has no upload or ORGANIZER-CONFIRMED score.</li>
+<li>All six H61U single-feature canaries were below AUC 0.90 (maximum 0.555204); that bounds tested leakage channels only.</li>
+</ul>
+<h2>Invalid first attempt and correction</h2><p>Attempt one produced zero valid flank profiles because the helper incorrectly required flank interpolation samples to be HGM maxima. Its empty-surface registry clearance and transient metrics were invalidated and discarded. The shared flank-validity logic was repaired and regression-tested before the unchanged H61U-H1 retry. The invalid attempt produced no TIF or score; the retry also produced no TIF because its final uniqueness gate stopped.</p><p>Exact evidence: <a href="data/h61u_first_attempt.json">invalid first-attempt record</a>, <a href="data/h61u_run_card.json">full retry receipt</a>, <a href="data/irregularities.json">machine-readable irregularity register</a>.</p>
+<h2>Historic reports</h2><p>Old H61-M calibration, score, and readiness claims were withdrawn. Historical TIFFs remain as archived data only; their availability does not authorize H61U downloads or imply current uniqueness. See <a href="submit.html">the explicit artifact decision</a>.</p>
+</main><footer><div class="wrap">Irregularities are recorded as limitations, not silently repaired through unsupported assumptions.</div></footer></body></html>

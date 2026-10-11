@@ -241,53 +241,68 @@ def robust_scale(reference: np.ndarray, estimate: np.ndarray, mask: np.ndarray) 
                 median_abs_error_m=float(np.median(np.abs(residual))))
 
 
-def calibrate_depth_scale(gravity_mgal: np.ndarray, reference_depth: np.ndarray,
-                          mask: np.ndarray, cell: float,
+def calibrate_depth_scale(gravity_mgal: np.ndarray, gp1012_reference, mask: np.ndarray,
+                          cell: float,
                           drho_grid=(250.0, 300.0, 350.0, 400.0, 450.0, 500.0, 600.0, 700.0),
                           z0_grid=(500.0, 1000.0, 1500.0, 2000.0, 3000.0),
                           cutoff_grid=(4000.0, 8000.0, 16000.0),
                           n_iter: int = 12, n_terms: int = 6, pad: int = 64) -> dict:
-    """Choose ``(drho, z0, cutoff)`` so the inverted relief matches an
-    independent basin-depth product in *scale*.
+    """Calibrate depth scale against a complete official GP-1012 source grid.
 
-    The intended reference is the USGS Basin and Range basin-depth map
-    (Saltus & Jachens, USGS Geophysical Investigations Map GP-1012, 1:2,500,000,
-    1995).  GP-1012 is **not** reachable from this sandbox (egress is limited to
-    github.com / api.github.com / pypi.org / registry.npmjs.org), so the only
-    basin-depth reference available locally is the organiser's own band 15
-    ``depth_to_base_surf``; it is used here *only* to fix the depth scale, never
-    as a prediction feature, and its use is recorded in the run card.
-
-    Scoring: the inverted relief is compared with the reference depth anomaly
-    (reference minus its own long-wavelength regional, because the inversion is
-    band-limited and carries no absolute datum).  The objective is
-    ``|log(slope)|`` so the fit fixes the depth *scale* and is indifferent to
-    the unknown long-wavelength datum.
+    GP-1012 is a 2 km regional model and its distributed XYZ header does not
+    declare a geodetic datum, so this routine compares global summary statistics
+    only. It refuses numpy arrays (including organizer band 15) rather than
+    silently treating an unrelated grid as the calibration target. The resulting
+    scale fit does not validate local candidate-fault geometry.
     """
-    from scipy.ndimage import gaussian_filter
-    ref = np.asarray(reference_depth, np.float64)
-    filled = inpaint(np.where(np.isfinite(ref), ref, np.nan), np.isfinite(ref))
-    regional = gaussian_filter(filled, 60.0, mode="nearest")
-    ref_anom = (ref - regional).astype(np.float32)
+    from .gp1012 import GP1012Grid
 
+    if not isinstance(gp1012_reference, GP1012Grid):
+        raise RuntimeError(
+            "GP-1012 calibration blocked: pass a complete read_gp1012_xyz() grid; "
+            "organizer band 15 is prohibited"
+        )
+    observed = np.asarray(gravity_mgal, np.float32)
+    valid = np.asarray(mask, bool)
+    if observed.ndim != 2 or observed.shape != valid.shape:
+        raise ValueError("gravity and mask must be matching 2-D arrays")
+    if cell <= 0:
+        raise ValueError("cell spacing must be positive")
+    target = gp1012_reference.summary()
+    target_p50, target_p90 = float(target["p50_m"]), float(target["p90_m"])
+    target_deep = float(target["fraction_gt_1km"])
     results = []
     for drho in drho_grid:
+        if float(drho) <= 0:
+            raise ValueError("drho is basement-minus-fill and must be positive")
         for z0 in z0_grid:
             for cutoff in cutoff_grid:
                 relief, diag = oldenburg_invert(
-                    gravity_mgal, drho, z0, cell, cutoff_wavelength_m=cutoff,
+                    observed, drho, z0, cell, cutoff_wavelength_m=cutoff,
                     n_iter=n_iter, n_terms=n_terms, pad=pad, return_diagnostics=True)
-                # depth anomaly = -relief (a basement high is a shallow depth)
-                est = -relief.astype(np.float64)
-                est_regional = gaussian_filter(est, 60.0, mode="nearest")
-                est_anom = est - est_regional
-                fit = robust_scale(ref_anom, est_anom, mask)
-                fit.update(drho=float(drho), z0=float(z0), cutoff_wavelength_m=float(cutoff),
-                           n_iter_done=diag["n_iter_done"], last_update_m=diag["rms_update_m"][-1])
-                # Objective: match the depth scale (slope magnitude 1) and the pattern.
-                fit["objective"] = float(abs(np.log(max(abs(fit["slope"]), 1e-6))) - 0.5 * max(fit["pearson"], 0.0))
-                results.append(fit)
-    results.sort(key=lambda r: r["objective"])
-    return dict(evidence_class="MODEL-CALIBRATION",
-                reference="band 15 depth_to_base_surf (GP-1012 unreachable from this sandbox)",
-                best=results[0], grid_search=results)
+                depth = np.maximum(depth_from_relief(relief, z0), 0.0)
+                values = depth[valid & np.isfinite(depth)]
+                if values.size == 0:
+                    raise ValueError("no valid inverted depths for calibration")
+                stats = dict(p50_m=float(np.median(values)),
+                             p90_m=float(np.percentile(values, 90)),
+                             fraction_gt_1km=float((values > 1000.0).mean()))
+                penalties = dict(
+                    p50=abs(np.log(max(stats["p50_m"], 1.0) / max(target_p50, 1.0))),
+                    p90=abs(np.log(max(stats["p90_m"], 1.0) / max(target_p90, 1.0))),
+                    fraction_gt_1km=abs(np.log(max(stats["fraction_gt_1km"], 1e-6) /
+                                               max(target_deep, 1e-6))),
+                )
+                results.append(dict(drho_kg_m3=float(drho), z0_m=float(z0),
+                                    cutoff_wavelength_m=float(cutoff), stats=stats,
+                                    penalties=penalties, penalty=float(sum(penalties.values())),
+                                    n_iter_done=diag["n_iter_done"],
+                                    last_update_m=(diag["rms_update_m"][-1]
+                                                   if diag["rms_update_m"] else None)))
+    results.sort(key=lambda row: row["penalty"])
+    return dict(evidence_class="MODEL-CALIBRATION-TO-OFFICIAL-GP1012-SUMMARIES",
+                reference=target, best=results[0], grid_search=results,
+                calibration_scope="grid-wide p50, p90, fraction >1 km; no pixel alignment",
+                limitations=["GP-1012 is a 2 km low-pass model, not a 100 m label",
+                             "distributed header lacks geodetic datum; no pixelwise comparison",
+                             "global-scale fit does not validate local fault geometry"])

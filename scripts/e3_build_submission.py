@@ -74,6 +74,7 @@ def cascade_emit(belief, eligible, budget, seps=SEPS, seed=0):
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical submission builder: it used organizer band 15 for calibration/features. Use scripts/run_h61u.py; GP-1012 remains the only permitted calibration reference.")
     t0 = time.time()
     grid = gio.load_grid(verify=True)
     z = np.load(ROOT / "data" / "cache" / f"basement_z{Z0}_dr{DRHO}.npz")
@@ -94,7 +95,7 @@ def main() -> int:
     print(f"emitted={int(pred.sum())} on_catalogue={int((pred & grid.catalogue).sum())}")
 
     # ---- holdout screen (reported, and labelled as a broken instrument) ------
-    folds = ho.make_folds(grid.footprint, grid.catalogue, n_folds=4, collar_px=3, min_px=20)
+    folds = ho.make_folds(grid.catalogue, grid.footprint, fraction=0.20, buffer_px=3, seed=20261011, n_folds=4, min_component_px=20)
     TP = FP = FN = 0.0
     per = {}
     for f in folds:

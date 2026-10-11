@@ -45,6 +45,7 @@ def pooled_score(pred_fn, folds):
 
 
 def main() -> int:
+    raise SystemExit("RETIRED: Retired historical holdout: its predictor/calibration path used organizer band 15. Use the frozen shared H61U runner.")
     t0 = time.time()
     grid = gio.load_grid(verify=False)
     z = np.load(ROOT / "data" / "cache" / f"basement_z{Z0}_dr{DRHO}.npz")
@@ -54,8 +55,8 @@ def main() -> int:
     baseref = np.asarray(grid.band("depth_to_basement_surface"), dtype=np.float32)
     valid = grid.footprint & np.isfinite(g)
 
-    folds = ho.make_folds(grid.footprint, grid.catalogue, n_folds=4,
-                          collar_px=COLLAR_PX, min_px=20)
+    folds = ho.make_folds(grid.catalogue, grid.footprint, fraction=0.20,
+                          buffer_px=COLLAR_PX, seed=20261011, n_folds=4, min_component_px=20)
     print("folds:", [(f.name, f.n_segments, int(f.hidden.sum()), int(f.domain.sum()))
                      for f in folds])
 

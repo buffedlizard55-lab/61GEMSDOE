@@ -53,7 +53,7 @@
       "doi": "10.3133/ofr90404",
       "url": "https://doi.org/10.3133/ofr90404",
       "verification": "crossref",
-      "facts_used": "the gravity and basin-thickness maps of Nevada produced by the method that Blakely & Jachens (S4) describe; this is the direct provenance of the organiser's iso_grav_anom and depth_to_base_surf layers"
+      "facts_used": "Jachens & Moring's gravity/basin-depth methodology is part of the historical provenance of the organizer's gravity and depth products. Current H61U candidate construction uses band 13 alone and does not consume organizer band 15."
     },
     {
       "id": "S6",
@@ -66,18 +66,18 @@
     {
       "id": "S7",
       "role": "external-data",
-      "citation": "Saltus, R.W., and Jachens, R.C., 1995, Gravity and basin-depth maps of the Basin and Range Province, western United States, U.S. Geological Survey Geophysical Investigations Map GP-1012, scale 1:2,500,000",
-      "url": "https://store.usgs.gov/product/23063",
-      "verification": "fetched",
-      "facts_used": "the product exists and is sold as a paper, folded map only; no digital raster is published on the product page. This is the map the lane prescribes for calibrating the density-contrast depth scale, and it is NOT obtainable from this sandbox. See docs/irregularities.html."
+      "citation": "Saltus, R.W., and Jachens, R.C., 1995, Gravity and basin-depth maps of the Basin and Range Province, western United States, USGS Geophysical Investigations Map GP-1012; NOAA/NCEI distributes an official regional br_depth.xyz grid.",
+      "url": "https://pubs.usgs.gov/publication/gp1012",
+      "verification": "USGS publication page and partial NOAA/NCEI grid header checked; complete grid not locally obtained or calibrated.",
+      "facts_used": "GP-1012 is the sole permitted depth-scale calibration reference, not a prediction feature. NOAA/NCEI's br_depth.xyz header excerpt reports a 596 x 504 grid at 2 km spacing, in km, with missing value 9999; no geodetic datum was identified in the excerpt. The complete file is not present locally, so no calibration is claimed."
     },
     {
       "id": "S8",
       "role": "data-provenance",
-      "citation": "the organiser's feature stack, band 13 iso_grav_anom and band 15 depth_to_base_surf, together with the official labels, existing faults and sample submission rasters",
+      "citation": "the organizer's training-feature stack, used by the current candidate only through band 13 iso_grav_anom; labels, existing faults and sample submission are used for the documented holdout/format protocol",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
       "verification": "not fetched - the data tab is behind a login and no DrivenData credentials are available in this sandbox",
-      "facts_used": "the rasters themselves were restored from the sibling repository's hash-pinned cache and every pin verified, see evidence/data_preparation.json"
+      "facts_used": "Local pinned mirror bytes were used with the disclosed provenance caveat; band 15 depth_to_base_surf is fail-closed and is not a calibration reference or prediction feature. See evidence/data_preparation.json and evidence/h61u_preregistration.json."
     },
     {
       "id": "S9",

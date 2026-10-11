@@ -1,15 +1,14 @@
 name: Pages
 
-# Publishes docs/ to GitHub Pages.  The site is static: every page is rendered
-# by scripts/build_site.py from evidence/*.json and docs/data/*.json, so a
-# redeploy can never disagree with the evidence it quotes.
+# The site is checked-in static HTML so a deployment cannot regenerate pages
+# from a legacy run card or silently change the candidate/download decision.
 on:
   push:
     branches: [main]
     paths:
       - 'docs/**'
       - 'evidence/**'
-      - 'scripts/build_site.py'
+      - 'scripts/check_site.py'
   workflow_dispatch:
 
 permissions:
@@ -29,9 +28,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Render static site from evidence
-        run: python3 scripts/build_site.py
-      - name: Verify every internal link resolves
+      - name: Verify static site and H61U download gate
         run: python3 scripts/check_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
