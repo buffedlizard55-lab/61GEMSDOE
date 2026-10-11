@@ -432,10 +432,30 @@ Format-valid and unique, and an honest negative on the selector's bar.</p>
 The current-run H61-L surface did not reach holdout, so no canary or DTI is claimed for that run. The separate main-branch H61-L variant's historical HOLDOUT-DTI is documented above and does not clear its strict final-dot failure.</p>
 """
 
+# Two irregularity registers. The evidence register carries the measured lane
+# findings (IR-61-*); the public data file carries the protocol, calibration and
+# history register that main rendered before this merge (IR-1 ... IR-8, IR-2b,
+# IR-6b). Both are published, because dropping the second register would lose
+# main's standing facts (GP-1012 unobtainable, the linear-slab 0.7318 vs 0.6575
+# disagreement, the fold-coverage fix, plateau_fraction 0.5).
 irr = load("evidence/h61g_irregularities.json") + load("evidence/h61w_irregularities.json")
-irr_body = "<h1>Irregularities and corrections</h1><table><tr><th>ID</th><th>Finding</th><th>Action</th></tr>" + "".join(
+irr_lane_rows = "".join(
     f"<tr><td><code>{esc(row['id'])}</code></td><td>{esc(row.get('finding',row.get('statement','')))}</td><td>{esc(row.get('action',''))}</td></tr>"
-    for row in irr) + "</table>"
+    for row in irr)
+public_irr = load("docs/data/irregularities.json")
+public_irr_rows = "".join(
+    f"<tr><td><code>{esc(row['id'])}</code></td><td>{esc(row.get('severity',''))}</td>"
+    f"<td><b>{esc(row.get('title',''))}</b> — {esc(row.get('detail',''))}</td>"
+    f"<td>{esc(row.get('consequence',''))}</td><td>{esc(row.get('status',''))}</td></tr>"
+    for row in public_irr)
+irr_body = f"""<h1>Irregularities and corrections</h1>
+<h2>Measured-lane register ({len(irr)} entries, evidence-sourced)</h2>
+<table><tr><th>ID</th><th>Finding</th><th>Action</th></tr>{irr_lane_rows}</table>
+<h2>Protocol, calibration and history register ({len(public_irr)} entries, <a href="../docs/data/irregularities.json">public data file</a>)</h2>
+<p>These are the standing findings inherited from the merged sessions on <code>main</code>; they are separate from the measured-lane register above
+and none of them is a submission clearance. IR-1 explains why the depth scale is calibrated against the supplied band 15 instead of GP-1012;
+IR-2 records the linear-slab versus iterative disagreement; IR-7 and IR-8 record the thinning and taper fixes.</p>
+<table><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Consequence</th><th>Status</th></tr>{public_irr_rows}</table>"""
 
 next_body = f"""
 <h1>Next steps and remaining limitations</h1>
