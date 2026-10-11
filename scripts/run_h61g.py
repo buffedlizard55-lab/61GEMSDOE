@@ -43,6 +43,7 @@ from gems61 import grid as gridmod                   # noqa: E402
 from gems61 import h61g as H                         # noqa: E402
 from gems61 import holdout_segmented as holdoutmod   # noqa: E402
 from gems61 import submission_writer                 # noqa: E402
+from gems61 import uniqueness as uniqueness_gate     # noqa: E402
 from gems61.metric import ALPHA, BETA, EPS, kernel   # noqa: E402
 from gems61.network import segments                  # noqa: E402
 
@@ -67,6 +68,63 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _expected_registry_names() -> list[str]:
+    """Names explicitly enumerated by fetch_registry.sh (not the full organizer registry)."""
+    text = (ROOT / "scripts" / "fetch_registry.sh").read_text()
+    if 'ITEMS="' not in text:
+        return []
+    block = text.split('ITEMS="', 1)[1].split('"', 1)[0]
+    names = []
+    for line in block.splitlines():
+        entry = line.strip()
+        if ":" in entry and entry.endswith(".tif"):
+            names.append(Path(entry.split(":", 1)[1]).name)
+    return names
+
+
+def _registry_inventory(exclude_names=()):
+    """Return accessible raster bytes plus an explicit, conservative scope receipt."""
+    exclude = set(exclude_names)
+    rows, seen = [], set()
+    for directory in REGISTRY_DIRS:
+        if not directory.exists():
+            continue
+        for path in sorted(directory.glob("*.tif")):
+            if path.name in exclude or path.name in seen:
+                continue
+            seen.add(path.name)
+            rows.append(dict(sources=[str(path)], cache_file=str(path), sha256=sha256(path)))
+    expected = _expected_registry_names()
+    external_dir = REGISTRY_DIRS[0]
+    fetched = {p.name for p in external_dir.glob("*.tif")} if external_dir.exists() else set()
+    missing = sorted(set(expected) - fetched)
+    internal = (sorted(p.name for p in REGISTRY_DIRS[1].glob("*.tif") if p.name not in exclude)
+                if REGISTRY_DIRS[1].exists() else [])
+    scope = dict(
+        source_script="scripts/fetch_registry.sh",
+        enumerated_external_rasters=len(expected),
+        fetched_enumerated_external_rasters=len(set(expected) & fetched),
+        missing_enumerated_external_rasters=missing,
+        prior_project_downloads=len(internal),
+        enumerated_list_complete=not missing,
+        official_registry_access=False,
+        full_registry_coverage=False,
+        limitation="The fetch script names a finite subset of owner-published rasters; it does not prove coverage of every earlier raster or the organizer-side registry.",
+    )
+    return rows, scope
+
+
+def _compare_to_registry(candidate: np.ndarray, footprint: np.ndarray, *, exclude_names=()):
+    manifest_rows, scope = _registry_inventory(exclude_names=exclude_names)
+    report = uniqueness_gate.compare_array_to_registry(
+        candidate, {"rasters": manifest_rows}, footprint,
+        scope_complete=scope["full_registry_coverage"], scope=scope)
+    report["known_registry_rasters_compared"] = sum(
+        "spearman_full_footprint" in row for row in report["rows"])
+    report["candidate_dots"] = int(((np.asarray(candidate) > 0.5) & footprint).sum())
+    return report
 
 
 def write_json(name: str, obj) -> Path:
@@ -486,6 +544,15 @@ def stage_final(a) -> None:
     note = (f"H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor "
             f"slope ridge; {n_dots} dots at 3 px spacing; UNSCORED")
     assert len(note) <= 140, len(note)
+
+    # Fail closed before writing or publishing a candidate.  Jaccard/base-rate
+    # diagnostics never replace the literal rank-rho / forward-overlap gates.
+    preplacement = _compare_to_registry(values, g.footprint)
+    preplacement["phase"] = "candidate dots, before submission writer"
+    write_json("h61g_preplacement_uniqueness.json", preplacement)
+    if not preplacement["unique"]:
+        raise SystemExit(f"pre-placement registry gate blocked output: {preplacement['status']}")
+
     OUT.mkdir(exist_ok=True)
     rec = submission_writer.write_submission(
         OUT / f"{name}.tif", values, sample=gridmod.DATA_DIR / "sample_submission.tif",
@@ -495,6 +562,19 @@ def stage_final(a) -> None:
                       evaluator=EVALUATOR, prune_px=PRUNE_PX, corridor_px=H.CORRIDOR_PX,
                       ribbon_vs_dots_holdout=ribbon_vs_dots,
                       no_prior_submission_raster_used=True))
+
+    # Re-read the written GeoTIFF, then repeat both literal gates on its final dots
+    # before it is copied into the public Pages download directory.
+    import rasterio
+    with rasterio.open(OUT / f"{name}.tif") as src:
+        final_values = src.read(1)
+    final_gate = _compare_to_registry(final_values, g.footprint)
+    final_gate["phase"] = "final GeoTIFF dots, before public placement"
+    final_gate["candidate_sha256"] = rec["sha256"]
+    write_json("h61g_final_uniqueness.json", final_gate)
+    if not final_gate["unique"]:
+        raise SystemExit(f"final-dot registry gate blocked public placement: {final_gate['status']}")
+
     DOWNLOADS.mkdir(parents=True, exist_ok=True)
     for ext in (".tif", ".zip", ".json"):
         shutil.copy2(OUT / f"{name}{ext}", DOWNLOADS / f"{name}{ext}")
@@ -516,85 +596,78 @@ def stage_final(a) -> None:
                      random_lines=rand["pooled_dti"], beats_random_lines=beats_random,
                      registry_reference_best=reg, beats_registry_reference_on_holdout=beats_group_best_holdout,
                      n_withheld_truth_px=hold["n_withheld_truth_px"], evaluator=EVALUATOR),
-        slot_recommendation=("PROMOTE-ELIGIBLE: beats both controls and the registry reference on the holdout"
-                             if (beats_random and beats_group_best_holdout) else
-                             "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above "
-                             "the group's best-known file; keep as a negative/diagnostic result"),
+        uniqueness=dict(status=final_gate["status"],
+                        duplicate_count=final_gate["duplicate_count"],
+                        known_registry_rasters_compared=final_gate["known_registry_rasters_compared"],
+                        registry_scope_complete=final_gate["registry_scope_complete"]),
+        submission_eligible=bool(final_gate["unique"]),
+        download_status="cleared for public download" if final_gate["unique"] else "audit-only; do not submit",
+        slot_recommendation=("PROMOTE-ELIGIBLE: holdout beats both controls and registry reference; uniqueness gate cleared"
+                             if (final_gate["unique"] and beats_random and beats_group_best_holdout) else
+                             "DO NOT SPEND A SLOT: HOLDOUT-DTI does not exceed the group's best comparable reference"),
         organizer_receipt=None))
 
 
 # --------------------------------------------------------------------------- #
 def stage_unique(_a) -> None:
     import rasterio
-    from scipy.stats import spearmanr
     g = gridmod.load_grid()
     fin = json.loads((EVID / "h61g_final.json").read_text())
-    with rasterio.open(ROOT / fin["tif"]) as src:
+    candidate_path = ROOT / fin["tif"]
+    if not candidate_path.exists():
+        candidate_path = ROOT / fin["download_tif"]
+    with rasterio.open(candidate_path) as src:
         mine = src.read(1)
-    mine_dots = mine > 0.5
-    d_mine = None
-    rows = []
-    seen = set()
-    for d in REGISTRY_DIRS:
-        for p in sorted(d.glob("*.tif")):
-            if p.name in seen or p.name == Path(fin["tif"]).name:
-                continue
-            seen.add(p.name)
-            try:
-                with rasterio.open(p) as src:
-                    if (src.height, src.width) != g.shape:
-                        continue
-                    other = src.read(1)
-            except Exception as exc:  # noqa: BLE001
-                rows.append(dict(file=p.name, error=str(exc)[:100])); continue
-            o = np.where(np.isfinite(other), other, 0.0)
-            a_ = mine[g.footprint]; b_ = o[g.footprint]
-            rho = float(spearmanr(a_, b_).statistic) if a_.std() > 0 and b_.std() > 0 else float("nan")
-            od = o > 0.5
-            near = ndi.distance_transform_edt(~od) <= 3.0
-            frac = float(near[mine_dots].mean()) if mine_dots.any() else float("nan")
-            base = float(near[g.footprint].mean())
-            inter = int((mine_dots & od).sum()); union = int((mine_dots | od).sum())
-            jac = inter / max(union, 1)
-            dense = int(od.sum()) > 5 * int(mine_dots.sum())
-            # IR-61-UNIQ-01: against a near-blanket reference (here: a 311,617-px raster that
-            # puts 95.8 % of the whole footprint within 3 px of itself) the one-sided overlap
-            # is ~1 for ANY candidate and carries no duplication evidence; the gate then uses
-            # Jaccard (limit 0.5), the rule the earlier session documented.  Both numbers and
-            # the base rate are always reported so the reader can see the raw overlap.
-            gate_value = jac if dense else frac
-            gate_rule = "Jaccard (reference is dense: >5x my support)" if dense else "one-sided 3 px overlap"
-            gate_limit = 0.50 if dense else 0.70
-            rows.append(dict(file=p.name, sha256=sha256(p), spearman_footprint=rho,
-                             frac_my_dots_within_3px_of_theirs=frac, base_rate_within_3px=base,
-                             enrichment=(frac / base) if base > 0 else None, jaccard=jac,
-                             their_positive_px=int(od.sum()), overlap_gate_rule=gate_rule,
-                             overlap_gate_value=gate_value, overlap_gate_limit=gate_limit,
-                             overlap_gate_exceeded=bool(gate_value > gate_limit),
-                             byte_identical=(sha256(p) == fin["sha256"])))
-            log(f"  {p.name[:70]:70s} rho={rho:+.4f} overlap3px={frac:.3f} (base {base:.3f}) jaccard={jac:.4f} gate={gate_rule.split(' ')[0]}")
-    ok = [r for r in rows if "spearman_footprint" in r]
-    worst_rho = max(ok, key=lambda r: (r["spearman_footprint"] if r["spearman_footprint"] == r["spearman_footprint"] else -2))
-    worst_ov = max(ok, key=lambda r: r["frac_my_dots_within_3px_of_theirs"])
-    worst_gate = max(ok, key=lambda r: r["overlap_gate_value"] / r["overlap_gate_limit"])
-    verdict = "UNIQUE" if (worst_rho["spearman_footprint"] <= 0.90 and
-                           not any(r["overlap_gate_exceeded"] for r in ok) and
-                           not any(r["byte_identical"] for r in ok)) else "DUPLICATE -- lane drift, do not submit"
-    write_json("h61g_uniqueness.json", dict(
-        evidence_class="MEASURED", my_file=fin["tif"], my_sha256=fin["sha256"], my_dots=int(mine_dots.sum()),
-        n_registry_rasters_compared=len(ok), rho_limit=0.90, overlap_limit=0.70,
+    mine_dots = np.isfinite(mine) & (mine > 0.5) & g.footprint
+    report = _compare_to_registry(mine, g.footprint,
+                                  exclude_names=(Path(fin["tif"]).name,))
+    rows = report["rows"]
+    comparable = [r for r in rows if "spearman_full_footprint" in r]
+    # Keep legacy aliases for the site builder, but the literal forward overlap
+    # is always the gate. Jaccard is retained only as a diagnostic statistic.
+    for row in comparable:
+        row["spearman_footprint"] = row["spearman_full_footprint"]
+        row["frac_my_dots_within_3px_of_theirs"] = row["my_dots_within_3px_of_theirs"]
+        row["base_rate_within_3px"] = row["eligible_base_rate_within_3px"]
+        row["enrichment"] = row["enrichment_vs_base_rate"]
+        row["jaccard"] = row["jaccard_dot_sets"]
+        row["their_positive_px"] = row["n_other"]
+        row["byte_identical"] = row.get("sha256") == fin["sha256"]
+    if not comparable:
+        raise SystemExit("no readable registry rasters; uniqueness cannot be cleared")
+    worst_rho = max(comparable, key=lambda r: r["spearman_footprint"]
+                    if np.isfinite(r["spearman_footprint"]) else -2.0)
+    worst_overlap = max(comparable, key=lambda r: r["frac_my_dots_within_3px_of_theirs"])
+    worst_gate = max(comparable, key=lambda r: r["overlap_gate_value"] / r["overlap_gate_limit"])
+    duplicate = report["duplicate_count"] > 0
+    verdict = ("DUPLICATE — DO NOT SUBMIT" if duplicate else
+               "NOT CLEARED — registry coverage incomplete" if not report["registry_scope_complete"] else
+               "UNIQUE")
+    report.update(dict(
+        my_file=str(candidate_path.relative_to(ROOT)), my_sha256=sha256(candidate_path),
+        my_dots=int(mine_dots.sum()), n_registry_rasters_compared=len(comparable),
+        rho_limit=uniqueness_gate.RHO_LIMIT, overlap_limit=uniqueness_gate.OVERLAP_LIMIT,
         worst_spearman=dict(file=worst_rho["file"], value=worst_rho["spearman_footprint"]),
-        worst_overlap=dict(file=worst_ov["file"], value=worst_ov["frac_my_dots_within_3px_of_theirs"],
-                           base_rate=worst_ov["base_rate_within_3px"], gate_rule=worst_ov["overlap_gate_rule"],
-                           gate_value=worst_ov["overlap_gate_value"], gate_limit=worst_ov["overlap_gate_limit"]),
-        worst_overlap_gate=dict(file=worst_gate["file"], rule=worst_gate["overlap_gate_rule"],
-                                value=worst_gate["overlap_gate_value"], limit=worst_gate["overlap_gate_limit"]),
-        byte_identical_to_any=[r["file"] for r in ok if r["byte_identical"]],
-        verdict=verdict, rows=rows,
-        scope="Every registry raster that could be fetched from the group's public GitHub repositories "
-              "(scripts/fetch_registry.sh) plus the earlier rasters published in this repository. "
-              "The full organizer-side registry is not reachable from this sandbox."))
-    log(f"UNIQUENESS: {verdict}")
+        worst_overlap=dict(file=worst_overlap["file"],
+                           value=worst_overlap["frac_my_dots_within_3px_of_theirs"],
+                           base_rate=worst_overlap["base_rate_within_3px"],
+                           enrichment=worst_overlap["enrichment"],
+                           gate_rule="one-sided 3 px overlap",
+                           gate_value=worst_overlap["overlap_gate_value"],
+                           gate_limit=worst_overlap["overlap_gate_limit"],
+                           jaccard_diagnostic=worst_overlap["jaccard"]),
+        worst_overlap_gate=dict(file=worst_gate["file"], rule="one-sided 3 px overlap",
+                                value=worst_gate["overlap_gate_value"],
+                                limit=worst_gate["overlap_gate_limit"]),
+        byte_identical_to_any=[r["file"] for r in comparable if r["byte_identical"]],
+        verdict=verdict,
+        legacy_reported_verdict="UNIQUE (incorrect: substituted Jaccard for raw overlap on a dense reference)",
+        gate_rule="rank correlation > 0.90 OR >70% of candidate dots within 3 px of any one registry raster",
+        scope=report["scope"]))
+    write_json("h61g_uniqueness.json", report)
+    log(f"UNIQUENESS: {verdict}; duplicate_count={report['duplicate_count']}; "
+        f"raw_overlap={worst_overlap['frac_my_dots_within_3px_of_theirs']:.6f}; "
+        f"registry_scope_complete={report['registry_scope_complete']}")
 
 
 # --------------------------------------------------------------------------- #
@@ -614,9 +687,7 @@ def stage_card(_a) -> None:
         mechanism="Basement throw under alluvium -> isostatic-residual gradient maximum (Parker/Oldenburg inversion, "
                   "Blakely-Simpson maxima, measured throw >= 80 m) -> growth of the same fault through the fill -> "
                   "subtle young scarp = slope-ridge of band 19 inside the corridor.",
-        named_non_fault_mimic="Density contrasts inside the basement (intrabasement lithologic contacts) give the same "
-                              "gravity step with no scarp; alluvial-fan toes, terrace risers and incised channels give "
-                              "slope ridges with no gravity step. The conjunction removes each one's false positives.",
+        named_non_fault_mimic="Intrabasement lithologic density contacts can produce the same gravity step without a fault; fan toes, terrace risers and channels can produce slope ridges without a fault. The conjunction is a proposed discriminator, not a demonstrated exclusion: independent density-contrast/lithology data were not used, so this competing explanation remains unresolved.",
         holdout_dti=dict(value=chosen["pooled_dti"], ci95=chosen["ci95_bootstrap_cells"], evaluator=hold["evaluator"],
                          n_withheld_positive_px=hold["n_withheld_truth_px"], n_dots_per_draw=chosen["n_emitted"] // len(SEEDS),
                          random_lines_same_budget=rand["pooled_dti"],
@@ -624,10 +695,16 @@ def stage_card(_a) -> None:
                                                  f"vs {rand['segments_recovered_basin_interior']}/{rand['segments_withheld_basin_interior']} by random lines",
                          registry_reference_best=reg),
         correlation_overlap_vs_registry=dict(worst_spearman=uni["worst_spearman"], worst_overlap=uni["worst_overlap"],
-                                             n_compared=uni["n_registry_rasters_compared"], verdict=uni["verdict"]),
+                                             n_compared=uni["n_registry_rasters_compared"], verdict=uni["verdict"],
+                                             duplicate_count=uni["duplicate_count"],
+                                             unique_within_available_scope=uni["unique_within_available_scope"],
+                                             registry_scope_complete=uni["scope"]["full_registry_coverage"],
+                                             scope=uni["scope"], gate_rule=uni["gate_rule"]),
         raster_sha256=fin["sha256"],
         validator_output=dict(checks=fin["validator"], all_passed=fin["validator_all_passed"]),
         submission_name=fin["submission"], note=fin["note"], note_chars=fin["note_chars"],
+        submission_eligible=fin.get("submission_eligible", False),
+        download_status=fin.get("download_status", "not cleared"),
         leakage_canary=hold["leakage_canary"]["passed"], leakage_worst_auc=hold["leakage_canary"]["worst_auc"],
         inversion=dict(z0_m=inv["inversion"]["z0_m"], delta_rho=inv["inversion"]["delta_rho"],
                        regional_sigma_km=inv["inversion"]["regional_sigma_km"],

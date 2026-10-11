@@ -18,34 +18,39 @@ nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:
 <nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html" class=active>Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
 <h1>Next steps, remaining work and limitations</h1>
-<h2>Remaining work (ordered)</h2>
+<div class="status bad"><b>No current TIFF is cleared for competition submission.</b> H61-G is format-valid but fails the literal duplicate gate; the accessible registry list is incomplete. No experiment or upload is authorized by this page.</div>
+<h2>Remaining work (ordered; do not spend the exhausted slot)</h2>
 <ol>
-<li><b>Decide on the slot.</b> Upload <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> only if an ORGANIZER-CONFIRMED number for the gravity lane is wanted; otherwise keep the slot for a lidar-based candidate.</li>
-<li><b>Run H61-L on the holdout</b> (hypotheses page #1): fetch <code>GEMSDOE24/data/external/lidar_scarp_features_u8.tif</code> through the GitHub API, intersect with the corridor and basin masks, pack dots, score with <code>scripts/run_h61g.py</code>'s evaluator; promote only if it beats 0.1011 HOLDOUT-DTI.</li>
-<li><b>H61-I piedmont belt</b> (one cheap holdout run).</li>
-<li><b>Record the organiser score</b> of any uploaded file in <code>evidence/h61g_run_card.json</code> and rebuild the site.</li>
-<li><b>Template housekeeping:</b> the older drivers (<code>scripts/run_lane61.py</code>) still hard-code an absent corpus path; delete or point them at <code>scripts/fetch_registry.sh</code>'s <code>/tmp/refs/registry</code>.</li>
+<li><b>Obtain complete uniqueness coverage.</b> The current public enumeration names 21 sibling rasters and the local scan adds 6 prior project downloads. This does not prove coverage of every previous artifact or the organizer registry. Expand/verify the registry from an authoritative inventory before any candidate can be called globally unique; keep the raw &gt;70% forward-overlap rule and rho &gt;0.90 rule literal.</li>
+<li><b>Resolve the reported 0.2778 attribution.</b> Obtain a submission-page receipt containing the exact filename/hash and score. Until then, retain the account-level 0.2778 as observed and the H33-2-B2 file attribution as unverified.</li>
+<li><b>Check official 3DEP tile coverage before H61-L is viable.</b> The USGS 3DEP 1 m collection is free/public-domain, but region-level catalog metadata does not prove target-footprint 1 m tiles exist. Query the official National Map/3DEP footprint for the exact raster extent; record tile IDs, dates, CRS, and hashes before building features. This check was not made in this run.</li>
+<li><b>Only under a new authorized run card:</b> use the shared holdout/evaluator and compare H61-L (or another preregistered idea) against <code>gems61-pooled-hide-v2</code> uniform_flank = 0.064939 HOLDOUT-DTI (95% CI 0.057660–0.072891; 39,310 withheld positives) on identical folds, score and budget. Do not compare H61-G's 0.0465 across evaluator versions. The standing run card reports 3/3 experiments used.</li>
+<li><b>Resolve gravity interpretation.</b> Test H61-H magnetic co-location and H61-J source-depth consistency only as falsification hypotheses. Current data do not rule out intrabasement density contrasts as the source of an apparent basement step.</li>
+<li><b>Template housekeeping:</b> inspect older drivers such as <code>scripts/run_lane61.py</code> for stale corpus assumptions before reusing them; do not launch the full H61-G experiment pipeline without new authorization.</li>
 </ol>
 <h2>Limitations</h2>
 <ul>
-<li>HOLDOUT-DTI is measured against withheld <i>catalogue</i> segments, while the live truth is <i>uncatalogued</i> faults. The evaluator orders unpruned group files like the leaderboard, but its absolute values are not live scores and it cannot see the value of pruning near the catalogue.</li>
-<li>The GP-1012 calibration uses one published area statistic (fraction of basin area deeper than 1 km), not the digital GP-1012 grids, which are not reachable from this sandbox.</li>
-<li>Only 8 fold cells (two seeds × four quadrants); CIs are bootstrap over cells and are therefore wide for small effects.</li>
-<li>The competition data were obtained from a hash-pinned public bridge, not directly from DrivenData (sandbox allow-list); the pins match the organiser's file sizes and grid.</li>
-<li>Experiment budget exhausted (3/3); no hypothesis outside the lane was run.</li>
+<li>H61-G's <span class="tag h">HOLDOUT-DTI</span> uses <code>gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)</code> and withholds mapped catalogue segments. It is an internal index, not the competition's hidden uncatalogued-fault score.</li>
+<li>The shared <code>gems61-pooled-hide-v2</code> benchmark is a different instrument/fold set. Its 0.064939 value is an internal same-version comparator, not a live projection or score.</li>
+<li>GP-1012 calibration matches a regional depth statistic (fraction deeper than 1 km), not independent pixelwise truth; its broad 1:2.5M scale cannot identify the cause of individual gravity edges.</li>
+<li>Intrabasement lithologic density contrasts were not modeled or independently checked; a gravity step is not by itself evidence of a fault.</li>
+<li>H33-2-B2's 0.2778 association is owner-reported and not tied to an organizer receipt. The official leaderboard observation is account-level only.</li>
+<li>The current registry audit sees 27 accessible rasters, not the full organizer-side registry. H61-G fails even this partial gate, so the lack of full coverage cannot rescue it.</li>
+<li>1 m USGS 3DEP product access and licensing are documented as public/free, but exact project tile availability for this footprint was not checked. It remains conditional.</li>
+<li>Competition rasters were obtained from a hash-pinned public mirror because direct competition hosts are blocked in the sandbox; this is not organizer provenance.</li>
 </ul>
-<h2>Official links for manual review</h2>
+<h2>Official sources for manual review</h2>
 <ul>
 <li>Competition problem page (metric, format): <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/</a></li>
-<li>Leaderboard: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/</a></li>
-<li>Submissions: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a></li>
+<li>Official leaderboard: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/</a></li>
+<li>Submission portal/receipts: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a></li>
+<li>USGS GP-1012 catalog record/DOI (Saltus &amp; Jachens 1995): <a href="https://doi.org/10.3133/gp1012">https://doi.org/10.3133/gp1012</a></li>
+<li>USGS 3DEP official program and elevation data: <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov/3d-elevation-program</a>; 1 m DEM collection metadata: <a href="https://catalog.data.gov/dataset/1-meter-digital-elevation-models-dems-usgs-national-map-3dep-downloadable-data-collection">Data.gov / USGS 1 m DEM</a>. The collection is public-domain; exact local tile availability is still unverified.</li>
 <li>Organiser reference solution: <a href="https://github.com/drivendataorg/gems-prize-reference-solution">github.com/drivendataorg/gems-prize-reference-solution</a></li>
-<li>USGS GP-1012 (Saltus &amp; Jachens 1995, Gravity and basin-depth maps of the Basin and Range Province): <a href="https://pubs.usgs.gov/publication/gp1012">pubs.usgs.gov/publication/gp1012</a></li>
-<li>USGS 3DEP 1 m DEM (free, public domain): <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov/3d-elevation-program</a> (tile URLs in the organiser's <code>1m_DEM_links.csv</code>)</li>
-<li>This repository and run card: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/h61g_run_card.json">evidence/h61g_run_card.json</a></li>
+<li>Repository evidence: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/h61g_run_card.json">H61-G run card</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/h61g_uniqueness.json">uniqueness audit</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/prior_range_error_audit.json">prior range-error audit</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/registry_snapshot_provenance.json">registry snapshot provenance</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/source_review_20261011.json">official-source review</a> · <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/reports/forensics_current.json">current forensics</a></li>
 </ul>
 
-<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<hr><p class="small">61GEMSDOE · H61-G experiment run card dated 2026-10-11; uniqueness/forensics audit refreshed 2026-10-11 · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
 (gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
 <span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>

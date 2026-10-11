@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Download every previously-SCORED submission raster that the GEMSDOE group published,
-# so that the uniqueness check in this repository runs against the real registry and
-# not against a description of it.
+# Download a finite, explicitly enumerated set of 21 owner-published raster blobs from
+# sibling GEMSDOE repositories. This list is useful for a partial duplicate screen, but
+# it is NOT proven exhaustive and is not the organizer-side registry.
 #
 # WHY GIT AND NOT HTTP: raw.githubusercontent.com is not reachable from the sandbox
 # this project is developed in; github.com is.  A blob-filtered clone with --no-checkout
@@ -12,8 +12,8 @@ DEST="$(mkdir -p "${1:-/tmp/refs/registry}" && cd "${1:-/tmp/refs/registry}" && 
 
 # repo : path-within-repo   (the score the group reports for each file is in
 #                            scripts/forensics_registry.py -> CLAIMED)
-# The second block (GEMSDOE36 onwards) was added by session arena/c57b45ae (H61-G) so that
-# every further owner-reported scored raster reachable on GitHub is in the uniqueness gate.
+# The second block (GEMSDOE36 onwards) was added by session arena/c57b45ae (H61-G).
+# It expands this selected inventory but does not establish completeness.
 ITEMS="
 GEMSDOE32:docs/downloads/gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif
 GEMSDOE32:docs/downloads/gems32-probe-S1-ANCHOR-identical-to-live-02600.tif

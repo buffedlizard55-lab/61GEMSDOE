@@ -83,6 +83,23 @@
     "n_withheld_truth_px": 22641,
     "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
   },
-  "slot_recommendation": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
-  "organizer_receipt": null
+  "slot_recommendation": "DO NOT SUBMIT: 39,437/40,000 candidate dots (98.5925%) lie within 3 px of a prior registry raster, exceeding the literal 70% duplicate gate. Format validation passes, but that does not clear uniqueness.",
+  "organizer_receipt": null,
+  "uniqueness": {
+    "status": "DUPLICATE \u2014 DO NOT SUBMIT",
+    "literal_gate_rule": "rank correlation > 0.90 OR >70% of candidate dots within 3 px of any one registry raster",
+    "duplicate_count": 1,
+    "known_registry_rasters_compared": 27,
+    "registry_scope_complete": false,
+    "failing_reference": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "raw_3px_overlap": 0.985925,
+    "raw_3px_overlap_dots": 39437,
+    "threshold": 0.7,
+    "eligible_area_base_rate": 0.9581822330224662,
+    "jaccard_diagnostic_only": 0.0074812467407437125,
+    "legacy_jaccard_substitute_is_not_the_gate": true,
+    "scope_note": "21 explicitly enumerated sibling rasters plus 6 prior project downloads; this is not proven exhaustive and the organizer-side registry was unavailable."
+  },
+  "submission_eligible": false,
+  "download_status": "audit-only; do not submit"
 }

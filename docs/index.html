@@ -20,35 +20,32 @@ nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:
 <h1>61GEMSDOE — buried-structure lane: basement-depth steps from gravity inversion</h1>
 <p>DOE GEMS (DrivenData competition 306). This page answers one question first: <b>is the newest GeoTIFF OK to download and submit?</b></p>
 
-<div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to upload</span>
- · <span style="color:var(--warn)">EXPECTED TO SCORE WELL BELOW 0.2778 – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; everything else 0.0), float32, EPSG:32611,
-3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, min 0 / max 1
-(<a href="verify.html">validator receipt</a>: 19 checks, all passed). Uniqueness against 24 earlier rasters:
-worst Spearman +0.0153, verdict <b>UNIQUE</b>.</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465 (95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)).
-Random lines with the same budget: 0.0314. The best earlier group file on the same evaluator (the unpruned dotted h19-5 base, which is
-<span class="tag o">ORGANIZER-CONFIRMED</span> 0.2600 live): 0.1011. The new file is therefore <b>better than random but about
-half as good as the file family that already holds our 0.2778</b>. Verdict in the run card: <b>negative</b>.</p>
-<p><a class="btn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>⬇ Download gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif (135 kB)</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>zip</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">format receipt (JSON)</a>
-<a class="btn sec" href="executive-summary.html">How to submit</a></p>
-<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · note (133 chars): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
+<div class="status bad">
+<h2 style="margin:.2em 0;border:0">Submission status: <span style="color:var(--bad)">BLOCKED — DUPLICATE; DO NOT SUBMIT</span>
+ · <span style="color:var(--warn)">format-valid is not a uniqueness clearance</span></h2>
+<p><b>Artifact:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code>. Its local format receipt passes 19 checks
+(Float32, EPSG:32611, 3730 × 3292, matching transform, finite values throughout, range [0,1], zeros outside the footprint).
+This proves format compatibility only.</p>
+<p><b>Literal registry gate:</b> <b>39,437/40,000 = 98.5925%</b> of candidate dots fall within 3 px of
+<code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>; the required stop threshold is &gt;70%. The raw fraction is the gate. The reference's high
+eligible-area base rate (95.8182%) explains why this near-blanket surface captures most dots, but it does not waive the rule.
+Jaccard 0.007481 is diagnostic only. The measured rank correlation remains below 0.90.</p>
+<p><b>Scope limitation:</b> the check compared 27 accessible prior rasters (21 explicitly listed sibling blobs plus
+6 earlier project downloads). The list is not proven exhaustive and the organizer-side registry was unavailable;
+therefore no full-registry uniqueness claim is made.</p>
+<p><b>Scientific result, not a score:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465
+(95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)), versus random lines 0.0314 on the same evaluator.
+No organizer receipt exists for this artifact. Its verdict is negative for both slot promotion and submission.</p>
+<p><b>Download status:</b> the TIFF remains accessible below as an <b>audit/reproduction artifact only</b>, not as a submission candidate.
+Do not upload it.</p>
+<p><a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>Download audit copy — NOT FOR SUBMISSION</a>
+<a class="btn sec" href="verify.html">Inspect format and duplicate-gate evidence</a>
+<a class="btn sec" href="executive-summary.html">How to submit a future cleared file</a></p>
+<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · stored note (133 chars; do not use for this file): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
 </div>
 
 <h2>One-paragraph result</h2>
-<p>The lane asked for a Parker/Oldenburg inversion of the supplied isostatic-residual gravity, calibrated only against the USGS GP-1012 basin-depth
-maps, and for the horizontal-gradient maxima of the inverted basement surface as candidate buried faults. We did that
-(<a href="method.html">method</a>): the inversion reproduces GP-1012's &gt;1 km basin fraction (0.203 vs 0.20)
-and agrees with the organiser's own depth layer (r = 0.738). But on a hide-and-recover holdout that withholds whole fault segments,
-pure basement-step ribbons score <span class="tag h">HOLDOUT-DTI</span> 0.0230
-— <i>below</i> random lines (0.0314). Gravity resolves a step to kilometres, the metric pays only within 300 m.
-The one lane-consistent construction that beats random is to use the gravity step as a ±1 km <i>corridor</i> and let the detrended-elevation slope ridge
-inside the corridor fix the trace: HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507) at 40,000 dots, 1.48× random lines, recovering 351/1999 recovered vs 215/1999 by random lines withheld basin-interior segments.
-That is real but small: the unpruned dotted h19-5 family already reaches 0.1011 on the same evaluator and 0.2600–0.2778 live, so this file is
-shipped as a <b>valid, unique, negative result</b>, not as a slot candidate. The <a href="analysis.html">analysis page</a> explains why 0.2778 is where it is and what would beat it.</p>
+<p>The lane asked for a Parker/Oldenburg inversion of supplied isostatic-residual gravity, with depth scale calibrated only against the USGS GP-1012 basin-depth statistic, then basement-step maxima as candidate buried faults. The inversion reaches 0.203 of basin area deeper than 1 km (GP-1012 anchor ≈0.20) and has Pearson r=0.738 against supplied band 15, which was not used in fitting. Pure-step ribbons score HOLDOUT-DTI 0.0230, below same-budget random lines (0.0314). Adding the slope-ridge locator gives HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507). This is an evaluator result, not a competition score. Basin-interior segment recovery (not a score): 351/1999 recovered vs 215/1999 by random lines. Crucially, the final dots overlap an earlier near-blanket raster at 98.5925%, above the literal 70% stop threshold; the candidate is a duplicate and must not be submitted. No new submission TIFF is cleared.</p>
 
 <h2>Holdout headline table <span class="tag h">HOLDOUT-DTI</span></h2>
 <p class="small">Evaluator gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all); withheld positives 22,641 px; pooled DTI with α = 0.2, β = 0.8, 300 m triangular kernel; 95% CI = percentile bootstrap over fold cells.
@@ -61,9 +58,8 @@ Candidates are pruned only against the <i>visible</i> catalogue inside each fold
 <p>X2b (corridor × slope ridge at any depth) scored 0.0479 (CI 0.0439–0.0522), statistically tied with X2 (0.0465); X2 was shipped because the lane&#x27;s premise is the concealed basin-interior population, X2 recovers more withheld basin-interior segments (351 vs 245), and range-front dots near mapped traces are the likelier live false positives. The tie-break rule was fixed before the final build and is recorded in the run card.</p>
 <p>Full table with all 35 rows, 20 k-dot budget, leakage canary and the dots-vs-ribbons test: <a href="holdout.html">holdout evidence</a>.</p>
 
-<h2>Live context <span class="tag o">ORGANIZER-CONFIRMED</span></h2>
-<p>Leaderboard read on 2026-10-11: #1 0.4133; our account (extradr19) 0.2778 at #23 with
-<code>h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros</code>. No file produced in this repository has been uploaded; every number here for our files is HOLDOUT-DTI.</p>
+<h2>Leaderboard context <span class="tag o">ORGANIZER-CONFIRMED ACCOUNT ROWS</span></h2>
+<p>Public <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">leaderboard</a> snapshot read 2026-10-11: global #1 0.4133; DARD showed 0.3195 at #8; account <code>extradr19</code> showed 0.2778 at #23. This confirms account-level leaderboard entries only, not a score for a specific raster. The public <a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32 page</a> labels H33-2-B2 UNSCORED and says no artifact there has an organizer score. No submission-page receipt links H33-2-B2 to the 0.2778 row; the attribution remains unverified. No file produced in this repository has an organizer receipt.</p>
 
 <h2>Experiment budget</h2>
 <p>3 of 3 experiments used (inversion + screen; segment holdout of five candidates and two controls; final build with the dots-vs-ribbons check). Wall-clock within the 2-hour cap.</p>
@@ -76,16 +72,15 @@ the only within-protocol numbers (construction re-emitted with visible-only prun
 <tr class=""><td><code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>e3, PR #3</td><td>40,000</td><td>kept; superseded</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>H61-A, PR #5</td><td>25,285</td><td>catalogue-frame holdout 0.0000 vs random 0.0089 -&gt; SUPERSEDED</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td><td>H61-B, PR #6</td><td>88,796</td><td>format-valid + unique; no holdout number above random recorded in its run card</td><td>0.0000</td></tr>
-<tr class="hl"><td><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></td><td>this session (H61-G), PR #9</td><td>40,000</td><td>FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421-0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar -&gt; negative for a slot</td><td>0.0045</td></tr>
+<tr class="hl"><td><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></td><td>this session (H61-G), PR #9</td><td>40,000</td><td>FORMAT-VALID, but DUPLICATE under the literal gate: 98.5925% raw 3-px overlap &gt; 70%; do not submit. HOLDOUT-DTI 0.0465 is version-specific and below its same-evaluator 0.1011 HOLDOUT-DTI reference.</td><td>0.0045</td></tr>
 <tr class=""><td><code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code></td><td>H62, PR #7</td><td>38,000</td><td>its card: surrogate-truth DTI 0.0395 below every one of seven registry rasters -&gt; &#x27;Submit NOT RECOMMENDED&#x27;</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code></td><td>e3, PR #3</td><td>311,617</td><td>311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>session C, PR #8</td><td>40,000</td><td>its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 &lt; random lines 0.0092 (gems61-pooled-hide-v2); &#x27;value unproven&#x27;, declared weight 0.10</td><td>0.0007</td></tr>
 </table>
-<h2>Older files in <code>docs/downloads/</code></h2>
-<p>Three earlier rasters from previous sessions (<code>gems61-lane-buried-step-…</code>, <code>gems61-buried-basement-step-…</code>, <code>gems61-h61a-…</code>) are <b>SUPERSEDED</b>:
-their own holdout numbers were 0.0000–0.0089 and the first of them is a near-blanket raster (311,617 px). They stay only as the uniqueness registry. Do not upload them.</p>
+<h2>Archived artifacts in <code>docs/downloads/</code></h2>
+<p>These are retained for reproducibility and registry comparisons, not promoted submissions. H61-G is specifically blocked by the literal raw-overlap gate above; other historical files carry their own stale or incompatible run cards. Do not treat a file in this directory as cleared unless the current verification page says so.</p>
 
-<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<hr><p class="small">61GEMSDOE · H61-G experiment run card dated 2026-10-11; uniqueness/forensics audit refreshed 2026-10-11 · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
 (gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
 <span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>

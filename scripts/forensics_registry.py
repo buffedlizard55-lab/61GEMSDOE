@@ -48,9 +48,9 @@ CLAIMED = {
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--registry", default="/tmp/refs/subs")
-    ap.add_argument("--labels", default="data/labels.tif")
-    ap.add_argument("--out", default="reports/forensics.json")
+    ap.add_argument("--registry", default="/tmp/refs/registry")
+    ap.add_argument("--labels", default="data/official/labels.tif")
+    ap.add_argument("--out", default="reports/forensics_current.json")
     args = ap.parse_args()
 
     with rasterio.open(args.labels) as s:
@@ -81,20 +81,37 @@ def main():
     for p in files:
         name = os.path.basename(p)
         with rasterio.open(p) as s:
-            a = s.read(1).astype(np.float64)
-        a = np.nan_to_num(a, nan=0.0)
-        np.clip(a, 0, 1, out=a)
-        b = a > 0.5
+            raw = s.read(1).astype(np.float64)
+            nodata = s.nodata
+        finite = np.isfinite(raw)
+        finite_values = raw[finite]
+        safe = np.where(finite, raw, 0.0)
+        # Keep raw validity separate from geometry statistics. Clipping or replacing
+        # NaNs before recording format checks would hide precisely the upload defect
+        # this audit is meant to detect.
+        np.clip(safe, 0, 1, out=safe)
+        b = safe > 0.5
         d = dist[b] if b.any() else np.array([np.inf])
+        raw_binary = bool(finite.all() and set(np.unique(raw)).issubset({0.0, 1.0}))
+        raw_range = bool(finite.all() and (raw >= 0.0).all() and (raw <= 1.0).all())
         rec = dict(
             file=name,
             claimed_score_by_group=CLAIMED.get(name),
             sha256=sha256_file(p),
-            min=round(float(a.min()), 6), max=round(float(a.max()), 6),
-            is_binary_0_1=bool(set(np.unique(a)).issubset({0.0, 1.0})),
-            n_nonzero=int((a > 0).sum()),
-            mass=round(float(a[valid].sum()), 3),
-            sparse_fraction_of_valid=round(float((a > 0).sum() / valid.sum()), 6),
+            nodata=(float(nodata) if nodata is not None and np.isfinite(nodata) else
+                    ("NaN" if nodata is not None else None)),
+            raw_nan_pixels=int(np.isnan(raw).sum()),
+            raw_infinite_pixels=int(np.isinf(raw).sum()),
+            raw_finite_min=(round(float(finite_values.min()), 6) if finite_values.size else None),
+            raw_finite_max=(round(float(finite_values.max()), 6) if finite_values.size else None),
+            raw_passes_full_raster_range_0_1=raw_range,
+            raw_nonfinite_inside_valid=int((~finite & valid).sum()),
+            raw_nonfinite_outside_valid=int((~finite & ~valid).sum()),
+            min=round(float(safe.min()), 6), max=round(float(safe.max()), 6),
+            is_binary_0_1=raw_binary,
+            n_nonzero=int((safe > 0).sum()),
+            mass=round(float(safe[valid].sum()), 3),
+            sparse_fraction_of_valid=round(float((safe[valid] > 0).sum() / valid.sum()), 6),
             n_pixels_on_visible_catalogue=int((b & gt).sum()),
             n_pixels_within_3px_of_visible_catalogue=int((d <= 3).sum()),
             n_pixels_within_10px=int((d <= 10).sum()),
@@ -151,21 +168,22 @@ def main():
     out["set_difference_forensics"] = diffs
 
     out["conclusions"] = [
-        "Every registry raster is binary {0,1}; none uses soft probabilities.",
-        "Every registry raster is sparse: 0.73-1.19 percent of the 5,165,852 valid pixels.",
-        "Every high-scoring raster contains ZERO pixels on a visible catalogue fault; "
-        "the one raster that does contain them (647 px) is the lowest scorer (0.0512).",
-        "The 0.2778 raster is the 0.2600 raster with every pixel within 3 px of the "
-        "visible catalogue deleted -- an exact set difference, verified above.",
+        "Raw validity, finite range and binary status are reported per raster before any geometry-only sanitization.",
+        "Geometry statistics use a separate NaN-to-zero clipped working copy; they are not format-validation results.",
+        "The historical GEMSDOE29 raster with a -nan filename has 7,111,787 NaN nodata cells outside the sample footprint and fails a whole-raster finite/[0,1] check.",
+        "The selected registry rasters are sparse by their finite positive support; see per-raster raw validity fields.",
+        "Every candidate with a group-reported high score contains ZERO pixels on a visible catalogue fault; "
+        "the raster that does contain them (647 px) has the lowest owner-reported score (0.0512).",
+        "The owner-reported 0.2778 candidate is an exact set difference from an owner-reported 0.2600 candidate: "
+        "every deleted dot is within 3 px of the visible catalogue. This does not verify score-to-file attribution.",
         "Three filenames carry byte-identical rasters, so the group's apparent "
         "0.2600 plateau is one artifact under three names.",
     ]
     out["irregularities"] = [
         dict(id="IR-61-SCORE-01", severity="high",
-             statement="Every score in CLAIMED is a group/owner report. None is an "
-                       "organizer receipt linking those bytes to a leaderboard row. "
-                       "The public leaderboard rows are the only observed scores and "
-                       "they belong to other teams."),
+             statement="Every score in CLAIMED is a group/owner report. No organizer "
+                       "receipt links those bytes to a leaderboard row; public leaderboard "
+                       "values are account-level and do not prove artifact attribution."),
         dict(id="IR-61-FOOTPRINT-01", severity="medium",
              statement="This project measures 5,165,852 finite footprint pixels from "
                        "the official labels; the group's record says 5,167,373. A "
@@ -173,8 +191,11 @@ def main():
         dict(id="IR-61-PROVENANCE-01", severity="high",
              statement="The competition rasters used here were obtained from a public "
                        "GitHub mirror of the official data (the DrivenData data page is "
-                       "login-walled). All three match the official SHA-256 pins "
-                       "recorded by the mirror, but they are not organizer-authenticated."),
+                       "login-walled). Their SHA-256 values match recorded bridge pins, "
+                       "but the bytes are not organizer-authenticated."),
+        dict(id="IR-61-FORMAT-02", severity="high",
+             statement="The historical forensics pass replaced NaNs with zero before recording min/max and binary status, "
+                       "concealing 7,111,787 NaN nodata pixels in the archived GEMSDOE29 raster. Raw validity is now recorded separately."),
     ]
 
     os.makedirs(os.path.dirname(args.out), exist_ok=True)

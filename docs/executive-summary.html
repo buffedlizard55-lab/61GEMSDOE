@@ -19,53 +19,54 @@ nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:
 
 <h1>Executive summary &amp; exactly how to submit</h1>
 
-<div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to upload</span>
- · <span style="color:var(--warn)">EXPECTED TO SCORE WELL BELOW 0.2778 – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; everything else 0.0), float32, EPSG:32611,
-3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, min 0 / max 1
-(<a href="verify.html">validator receipt</a>: 19 checks, all passed). Uniqueness against 24 earlier rasters:
-worst Spearman +0.0153, verdict <b>UNIQUE</b>.</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465 (95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)).
-Random lines with the same budget: 0.0314. The best earlier group file on the same evaluator (the unpruned dotted h19-5 base, which is
-<span class="tag o">ORGANIZER-CONFIRMED</span> 0.2600 live): 0.1011. The new file is therefore <b>better than random but about
-half as good as the file family that already holds our 0.2778</b>. Verdict in the run card: <b>negative</b>.</p>
-<p><a class="btn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>⬇ Download gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif (135 kB)</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>zip</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">format receipt (JSON)</a>
-<a class="btn sec" href="executive-summary.html">How to submit</a></p>
-<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · note (133 chars): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
+<div class="status bad">
+<h2 style="margin:.2em 0;border:0">Submission status: <span style="color:var(--bad)">BLOCKED — DUPLICATE; DO NOT SUBMIT</span>
+ · <span style="color:var(--warn)">format-valid is not a uniqueness clearance</span></h2>
+<p><b>Artifact:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code>. Its local format receipt passes 19 checks
+(Float32, EPSG:32611, 3730 × 3292, matching transform, finite values throughout, range [0,1], zeros outside the footprint).
+This proves format compatibility only.</p>
+<p><b>Literal registry gate:</b> <b>39,437/40,000 = 98.5925%</b> of candidate dots fall within 3 px of
+<code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>; the required stop threshold is &gt;70%. The raw fraction is the gate. The reference's high
+eligible-area base rate (95.8182%) explains why this near-blanket surface captures most dots, but it does not waive the rule.
+Jaccard 0.007481 is diagnostic only. The measured rank correlation remains below 0.90.</p>
+<p><b>Scope limitation:</b> the check compared 27 accessible prior rasters (21 explicitly listed sibling blobs plus
+6 earlier project downloads). The list is not proven exhaustive and the organizer-side registry was unavailable;
+therefore no full-registry uniqueness claim is made.</p>
+<p><b>Scientific result, not a score:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465
+(95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)), versus random lines 0.0314 on the same evaluator.
+No organizer receipt exists for this artifact. Its verdict is negative for both slot promotion and submission.</p>
+<p><b>Download status:</b> the TIFF remains accessible below as an <b>audit/reproduction artifact only</b>, not as a submission candidate.
+Do not upload it.</p>
+<p><a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>Download audit copy — NOT FOR SUBMISSION</a>
+<a class="btn sec" href="verify.html">Inspect format and duplicate-gate evidence</a>
+<a class="btn sec" href="executive-summary.html">How to submit a future cleared file</a></p>
+<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · stored note (133 chars; do not use for this file): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
 </div>
 <h2>Decision in one line</h2>
-<p>Upload is <b>safe</b> (the format is pinned to the organiser's sample and every value is 0.0 or 1.0), but the file is a <b>negative result</b>:
-HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507), 22,641 withheld positive px against 0.1011 for the unpruned base of our current 0.2778 on the same evaluator. Spend a slot on it only if the goal
-is to obtain an ORGANIZER-CONFIRMED number for the gravity lane itself (useful to close the lane for good); do not expect it to move the leaderboard position.</p>
+<p><b>Do not submit any current 61GEMSDOE TIFF.</b> The newest H61-G artifact is format-valid but fails the literal duplicate gate (98.5925% &gt;70% raw 3-px overlap), and the accessible registry inventory is not proven exhaustive. The H61-G holdout result is a negative <span class="tag h">HOLDOUT-DTI</span> finding, not a leaderboard score. The experiment budget is exhausted (3/3); this turn did not run a new geological hypothesis or make a replacement TIFF.</p>
 
-<h2>How to submit (step by step)</h2>
+<h2>How to submit a future, cleared TIFF</h2>
 <ol>
-<li>Download <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></a> (or the <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip">zip</a>). Check the sha256 if you like: <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code>.</li>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> while logged in as the competition account.</li>
-<li>Upload the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the zip is only a convenience copy).</li>
-<li>Paste the submission note (≤ 140 characters, 133 here): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></li>
-<li>After the platform scores it, copy the number into <code>evidence/h61g_run_card.json</code> → <code>organizer_confirmed_score</code> and rebuild the site; until then every number on this site stays HOLDOUT-DTI.</li>
+<li>Only proceed when the home page and <a href="verify.html">verification page</a> explicitly say <b>submission eligible</b>, the literal rank-correlation and raw &gt;70% 3-px overlap gates pass, and registry coverage is documented. A format-valid file alone is not enough.</li>
+<li>Download the newly cleared <code>.tif</code> named on that status page, not an older file in <code>docs/downloads/</code>. Verify its published SHA-256 and keep the ≤140-character submission note shown beside it.</li>
+<li>Log in to the competition account and open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the DOE GEMS submissions page</a>.</li>
+<li>Upload the single-band GeoTIFF directly. Paste the exact note into the Note field; do not upload the ZIP unless the portal explicitly requires one.</li>
+<li>After the portal returns a submission receipt and score, preserve the receipt (including the submitted filename/hash) and only then record a file-specific value as <span class="tag o">ORGANIZER-CONFIRMED</span>. Until then, use HOLDOUT-DTI or OWNER-REPORTED labels as appropriate.</li>
 </ol>
-<h3>Why the earlier upload error cannot recur</h3>
-<p>The earlier rejection <i>“Predicted values must be in range [0, 1]”</i> came from a file with NaN / sentinel values outside the footprint. The writer used here
-(<code>src/gems61/submission_writer.py</code>) writes 0.0 outside the footprint, float32, no nodata tag, and the validator (<code>src/gems61/validate.py</code>) refuses to emit a file
-unless <code>no_nan_anywhere</code>, <code>no_inf_anywhere</code>, <code>min_ge_0</code>, <code>max_le_1</code>, <code>dtype_float32</code>, <code>crs_epsg_32611</code>,
-<code>transform_matches_sample_submission</code> and <code>dimensions_3730x3292</code> all pass. The receipt for this file lists 19 checks, all true
-(<a href="verify.html">verify</a>). The filename ends in <code>-zeros</code> to record that convention.</p>
+<p><b>Current H61-G file:</b> <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif">audit-only copy</a>; <b>do not upload it</b>. Its submission name and note are archived for reproducibility, not cleared for use.</p>
 
-<h2>What the file contains, in plain words</h2>
-<p>40,000 dots, each one pixel (100 m), placed where (a) the inverted basement surface has a step with ≥ 80 m throw within ±1 km, (b) the basin fill is ≥ 300 m deep,
-(c) the detrended-elevation slope field has a local ridge, and (d) the spot is more than 2 px from any mapped fault. Dots are packed at ≥ 3 px spacing so they never pay twice for one truth pixel.
-Median distance of a dot from the nearest mapped fault: 17.5 px; 7.1% within 3 px.</p>
+<h2>Why the earlier upload error said values must be in [0,1]</h2>
+<p>The archived sibling raster <code>gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif</code> (SHA-256 <code>9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad</code>) has TIFF nodata set to NaN. A raw audit found <b>7,111,787 NaN cells</b>, all outside the sample-submission footprint. Its finite cells range from 0 to 1, but the whole raster is not finite and therefore fails a full-raster [0,1] check: NaN is not in that interval. This is the measured mechanism that best explains the historical message. We did not find an organizer receipt with the rejected file's hash, so exact attribution to that upload remains unverified; see <a href="https://github.com/buffedlizard55-lab/61GEMSDOE/blob/main/evidence/prior_range_error_audit.json">the raw-value audit</a>.</p>
+<p>The current writer <code>src/gems61/submission_writer.py</code> writes zeros outside the footprint and float32 values. The validator checks finiteness and range across the whole raster (not just inside the footprint), plus CRS, shape, transform and catalogue mask. H61-G passes those <b>format</b> checks; it still fails the separate uniqueness gate.</p>
 
-<h2>Expected outcome <span class="tag p">PROJECTION</span></h2>
-<p>We do not translate HOLDOUT-DTI into a live score. The only calibration we have is ordinal: on this evaluator the h19-5 lines (live 0.1922) score 0.0712
-and their dotted version (live 0.2600) scores 0.1011 — the evaluator orders them like the leaderboard. Our file sits at 0.0465, below both. Expect a live number well below 0.26.</p>
+<h2>What the buried-structure work established</h2>
+<p>The isostatic-gravity inversion was calibrated to the USGS GP-1012 statewide depth statistic (fraction deeper than 1 km: 0.203 versus the ≈0.20 anchor); band 15 was only an independent cross-check (Pearson r=0.738). Pure basement-step ribbons did not beat random lines on the H61-G holdout. The gravity corridor plus band-19 slope-ridge locator did beat random lines on that same evaluator, but its emitted raster is a duplicate under the literal registry rule and must not be submitted.</p>
+<p>Intrabasement density contrasts remain a live competing explanation: the same gravity edge can arise from a lithologic contact without a fault. The H61-G corridor/slope conjunction was intended to discriminate, but no independent density/lithology evidence was used to show that it actually removes those mimics. H61-J (source-depth consistency) remains an untested hypothesis.</p>
 
-<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<h2>Reported 0.2778</h2>
+<p>The official leaderboard showed <code>extradr19</code> at 0.2778/#23 on 2026-10-11; that is an account-level observation. Public project evidence labels H33-2-B2 UNSCORED and supplies no receipt connecting its bytes to that row. Treat the raster attribution as unverified. The <a href="analysis.html">analysis page</a> separates the measured byte-level dot-pruning history from owner-reported score claims and explains what can—and cannot—be inferred.</p>
+
+<hr><p class="small">61GEMSDOE · H61-G experiment run card dated 2026-10-11; uniqueness/forensics audit refreshed 2026-10-11 · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
 (gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
 <span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>

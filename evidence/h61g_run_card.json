@@ -1,7 +1,7 @@
 {
   "hypothesis": "H61-G: a buried normal fault is a step in the GP-1012-calibrated inverted basement surface; the gravity step fixes a +/-1 km corridor and the in-corridor slope ridge of the detrended elevation fixes the trace to the 300 m kernel.",
   "mechanism": "Basement throw under alluvium -> isostatic-residual gradient maximum (Parker/Oldenburg inversion, Blakely-Simpson maxima, measured throw >= 80 m) -> growth of the same fault through the fill -> subtle young scarp = slope-ridge of band 19 inside the corridor.",
-  "named_non_fault_mimic": "Density contrasts inside the basement (intrabasement lithologic contacts) give the same gravity step with no scarp; alluvial-fan toes, terrace risers and incised channels give slope ridges with no gravity step. The conjunction removes each one's false positives.",
+  "named_non_fault_mimic": "Intrabasement lithologic density contacts can produce the same gravity step without a fault; fan toes, terrace risers and channels can produce slope ridges without a fault. The conjunction is a proposed discriminator, not a demonstrated exclusion: independent density-contrast/lithology data were not used, so this competing explanation remains unresolved.",
   "holdout_dti": {
     "value": 0.046504803513711855,
     "ci95": [
@@ -21,18 +21,35 @@
   "correlation_overlap_vs_registry": {
     "worst_spearman": {
       "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif",
-      "value": 0.015285099819131428
+      "value": 0.01528509981913192
     },
     "worst_overlap": {
       "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
       "value": 0.985925,
       "base_rate": 0.9581822330224662,
-      "gate_rule": "Jaccard (reference is dense: >5x my support)",
-      "gate_value": 0.0074812467407437125,
-      "gate_limit": 0.5
+      "enrichment": 1.0289535393387776,
+      "gate_rule": "one-sided 3 px overlap",
+      "gate_value": 0.985925,
+      "gate_limit": 0.7,
+      "jaccard_diagnostic": 0.0074812467407437125
     },
-    "n_compared": 24,
-    "verdict": "UNIQUE"
+    "n_compared": 27,
+    "verdict": "DUPLICATE \u2014 DO NOT SUBMIT",
+    "duplicate_count": 1,
+    "unique_within_available_scope": false,
+    "registry_scope_complete": false,
+    "scope": {
+      "source_script": "scripts/fetch_registry.sh",
+      "enumerated_external_rasters": 21,
+      "fetched_enumerated_external_rasters": 21,
+      "missing_enumerated_external_rasters": [],
+      "prior_project_downloads": 6,
+      "enumerated_list_complete": true,
+      "official_registry_access": false,
+      "full_registry_coverage": false,
+      "limitation": "The fetch script names a finite subset of owner-published rasters; it does not prove coverage of every earlier raster or the organizer-side registry."
+    },
+    "gate_rule": "rank correlation > 0.90 OR >70% of candidate dots within 3 px of any one registry raster"
   },
   "raster_sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
   "validator_output": {
@@ -62,6 +79,8 @@
   "submission_name": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
   "note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
   "note_chars": 133,
+  "submission_eligible": false,
+  "download_status": "audit-only; do not submit",
   "leakage_canary": true,
   "leakage_worst_auc": 0.5576993057395875,
   "inversion": {
@@ -72,7 +91,7 @@
     "cross_check_r_vs_band15": 0.7382397545865853
   },
   "verdict": "negative",
-  "verdict_reason": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "verdict_reason": "DO NOT SUBMIT: 39,437/40,000 candidate dots (98.5925%) lie within 3 px of a prior registry raster, exceeding the literal 70% duplicate gate. Format validation passes, but that does not clear uniqueness.",
   "candidate_selection": {
     "rule": "max pooled HOLDOUT-DTI over candidates and budgets; ties (overlapping 95% CIs) broken toward the lane's stated population (basin interior) and higher basin-interior segment recovery",
     "shipped": "X2 corridor x slope-ridge (basin interior)",

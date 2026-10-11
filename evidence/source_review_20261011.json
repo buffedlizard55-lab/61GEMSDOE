@@ -1,0 +1,41 @@
+{
+  "evidence_class": "SOURCE-REVIEW",
+  "reviewed_utc": "2026-10-11T05:30:11Z",
+  "sources": [
+    {
+      "topic": "GP-1012 calibration reference",
+      "url": "https://doi.org/10.3133/gp1012",
+      "title": "Gravity and basin-depth maps of the Basin and Range Province, western United States",
+      "publisher": "U.S. Geological Survey",
+      "authors_year": "R. W. Saltus and R. C. Jachens, 1995",
+      "use_in_project": "Regional depth-scale anchor only; the H61-G inversion matched the reported fraction of Nevada basin area deeper than 1 km.",
+      "limitation": "The regional map is not pixelwise ground truth for this raster; the official digital map was not downloaded or independently sampled in this review."
+    },
+    {
+      "topic": "1 m elevation source proposed for H61-L",
+      "url": "https://catalog.data.gov/dataset/1-meter-digital-elevation-models-dems-usgs-national-map-3dep-downloadable-data-collection",
+      "program_url": "https://www.usgs.gov/3d-elevation-program",
+      "publisher": "U.S. Geological Survey / The National Map 3DEP",
+      "source_check": "Official catalog describes a public one-meter DEM collection and states 3DEP products are public domain.",
+      "viability_status": "CONDITIONAL — exact tile availability for the competition footprint, acquisition dates, CRS, and downloadable files were not checked.",
+      "use_in_project": "Do not call H61-L data-viable until the exact target-footprint tiles are checked directly in the USGS National Map/3DEP inventory and their IDs/hashes are recorded."
+    },
+    {
+      "topic": "DOE GEMS leaderboard snapshot",
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+      "as_of_date": "2026-10-11",
+      "observations": {
+        "global_rank_1": 0.4133,
+        "DARD_rank_8": 0.3195,
+        "extradr19_rank_23": 0.2778
+      },
+      "scope": "Account/leaderboard rows only. No submission receipt or file hash was found linking the 0.2778 account row to H33-2-B2 or another exact raster."
+    },
+    {
+      "topic": "H33-2-B2 public status",
+      "url": "https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html",
+      "observation": "The sibling page labels H33-2-B2 UNSCORED; repository records contain an owner-reported 0.2778 association, but no organizer receipt.",
+      "interpretation": "Do not attribute the account leaderboard score to these bytes without a matching submission receipt/hash."
+    }
+  ]
+}

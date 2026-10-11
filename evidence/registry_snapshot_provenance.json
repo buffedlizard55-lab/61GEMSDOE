@@ -1,0 +1,36 @@
+{
+  "evidence_class": "PROVENANCE-AUDIT",
+  "artifact": "docs/data/registry.json",
+  "snapshot_generated_utc": "2026-10-11 00:40 UTC",
+  "embedded_experiment_generated_utc": "2026-10-11T00:31:36Z",
+  "historical_introduction": {
+    "repository": "buffedlizard55-lab/61GEMSDOE",
+    "commit": "f48e2706d9cd8f609dd22805e860629d70584a38",
+    "commit_date": "2026-10-11T00:40:32Z",
+    "commit_message": "Buried-structure lane: verified metric, registry forensics, Parker-Oldenburg inversion, holdout + submission",
+    "change": "docs/data/registry.json was added in this commit"
+  },
+  "historical_generator": {
+    "path": "scripts/build_site.py at commit f48e2706d9cd8f609dd22805e860629d70584a38",
+    "behavior": "Loaded reports/experiment.json, reports/forensics.json, reports/uniqueness.json, reports/submission_checks.json and reports/run_card.json, then serialized those objects plus feed_scores() into docs/data/registry.json.",
+    "score_claim_source": "feed_scores() contains hard-coded group/owner-reported score claims and an explicit disclaimer; these are not submission receipts."
+  },
+  "embedded_run_card": {
+    "submission": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+    "matches_historical_file_in_docs_downloads": true,
+    "is_h61g_candidate": false
+  },
+  "current_h61g_artifact": {
+    "submission": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+    "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+    "evidence_path": "evidence/h61g_run_card.json"
+  },
+  "known_limitations": [
+    "The current checkout's scripts/build_site.py and scripts/build_site_h61g.py do not write docs/data/registry.json; the JSON is a retained historical snapshot, not the H61-G evidence source.",
+    "The snapshot's top-level uniqueness field is null. Its old run card and experiment record must not be cited as the H61-G run.",
+    "reports/forensics.json in the historical snapshot sanitized NaNs to zero before reporting min/max and binary values; that preprocessing concealed the raw NaN nodata in the archived GEMSDOE29 raster. See evidence/prior_range_error_audit.json.",
+    "The public leaderboard value 0.2778 is an account-level observation; neither this snapshot nor the public GEMSDOE32 page supplies a receipt linking that account score to H33-2-B2."
+  ],
+  "score_claims_disclaimer": "Claims embedded in the snapshot are owner/group reports, not organizer-confirmed artifact scores."
+}

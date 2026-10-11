@@ -112,3 +112,90 @@ def test_jaccard_above_diagnostic_threshold_does_not_add_a_stop_rule(tmp_path):
     assert row["duplicate_by_jaccard"] is True
     assert report["jaccard_diagnostic_only"] is True
     assert report["duplicate_count"] == 0 and report["unique"]
+
+
+def _dense_reference_with_overlap(candidate, n_overlap):
+    """Create a >5x reference whose Jaccard is tiny but forward overlap is exact."""
+    prior = np.zeros(SHAPE, dtype=np.float32)
+    ys, xs = np.nonzero(candidate)
+    for y, x in zip(ys[:n_overlap], xs[:n_overlap]):
+        prior[y, x] = 1.0
+    # Add distant reference dots so the reference is much denser than the candidate
+    # without changing the candidate's within-3-pixel overlap.
+    for i in range(1000):
+        y = 200 + (i // 40) * 8
+        x = 5 + (i % 40) * 8
+        prior[y, x] = 1.0
+    return prior
+
+
+def test_dense_reference_does_not_replace_literal_70_percent_overlap_gate(tmp_path):
+    candidate = np.zeros(SHAPE, dtype=np.float32)
+    points = [(10 + 10 * (i // 10), 10 + 10 * (i % 10)) for i in range(100)]
+    for y, x in points:
+        candidate[y, x] = 1.0
+    path = tmp_path / "dense-prior.tif"
+    transform = Affine(100, 0, 0, 0, -100, 40000)
+    valid = np.ones(SHAPE, bool)
+
+    for n_overlap, should_duplicate in ((70, False), (71, True)):
+        prior = _dense_reference_with_overlap(candidate, n_overlap)
+        with rasterio.open(path, "w", driver="GTiff", height=SHAPE[0], width=SHAPE[1],
+                           count=1, dtype="float32", crs="EPSG:32611", transform=transform) as dst:
+            dst.write(prior, 1)
+        manifest = {"complete_accessible_scan": True, "errors": [], "rasters": [
+            {"sources": ["fixture:dense-prior"], "cache_file": str(path),
+             "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}]}
+        report = compare_array_to_registry(candidate, manifest, valid)
+        row = report["rows"][0]
+        assert row["my_dots_within_3px_of_theirs"] == pytest.approx(n_overlap / 100)
+        assert row["jaccard_dot_sets"] < JACCARD_LIMIT
+        assert row["overlap_gate_rule"] == "one-sided 3 px overlap"
+        assert row["overlap_gate_exceeded"] is should_duplicate
+        assert report["duplicate_count"] == int(should_duplicate)
+        assert report["unique"] is (not should_duplicate)
+
+
+def test_high_positive_rank_correlation_is_an_independent_stop_rule(tmp_path):
+    """The rho gate must stop a candidate even when raw dot overlap is <70%."""
+    rng = np.random.default_rng(812)
+    candidate = rng.uniform(0.0, 0.4, size=SHAPE).astype(np.float32)
+    positive_idx = rng.choice(candidate.size, size=1000, replace=False)
+    candidate.flat[positive_idx] = rng.uniform(0.6, 0.8, size=positive_idx.size)
+    prior = candidate ** 2  # perfectly rank-monotone; a different >0.5 support
+    path = tmp_path / "rho-only-prior.tif"
+    with rasterio.open(path, "w", driver="GTiff", height=SHAPE[0], width=SHAPE[1],
+                       count=1, dtype="float32", crs="EPSG:32611",
+                       transform=Affine(100, 0, 0, 0, -100, 40000)) as dst:
+        dst.write(prior, 1)
+    report = compare_array_to_registry(
+        candidate,
+        {"complete_accessible_scan": True, "rasters": [
+            {"sources": ["fixture:rho-only"], "cache_file": str(path)}]},
+        np.ones(SHAPE, bool))
+    row = report["rows"][0]
+    assert row["spearman_full_footprint"] > RHO_LIMIT
+    assert row["my_dots_within_3px_of_theirs"] < OVERLAP_LIMIT
+    assert row["duplicate_by_rho"] is True
+    assert row["duplicate_by_overlap"] is False
+    assert report["duplicate_count"] == 1
+    assert report["unique"] is False
+
+
+def test_partial_registry_never_receives_unique_clearance(tmp_path):
+    candidate = _sparse(11, 50).astype(np.float32)
+    path = tmp_path / "empty-prior.tif"
+    with rasterio.open(path, "w", driver="GTiff", height=SHAPE[0], width=SHAPE[1],
+                       count=1, dtype="float32", crs="EPSG:32611",
+                       transform=Affine(100, 0, 0, 0, -100, 40000)) as dst:
+        dst.write(np.zeros(SHAPE, dtype=np.float32), 1)
+    report = compare_array_to_registry(
+        candidate,
+        {"rasters": [{"sources": ["fixture:empty"], "cache_file": str(path)}]},
+        np.ones(SHAPE, bool), scope_complete=False,
+        scope={"reason": "fixture inventory is explicitly incomplete"})
+    assert report["duplicate_count"] == 0
+    assert report["unique_within_available_scope"] is True
+    assert report["registry_scope_complete"] is False
+    assert report["unique"] is False
+    assert report["status"] == "NOT CLEARED — registry scope incomplete"

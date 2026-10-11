@@ -1,0 +1,42 @@
+{
+  "evidence_class": "DATA-MEASUREMENT",
+  "artifact": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+  "source": "buffedlizard55-lab/GEMSDOE29:docs/downloads/gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif (listed in scripts/fetch_registry.sh)",
+  "sha256": "9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad",
+  "grid": {
+    "shape": [
+      3730,
+      3292
+    ],
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "nodata": "NaN",
+    "total_pixels": 12279160
+  },
+  "comparison_template": {
+    "path": "data/official/sample_submission.tif",
+    "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+    "finite_footprint_pixels": 5167373
+  },
+  "raw_value_audit": {
+    "finite_pixels": 5167373,
+    "nan_pixels": 7111787,
+    "infinite_pixels": 0,
+    "finite_min": 0.0,
+    "finite_max": 1.0,
+    "nonfinite_inside_template_footprint": 0,
+    "nonfinite_outside_template_footprint": 7111787,
+    "finite_outside_template_footprint": 0,
+    "full_raster_passes_finite_[0,1]": false
+  },
+  "interpretation": "The finite cells are within [0,1], but all 7,111,787 cells outside the template footprint are NaN (also the TIFF nodata value). A portal validating the complete raster's numeric range would reject those NaNs; this is a measured, plausible mechanism for the historical range error, not proof that this exact artifact was uploaded.",
+  "causal_attribution_limit": "No organizer upload receipt or exact rejected-file hash was found, so this audit does not prove that this particular raster was the exact file submitted in the historical rejection."
+}
