@@ -461,7 +461,7 @@ def robust_inversion(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: fl
 
 def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float,
                   dx: float = PIXEL_M, filter_order: float = 4.0,
-                  kc_scale: float = 0.25) -> dict:
+                  kc_scale: float = 0.25, *, _pre_filled: np.ndarray | None = None) -> dict:
     """First iterate of the Oldenburg iteration: the low-passed Bouguer slab depth.
 
     **This is the operator the lane uses, and the reason is a measurement.**
@@ -479,7 +479,7 @@ def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float
     against USGS GP-1012 in :func:`calibrate_density_scale`.
     """
     known = np.asarray(known, bool)
-    filled = inpaint_smooth(np.asarray(dg, np.float64), known)
+    filled = _pre_filled if _pre_filled is not None else inpaint_smooth(np.asarray(dg, np.float64), known)
     shape = filled.shape
     k = wavenumbers(shape, dx)
     filt = 1.0 / (1.0 + (k / (kc_scale / (2.0 * z0))) ** filter_order)
@@ -526,10 +526,11 @@ def calibrate_density_scale(dg: np.ndarray, known: np.ndarray, z0: float = 500.0
     """
     rows = []
     lo, hi = GP1012_ANCHORS["median_depth_m_range"]
+    pre_filled = inpaint_smooth(np.asarray(dg, np.float64), np.asarray(known, bool))
     for z0 in z0_candidates:
       for dr in candidates:
         for ks in kc_scales:
-            sol = slab_solution(dg, known, dr, z0, dx=dx, kc_scale=ks)
+            sol = slab_solution(dg, known, dr, z0, dx=dx, kc_scale=ks, _pre_filled=pre_filled)
             st = calibrate_depth_scale(sol["depth_m"], known)
             med_pen = 0.0 if lo <= st["p50"] <= hi else min(
                 abs(math.log(max(st["p50"], 1e-6) / lo)),

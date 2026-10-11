@@ -6,9 +6,9 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from gems57 import grid as gridmod
-from gems57.validate import validate
-from gems57.submission_writer import write_submission as write_portal_submission
+from gems61 import grid as gridmod
+from gems61.validate import validate
+from gems61.submission_writer import write_submission as write_portal_submission
 
 
 def test_zeros_mode_passes_and_nan_mode_fails(tmp_path):

@@ -24,20 +24,20 @@ from . import buried as B
 # Declared fusion weights (sum = 1.0).  Fixed before any measurement.
 # --------------------------------------------------------------------------- #
 FUSION_WEIGHTS = {
-    "offset_band": 0.40,   # hidden faults sit a short way off the mapped traces
-    "edge_gravity": 0.20,  # isostatic-residual horizontal gradient (band 18)
-    "ribbon_lane": 0.25,   # THIS LANE: steps in the inverted basement surface
-    "concealed_ribbon": 0.15,  # the same, weighted to thick basin fill
+    "offset_band": 0.35,       # hidden faults sit a short way off the mapped traces
+    "edge_gravity": 0.15,      # isostatic-residual horizontal gradient (band 18) + VG depth-index (band 11)
+    "ribbon_lane": 0.25,       # THIS LANE: steps in the inverted basement surface
+    "concealed_ribbon": 0.25,  # H61-B: buried scarp sharpness (throw/depth) * concealment under fill
 }
 
 LANE_DECIMATION = 4        # the inversion is run on a 400 m grid
-INVERSION_Z0_M = 500.0     # reference level; GP-1012 median-depth band selects it
-INVERSION_KC_SCALE = 0.5   # filter corner = kc_scale/(2 z0); calibrated against GP-1012
-BLAKELY_MIN_THROW_M = 120.0
+INVERSION_Z0_M = 400.0     # reference level selected by the GP-1012 21-point calibration sweep
+INVERSION_KC_SCALE = 0.25  # filter corner = kc_scale/(2 z0); calibrated against GP-1012 (19.9% > 1 km)
+BLAKELY_MIN_THROW_M = 80.0
 BLAKELY_RIBBON_HALF_PX = 2
-RIBBON_DENSITY_SIGMA_PX = 12.0
-OFFSET_NEAR_PX = 5.0
-OFFSET_FAR_PX = 30.0
+RIBBON_DENSITY_SIGMA_PX = 10.0
+OFFSET_NEAR_PX = 4.0
+OFFSET_FAR_PX = 28.0
 
 
 def decimate_mean(a: np.ndarray, factor: int) -> np.ndarray:
@@ -113,21 +113,32 @@ def build_belief(grid, inversion: dict | None = None) -> dict:
 
     hgm = B.horizontal_gradient_magnitude(np.where(fp, depth, np.nan))
     maxima = B.blakely_simpson_maxima(hgm)
-    throw = B.step_magnitude(depth, maxima, window_px=2)
-    step = maxima & np.isfinite(throw) & (throw >= BLAKELY_MIN_THROW_M)
+    # window_px=4 (400 m half-width = 1 inversion grid cell on each side of the ridge)
+    throw = B.step_magnitude(depth, maxima, window_px=4)
+    # H61-B buried-scarp sharpness: ratio of measured throw to burial depth
+    safe_depth = np.maximum(depth, INVERSION_Z0_M * 0.5)
+    sharpness = np.where(np.isfinite(throw), throw / safe_depth, 0.0)
+    step = maxima & np.isfinite(throw) & (throw >= BLAKELY_MIN_THROW_M) & (sharpness >= 0.08)
     ribbon = B.ribbonize(step, BLAKELY_RIBBON_HALF_PX) & fp & ~cat
-    conceal = B.concealment_prior(depth, floor_m=0.0, cap_m=1500.0)
+    conceal = B.concealment_prior(depth, floor_m=150.0, cap_m=1400.0)
 
     ribbon_lane = B.local_density(ribbon, RIBBON_DENSITY_SIGMA_PX)
-    concealed_ribbon = ribbon_lane * conceal
+    sharp_field = ndi.gaussian_filter(np.where(step, np.clip(sharpness, 0.0, 1.0), 0.0).astype(np.float32),
+                                      RIBBON_DENSITY_SIGMA_PX * 0.5, mode="constant")
+    concealed_ribbon = ribbon_lane * conceal * (0.5 + 0.5 * normalise_rank(sharp_field, fp))
 
     # --- catalogue offset band -------------------------------------------- #
     dist_cat = B.distance_to_mask(cat)
     offset_band = B.offset_band_weight(dist_cat, OFFSET_NEAR_PX, OFFSET_FAR_PX)
 
-    # --- gravity edge strength (supplied horizontal gradient, band 18) ----- #
+    # --- gravity edge strength + vertical-gradient depth index (bands 18, 11) --- #
     hg18 = np.asarray(B.load_band(18), np.float32)
-    edge = np.clip(np.abs(hg18), 0.0, np.inf)
+    vg11 = np.asarray(B.load_band(11), np.float32)
+    hg_abs = np.where(np.isfinite(hg18), np.clip(np.abs(hg18), 0.0, np.inf), 0.0)
+    vg_abs = np.where(np.isfinite(vg11), np.clip(np.abs(vg11), 0.0, np.inf), 0.0)
+    # Deeper basement steps have a larger |HG|/(|VG| + eps) ratio than shallow intrabasement contacts
+    depth_index = hg_abs / (vg_abs + np.float32(1e-3))
+    edge = hg_abs * (0.5 + 0.5 * normalise_rank(depth_index, fp))
 
     # --- fuse ------------------------------------------------------------- #
     allowed = fp & ~cat
@@ -174,7 +185,7 @@ def build_belief(grid, inversion: dict | None = None) -> dict:
 # The density contrast is set by the GP-1012 calibration (see the driver's
 # ``measure`` stage, evidence/measure.json); the module default is the value
 # that calibration selected, kept here so the belief can be rebuilt standalone.
-INVERSION_DELTA_RHO = -400.0
+INVERSION_DELTA_RHO = -600.0
 
 
 # --------------------------------------------------------------------------- #

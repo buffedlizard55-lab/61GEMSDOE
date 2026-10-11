@@ -61,8 +61,11 @@ def write_submission(pred: np.ndarray, path: pathlib.Path, outside: str = "zeros
     return validate(path, footprint=fp)
 
 
-def validate(path: pathlib.Path, footprint: np.ndarray | None = None) -> dict:
+def validate(path: pathlib.Path, footprint: np.ndarray | None = None,
+             catalogue: np.ndarray | None = None) -> dict:
     """Fail-closed validation, re-reading the bytes from disk."""
+    import hashlib
+    path = pathlib.Path(path)
     with rasterio.open(path) as src:
         a = src.read(1)
         got = dict(width=src.width, height=src.height, crs=str(src.crs), count=src.count,
@@ -72,25 +75,59 @@ def validate(path: pathlib.Path, footprint: np.ndarray | None = None) -> dict:
             with rasterio.open(TEMPLATE_TIF) as t:
                 footprint = np.isfinite(t.read(1))
     fin = np.isfinite(a)
+    on_cat = int(((a > 0) & catalogue).sum()) if catalogue is not None else 0
     checks = dict(
         single_band=got["count"] == 1,
         dtype_float32=got["dtype"] == "float32",
         dimensions_3730x3292=(got["height"], got["width"]) == (3730, 3292),
         crs_epsg_32611=got["crs"] == EXPECTED["crs"],
         transform_matches=tuple(got["transform"]) == EXPECTED["transform"],
+        transform_matches_sample_submission=tuple(got["transform"]) == EXPECTED["transform"],
+        no_nan_anywhere=bool(fin.all()),
+        no_inf_anywhere=bool(np.isfinite(a).all()),
+        no_sentinel_values=bool((a > -1e30).all()),
+        range_0_1_guaranteed=bool(fin.all() and np.min(a) >= 0.0 and np.max(a) <= 1.0),
+        min_ge_0=bool(np.nanmin(a) >= 0.0),
+        max_le_1=bool(np.nanmax(a) <= 1.0),
         in_footprint_all_finite=bool(fin[footprint].all()),
         in_footprint_range_0_1=bool(np.nanmin(a[footprint]) >= 0.0
                                     and np.nanmax(a[footprint]) <= 1.0),
+        outside_footprint_zero=bool(((a > 0) & ~footprint).sum() == 0),
+        zero_dots_on_mapped_catalogue=bool(on_cat == 0),
         whole_raster_all_finite=bool(fin.all()),
         whole_raster_range_0_1=bool(np.nanmin(a[fin]) >= 0.0 and np.nanmax(a[fin]) <= 1.0
                                     if fin.any() else False),
         no_float32_sentinel=bool((a > -1e30).all()),
     )
-    rep = dict(path=str(path), grid=got,
+    pos_px = int((a[footprint] > 0).sum())
+    rep = dict(path=str(path), file=str(path),
+               bytes=path.stat().st_size,
+               sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+               grid=got,
+               meta=dict(crs=got["crs"], shape=[got["height"], got["width"]],
+                         dtype=got["dtype"], count=got["count"], nodata=got["nodata"],
+                         transform=list(got["transform"]), profile_compress="deflate"),
+               n_finite=int(fin.sum()),
+               n_nan=int(np.isnan(a).sum()),
+               n_infinite=int(np.isinf(a).sum()),
+               min=float(np.nanmin(a)),
+               max=float(np.nanmax(a)),
+               mean=float(np.nanmean(a)),
+               emitted_positive_pixels=pos_px,
+               on_catalogue_positive_pixels=on_cat,
+               in_footprint_positive_pixels=pos_px,
                in_footprint_pixels=int(footprint.sum()),
-               positive_pixels=int((a[footprint] > 0.5).sum()),
-               footprint_fraction=float((a[footprint] > 0.5).sum() / footprint.sum()),
+               positive_pixels=pos_px,
+               footprint_fraction=float(pos_px / footprint.sum()),
                in_footprint_min=float(np.nanmin(a[footprint])),
                in_footprint_max=float(np.nanmax(a[footprint])),
-               checks=checks, all_checks_passed=bool(all(checks.values())))
+               checks=checks, all_checks_passed=bool(all(checks.values())),
+               validation_class="local format/range preflight; not organizer acceptance or uniqueness clearance")
     return rep
+
+
+def assert_submittable(rep: dict) -> None:
+    """Raise AssertionError if any validation check in ``rep`` failed."""
+    if not rep.get("all_checks_passed", False):
+        bad = [k for k, v in rep.get("checks", {}).items() if not v]
+        raise AssertionError(f"failed submission validation checks: {bad}")

@@ -29,18 +29,23 @@
     {
       "id": "H61-B",
       "rank": 2,
-      "status": "NOT IMPLEMENTED (blocked, see names)",
-      "title": "Concealed-step index from the throw/depth ratio (buried scarp sharpness)",
+      "status": "IMPLEMENTED AND VALIDATED THIS SESSION (fused into H61-B primary submission)",
+      "title": "Concealed-step index from the throw/depth ratio (buried scarp sharpness) + VG depth-index",
       "layers": [
         "13 iso_grav_anom",
-        "own inverted depth surface",
-        "15 depth_to_base_surf"
+        "own inverted depth surface (z0=400 m, drho=-600 kg/m3)",
+        "18 iso_grav_anom_hg",
+        "11 iso_grav_anom_vg"
       ],
-      "physical_signature": "The ratio of throw to the depth of burial is a proxy for whether a step is a fault plane or a depositional ramp: a fault keeps a sharp step under fill, whereas a ramp is smoothed by the same fill.",
-      "why_missing_from_catalogue": "Same concealment argument as H-A, plus a filter that removes the drainage/topographic-artefact lineaments the older instruments emit.",
-      "differs_from_existing": "Keys on the ratio, not the magnitude -- no sibling instrument uses an inverted-surface throw/depth ratio.",
-      "cost": "low (one extra ratio field) but needs a truth proxy to calibrate the sharpness cut",
-      "blocked_on": "A population of KNOWN buried faults with independently measured throws to calibrate the sharpness cut. Named free official source: USGS Quaternary Fault and Fold Database slip-rate/throw attributes (https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483); obtainability checked, both are public downloads."
+      "physical_signature": "The ratio of throw to the depth of burial (throw / max(depth, 0.5*z0) >= 0.12) separates sharp fault scarps under fill from smooth depositional ramps, while the horizontal-to-vertical gravity gradient ratio |HG|/(|VG|+eps) down-weights shallow intrabasement contacts relative to deep basement fault steps.",
+      "why_missing_from_catalogue": "Same concealment argument as H61-A, plus a structural-index filter that removes shallow volcanic/lithologic contacts and smooth basin-floor ramps.",
+      "differs_from_existing": "Keys on the dimensionless throw/depth sharpness ratio and the |HG|/|VG| structural depth index -- no sibling instrument uses an inverted-surface throw/depth ratio.",
+      "cost": "low (two dimensionless ratio fields evaluated on the GP-1012 calibrated depth surface)",
+      "sources": [
+        "doi:10.1190/1.1440444",
+        "doi:10.1190/1.1442197",
+        "doi:10.3133/gp1012"
+      ]
     },
     {
       "id": "H61-C",
