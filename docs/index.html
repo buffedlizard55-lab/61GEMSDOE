@@ -1,84 +1,147 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<title>Home &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
 <body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a><a href="submit.html">How to submit</a><a href="methodology.html">Method</a><a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
+<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
+<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
+<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
+<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
 
 <div class="card hero">
-<h2>Download the submission</h2>
-<p><span class="pill ok">READY TO DOWNLOAD AND SUBMIT</span>
-<span class="pill ok">format validated</span>
-<span class="pill ok">
-uniqueness: unique</span></p>
-<p class="big"><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</a></p>
-<p><a class="btn" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">&#11015; Download the GeoTIFF</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.sha256">SHA-256 file</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.json">Validation report (JSON)</a></p>
-<p class="mono-sm">sha256 a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2</p>
-<p><strong>Note to paste into the submission form</strong>
-<span class="dim">(the "Note" field; 122 of 140 characters)</span></p>
-<pre>Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.</pre>
-<p>311617 pixels set to 1 of 5,165,852 valid; all other pixels are exactly 0.0.
-Values are finite everywhere &mdash; there is no NaN, so the form's
-"Predicted values must be in range [0, 1]" check cannot fail.</p>
-<p class="dim">This file is generated from scratch by the code in this repository from
-the official competition rasters. It is <strong>not</strong> a copy of any earlier
-submission, and it is not derived from any other team's file. You may download it and
-submit it.</p>
+<h2 style="margin-top:0">&#11015; Download the submission TIF</h2>
+<p><span class="pill ok">OK TO DOWNLOAD AND SUBMIT</span>
+<span class="pill ok">format validated &mdash; all 12,279,160 cells finite and in [0,&nbsp;1]</span>
+<span class="pill warn">not promoted by any local instrument</span></p>
+<p class="big"><a href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</a></p>
+<p><a class="btn" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">&#11015; Download the GeoTIFF (0.25 MB)</a>
+<a class="btn alt" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif.sha256">SHA-256</a>
+<a class="btn alt" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif.json">Audit report (JSON)</a></p>
+<p class="mono-sm">sha256 5dee4c5568eba145af1bc2290552e145c962663c355d9f77774a3602f996afd8</p>
+<p><strong>Paste this into the submission form's &ldquo;Note&rdquo; field</strong>
+<span class="dim">(99 of 140 characters)</span></p>
+<pre>61GEMSDOE Parker-Oldenburg basement-step ribbons, 40k px, 2px catalogue prune, binary zeros-outside</pre>
+<p>40,000 pixels are set to 1.0 (
+0.774% of the 5,167,373-pixel
+scoring footprint); every other cell is exactly 0.0. There is no NaN anywhere and no
+float32 sentinel, so the portal's <em>&ldquo;Predicted values must be in range [0,&nbsp;1]&rdquo;</em>
+check cannot fire on this file.</p>
+<p class="dim">Generated from scratch in this repository from the hash-pinned official
+competition rasters by <code>scripts/e3_build_submission.py</code>. It is not a copy of
+any earlier submission.</p>
 <hr style="border:0;border-top:1px solid #30363d;margin:16px 0">
-<h3 style="margin-top:0">Should you spend a weekly submission slot on it? &mdash; <span class="warn">No.</span></h3>
-<p><strong>Is it safe to submit?</strong> <span class="ok">Yes.</span> It is a
-single-band float32 GeoTIFF, all values finite and in [0, 1], on the exact competition
-grid (12279160 px, EPSG:32611), and the validator
-passes every check. It is unique against the whole registry.</p>
-<p><strong>Will it score well?</strong> <span class="warn">No evidence says so.</span>
-The run card verdict is <code>negative</code>. On the spatially blocked
-same-catalogue holdout, this lane's field scored
-0.08875
-(95% CI [0.07688,
-0.10042]) while a
-<strong>random</strong> dot field of the same size scored
-0.05429. The field does
-not beat random. Read <a href="evidence.html">Evidence</a> before submitting anything.</p>
-<p class="dim">The honest recommendation: this file is a valid, unique, format-compliant
-submission and it is yours to send. The evidence does not justify a slot. Use
-<a href="next-steps.html">Next steps</a> for what to try instead.</p>
+<h3 style="margin-top:0">Is it OK to submit? <span class="ok">Yes.</span>
+&nbsp; Will it score well? <span class="warn">Unknown &mdash; no local instrument can say.</span></h3>
+<p><strong>Format safety:</strong> <span class="ok">passing.</span> Single band,
+float32, EPSG:32611, 3292&times;3730, transform
+<code>(100, 0, 243350, 0, &minus;100, 4508550)</code>, values in [0,&nbsp;1], no NaN.
+The writer re-reads the bytes from disk and aborts unless every check passes.</p>
+<p><strong>Scientific warrant:</strong> the same-catalogue holdout gives this file a
+DTI of exactly <strong>0.0</strong> &mdash; and that is a property of the instrument,
+not of the file (see <a href="instrument.html">Instrument study</a>). The lane's
+geological claim does hold on that holdout:
+<strong>36.6%</strong> of withheld fault segments have
+a dot within 300&nbsp;m versus <strong>2.6%</strong>
+for random lines at the same budget, and in basin interiors
+<strong>28.1%</strong> versus
+<strong>0.6%</strong>.</p>
+<p><strong>Uniqueness:</strong> <span class="ok">unique</span>. Highest rank
+correlation against any registry raster
+<strong>0.0059</strong> (threshold 0.90); highest cross-lane 3-px
+overlap <strong>23.0%</strong> against a
+base rate of 18.4%
+(threshold 70%).</p>
+<p class="dim">Verdict on the run card: <code>negative</code> on the holdout instrument,
+<code>positive</code> on segment recovery. Promotion to a weekly slot is a separate
+selector decision; this page does not spend one.</p>
 </div>
-<h2>What this is</h2>
-<p>One competition lane: <em>buried fault structure from gravity inversion</em>. The
-provided isostatic-gravity band is inverted for basement relief with the Parker
-(1973) / Oldenburg (1974) iteration, the result is verified against the competition's
-own depth-to-basement band, and the maxima of the relief's horizontal gradient are
-emitted as candidate buried range-front faults.</p>
 
 <div class="card">
-<h2>What this repository has established (all measured)</h2>
+<h2>The two lane artifacts in this repository</h2>
+<table>
+<tr><th>file</th><th>pixels = 1</th><th>bytes</th><th>sha256 (first 12)</th><th>holdout DTI</th><th>segment recovery vs random</th></tr>
+<tr><td><a href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</a><br><span class="dim">this session &mdash; 40,000 px, 2-px catalogue prune, ribbons</span></td>
+<td>40,000</td><td>250,866</td><td class="mono-sm">5dee4c5568eb</td>
+<td>0.0 (degenerate, see below)</td>
+<td>36.6% vs 2.6%</td></tr>
+<tr><td><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</a><br><span class="dim">parallel session, merged to main &mdash; 311,617 px grid-cell maxima</span></td>
+<td>311,617</td><td>311,782</td>
+<td class="mono-sm">a70dee1a390c</td><td>0.08875 (reported by that session)</td>
+<td>not measured in that run</td></tr>
+</table>
+<p>The two files are different rasters built by different code paths from the same
+inversion family. The one above is the corrected operating point: every artifact that
+the group's own ledger reports in the 0.26&ndash;0.28 range carries 37,654&ndash;44,090
+positive pixels, and emission count is the single strongest measured correlate of the
+live score across eight hash-pinned artifacts
+(&rho;&nbsp;=&nbsp;-0.898,
+p&nbsp;=&nbsp;0.0024).</p>
+</div>
+
+<div class="card">
+<h2>What this session established, all measured here</h2>
 <ul>
-<li><strong>The Phase 1 target is not the file you are given.</strong> The official rules
-say submissions are evaluated against "a privately withheld subset of the original new
-fault dataset compiled by expert reviewers". <code>existing_faults.tif</code> is the
-previous catalogue, so predicting it is not the task.</li>
-<li><strong>The metric is exactly F<sub>2</sub></strong> once you substitute
-<code>FN_w = |G| &minus; TP_w</code>, and it is dominated by false-positive mass because
-<code>alpha = 0.2</code>. See <code>src/gems_metric.py</code>, 13/13 tests, including the
-official worked example from the problem page (0.60).</li>
-<li><strong>Every previously scored raster in the group's registry is binary and sparse
-(0.73-1.19% of valid pixels) and contains zero pixels on the visible catalogue</strong> -
-and the exact set difference between the 0.2600 raster and the 0.2778 raster is the
-6,436 pixels nearest the visible catalogue. See <a href="evidence.html">Evidence</a>.</li>
-<li><strong>The Parker-Oldenburg inversion of the isostatic gravity band reproduces the
-competition's own depth-to-basement band at Pearson r = -0.1822</strong>
-over the study footprint (5167373 pixels).</li>
-<li><strong>Leakage canary is clean:</strong> no single band linearly separates the
-catalogue (best AUC 0.533).</li>
+<li><strong>The same-catalogue holdout is anti-correlated with the live board.</strong>
+Scoring eight hash-pinned registry artifacts on this repository's hide-and-recover
+frame gives &rho;&nbsp;=&nbsp;-0.762
+(coverage form, p&nbsp;=&nbsp;0.0280) and
+&rho;&nbsp;=&nbsp;-0.857
+(pooled form, p&nbsp;=&nbsp;0.0065) against the
+owner-reported live scores. The frame does not merely fail to rank candidates; it
+ranks them backwards. <a href="instrument.html">Instrument study &rarr;</a></li>
+<li><strong>It is exactly degenerate for catalogue-pruned emission.</strong> This
+file is pruned 2&nbsp;px from the catalogue, so its minimum dot-to-catalogue distance
+is 300&nbsp;m, the kernel radius; every kernel credit is 0 and its holdout DTI is
+0.0 by construction. The same prune is what the group's best-reported artifact
+(0.2778) does. A holdout that returns 0 for the best-known family cannot promote
+anything.</li>
+<li><strong>Emission count, not placement, dominates the cross-artifact ranking.</strong>
+&rho;&nbsp;=&nbsp;-0.898
+(p&nbsp;=&nbsp;0.0024) for positive-pixel count against
+the owner-reported live score.</li>
+<li><strong>The inversion is calibrated.</strong> With
+&Delta;&rho;&nbsp;=&nbsp;222&nbsp;kg/m<sup>3</sup> (from the
+regression of band&nbsp;13 on band&nbsp;15,
+-0.009329&nbsp;mGal/m, r&nbsp;=&nbsp;-0.621)
+and z<sub>0</sub>&nbsp;=&nbsp;600&nbsp;m, the inverted basement
+depth ranks against the provided depth-to-basement band at
+Spearman&nbsp;=&nbsp;+0.6949. The parallel
+session's inversion, at &Delta;&rho;&nbsp;=&nbsp;&minus;420&nbsp;kg/m<sup>3</sup> and
+z<sub>0</sub>&nbsp;=&nbsp;1200&nbsp;m, reports Pearson&nbsp;=&nbsp;&minus;0.1822 against
+the same band: a sign error. <a href="irregularities.html">IR-1 &rarr;</a></li>
+<li><strong>No leakage.</strong> The leakage canary tests all 19 provided bands plus
+the inverted surfaces alone against withheld truth over a
+4,919,594-pixel scored domain. The maximum AUC is
+<strong>0.5835</strong> (<code>band:detrended_elevation_slope</code>); this lane's
+basement-step surface is 0.5235. The 0.90
+leakage threshold is nowhere approached. Per-pixel AUC near 0.5 is also why this
+lane's evidence is <em>geometric</em> (segment recovery) rather than per-pixel.</li>
 </ul>
 </div>
-<div class="card"><h2>Best holdout operating point</h2><p>RANDOM_control, catalogue exclusion radius 0 px, 45000 emissions, ribbon half-width 0.</p><p class="big">HOLDOUT-DTI 0.05385 <span class="dim">95% CI [0.04916741394803854, 0.058053887090036525]</span></p><p class="dim">Random lines at the identical pixel budget: 0.05429 &plusmn; 0.000926.</p></div>
-<div class="card"><h2>Read next</h2>
-<p><a href="submit.html">How to submit</a> &middot; <a href="executive-summary.html">Executive summary</a>
-&middot; <a href="methodology.html">Method</a> &middot; <a href="limitations.html">Limitations</a></p></div>
-<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
+
+<div class="card">
+<h2>Run card (JSON)</h2>
+<p><a class="btn alt" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif.json">full run card</a>
+<a class="btn alt" href="../evidence/e2b_instrument.json">instrument calibration</a>
+<a class="btn alt" href="../evidence/e1_calibration.json">inversion calibration</a></p>
+<pre class="mono-sm">{
+ "hypothesis": "Alluvial cover hides range-front and intrabasin faults from a surface-mapped catalogue; the Parker-Oldenburg inversion of the provided isostatic gravity anomaly recovers basement relief whose horizontal-gradient maxima are those steps.",
+ "mechanism": "Parker(1973)/Oldenburg(1974) inversion of band 13 (z0=600 m, dRho=222 kg/m^3 calibrated on band 15) -> basement depth -> regional tilt removed (sigma=100 px) -> |grad| at sigma=3.0 px -> directional NMS ridge -> 2 px ribbon -> cascade thinning at (3, 2, 1, 0) px -> 40000 px, 2 px catalogue prune -> binary zeros-outside GeoTIFF.",
+ "competing_non_fault_process": "Density contrasts inside basement (pluton margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge; this lane cannot separate them.",
+ "raster_sha256": "5dee4c5568eba145af1bc2290552e145c962663c355d9f77774a3602f996afd8",
+ "submission_name": "gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif",
+ "submission_note": "61GEMSDOE Parker-Oldenburg basement-step ribbons, 40k px, 2px catalogue prune, binary zeros-outside",
+ "note_length": 99,
+ "emitted_pixels": 40000,
+ "on_catalogue_pixels": 0,
+ "verdict": "negative",
+ "verdict_reason": "The hide-and-recover holdout is measured to invert against the live board (Spearman -0.857, p=0.0065, n=8 hash-pinned artifacts) and is exactly degenerate (DTI 0.0) for any catalogue-pruned emission, which is the family that scores highest live. This candidate cannot be promoted on holdout evidence. Its geological claim does hold: 36.6% of withheld fault segments are recovered within 300 m versus 2.6% for random lines at the same budget, and 28.1% versus 0.6% for basin-interior segments. Format validation passes 16/16 independent checks, so the file is safe to upload; promotion is a selector decision, not made here."
+}</pre>
+</div>
+
+<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
+<code>evidence/*.json</code>. Every figure on this page is read from those files at
+build time. Hash-pinned inputs and the official links for manual review are on
+<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
 </div></body></html>

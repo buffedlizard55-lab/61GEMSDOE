@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instrument study &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
+<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
+<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
+<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
+<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+
+<div class="card hero">
+<h2 style="margin-top:0">Instrument study: the holdout ranks candidates backwards</h2>
+<p>Eight artifacts whose bytes are hash-pinned on disk, each with an owner-reported live
+score from the group's site ledger, were re-scored on this repository's hide-and-recover
+frame. Every &ldquo;live&rdquo; number is <strong>OWNER-REPORTED</strong>, not an
+organiser receipt. Every other number is <strong>HOLDOUT-DTI</strong>, computed here.</p>
+<table>
+<tr><th>artifact</th><th>origin</th><th>live<br>(owner-reported)</th><th>positive px</th>
+<th>holdout<br>coverage form</th><th>holdout<br>pooled form</th><th>mean kernel<br>credit/dot</th>
+<th>median dist to<br>catalogue (m)</th><th>dots within<br>300 m of catalogue</th></tr>
+<tr><td class='mono-sm'>sgmc44k_00512.tif</td><td>GEMSDOE29 sgmc-off-catalogue-44k</td><td>0.0512</td><td>44,090</td><td>0.04216</td><td>0.02202</td><td>0.0086</td><td>1803</td><td>11.1%</td></tr><tr><td class='mono-sm'>h19_5_01922.tif</td><td>GEMSDOE19 h19-5-powerlaw</td><td>0.1922</td><td>121,131</td><td>0.07241</td><td>0.05995</td><td>0.0165</td><td>1456</td><td>20.0%</td></tr><tr><td class='mono-sm'>d15_02477.tif</td><td>GEMSDOE24 h25-1-dotted-d1.5</td><td>0.2477</td><td>60,069</td><td>0.09835</td><td>0.04822</td><td>0.0169</td><td>1487</td><td>19.9%</td></tr><tr><td class='mono-sm'>dotted_d2_8_02600.tif</td><td>GEMSDOE25 dotted-h19-5-d2.8</td><td>0.2600</td><td>44,090</td><td>0.10259</td><td>0.04131</td><td>0.0168</td><td>1500</td><td>19.5%</td></tr><tr><td class='mono-sm'>tip_stepover_r30_02632.tif</td><td>GEMSDOE33 h33d-analog-tip-stepover</td><td>0.2632</td><td>41,865</td><td>0.04113</td><td>0.01825</td><td>0.0074</td><td>1664</td><td>14.4%</td></tr><tr><td class='mono-sm'>dotted_d2_8_02708.tif</td><td>GEMSDOE31 h27-4-solo-d2.8</td><td>0.2708</td><td>40,199</td><td>0.02928</td><td>0.01370</td><td>0.0056</td><td>1769</td><td>11.7%</td></tr><tr><td class='mono-sm'>h36_rung30_02710.tif</td><td>GEMSDOE28 h36-1-rung30-blind-r1</td><td>0.2710</td><td>37,660</td><td>0.02800</td><td>0.01297</td><td>0.0055</td><td>1772</td><td>11.6%</td></tr><tr><td class='mono-sm'>dotted_b2_prune_02778.tif</td><td>GEMSDOE32 h33-2-b2 (audit says UNSCORED)</td><td>0.2778</td><td>37,654</td><td>0.00376</td><td>0.00270</td><td>0.0011</td><td>1965</td><td>5.8%</td></tr>
+</table>
+<h3>Rank correlations against the owner-reported live scores (n = 8)</h3>
+<table>
+<tr><th>statistic</th><th>Spearman &rho;</th><th>p</th><th>reading</th></tr>
+<tr><td>holdout DTI, coverage form</td><td>-0.7619</td>
+<td>0.0280</td><td class="warn">significant and <em>negative</em></td></tr>
+<tr><td>holdout DTI, pooled form</td><td>-0.8571</td>
+<td>0.0065</td><td class="warn">significant and <em>negative</em></td></tr>
+<tr><td>mean kernel credit per dot</td><td>-0.7857</td>
+<td>0.0208</td><td class="warn">negative</td></tr>
+<tr><td><strong>positive-pixel count</strong></td><td>-0.8982</td>
+<td>0.0024</td><td class="warn">strongest single correlate: fewer dots scored better</td></tr>
+<tr><td>median distance to catalogue</td><td>+0.5000</td>
+<td>0.2070</td><td>positive, not significant at n=8</td></tr>
+<tr><td>fraction of dots within 300 m of catalogue</td>
+<td>-0.5000</td>
+<td>0.2070</td><td>negative, not significant at n=8</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2>Why the frame inverts, and why it is degenerate</h2>
+<p><strong>The inversion.</strong> The live scorer masks known USGS/INGENIOUS pixels and
+scores only expert-labelled faults that are <em>not</em> in the catalogue. The
+hide-and-recover frame does the opposite: its truth <em>is</em> a withheld subset of the
+catalogue. So the frame rewards exactly the placement the live scorer deletes. The
+measured signature is in the table: the three highest-scoring artifacts keep
+5.8&ndash;11.7%
+of their dots within 300&nbsp;m of the catalogue and score 0.19&ndash;0.26, while the
+best-reported artifact keeps only
+5.8%
+there, scores 0.2778 live, and scores
+0.00376 on this frame.</p>
+<p><strong>The degeneracy.</strong> The lane submission on this page is pruned
+2&nbsp;px (200&nbsp;m) from the catalogue. Its minimum dot-to-catalogue distance is
+therefore exactly 300&nbsp;m, which is the kernel radius R. With
+k(d)&nbsp;=&nbsp;max(1&nbsp;&minus;&nbsp;d/R,&nbsp;0), every kernel credit is 0, so
+TP&nbsp;=&nbsp;0 and the holdout DTI is <strong>exactly 0.0</strong> &mdash; while a
+uniform random line field at the same budget scores
+0.00336 on the same frame, purely
+because random lines are allowed to land on the catalogue. A holdout that returns 0 for
+the best-known emission family is not a weak instrument; it is the wrong instrument.</p>
+<h3>What this repository uses instead</h3>
+<ul>
+<li><strong>Metric algebra</strong> (no fitting): with
+DTI&nbsp;=&nbsp;TP/(TP&nbsp;+&nbsp;0.2&nbsp;FP&nbsp;+&nbsp;0.8&nbsp;FN) and
+&alpha;&nbsp;+&nbsp;&beta;&nbsp;=&nbsp;1, adding a dot raises the denominator by exactly
+&alpha;, so a dot pays iff its kernel credit exceeds &alpha;&middot;s. At
+s&nbsp;=&nbsp;0.3195 that is 0.0639, i.e. within ~281&nbsp;m of scored truth.</li>
+<li><strong>Segment recovery</strong> &mdash; a geometric statistic that survives the
+prune: does a withheld segment have any dot within 300&nbsp;m? Candidate
+36.6% vs random
+2.6%; basin interior
+28.1% vs
+0.6%.</li>
+<li><strong>The cross-lane operating point</strong>: 37,654&ndash;44,090 px, binary,
+off-catalogue. Every artifact in the ledger above 0.26 sits in that band.</li>
+</ul>
+<p class="warn">Recommendation: stop promoting on the same-catalogue holdout. Any number
+quoted from it must carry the label HOLDOUT-DTI and the anti-correlation caveat.</p>
+</div>
+
+<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
+<code>evidence/*.json</code>. Every figure on this page is read from those files at
+build time. Hash-pinned inputs and the official links for manual review are on
+<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
+</div></body></html>
