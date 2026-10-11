@@ -137,7 +137,7 @@
   "approved_for_weekly_slot": false,
   "promoted": false,
   "submission_slots_used": 0,
-  "status": "locally validated within separately recorded inventory scope; not organizer acceptance or slot approval",
+  "status": "NOT CLEARED: local format-valid only; strict final-dot overlap is 99.64% (>70% stop); not organizer acceptance or slot approval.",
   "metadata": {
     "method": "H61-M",
     "candidate": "M2 habitat no corridor gate @ 40000",
@@ -182,5 +182,20 @@
       "depth_grad_y": -0.2544806357473135
     },
     "no_prior_submission_raster_used": true
-  }
+  },
+  "strict_uniqueness": {
+    "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "one_sided_overlap_fraction": 0.9964,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "organizer_registry_complete": false,
+    "holdout_reached_after_strict_failure": false,
+    "weekly_slot_used": false
+  },
+  "submission_allowed": false,
+  "note_use_status": "HISTORICAL ONLY — do not use this note for competition submission."
 }

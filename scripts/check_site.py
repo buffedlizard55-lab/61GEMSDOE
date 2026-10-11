@@ -8,8 +8,9 @@ Checks, in order:
 3. every external link is https and points at a host this lane actually cited
    (an unexpected host is a hallucination risk and is reported as a failure);
 4. no page still contains an unresolved placeholder;
-5. the download banner and the run card agree: if the card says the artifact is
-   not authorised for download, the site must not publish a link to it.
+5. the current run card and status banner agree: a denied submission decision
+   must not be rendered as a cleared submission or an approved submission link.
+   Explicit audit-only links remain allowed when their warning is visible.
 
 Exit code 0 means the site is internally consistent.  It says nothing about
 whether the evidence it quotes is correct -- that is what ``evidence/`` is for.
@@ -28,7 +29,7 @@ ALLOWED_HOSTS = {
     "www.drivendata.org", "community.drivendata.org", "doi.org",
     "pubs.geoscienceworld.org", "geophysics.geoscienceworld.org",
     "api.crossref.org", "store.usgs.gov", "pubs.usgs.gov",
-    "www.energy.gov", "www.nlr.gov", "github.com", "raw.githubusercontent.com",
+    "www.energy.gov", "www.nlr.gov", "www.usgs.gov", "github.com", "raw.githubusercontent.com",
     "buffedlizard55-lab.github.io", "docs.nlr.gov", "www.crossref.org",
 }
 
@@ -38,14 +39,25 @@ PLACEHOLDER = re.compile(r"\{\{|TODO|undefined|nan%|>nan<|None%")
 
 def main() -> int:
     problems: list[str] = []
-    # Only the pages this session's builder emits are in scope; pages written by
-    # the parallel sessions that are merged on main are linked, not vetted here.
+    # The current status pages are generated from the run card. Other merged
+    # session pages remain available only as explicitly marked historical pages.
     from build_site import PAGES  # noqa: PLC0415
     pages = sorted(DOCS / name for name, _ in PAGES)
     if not pages:
         print("[site] FAIL: no html pages in docs/")
         return 1
-    print(f"[site] {len(pages)} pages")
+    current_names = {p.name for p in pages}
+    legacy_pages = sorted(p for p in DOCS.rglob("*.html")
+                          if p.name not in current_names and p.name != "404.html")
+    print(f"[site] {len(pages)} current pages, {len(legacy_pages)} legacy pages")
+    for legacy in legacy_pages:
+        text = legacy.read_text(encoding="utf-8")
+        if "HISTORICAL PAGE — SUPERSEDED." not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page lacks the superseded-status warning")
+        if 'href="index.html"' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to current status")
+        if '../evidence/local_artifact_strict_dot_audit.json' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to the strict artifact audit")
 
     for page in pages:
         text = page.read_text(encoding="utf-8")
@@ -69,24 +81,25 @@ def main() -> int:
 
     # the banner and the run card must agree
     import json
-    card = None
-    for base in (ROOT / "evidence", DOCS / "data"):
-        p = base / "run_card.json"
-        if p.exists():
-            card = json.loads(p.read_text())
-            break
+    card_path = ROOT / "evidence" / "h61l_run_card.json"
     index = DOCS / "index.html"
-    if index.exists() and card is not None:
+    if index.exists() and card_path.is_file():
+        card = json.loads(card_path.read_text())
+        decision = card.get("submission_decision", {})
+        authorised = bool(decision.get("okay_to_submit", False))
         text = index.read_text()
-        authorised = bool(card.get("okay_to_download", False))
-        publishes_link = "Download the submission GeoTIFF" in text
-        if authorised and not publishes_link:
-            problems.append("run card authorises the download but the page publishes no link")
-        if not authorised and publishes_link:
-            problems.append("run card does NOT authorise the download but the page publishes a link")
-        print(f"[site] run card okay_to_download={authorised}, page publishes link={publishes_link}")
+        publishes_submission_link = "Download the submission GeoTIFF" in text
+        claims_cleared = ("CLEARED —" in text or "YES — it is FORMAT-VALID and UNIQUE" in text)
+        states_no_clearance = "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in text
+        if authorised and not publishes_submission_link:
+            problems.append("current run card authorises submission but the page publishes no exact submission link")
+        if not authorised and (publishes_submission_link or claims_cleared):
+            problems.append("current run card does NOT authorise submission but the page claims a cleared file")
+        if not authorised and not states_no_clearance:
+            problems.append("current run card denies submission but the status page omits the no-clearance banner")
+        print(f"[site] current run card okay_to_submit={authorised}, page claims cleared={claims_cleared}")
     elif index.exists():
-        problems.append("index.html exists but no run_card.json was found")
+        problems.append("index.html exists but the current evidence/h61l_run_card.json was not found")
 
     if problems:
         print(f"[site] FAIL ({len(problems)} problems)")

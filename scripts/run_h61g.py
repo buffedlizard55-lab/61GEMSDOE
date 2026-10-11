@@ -10,10 +10,10 @@ screen    label-aware enrichment screen of gravity edges vs the catalogue (why t
           pure lane cannot place a dot to 300 m)                -> h61g_screen.json
 invert    band-pass + GP-1012-calibrated slab inversion, steps, cross-check
                                                                 -> h61g_invert.json
-holdout   hide-and-recover (whole withheld segments, visible-only features,
-          pixel-exact masking, pooled DTI a=0.2 b=0.8 R=300 m) for every candidate,
-          both controls and the registry references; basin-interior segment
-          recovery vs random lines; per-feature leakage canary
+holdout   first apply the literal pre-placement uniqueness gate to every
+          candidate surface; stop if none pass. Only then run hide-and-recover
+          (whole segments, visible-only features, pixel-exact masking, pooled
+          DTI a=0.2 b=0.8 R=300 m), controls, and leakage canary
                                                                 -> h61g_holdout.json
 final     build + validate the GeoTIFF of the candidate the holdout selects
                                                                 -> h61g_final.json
@@ -40,6 +40,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from gems61 import buried as B                       # noqa: E402
 from gems61 import grid as gridmod                   # noqa: E402
+from gems61 import gates as gatesmod                 # noqa: E402
 from gems61 import h61g as H                         # noqa: E402
 from gems61 import holdout_segmented as holdoutmod   # noqa: E402
 from gems61 import submission_writer                 # noqa: E402
@@ -206,7 +207,7 @@ def stage_invert(_a) -> None:
                    n_persistent_steps=pers["n_steps"], persistence_scales_px=[0, 2, 5],
                    n_step_px_100m=int(steps_full.sum()), n_persistent_px_100m=int(pers_full.sum())),
         sources=dict(
-            parker="Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb02307.x",
+            parker="Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb06513.x",
             oldenburg="Oldenburg (1974) Geophysics 39(4):526-536, doi:10.1190/1.1440444",
             blakely_simpson="Blakely & Simpson (1986) Geophysics 51(7):1494-1498, doi:10.1190/1.1442197",
             blakely_jachens="Blakely & Jachens (1991) GSA Bulletin 103:795-803",
@@ -297,11 +298,50 @@ def _boot_ci(parts, n_boot=2000, seed=7):
     return [float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))]
 
 
+def _preflight_surface_fields(fields, g):
+    """Apply the shared strict surface gate before any candidate holdout scoring."""
+    inventory_path = EVID / "registry_accessible_index.json"
+    if not inventory_path.is_file():
+        raise SystemExit(f"missing fail-closed registry inventory: {inventory_path}")
+    inventory = json.loads(inventory_path.read_text())
+    sample = gridmod.DATA_DIR / "sample_submission.tif"
+    reports = {}
+    eligible = {}
+    for name, field in fields.items():
+        report = gatesmod.lane_uniqueness_report(
+            field, g.footprint, sample=sample, phase="surface",
+            registry_index=inventory,
+        )
+        reports[name] = report
+        if report["ok"]:
+            eligible[name] = field
+    write_json("h61g_surface_preflight.json", dict(
+        evidence_class="MEASURED — pre-placement strict surface gate",
+        inventory_path=str(inventory_path.relative_to(ROOT)),
+        declared_scope_complete=bool(inventory.get("declared_scope_complete")),
+        organizer_registry_complete=bool(inventory.get("organizer_registry_complete", False)),
+        candidate_fields_evaluated=len(fields),
+        eligible_candidate_fields=sorted(eligible),
+        holdout_started=bool(eligible),
+        action=("SURFACE CLEARED for listed candidate fields; only these may proceed to holdout"
+                if eligible else "STOP — no candidate surface cleared; holdout not run"),
+        reports=reports,
+    ))
+    if not eligible:
+        raise SystemExit(
+            "strict pre-placement uniqueness STOP: no candidate surface cleared; "
+            "do not run holdout, place dots, or emit a TIFF"
+        )
+    return eligible
+
+
 def stage_holdout(_a) -> None:
     t0 = time.time()
     g, grav, valid = load_base()
     fields, meta, aux = _candidate_fields(g, valid)
-    log(f"corridor covers {meta['corridor_fraction_of_valid']:.3f} of the valid area; basin {meta['basin_fraction_of_valid']:.3f}")
+    fields = _preflight_surface_fields(fields, g)
+    log(f"strict pre-placement gate passed for {len(fields)} candidate surface(s); "
+        f"corridor={meta['corridor_fraction_of_valid']:.3f}, basin={meta['basin_fraction_of_valid']:.3f}")
     ctx = holdoutmod.build_holdout(g, hide_frac=0.20, seeds=SEEDS, modes=("all",))
     n_truth = sum(c.n_truth for c in ctx.cells)
     log(f"holdout: {len(ctx.cells)} cells, {n_truth} withheld truth px")
@@ -440,9 +480,30 @@ def stage_final(a) -> None:
     budget = int(chosen["budget"])
     fields, meta, aux = _candidate_fields(g, valid)
     field = fields[fname]
+
+    # Strict lane protocol: test the complete candidate score surface BEFORE
+    # any thinning, placement, or catalogue pruning. No dense-reference or
+    # Jaccard exception is permitted. The declared inventory is fail-closed.
+    inventory_path = EVID / "registry_accessible_index.json"
+    if not inventory_path.is_file():
+        raise SystemExit(f"missing fail-closed registry inventory: {inventory_path}")
+    inventory = json.loads(inventory_path.read_text())
+    surface_gate = gatesmod.lane_uniqueness_report(
+        field, g.footprint, sample=gridmod.DATA_DIR / "sample_submission.tif",
+        phase="surface", registry_index=inventory, log=log)
+    write_json("h61g_surface_uniqueness.json", surface_gate)
+    if not surface_gate["ok"]:
+        raise SystemExit(f"strict surface uniqueness STOP: {surface_gate['verdict']}; do not place or emit dots")
+
     far = ndi.distance_transform_edt(~g.catalogue) > PRUNE_PX
     allowed = valid & far & ~g.catalogue
     dots = H.dot_thin(field, allowed, budget)
+    dots_gate = gatesmod.lane_uniqueness_report(
+        dots.astype(np.float32), g.footprint, sample=gridmod.DATA_DIR / "sample_submission.tif",
+        phase="dots", registry_index=inventory, log=log)
+    write_json("h61g_final_dots_uniqueness.json", dots_gate)
+    if not dots_gate["ok"]:
+        raise SystemExit(f"strict final-dot uniqueness STOP: {dots_gate['verdict']}; do not write or publish TIFF")
     # The holdout validated DOTS.  A 3 x 3 dilation of every dot ("ribbon") multiplies the
     # false-positive mass by ~6.75 while the kernel credit of a truth pixel can only rise
     # marginally, so the file ships the validated dots.  The "multi-line ribbon" of the lane
@@ -525,76 +586,42 @@ def stage_final(a) -> None:
 
 # --------------------------------------------------------------------------- #
 def stage_unique(_a) -> None:
+    """Final-dot check through the same fail-closed shared uniqueness gate."""
     import rasterio
-    from scipy.stats import spearmanr
-    g = gridmod.load_grid()
+
     fin = json.loads((EVID / "h61g_final.json").read_text())
-    with rasterio.open(ROOT / fin["tif"]) as src:
+    inventory_path = EVID / "registry_accessible_index.json"
+    if not inventory_path.is_file():
+        raise SystemExit(f"missing fail-closed registry inventory: {inventory_path}")
+    inventory = json.loads(inventory_path.read_text())
+    # The candidate's own mirrored download is not an earlier raster. Exclude
+    # only that exact repository path; same-hash files elsewhere remain in scope.
+    current_download = Path(fin.get("download_tif", "")).as_posix()
+    before = len(inventory.get("rasters", []))
+    inventory["rasters"] = [
+        row for row in inventory.get("rasters", [])
+        if row.get("repo_relative_path") != current_download
+    ]
+    excluded = before - len(inventory["rasters"])
+    inventory.setdefault("scope", {})["excluded_current_candidate_records"] = excluded
+    inventory["scope"]["total_raster_records"] = len(inventory["rasters"])
+    inventory["scope"]["repository_prior_file_count"] = max(
+        0, int(inventory["scope"].get("repository_prior_file_count", 0)) - excluded)
+    candidate_path = ROOT / fin["tif"]
+    if not candidate_path.is_file():
+        candidate_path = ROOT / fin.get("download_tif", "")
+    if not candidate_path.is_file():
+        raise SystemExit(f"candidate TIFF is missing: {candidate_path}")
+    with rasterio.open(candidate_path) as src:
         mine = src.read(1)
-    mine_dots = mine > 0.5
-    d_mine = None
-    rows = []
-    seen = set()
-    for d in REGISTRY_DIRS:
-        for p in sorted(d.glob("*.tif")):
-            if p.name in seen or p.name == Path(fin["tif"]).name:
-                continue
-            seen.add(p.name)
-            try:
-                with rasterio.open(p) as src:
-                    if (src.height, src.width) != g.shape:
-                        continue
-                    other = src.read(1)
-            except Exception as exc:  # noqa: BLE001
-                rows.append(dict(file=p.name, error=str(exc)[:100])); continue
-            o = np.where(np.isfinite(other), other, 0.0)
-            a_ = mine[g.footprint]; b_ = o[g.footprint]
-            rho = float(spearmanr(a_, b_).statistic) if a_.std() > 0 and b_.std() > 0 else float("nan")
-            od = o > 0.5
-            near = ndi.distance_transform_edt(~od) <= 3.0
-            frac = float(near[mine_dots].mean()) if mine_dots.any() else float("nan")
-            base = float(near[g.footprint].mean())
-            inter = int((mine_dots & od).sum()); union = int((mine_dots | od).sum())
-            jac = inter / max(union, 1)
-            dense = int(od.sum()) > 5 * int(mine_dots.sum())
-            # IR-61-UNIQ-01: against a near-blanket reference (here: a 311,617-px raster that
-            # puts 95.8 % of the whole footprint within 3 px of itself) the one-sided overlap
-            # is ~1 for ANY candidate and carries no duplication evidence; the gate then uses
-            # Jaccard (limit 0.5), the rule the earlier session documented.  Both numbers and
-            # the base rate are always reported so the reader can see the raw overlap.
-            gate_value = jac if dense else frac
-            gate_rule = "Jaccard (reference is dense: >5x my support)" if dense else "one-sided 3 px overlap"
-            gate_limit = 0.50 if dense else 0.70
-            rows.append(dict(file=p.name, sha256=sha256(p), spearman_footprint=rho,
-                             frac_my_dots_within_3px_of_theirs=frac, base_rate_within_3px=base,
-                             enrichment=(frac / base) if base > 0 else None, jaccard=jac,
-                             their_positive_px=int(od.sum()), overlap_gate_rule=gate_rule,
-                             overlap_gate_value=gate_value, overlap_gate_limit=gate_limit,
-                             overlap_gate_exceeded=bool(gate_value > gate_limit),
-                             byte_identical=(sha256(p) == fin["sha256"])))
-            log(f"  {p.name[:70]:70s} rho={rho:+.4f} overlap3px={frac:.3f} (base {base:.3f}) jaccard={jac:.4f} gate={gate_rule.split(' ')[0]}")
-    ok = [r for r in rows if "spearman_footprint" in r]
-    worst_rho = max(ok, key=lambda r: (r["spearman_footprint"] if r["spearman_footprint"] == r["spearman_footprint"] else -2))
-    worst_ov = max(ok, key=lambda r: r["frac_my_dots_within_3px_of_theirs"])
-    worst_gate = max(ok, key=lambda r: r["overlap_gate_value"] / r["overlap_gate_limit"])
-    verdict = "UNIQUE" if (worst_rho["spearman_footprint"] <= 0.90 and
-                           not any(r["overlap_gate_exceeded"] for r in ok) and
-                           not any(r["byte_identical"] for r in ok)) else "DUPLICATE -- lane drift, do not submit"
-    write_json("h61g_uniqueness.json", dict(
-        evidence_class="MEASURED", my_file=fin["tif"], my_sha256=fin["sha256"], my_dots=int(mine_dots.sum()),
-        n_registry_rasters_compared=len(ok), rho_limit=0.90, overlap_limit=0.70,
-        worst_spearman=dict(file=worst_rho["file"], value=worst_rho["spearman_footprint"]),
-        worst_overlap=dict(file=worst_ov["file"], value=worst_ov["frac_my_dots_within_3px_of_theirs"],
-                           base_rate=worst_ov["base_rate_within_3px"], gate_rule=worst_ov["overlap_gate_rule"],
-                           gate_value=worst_ov["overlap_gate_value"], gate_limit=worst_ov["overlap_gate_limit"]),
-        worst_overlap_gate=dict(file=worst_gate["file"], rule=worst_gate["overlap_gate_rule"],
-                                value=worst_gate["overlap_gate_value"], limit=worst_gate["overlap_gate_limit"]),
-        byte_identical_to_any=[r["file"] for r in ok if r["byte_identical"]],
-        verdict=verdict, rows=rows,
-        scope="Every registry raster that could be fetched from the group's public GitHub repositories "
-              "(scripts/fetch_registry.sh) plus the earlier rasters published in this repository. "
-              "The full organizer-side registry is not reachable from this sandbox."))
-    log(f"UNIQUENESS: {verdict}")
+    g = gridmod.load_grid()
+    report = gatesmod.lane_uniqueness_report(
+        mine, g.footprint, sample=gridmod.DATA_DIR / "sample_submission.tif",
+        phase="dots", registry_index=inventory, log=log)
+    report["my_file"] = fin["tif"]
+    report["my_sha256"] = fin["sha256"]
+    write_json("h61g_uniqueness.json", report)
+    log(f"UNIQUENESS: {report['verdict']} (declared inventory scope; organizer registry completeness is false)")
 
 
 # --------------------------------------------------------------------------- #

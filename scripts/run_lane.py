@@ -1,25 +1,10 @@
 #!/usr/bin/env python3
-"""61GEMSDOE lane: basement-depth steps from Parker-Oldenburg gravity inversion.
+"""RETIRED historical model/holdout runner.
 
-Three predeclared experiments (budget: 3 experiments / 2 hours).
-
-* **E1 -- leakage canary and arm selection.**  Every candidate feature is
-  scored alone against the withheld segments (AUC and the DTI of a
-  budget-matched emission).  ``max(AUC, 1-AUC) > 0.90`` is treated as leakage
-  until proven otherwise.  The step-detection smoothing scale is chosen here.
-* **E2 -- multi-line ribbons versus a thin line, versus random lines.**  The
-  positional resolution of the inverted step is *measured* (distance from
-  withheld segment pixels to the nearest crest) and the ribbon geometry is then
-  read off the closed-form DTI gain table rather than chosen by taste.  The
-  lane-specific recovery test counts how many withheld **basin-interior**
-  segments the steps recover, against a random-line null of matched length.
-* **E3 -- the competing explanation.**  Steps that coincide with a magnetic
-  lineament may be lateral density contrasts *within* basement rather than
-  offsets of the basement surface.  Demoting them is scored on the holdout.
-
-Every score below is HOLDOUT-DTI with the evaluator version, the withheld
-positive count and a 95 % paired block-bootstrap CI.  Nothing here is a
-leaderboard score.
+The previous 3-experiment pipeline does not enforce the current literal
+pre-placement uniqueness gate before holdout scoring. The experiment budget is
+already exhausted, so its CLI now fails closed. Existing evidence remains
+historical HOLDOUT-DTI only; use the current run card for submission status.
 """
 from __future__ import annotations
 
@@ -333,4 +318,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: the historical runner does not apply the current pre-placement "
+        "uniqueness gate and the candidate-experiment budget is exhausted. Do not run a new holdout."
+    )

@@ -1,24 +1,10 @@
 #!/usr/bin/env python3
-"""Experiment 3 - build the lane submission at the corrected operating point.
+"""RETIRED legacy candidate/holdout and submission writer.
 
-Pre-registered design (fixed before any score was inspected):
-
-  belief  = |grad(basement depth)| with the regional tilt removed, sigma = 3 px
-            (300 m), from the Parker-Oldenburg inversion of band 13
-            (z0 = 600 m, dRho = 222 kg/m^3, both calibrated against band 15)
-  ridge   = directional non-maximum suppression of the belief (the step trace)
-  ribbon  = ridge dilated by 2 px  -> multi-line ribbons ~500 m wide, because
-            gravity resolves a basement step only to a few hundred metres
-  eligible= footprint AND not within 2 px of the catalogue.  This is a
-            *mechanical* exclusion, not a geological claim: known USGS/INGENIOUS
-            pixels are masked out of scoring, so mass there earns nothing.
-  emission= cascade thinning along the ribbon (3 px, then 2 px, then 1 px
-            separation) ranked by belief, until 40,000 pixels are placed.
-  output  = binary float32, zeros outside the footprint, all 12,279,160 cells
-            finite and inside [0, 1].
-
-The 40,000-pixel budget is pre-registered from the cross-lane evidence in
-evidence/e2b_instrument.json, NOT tuned on any score.
+This pipeline scores a candidate before the current strict pre-placement gate,
+then applies a partial-corpus/base-rate enrichment rule and writes a TIFF. Its
+CLI is disabled; the old uniqueness decision is not a clearance source. Keep
+its evidence as history and do not regenerate or submit from this entrypoint.
 """
 from __future__ import annotations
 
@@ -234,4 +220,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this legacy pipeline uses a partial corpus and a base-rate enrichment "
+        "exception, not the current literal uniqueness gate. Do not run or emit a TIFF."
+    )

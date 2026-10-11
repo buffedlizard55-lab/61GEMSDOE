@@ -208,14 +208,26 @@ def ribbon(dots: np.ndarray, half_width_px: int = 1) -> np.ndarray:
 # 4. Controls
 # --------------------------------------------------------------------------- #
 def random_lines(shape, allowed, n_dots, seed=61, length_px=40, spacing_px=3) -> np.ndarray:
-    """Random straight dotted lines inside ``allowed`` with the same dot count
-    and the same 3 px dot spacing as the candidates (the null model the lane
-    paragraph asks for)."""
-    rng = np.random.default_rng(seed)
+    """Random straight dotted lines inside ``allowed`` at an exact pixel budget.
+
+    The original helper rescanned the full raster with ``out.sum()`` after every
+    dot, which made large null controls needlessly quadratic. Track newly set
+    cells incrementally, handle an empty domain, and fill the final remainder
+    from allowed cells only if line collisions prevent the exact budget.
+    """
+    allowed = np.asarray(allowed, bool)
+    if allowed.ndim != 2 or tuple(shape) != allowed.shape:
+        raise ValueError("shape and allowed domain must be matching 2-D arrays")
     out = np.zeros(shape, bool)
     ys, xs = np.nonzero(allowed)
+    target = min(max(0, int(n_dots)), int(ys.size))
+    if target == 0:
+        return out
+    rng = np.random.default_rng(seed)
+    count = 0
     guard = 0
-    while out.sum() < n_dots and guard < 1000 * n_dots:
+    max_guard = max(1000, 100 * target)
+    while count < target and guard < max_guard:
         guard += 1
         i = int(rng.integers(ys.size))
         y0, x0 = int(ys[i]), int(xs[i])
@@ -223,10 +235,16 @@ def random_lines(shape, allowed, n_dots, seed=61, length_px=40, spacing_px=3) ->
         for t in range(0, length_px, spacing_px):
             y = y0 + int(round(t * np.sin(th)))
             x = x0 + int(round(t * np.cos(th)))
-            if 0 <= y < shape[0] and 0 <= x < shape[1] and allowed[y, x]:
+            if (0 <= y < shape[0] and 0 <= x < shape[1]
+                    and allowed[y, x] and not out[y, x]):
                 out[y, x] = True
-                if out.sum() >= n_dots:
+                count += 1
+                if count >= target:
                     break
+    if count < target:
+        remaining = np.flatnonzero(allowed & ~out)
+        pick = rng.choice(remaining, size=target - count, replace=False)
+        out.ravel()[pick] = True
     return out
 
 

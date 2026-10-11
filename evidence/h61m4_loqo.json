@@ -188,5 +188,7 @@
       "mean_coverage": 0.04700653520991683
     }
   },
-  "note": "The non-spatially-blocked holdout (evidence/h61m_holdout.json, h61m2_holdout.json) over-rewards locators that sit next to visible traces, because the withheld segments are themselves adjacent to visible traces. The group's own organizer-scored pair (0.2600 -> 0.2778 by deleting every dot within 3 px of the catalogue) shows that adjacency does not pay on the live metric either, so the LOQO number is the one to trust for a slot decision."
+  "note": "The non-spatially-blocked holdout (evidence/h61m_holdout.json, h61m2_holdout.json) over-rewards locators that sit next to visible traces, because the withheld segments are themselves adjacent to visible traces. The group's own organizer-scored pair (0.2600 -> 0.2778 by deleting every dot within 3 px of the catalogue) shows that adjacency does not pay on the live metric either, so the LOQO number is the one to trust for a slot decision.",
+  "ci95": null,
+  "ci_status": "No 95% CI was generated/reported for the mean or quadrant range; mean/min/max summarize four quadrant results only."
 }

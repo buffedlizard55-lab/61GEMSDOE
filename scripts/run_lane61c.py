@@ -358,7 +358,7 @@ def stage_emit(a) -> None:
             lane="buried structures from gravity inversion",
             z0_m=Z0_M, density_contrast_kg_m3=DRHO, kc_scale=KC_SCALE,
             inversion_stage="first iterate (low-passed Bouguer slab); non-linear correction "
-                            "rejected because it diverges on an isostatic residual",
+                            "rejected because convergence was not demonstrated within six iterations",
             n_dots=n, budget=budget, min_sep_px=a.min_sep,
             no_prior_submission_raster_used=True))
     write_json("e4_submission.json", dict(
@@ -435,7 +435,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(
+        "Retired: this legacy pipeline reports uniqueness from a partial corpus. Use "
+        "the shared strict-gate runner; do not emit or score this candidate."
+    )
 
 
 # --------------------------------------------------------------- poisson disk

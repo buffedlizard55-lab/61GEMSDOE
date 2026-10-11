@@ -1,80 +1,43 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verify · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
+<title>Verify · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
 <style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html" class=active>Verify</a></nav>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html" class=active>Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<h2>Validator receipt — gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</h2>
-<table><tr><th>check</th><th>result</th></tr>
-<tr><td>single_band</td><td>PASS</td></tr>
-<tr><td>dtype_float32</td><td>PASS</td></tr>
-<tr><td>dimensions_3730x3292</td><td>PASS</td></tr>
-<tr><td>crs_epsg_32611</td><td>PASS</td></tr>
-<tr><td>transform_matches</td><td>PASS</td></tr>
-<tr><td>transform_matches_sample_submission</td><td>PASS</td></tr>
-<tr><td>no_nan_anywhere</td><td>PASS</td></tr>
-<tr><td>no_inf_anywhere</td><td>PASS</td></tr>
-<tr><td>no_sentinel_values</td><td>PASS</td></tr>
-<tr><td>range_0_1_guaranteed</td><td>PASS</td></tr>
-<tr><td>min_ge_0</td><td>PASS</td></tr>
-<tr><td>max_le_1</td><td>PASS</td></tr>
-<tr><td>in_footprint_all_finite</td><td>PASS</td></tr>
-<tr><td>in_footprint_range_0_1</td><td>PASS</td></tr>
-<tr><td>outside_footprint_zero</td><td>PASS</td></tr>
-<tr><td>zero_dots_on_mapped_catalogue</td><td>PASS</td></tr>
-<tr><td>whole_raster_all_finite</td><td>PASS</td></tr>
-<tr><td>whole_raster_range_0_1</td><td>PASS</td></tr>
-<tr><td>no_float32_sentinel</td><td>PASS</td></tr>
-</table>
-<p>All 19 checks passed: <code>all_checks_passed = True</code>.
-Bytes 130,225; sha256 <code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code>; zip sha256 <code>9b45a8d45d11232a5254cb8529b8ccf67ffe6426f886b9ffaac4ccceba24e160</code>.</p>
+<h1>Format and uniqueness verification</h1>
+<h2>H61-G archived TIFF local-format validation</h2>
+<p>File <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code>, SHA-256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code>; local writer/validator checks only.
+All listed format/range checks pass; this does not clear uniqueness or organizer acceptance.</p>
+<table><tr><th>Check</th><th>Result</th></tr><tr><td><code>single_band</code></td><td>PASS</td></tr><tr><td><code>dtype_float32</code></td><td>PASS</td></tr><tr><td><code>dimensions_3730x3292</code></td><td>PASS</td></tr><tr><td><code>crs_epsg_32611</code></td><td>PASS</td></tr><tr><td><code>transform_matches_sample_submission</code></td><td>PASS</td></tr><tr><td><code>no_nan_anywhere</code></td><td>PASS</td></tr><tr><td><code>no_inf_anywhere</code></td><td>PASS</td></tr><tr><td><code>no_sentinel_values</code></td><td>PASS</td></tr><tr><td><code>range_0_1_guaranteed</code></td><td>PASS</td></tr><tr><td><code>min_ge_0</code></td><td>PASS</td></tr><tr><td><code>max_le_1</code></td><td>PASS</td></tr><tr><td><code>in_footprint_all_finite</code></td><td>PASS</td></tr><tr><td><code>in_footprint_range_0_1</code></td><td>PASS</td></tr><tr><td><code>outside_footprint_zero</code></td><td>PASS</td></tr><tr><td><code>transform_matches</code></td><td>PASS</td></tr><tr><td><code>whole_raster_all_finite</code></td><td>PASS</td></tr><tr><td><code>whole_raster_range_0_1</code></td><td>PASS</td></tr><tr><td><code>no_float32_sentinel</code></td><td>PASS</td></tr><tr><td><code>zero_dots_on_mapped_catalogue</code></td><td>PASS</td></tr></table>
+<h2>H61-G final-dot strict uniqueness</h2>
+<p>Verdict <b>DUPLICATE_LANE_DRIFT</b>; 27 raster comparisons in the declared scope; organizer registry complete: no.
+Limits: signed full-footprint Spearman &gt; 0.90, OR one-sided positive-support overlap &gt; 70% within 3 px.
+Jaccard is diagnostic only.</p>
+<table><tr><th>Raster</th><th>Spearman</th><th>Candidate positives within 3 px</th><th>Jaccard (diagnostic)</th><th>Gate</th></tr><tr><td><code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code></td><td>+0.01087</td><td>31.22750%</td><td>0.00923</td><td>pass</td></tr><tr><td><code>gems32-probe-S1-ANCHOR-identical-to-live-02600.tif</code></td><td>+0.00885</td><td>33.03250%</td><td>0.00852</td><td>pass</td></tr><tr><td><code>gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif</code></td><td>+0.00892</td><td>31.77250%</td><td>0.00824</td><td>pass</td></tr><tr><td><code>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif</code></td><td>+0.01002</td><td>32.16750%</td><td>0.00893</td><td>pass</td></tr><tr><td><code>gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif</code></td><td>+0.01030</td><td>34.92250%</td><td>0.00977</td><td>pass</td></tr><tr><td><code>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif</code></td><td>+0.00885</td><td>33.03250%</td><td>0.00852</td><td>pass</td></tr><tr><td><code>gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif</code></td><td>+0.00384</td><td>24.50750%</td><td>0.00581</td><td>pass</td></tr><tr><td><code>gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif</code></td><td>+0.00230</td><td>16.06250%</td><td>0.00522</td><td>pass</td></tr><tr><td><code>gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif</code></td><td>+0.00885</td><td>33.03250%</td><td>0.00852</td><td>pass</td></tr><tr><td><code>gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif</code></td><td>+0.01087</td><td>31.75500%</td><td>0.00929</td><td>pass</td></tr><tr><td><code>GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif</code></td><td>+0.00933</td><td>32.84500%</td><td>0.00866</td><td>pass</td></tr><tr><td><code>gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif</code></td><td>+0.01002</td><td>32.16750%</td><td>0.00893</td><td>pass</td></tr><tr><td><code>gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif</code></td><td>+0.01529</td><td>37.29000%</td><td>0.01247</td><td>pass</td></tr><tr><td><code>gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-allfinite.tif</code></td><td>+0.01337</td><td>38.44250%</td><td>0.01164</td><td>pass</td></tr><tr><td><code>gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif</code></td><td>+0.01529</td><td>37.29000%</td><td>0.01247</td><td>pass</td></tr><tr><td><code>gems20-h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b-allfinite.tif</code></td><td>+0.01235</td><td>39.33250%</td><td>0.01120</td><td>pass</td></tr><tr><td><code>gems20-h20-5-continuous-pu-proxy-unverified-20260930-824ce73a-allfinite.tif</code></td><td>+0.01337</td><td>38.10250%</td><td>0.01164</td><td>pass</td></tr><tr><td><code>gems46-h46-1-dfa-regime-break-zeros.tif</code></td><td>+0.00077</td><td>20.06000%</td><td>0.00415</td><td>pass</td></tr><tr><td><code>tip_stepover_r30_02632.tif</code></td><td>+0.00933</td><td>32.84500%</td><td>0.00866</td><td>pass</td></tr><tr><td><code>SUBMIT-THIS-gems57-h57i-iso-zeros.tif</code></td><td>+0.00069</td><td>7.52750%</td><td>0.00411</td><td>pass</td></tr><tr><td><code>gems57-faultzone-anatomy-60000px-20261009T054251Z.tif</code></td><td>+0.00477</td><td>16.11500%</td><td>0.00701</td><td>pass</td></tr><tr><td><code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>+0.00447</td><td>8.18750%</td><td>0.00612</td><td>pass</td></tr><tr><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>+0.00536</td><td>1.70500%</td><td>0.00562</td><td>pass</td></tr><tr><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td><td>+0.01087</td><td>5.32750%</td><td>0.01041</td><td>pass</td></tr><tr><td><code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code></td><td>+0.00429</td><td>13.38000%</td><td>0.00593</td><td>pass</td></tr><tr><td><code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code></td><td>+0.00184</td><td>98.59250%</td><td>0.00748</td><td>STOP</td></tr><tr><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>+0.00182</td><td>25.31500%</td><td>0.00480</td><td>pass</td></tr></table>
+<p><b>Archive limitation:</b> no pre-placement surface-uniqueness receipt was found for the old H61-G dots. Do not infer a surface pass; the measured final-dot failure independently bars submission.</p>
+<h2>H61-L surface-before-placement gate</h2>
+<p>Verdict <b>DUPLICATE_LANE_DRIFT</b>; candidate support 614,556; maximum positive Spearman
+0.17299; worst one-sided overlap 94.66916% vs limit 70%.
+The highest-overlap raster is <code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>. This current-run H61-L surface stopped here: no placement, holdout, or TIFF from this run. The separate archived main-branch variant is listed in the post-merge final-dot audit below and is not cleared.</p>
+<p>Accessible inventory record: <a href="../evidence/registry_accessible_index.json">registry_accessible_index.json</a>;
+H61-G gate receipt: <a href="../evidence/h61g_uniqueness.json">h61g_uniqueness.json</a>;
+H61-L surface receipt: <a href="../evidence/h61l_surface.json">h61l_surface.json</a>.</p>
+<h2>Post-merge strict final-dot audit of local TIFFs</h2>
+<p>11/11 local candidate artifacts stop at the one-sided 3 px overlap leg against
+<code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>; threshold is strictly &gt;70%. This proves a stop, not a clearance of any unreported comparison.
+The archived main-branch pre-placement receipts are not accepted as strict-gate clearance; see the complete <a href="../evidence/local_artifact_strict_dot_audit.json">audit receipt</a>.</p>
+<table><tr><th>Local TIFF artifact</th><th>Positive cells</th><th>One-sided overlap</th><th>Strict gate</th></tr><tr><td><code>docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code></td><td>40,000</td><td>99.64000%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>25,285</td><td>99.75875%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code></td><td>38,000</td><td>98.86053%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>40,000</td><td>98.68500%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif</code></td><td>40,000</td><td>98.63750%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td><td>88,796</td><td>99.81080%</td><td>STOP</td></tr><tr><td><code>docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif</code></td><td>40,000</td><td>99.14750%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></td><td>55,301</td><td>94.68364%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>40,000</td><td>99.32000%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif</code></td><td>10,128</td><td>98.76580%</td><td>STOP</td></tr><tr><td><code>docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></td><td>40,000</td><td>98.59250%</td><td>STOP</td></tr></table>
 
-<h2>Uniqueness against every earlier raster</h2>
-<p>28 registry rasters compared (every raster reachable in the group's
-public GitHub repositories plus the earlier rasters published in this repository). Limits: Spearman
-ρ ≤ 0.9; one-sided 3 px dot overlap ≤ 0.7 (Jaccard ≤ 0.50 against a
-reference more than 5× denser than ours). Verdict <b>UNIQUE</b>.</p>
-<table><tr><th>reference raster</th><th>Spearman</th><th>my dots within 3 px of theirs</th><th>base rate</th><th>Jaccard</th><th>gate</th></tr>
-<tr><td>GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif</td><td>+0.0060</td><td>0.232</td><td>0.166</td><td>0.0070</td><td>one-sided ok</td></tr>
-<tr><td>SUBMIT-THIS-gems57-h57i-iso-zeros.tif</td><td>-0.0003</td><td>0.067</td><td>0.068</td><td>0.0036</td><td>one-sided ok</td></tr>
-<tr><td>gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-allfinite.tif</td><td>+0.0083</td><td>0.267</td><td>0.204</td><td>0.0094</td><td>one-sided ok</td></tr>
-<tr><td>gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif</td><td>+0.0091</td><td>0.261</td><td>0.196</td><td>0.0098</td><td>one-sided ok</td></tr>
-<tr><td>gems20-h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b-allfinite.tif</td><td>+0.0079</td><td>0.272</td><td>0.203</td><td>0.0093</td><td>one-sided ok</td></tr>
-<tr><td>gems20-h20-5-continuous-pu-proxy-unverified-20260930-824ce73a-allfinite.tif</td><td>+0.0088</td><td>0.266</td><td>0.193</td><td>0.0097</td><td>one-sided ok</td></tr>
-<tr><td>gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif</td><td>+0.0091</td><td>0.261</td><td>0.196</td><td>0.0098</td><td>one-sided ok</td></tr>
-<tr><td>gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif</td><td>+0.0051</td><td>0.230</td><td>0.172</td><td>0.0066</td><td>one-sided ok</td></tr>
-<tr><td>gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif</td><td>+0.0060</td><td>0.245</td><td>0.185</td><td>0.0077</td><td>one-sided ok</td></tr>
-<tr><td>gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif</td><td>+0.0061</td><td>0.226</td><td>0.160</td><td>0.0069</td><td>one-sided ok</td></tr>
-<tr><td>gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif</td><td>+0.0059</td><td>0.224</td><td>0.158</td><td>0.0067</td><td>one-sided ok</td></tr>
-<tr><td>gems32-probe-S1-ANCHOR-identical-to-live-02600.tif</td><td>+0.0051</td><td>0.230</td><td>0.172</td><td>0.0066</td><td>one-sided ok</td></tr>
-<tr><td>gems46-h46-1-dfa-regime-break-zeros.tif</td><td>+0.0009</td><td>0.213</td><td>0.198</td><td>0.0042</td><td>one-sided ok</td></tr>
-<tr><td>gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif</td><td>+0.0026</td><td>0.147</td><td>0.153</td><td>0.0052</td><td>one-sided ok</td></tr>
-<tr><td>gems57-faultzone-anatomy-60000px-20261009T054251Z.tif</td><td>+0.0031</td><td>0.142</td><td>0.099</td><td>0.0062</td><td>one-sided ok</td></tr>
-<tr><td>gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif</td><td>-0.0010</td><td>0.104</td><td>0.122</td><td>0.0036</td><td>one-sided ok</td></tr>
-<tr><td>gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif</td><td>+0.0051</td><td>0.230</td><td>0.172</td><td>0.0066</td><td>one-sided ok</td></tr>
-<tr><td>gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif</td><td>+0.0061</td><td>0.226</td><td>0.160</td><td>0.0069</td><td>one-sided ok</td></tr>
-<tr><td>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</td><td>+0.0068</td><td>0.221</td><td>0.151</td><td>0.0072</td><td>one-sided ok</td></tr>
-<tr><td>gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif</td><td>+0.0067</td><td>0.225</td><td>0.155</td><td>0.0072</td><td>one-sided ok</td></tr>
-<tr><td>tip_stepover_r30_02632.tif</td><td>+0.0060</td><td>0.232</td><td>0.166</td><td>0.0070</td><td>one-sided ok</td></tr>
-<tr><td>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</td><td>+0.0120</td><td>0.091</td><td>0.076</td><td>0.0099</td><td>one-sided ok</td></tr>
-<tr><td>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</td><td>+0.0175</td><td>0.029</td><td>0.007</td><td>0.0116</td><td>one-sided ok</td></tr>
-<tr><td>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</td><td>+0.0304</td><td>0.087</td><td>0.026</td><td>0.0196</td><td>one-sided ok</td></tr>
-<tr><td>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</td><td>+0.1961</td><td>0.431</td><td>0.091</td><td>0.1126</td><td>one-sided ok</td></tr>
-<tr><td>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</td><td>+0.0056</td><td>0.118</td><td>0.093</td><td>0.0066</td><td>one-sided ok</td></tr>
-<tr><td>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</td><td>+0.0040</td><td>0.996</td><td>0.958</td><td>0.0081</td><td>Jaccard ok</td></tr>
-<tr><td>gems61c-gravstep-liveband-40k-20261011.tif</td><td>+0.0033</td><td>0.295</td><td>0.212</td><td>0.0056</td><td>one-sided ok</td></tr>
-</table>
-
-</div></body></html>
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

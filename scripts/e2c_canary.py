@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Leakage canary: every provided band alone, plus the inverted surfaces, tested
-on the hide-and-recover holdout.
+"""RETIRED historical holdout leakage-canary experiment.
 
-AUC above 0.90 means leakage until proven otherwise.  Truth is the pooled withheld
-catalogue segments; background is a random sample of the pooled scored domain.
+The candidate did not pass the current pre-placement gate and the aggregate
+experiment budget is exhausted. Existing canary evidence is retained; the CLI is
+disabled to prevent new holdout scores from being produced out of protocol.
 """
 from __future__ import annotations
 
@@ -63,4 +63,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: the current candidate failed pre-placement; do not run another "
+        "holdout canary or produce a score outside the gate."
+    )

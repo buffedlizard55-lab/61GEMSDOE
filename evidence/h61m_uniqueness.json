@@ -1,5 +1,5 @@
 {
-  "evidence_class": "MEASURED",
+  "evidence_class": "MEASURED under retired dense-reference/Jaccard policy; strict final-dot verdict recorded separately and supersedes the old clearance label",
   "my_file": "out/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
   "my_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
   "my_dots": 40000,
@@ -25,7 +25,7 @@
     "limit": 0.7
   },
   "byte_identical_to_any": [],
-  "verdict": "UNIQUE",
+  "verdict": "DUPLICATE_LANE_DRIFT",
   "rows": [
     {
       "file": "GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
@@ -448,5 +448,20 @@
       "byte_identical": false
     }
   ],
-  "scope": "Every registry raster reachable from the group's public GitHub repositories (scripts/fetch_registry.sh) plus the earlier rasters published in this repository."
+  "scope": "Every registry raster reachable from the group's public GitHub repositories (scripts/fetch_registry.sh) plus the earlier rasters published in this repository.",
+  "legacy_policy_verdict": "UNIQUE",
+  "strict_final_dot_status": {
+    "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "one_sided_overlap_fraction": 0.9964,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "organizer_registry_complete": false,
+    "holdout_reached_after_strict_failure": false,
+    "weekly_slot_used": false
+  },
+  "scope_note": "The 28-raster comparison is the historical run-time scope; current declared accessible scope is 33 records and remains not organizer-complete."
 }

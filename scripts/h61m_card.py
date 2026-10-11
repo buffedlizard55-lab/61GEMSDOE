@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""H61-M run card -- one JSON card, every number labelled.
+"""RETIRED H61-MH card generator.
 
-Assembles evidence/h61m_features.json, h61m_holdout.json, h61m2_holdout.json,
-h61m3_loqo.json, h61m3_sweep.json, h61m4_loqo.json, h61m_final.json and
-h61m_uniqueness.json into evidence/h61m_run_card.json.
+The historical card contains a legacy UNIQUE verdict superseded by the strict
+99.64% final-dot overlap stop. Direct execution is disabled to prevent stale
+status from being regenerated; use scripts/build_site_status.py and the current
+strict run card instead.
 """
 from __future__ import annotations
 
@@ -27,6 +28,11 @@ def j(name):
 
 
 def main() -> int:
+    print("RETIRED: this card generator can restore a legacy H61-MH UNIQUE claim; "
+          "strict audit says DUPLICATE_LANE_DRIFT at 99.64%. Use the current H61-L run card.",
+          file=sys.stderr)
+    return 2
+
     feat, hold = j("h61m_features.json"), j("h61m_holdout.json")
     e2, e3l, e3s, e4 = (j("h61m2_holdout.json"), j("h61m3_loqo.json"),
                         j("h61m3_sweep.json"), j("h61m4_loqo.json"))

@@ -563,4 +563,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this legacy candidate builder uses the removed dense-reference/Jaccard "
+        "uniqueness exception and is not authorized to emit a submission. Use the "
+        "current strict-gate workflow."
+    )
