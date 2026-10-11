@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Experiments 1-3 for the buried-structure lane.
+"""RETIRED historical candidate/holdout experiment suite.
 
-Experiment 1  inversion sanity + leakage canary on every candidate field
-Experiment 2  operating-point sweep on a spatially blocked hide-and-recover holdout,
-              with the random-line control the lane protocol demands
-Experiment 3  basin-interior recovery (the lane's actual claim) + block bootstrap CI
-
-Usage:
-    python scripts/run_experiment.py --data data --out reports
+The former runner performed model and holdout sweeps without the current shared
+pre-placement uniqueness gate. The aggregate experiment budget is exhausted;
+its CLI is disabled and existing reports remain historical only.
 """
 
 from __future__ import annotations
@@ -284,4 +280,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(
+        "Retired: the historical experiment suite bypasses the current strict "
+        "pre-placement gate and experiment-budget stop. Do not run a new holdout."
+    )

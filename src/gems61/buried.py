@@ -7,11 +7,13 @@ This module is the assigned lane's instrument.  It answers one question:
 
 Method, in order, with the source that fixes each step:
 
-1. **Invert** the isostatic residual gravity field for depth to basement with the
-   Parker (1973) forward series / Oldenburg (1974) iteration.  Oldenburg's paper
-   is explicit that the iteration diverges without a low-pass filter; the filter
-   used here is a Gaussian tapering the high wavenumbers that the data cannot
-   resolve, in the Wiener sense (:func:`lowpass_wiener`).
+1. **Invert** the isostatic residual gravity field for a provisional depth-to-basement
+   surface. Parker (1973) supplies the forward series and Oldenburg (1974) the nonlinear
+   iteration; however, the current H61-G production path uses only the first low-passed
+   Bouguer-slab iterate (:func:`slab_solution`). A converged nonlinear iteration is not
+   established by the stored six-step test, so H61-G's surface must not be described as
+   a completed Parker-Oldenburg iterative inversion. The low-pass is the declared
+   stabilizer for unresolved high wavenumbers.
 2. **Calibrate** the density contrast against the published Basin-and-Range
    basin-depth scale of Saltus & Jachens (1995), USGS Geophysical Investigations
    Map **GP-1012**, 1:2,500,000 -- i.e. the *shape* of the published depth
@@ -176,7 +178,7 @@ def parker_oldenburg(dg_mgal: np.ndarray, delta_rho: float, z0: float,
         delta_rho=float(delta_rho), z0_m=float(z0), n_terms=int(n_terms),
         filter=f"1/(1+(k/kc)^{order}) with kc=1/(2*z0)",
         filter_form="Oldenburg 1974 low-pass (divergence without it)",
-        source_doi="doi:10.1190/1.1440444 (Oldenburg 1974); doi:10.1111/j.1365-246X.1973.tb02307.x (Parker 1973)",
+        source_doi="doi:10.1190/1.1440444 (Oldenburg 1974); doi:10.1111/j.1365-246X.1973.tb06513.x (Parker 1973)",
     )
 
 
@@ -464,15 +466,14 @@ def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float
                   kc_scale: float = 0.25, *, _pre_filled: np.ndarray | None = None) -> dict:
     """First iterate of the Oldenburg iteration: the low-passed Bouguer slab depth.
 
-    **This is the operator the lane uses, and the reason is a measurement.**
-    Running the full non-linear series on this data set does not converge: the
-    leading term leaves a 23.8 mGal forward residual, the first correction raises
-    it to 39.7 mGal, and the sequence then grows without bound (recorded in
-    ``evidence/measure.json``, ``divergence_trace``).  That is the expected
-    behaviour when the input is an *isostatic residual* -- it carries crustal-
-    and mantle-scale field, and the Parker series can only put that field into
-    relief on one interface, so it does.  The first iterate is therefore kept and
-    the non-linear correction is reported as rejected rather than hidden.
+    **This is the operator the current H61-G lane uses; it is an explicit
+    approximation, not a converged nonlinear inversion.** The stored six-step
+    test in ``evidence/measure.json`` reduces the forward residual but still has
+    a 130.5 m maximum change at iteration six (tolerance was 1 m); it therefore
+    does not establish convergence. The data alone do not prove that every
+    damped/filter configuration diverges. Until a reproducible converged solve
+    is validated, retain this first iterate and report the method limitation
+    rather than calling it a completed Oldenburg iteration.
 
     The low-pass is a Butterworth of ``filter_order`` with corner
     ``kc = kc_scale / (2 z0)``; ``kc_scale`` < 1 is required and is calibrated
@@ -501,8 +502,8 @@ def slab_solution(dg: np.ndarray, known: np.ndarray, delta_rho: float, z0: float
                 filter=f"Butterworth order {filter_order}, kc = {kc_scale/(2.0*z0):.3e} rad/m "
                        f"(kc_scale={kc_scale})",
                 rms_residual_mgal=float(np.sqrt(np.mean(resid ** 2))),
-                stage="first iterate (low-passed Bouguer slab); non-linear correction rejected "
-                      "because it diverges on an isostatic residual",
+                stage="first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated "
+                      "by the recorded six-iteration test",
                 source_doi="doi:10.1190/1.1440444")
 
 

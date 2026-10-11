@@ -156,4 +156,3 @@ def assert_submittable(rep: dict) -> None:
     if not rep.get("all_checks_passed", False):
         bad = [k for k, v in rep.get("checks", {}).items() if not v]
         raise AssertionError(f"failed submission validation checks: {bad}")
-

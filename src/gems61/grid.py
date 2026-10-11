@@ -230,4 +230,3 @@ def write_submission(path: Path, values: np.ndarray, *, mode: str = "zeros") -> 
         dst.write(out, 1)
         dst.set_band_description(1, "predicted_new_fault_probability")
     return {"path": str(path), "mode": mode, "nodata": nodata}
-

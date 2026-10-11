@@ -111,27 +111,27 @@ def to_full_grid(mask_small: np.ndarray, shape: tuple[int, int]) -> np.ndarray:
 def magnetic_edges(mag_full: np.ndarray, valid_full: np.ndarray, *,
                   smooth_px: float = MAG_SMOOTH_PX) -> dict:
     """Find horizontal gradient maxima in TMI data (magnetic edges).
-    
+
     Uses the same Blakely-Simpson approach as for gravity, but on magnetic data.
     These represent locations where magnetized material changes abruptly,
     which happens at faults that offset magnetic basement or volcanic flows.
     """
     m = np.asarray(mag_full, np.float64)
     valid = np.asarray(valid_full, bool) & np.isfinite(m)
-    
+
     # Fill invalid areas with inpaint
     filled = B.inpaint_smooth(np.where(valid, m, np.nan), valid)
-    
+
     # Smooth to reduce noise
     if smooth_px > 0:
         filled = ndi.gaussian_filter(filled, smooth_px, mode="nearest")
-    
+
     # Compute horizontal gradient magnitude
     hgm = B.horizontal_gradient_magnitude(filled, B.PIXEL_M)
-    
+
     # Find Blakely-Simpson maxima
     mx = B.blakely_simpson_maxima(hgm) & valid
-    
+
     return dict(hgm=hgm, maxima=mx, n_edges=int(mx.sum()))
 
 
@@ -147,7 +147,7 @@ def magnetic_edges_in_corridor(mag_edges: np.ndarray, corridor: np.ndarray) -> n
 
 def ribbon(dots: np.ndarray, half_width_px: int = 1) -> np.ndarray:
     """8-neighbour dilation of a dot field into a (2w+1)-cell ribbon.
-    
+
     As required by the lane: "Gravity resolves such steps only to a few hundred metres
     at best, so emit multi-line ribbons rather than thin lines."
     """

@@ -232,4 +232,3 @@ def auc(score: np.ndarray, labels: np.ndarray, n_bg: int = 400000, seed=0) -> fl
     ranks = rankdata(allv, method="average")
     ra = ranks[: len(a)].sum()
     return float((ra - len(a) * (len(a) + 1) / 2.0) / (len(a) * len(b)))
-

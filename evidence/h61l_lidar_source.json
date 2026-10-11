@@ -1,0 +1,61 @@
+{
+  "source": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features_u8.tif",
+  "metadata_source": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json",
+  "upstream_repository": "buffedlizard55-lab/GEMSDOE24",
+  "upstream_commit": "2e7bf080270493f77286fd62f2db958805053ba5",
+  "upstream_git_blob_sha": "da733b53147efad5c141ffdb96e469ec5b4da8b8",
+  "local_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+  "bytes": 36943606,
+  "shape": [
+    3730,
+    3292
+  ],
+  "count": 12,
+  "dtype": [
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8"
+  ],
+  "crs": "EPSG:32611",
+  "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+  ],
+  "nodata": 0.0,
+  "bands": [
+    "ex_max",
+    "ex_mean",
+    "step_max",
+    "lapneg_max",
+    "lappos_max",
+    "downface_max",
+    "upface_max",
+    "cross_max",
+    "relief",
+    "coh100",
+    "strike",
+    "valid"
+  ],
+  "method_note": "Twelve uint8 terrain-descriptor channels aggregated from 2 m work cells; upstream metadata identifies USGS 3DEP 1 m DEM tiles. Quantized descriptors are not fault labels or a fault-detection raster.",
+  "rights_note": "Upstream metadata states USGS 3DEP products are available without use restrictions; the source feature file is a public sibling-repository derivative.",
+  "caveats": [
+    "uncalibrated terrain descriptors, not fault detections",
+    "roads, channels, terrace risers, paleo-shorelines, landslides and mines also create steps",
+    "upstream metadata reports 10 failed tiles out of 716 and approximately 1-2 m datum offset",
+    "source is a sibling feature product; no sibling prediction raster is used"
+  ],
+  "label": "PUBLIC-REPOSITORY-DERIVATIVE; not organizer-provided and not an organizer score receipt"
+}

@@ -49,7 +49,7 @@
     "n_combinations": 72
   },
   "inversion": {
-    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "stage": "first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated by the recorded six-iteration test",
     "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
     "rms_residual_mgal": 2.425341944786814,
     "delta_rho": -300.0,
@@ -94,11 +94,11 @@
     "n_persistent_px_100m": 65664
   },
   "sources": {
-    "parker": "Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb02307.x",
+    "parker": "Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb06513.x",
     "oldenburg": "Oldenburg (1974) Geophysics 39(4):526-536, doi:10.1190/1.1440444",
     "blakely_simpson": "Blakely & Simpson (1986) Geophysics 51(7):1494-1498, doi:10.1190/1.1442197",
     "blakely_jachens": "Blakely & Jachens (1991) GSA Bulletin 103:795-803",
     "gp1012": "Saltus & Jachens (1995) USGS GP-1012, doi:10.3133/gp1012"
   },
-  "elapsed_s": 344.6
+  "elapsed_s": 57.8
 }
