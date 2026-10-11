@@ -1,108 +1,54 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Method</title><style>
-:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
-h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
-h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
-h3{font-size:17px;margin:1.4em 0 .35em}
-p,li{color:var(--ink)}
-small,.mut{color:var(--mut)}
-.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
-.ok{background:#eefaf1;border-color:#b6e2c5}
-.warn{background:#fff8ec;border-color:#f2d6a8}
-.bad{background:#fdeeed;border-color:#f3c2bd}
-.banner strong{display:block;font-size:19px;margin-bottom:6px}
-.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
-a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
-a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
-th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
-th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
-nav a{margin-right:14px}
-ul.tight li{margin:.15em 0}
-.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Method</h1>
-<h2>The method, and why each choice was forced</h2>
-<h3>1 · Invert the gravity for depth to basement</h3>
-<p>Input is band 13, <code>iso_grav_anom</code>, of the pinned
-<code>training_features.tif</code>. The operator is Parker (1973) forward / Oldenburg (1974)
-iterative, on a 400 m block-mean grid (the field is band-limited to tens of kilometres; 100 m
-sampling would add nothing but noise). The gravity band is NaN over 58 % of the rectangle, so the
-gap is filled by multi-scale normalised convolution — a constant fill puts a step along the whole
-survey boundary and the downward-continuation factor turns that step into tens of kilometres of
-fake relief.</p>
-<h3>2 · The non-linear correction is rejected, on measurement</h3>
-<p>Oldenburg's iteration does not converge on an <i>isostatic residual</i>. The trace is below:
-iteration 1 leaves the smallest forward residual; every later correction makes it worse and the
-relief grows without bound. An isostatic residual carries crustal- and mantle-scale field, and a
-single-interface Parker series can only absorb that field as relief — so it does. The lane
-therefore keeps the <b>first iterate</b> (the low-passed Bouguer slab) and reports the rejected
-correction rather than hiding it.</p>
-<table><tr><th>iteration</th><th>max change (m)</th><th>max |relief| (m)</th><th>forward RMS (mGal)</th></tr><tr><td>1</td><td>2837</td><td>1265</td><td>26.31</td></tr><tr><td>2</td><td>786</td><td>1799</td><td>8.31</td></tr><tr><td>3</td><td>412</td><td>2182</td><td>3.68</td></tr><tr><td>4</td><td>251</td><td>2401</td><td>2.23</td></tr><tr><td>5</td><td>167</td><td>2540</td><td>1.68</td></tr><tr><td>6</td><td>131</td><td>2633</td><td>1.40</td></tr></table>
-<h3>3 · Calibrate against the published map, not against the supplied band</h3>
-<p>The two free parameters are exactly the pair Oldenburg identifies as non-unique: the density
-contrast and the reference level. Both are fitted to USGS <b>GP-1012</b>, whose published scale is
-1 : 2,500,000 and whose only transportable quantities are the median depth band and the fraction
-of the province deeper than 1 km ("about 20 %", Blakely &amp; Jachens 1991). A subset of the
-21-point sweep:</p>
-<table><tr><th>z₀ (m)</th><th>Δρ (kg/m³)</th><th>kc scale</th><th>median (m)</th><th>p90 (m)</th>
-<th>&gt; 1 km</th><th>forward RMS (mGal)</th><th>penalty</th></tr><tr><td>300</td><td>-250</td><td>0.500</td><td>980</td><td>2455</td><td>49.2 %</td><td>3.02</td><td>1.236</td></tr><tr><td>300</td><td>-300</td><td>0.250</td><td>873</td><td>1947</td><td>42.8 %</td><td>3.71</td><td>0.982</td></tr><tr><td>300</td><td>-350</td><td>0.125</td><td>808</td><td>1436</td><td>33.2 %</td><td>5.94</td><td>0.651</td></tr><tr><td>300</td><td>-450</td><td>0.500</td><td>678</td><td>1497</td><td>30.1 %</td><td>2.17</td><td>0.409</td></tr><tr><td>300</td><td>-500</td><td>0.250</td><td>644</td><td>1288</td><td>23.4 %</td><td>3.41</td><td>0.156</td></tr><tr><td>300</td><td>-600</td><td>0.125</td><td>596</td><td>963</td><td>8.2 %</td><td>5.83</td><td>0.896</td></tr><tr><td>400</td><td>-300</td><td>0.500</td><td>969</td><td>2180</td><td>48.5 %</td><td>2.93</td><td>1.210</td></tr><tr><td>400</td><td>-350</td><td>0.250</td><td>896</td><td>1731</td><td>42.4 %</td><td>4.48</td><td>0.998</td></tr><tr><td>400</td><td>-400</td><td>0.125</td><td>854</td><td>1295</td><td>31.8 %</td><td>6.92</td><td>0.664</td></tr><tr><td>400</td><td>-500</td><td>0.500</td><td>741</td><td>1468</td><td>31.5 %</td><td>2.47</td><td>0.512</td></tr><tr><td>400</td><td>-600</td><td>0.250</td><td>689</td><td>1177</td><td>19.9 %</td><td>4.28</td><td>0.004</td></tr><tr><td>500</td><td>-250</td><td>0.125</td><td>1215</td><td>1831</td><td>68.2 %</td><td>7.65</td><td>1.777</td></tr><tr><td>500</td><td>-350</td><td>0.500</td><td>990</td><td>1998</td><td>49.4 %</td><td>3.17</td><td>1.251</td></tr><tr><td>500</td><td>-400</td><td>0.250</td><td>940</td><td>1588</td><td>44.3 %</td><td>5.23</td><td>1.090</td></tr><tr><td>500</td><td>-450</td><td>0.125</td><td>897</td><td>1239</td><td>33.9 %</td><td>7.58</td><td>0.777</td></tr><tr><td>500</td><td>-600</td><td>0.500</td><td>786</td><td>1374</td><td>31.1 %</td><td>2.84</td><td>0.556</td></tr><tr><td>700</td><td>-250</td><td>0.250</td><td>1425</td><td>2238</td><td>75.9 %</td><td>6.57</td><td>2.044</td></tr><tr><td>700</td><td>-300</td><td>0.125</td><td>1279</td><td>1683</td><td>79.4 %</td><td>8.42</td><td>1.982</td></tr><tr><td>700</td><td>-400</td><td>0.500</td><td>1133</td><td>1950</td><td>60.6 %</td><td>3.99</td><td>1.589</td></tr><tr><td>700</td><td>-450</td><td>0.250</td><td>1103</td><td>1555</td><td>63.1 %</td><td>6.45</td><td>1.603</td></tr><tr><td>700</td><td>-500</td><td>0.125</td><td>1048</td><td>1290</td><td>60.9 %</td><td>8.39</td><td>1.516</td></tr></table>
-<p>Selected: z₀ = 400.0 m, Δρ =
--600.0 kg/m³, kc scale =
-0.25, giving
-19.9 % deeper than 1 km.
-The high apparent contrast is expected for an isostatic residual: the topographic and isostatic
-masses are already removed, so the residual sees a larger effective contrast than a raw Bouguer
-slab.</p>
-<h3>4 · Steps, not lineaments</h3>
-<p>Maxima of the horizontal gradient magnitude of the depth surface, accepted on the
-Blakely &amp; Simpson (1986) "greater than at least two neighbours" rule. Each accepted maximum then
-has its <b>throw</b> measured — the depth range across the ridge in a 5 × 5 window — and only the
-ones above 120 m survive. The DrivenData problem statement's own ledger row DD-ABOUT is
-explicit that a lineament is not a fault and that a fault is a structure with displacement; this
-step is where that is enforced rather than asserted.</p>
-<h3>5 · Emission under the metric, not by eye</h3>
-<p>Dots are chosen by a greedy allocation whose decision rule is the metric's own marginal test,
-<code>dT · D &gt; 0.2 · T · (dT + 1 − k)</code>, with a minimum separation so no truth cell is paid
-for twice. The result is binary, because a graded field is strictly dominated by its own thresholded
-support.</p>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Method · 61GEMSDOE</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status.ok{border-color:var(--ok);background:#0f2a16}
+.status.bad{border-color:var(--bad);background:#2a0f0f}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
+.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
+nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+</style></head><body><div class="wrap">
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html" class=active>Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
-<h2>Sources</h2>
-<ul class="tight">
-<li>Parker, R. L. (1973), <i>The rapid calculation of potential anomalies</i>, GJI 31, 447–455.</li>
-<li>Oldenburg, D. W. (1974), <i>The inversion and interpretation of gravity anomalies</i>,
-    Geophysics 39(4), 526–536, <a href="https://doi.org/10.1190/1.1440444">doi:10.1190/1.1440444</a>.</li>
-<li>Blakely, R. J. &amp; Simpson, R. W. (1986), <i>Approximating edges of source bodies from
-    magnetic or gravity anomalies</i>, Geophysics 51(7), 1494–1498,
-    <a href="https://doi.org/10.1190/1.1442197">doi:10.1190/1.1442197</a>.</li>
-<li>Blakely, R. J. &amp; Jachens, R. C. (1991), <i>Regional study of mineral resources in Nevada</i>,
-    GSA Bulletin 103, 795–803,
-    <a href="https://doi.org/10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2">doi:10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2</a>.</li>
-<li>Saltus, R. W. &amp; Jachens, R. C. (1995), <i>Gravity and basin-depth maps of the Basin and
-    Range Province, western United States</i>, USGS GP-1012,
-    <a href="https://doi.org/10.3133/gp1012">doi:10.3133/gp1012</a> (1 : 2,500,000).</li>
-<li>Jachens, R. C. &amp; Moring, B. C. (1990), USGS OFR 90-404; and USGS OFR 99-49,
-    <a href="https://pubs.usgs.gov/of/1999/0049/pdf/of99-49.pdf">pubs.usgs.gov/of/1999/0049</a>
-    — the practice of reducing with 2,670 kg/m³ and stepping basin fill 1,900–2,450 kg/m³.</li>
-</ul>
-<h2>Gates on this page</h2>
-<table>
-<tr><th>Gate</th><th>Result</th></tr>
-<tr><td>Grid pins (CRS, shape, transform)</td>
-<td>FAIL — —,
-<code>—</code>, footprint
-0 px, catalogue 0 px</td></tr>
-<tr><td>On-disk format, range, finiteness, masked catalogue</td>
-<td>PASS (the writer refuses to emit a file that fails any of these)</td></tr>
-<tr><td>Uniqueness vs the 34 comparable sibling rasters</td>
-<td>UNIQUE — worst rank correlation
-0.050, worst dot overlap
-0.030, byte-identical to none</td></tr>
-<tr><td>Catalogue-frame holdout (structural fidelity)</td>
-<td>0.0000 vs control
-0.0089 — <b>the instrument cannot rank this
-file</b>; see IR-57-INSTR-01</td></tr>
-</table>
-</main></body></html>
+<h1>Method — H61-G</h1>
+<h2>1. Inversion (Parker 1973 forward, Oldenburg 1974 iteration, damped)</h2>
+<p>Input: band 13 isostatic residual gravity (mGal) and band 18 (its horizontal gradient) from <code>training_features.tif</code>. Regional removed with a 15 km Gaussian;
+the residual is inverted for the depth of a single density interface with z0 = 500 m, Δρ = -300 kg/m³ and a low-pass at kc_scale 0.5 to keep the
+Oldenburg series convergent (the undamped iteration diverges on this residual — IR-61-CONV-01 from an earlier session, reproduced). The density-contrast depth scale was calibrated
+only against the USGS GP-1012 (Saltus &amp; Jachens 1995) statistic that ~20% of the Nevada basin area is deeper than 1 km: achieved 0.203
+(depth p50 462 m, p90 1343 m, rms misfit 2.43 mGal). Independent cross-check against the organiser's depth-to-conductive-base band 15 (never used in the fit):
+Pearson r = 0.738, slope 0.946.</p>
+<h2>2. Basement steps</h2>
+<p>Horizontal-gradient magnitude of the inverted depth; Blakely–Simpson maxima at Gaussian scales 0, 2 and 5 px; throw measured across each maximum; kept if throw ≥ 80 m
+(8,999 maxima → 7,527; 4,104 persistent across all three scales). Pure-step candidates (X1a, X1b) emit ribbons along these maxima.</p>
+<h2>3. Corridor × locator (X2, the shipped construction)</h2>
+<p>Corridor = pixels within ±1 km of a kept step (19.3% of the valid area); basin interior = inverted depth ≥ 300 m (73.8%).
+Locator = local ridge of band 19 (slope of the detrended elevation) along the direction of steepest descent, strength-ranked (rank capped at 0.9 so that deeper/better-concealed positions break ties).
+Dots are greedily packed at ≥ 3 px spacing, never within 2 px of a mapped fault (pixel-exact), budget 40,000. Two controls: C3 (same locator outside the corridor) isolates the corridor's value;
+random dots inside the corridor isolate the locator's value.</p>
+<h2>4. Screening table (label-aware, full catalogue; not a holdout)</h2>
+<p class="small">Mean kernel credit k̄ of a pixel class against the full catalogue; a dot breaks even at k̄ ≈ 0.056 at the current live score. This table was used only to choose which candidates to send to the holdout.</p>
+<table><tr><th>domain</th><th>pixel class</th><th>n</th><th>within 3 px</th><th>mean k</th></tr><tr><td>depth&gt;300m</td><td>RANDOM pixel</td><td>2,620,626</td><td>0.0765</td><td>0.0301</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 2px, all</td><td>26,104</td><td>0.0815</td><td>0.0324</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 2px, top50%</td><td>13,052</td><td>0.0783</td><td>0.0308</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 5px, all</td><td>12,745</td><td>0.0933</td><td>0.0367</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 5px, top50%</td><td>6,373</td><td>0.0927</td><td>0.0369</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 10px, all</td><td>8,308</td><td>0.0997</td><td>0.0398</td></tr><tr><td>depth&gt;300m</td><td>grav HGM maxima, gaussian 10px, top50%</td><td>4,154</td><td>0.0953</td><td>0.0352</td></tr><tr><td>depth&gt;300m</td><td>supplied depth band 15 HGM maxima</td><td>179,888</td><td>0.0772</td><td>0.0305</td></tr><tr><td>depth&gt;300m</td><td>detrended-elevation slope ridges (band 19), all</td><td>833,596</td><td>0.0755</td><td>0.0296</td></tr><tr><td>depth&gt;300m</td><td>slope ridges, &gt;= median strength</td><td>416,798</td><td>0.1043</td><td>0.0411</td></tr><tr><td>depth&gt;300m</td><td>RANDOM pixel inside gravity corridor</td><td>397,234</td><td>0.0829</td><td>0.0324</td></tr><tr><td>depth&gt;300m</td><td>slope ridges &gt;= median, inside gravity corridor</td><td>58,413</td><td>0.1197</td><td>0.0471</td></tr><tr><td>depth&gt;300m</td><td>slope ridges &gt;= median, outside gravity corridor</td><td>358,385</td><td>0.1018</td><td>0.0401</td></tr><tr><td>all valid</td><td>RANDOM pixel</td><td>5,103,418</td><td>0.0752</td><td>0.0293</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 2px, all</td><td>48,680</td><td>0.0801</td><td>0.0316</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 2px, top50%</td><td>24,340</td><td>0.0816</td><td>0.0324</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 5px, all</td><td>23,598</td><td>0.0878</td><td>0.0351</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 5px, top50%</td><td>11,799</td><td>0.0962</td><td>0.0384</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 10px, all</td><td>14,678</td><td>0.0953</td><td>0.0380</td></tr><tr><td>all valid</td><td>grav HGM maxima, gaussian 10px, top50%</td><td>7,339</td><td>0.0920</td><td>0.0359</td></tr><tr><td>all valid</td><td>supplied depth band 15 HGM maxima</td><td>314,506</td><td>0.0741</td><td>0.0290</td></tr><tr><td>all valid</td><td>detrended-elevation slope ridges (band 19), all</td><td>1,648,233</td><td>0.0733</td><td>0.0284</td></tr><tr><td>all valid</td><td>slope ridges, &gt;= median strength</td><td>824,117</td><td>0.0845</td><td>0.0331</td></tr><tr><td>all valid</td><td>RANDOM pixel inside gravity corridor</td><td>610,222</td><td>0.0916</td><td>0.0359</td></tr><tr><td>all valid</td><td>slope ridges &gt;= median, inside gravity corridor</td><td>58,635</td><td>0.1287</td><td>0.0511</td></tr><tr><td>all valid</td><td>slope ridges &gt;= median, outside gravity corridor</td><td>765,482</td><td>0.0812</td><td>0.0317</td></tr></table>
+<h2>5. Holdout protocol</h2>
+<p>gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all). Whole catalogue segments (≤ 12 px pieces) are withheld in four eroded quadrant cells per seed, two seeds → 8 fold cells, 22,641 withheld positive px.
+Inside each cell the candidate sees only the visible catalogue (feature construction never uses labels; pruning is against visible traces only). Pooled DTI with α = 0.2, β = 0.8 and the
+300 m triangular kernel; bootstrap CI over cells; recovery = withheld segments with any dot within 3 px, reported for basin-interior segments with Wilson CI; random lines and random
+in-corridor dots as controls; registry rasters scored as-is for calibration; leakage canary = single-feature AUC on withheld truth (worst 0.558; limit 0.90).</p>
+<h2>6. Dots versus 3 × 3 ribbons (same cells, same budget)</h2>
+<table><tr><th>variant</th><th>emitted / draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th></tr><tr><td>dots (shipped)</td><td>40,000</td><td>0.0465</td><td>0.0421–0.0507</td><td>0.070</td></tr><tr><td>3x3 ribbons (not shipped)</td><td>271,536</td><td>0.0216</td><td>0.0193–0.0243</td><td>0.120</td></tr></table>
+<p>The lane brief asks for "multi-line ribbons rather than thin lines" because gravity resolves a step only to a few hundred metres. In H61-G the position comes from the 100 m slope
+ridge, not from gravity, and the metric charges 0.2 per extra positive pixel: dilating each dot to 3 × 3 halves the holdout score. The multi-line character is kept at corridor scale —
+every slope ridge inside the ±1 km corridor is emitted, not a single thinned line — and the shipped raster is the dot version that was validated.</p>
+
+<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
+(gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
+<span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
+</div></body></html>

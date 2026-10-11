@@ -59,5 +59,35 @@
     }
   ],
   "provenance": "public bridge, not organizer receipt",
-  "all_pins_verified": true
+  "all_pins_verified": true,
+  "layout_links": [
+    {
+      "path": "data/bridge/existing_faults.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/bridge/labels.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/bridge/sample_submission.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/bridge/training_features.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/raw/existing_faults.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/raw/example_submission.tif",
+      "state": "exists"
+    },
+    {
+      "path": "data/raw/training_features.tif",
+      "state": "exists"
+    }
+  ]
 }

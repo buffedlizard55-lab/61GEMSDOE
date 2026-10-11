@@ -1,0 +1,1304 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "prune_px": 2.0,
+  "budgets": [
+    20000,
+    40000
+  ],
+  "fields_meta": {
+    "corridor_fraction_of_valid": 0.19251025112347975,
+    "basin_fraction_of_valid": 0.7376421099267434,
+    "n_slope_ridge_px": 1668964
+  },
+  "results": [
+    {
+      "name": "REGISTRY GEMSDOE33-h33d-analog-tip-stepover-r30-20261004-cb490425926e.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.05456282154537134,
+      "tp": 1853.66222072112,
+      "fp": 77447.29052734375,
+      "fn": 20787.33777927888,
+      "n_emitted": 78426,
+      "coverage": 0.0818719235334623,
+      "n_emitted_per_draw": 39213.0,
+      "ci95_bootstrap_cells": [
+        0.04788815944806788,
+        0.06165430150363018
+      ],
+      "per_cell_dti": [
+        0.05661,
+        0.05992,
+        0.04149,
+        0.06645,
+        0.05199,
+        0.06211,
+        0.04121,
+        0.06356
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 859,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 467,
+      "basin_recovery_rate": 0.2336168084042021,
+      "basin_recovery_ci95": [
+        0.21558964876710543,
+        0.25266581633289764
+      ]
+    },
+    {
+      "name": "REGISTRY SUBMIT-THIS-gems57-h57i-iso-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.0578837510845722,
+      "tp": 1870.622341507789,
+      "fp": 69149.78662109375,
+      "fn": 20770.377658492213,
+      "n_emitted": 71230,
+      "coverage": 0.08262101238937278,
+      "n_emitted_per_draw": 35615.0,
+      "ci95_bootstrap_cells": [
+        0.05324679632512615,
+        0.06149517162237456
+      ],
+      "per_cell_dti": [
+        0.04694,
+        0.05076,
+        0.06095,
+        0.0621,
+        0.04808,
+        0.05764,
+        0.05981,
+        0.06714
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 920,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 633,
+      "basin_recovery_rate": 0.3166583291645823,
+      "basin_recovery_ci95": [
+        0.2966346843341477,
+        0.3373852742745868
+      ]
+    },
+    {
+      "name": "REGISTRY gems19-h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.07136141533302712,
+      "tp": 4594.704880254328,
+      "fp": 226773.3125,
+      "fn": 18046.29511974567,
+      "n_emitted": 231506,
+      "coverage": 0.20293736496861126,
+      "n_emitted_per_draw": 115753.0,
+      "ci95_bootstrap_cells": [
+        0.06234856589035412,
+        0.08212663207645889
+      ],
+      "per_cell_dti": [
+        0.06051,
+        0.07875,
+        0.05676,
+        0.09607,
+        0.06393,
+        0.07192,
+        0.05601,
+        0.09169
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1334,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 752,
+      "basin_recovery_rate": 0.3761880940470235,
+      "basin_recovery_ci95": [
+        0.35520869354038354,
+        0.397642438125815
+      ]
+    },
+    {
+      "name": "REGISTRY gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.07120613242443212,
+      "tp": 4509.35358174234,
+      "fp": 221567.462890625,
+      "fn": 18131.64641825766,
+      "n_emitted": 226212,
+      "coverage": 0.1991675977979038,
+      "n_emitted_per_draw": 113106.0,
+      "ci95_bootstrap_cells": [
+        0.06158450049323349,
+        0.08236351939143297
+      ],
+      "per_cell_dti": [
+        0.05925,
+        0.08127,
+        0.0562,
+        0.09568,
+        0.06297,
+        0.07373,
+        0.05377,
+        0.09147
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1306,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 739,
+      "basin_recovery_rate": 0.3696848424212106,
+      "basin_recovery_ci95": [
+        0.34879260321425676,
+        0.39107697173137845
+      ]
+    },
+    {
+      "name": "REGISTRY gems20-h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.07152144694906384,
+      "tp": 4589.536012439698,
+      "fp": 225696.796875,
+      "fn": 18051.463987560302,
+      "n_emitted": 230476,
+      "coverage": 0.20270906817012052,
+      "n_emitted_per_draw": 115238.0,
+      "ci95_bootstrap_cells": [
+        0.06213593901098354,
+        0.08271292424987668
+      ],
+      "per_cell_dti": [
+        0.05915,
+        0.07876,
+        0.05697,
+        0.09786,
+        0.06554,
+        0.07261,
+        0.0544,
+        0.09208
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1324,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 747,
+      "basin_recovery_rate": 0.3736868434217109,
+      "basin_recovery_ci95": [
+        0.35274048314403345,
+        0.3951177420911793
+      ]
+    },
+    {
+      "name": "REGISTRY gems20-h20-5-continuous-pu-proxy-unverified-20260930-824ce73a-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.07155944220099089,
+      "tp": 4509.139843659813,
+      "fp": 219989.39453125,
+      "fn": 18131.860156340186,
+      "n_emitted": 224736,
+      "coverage": 0.19915815748685187,
+      "n_emitted_per_draw": 112368.0,
+      "ci95_bootstrap_cells": [
+        0.061956352576090404,
+        0.08269316171919794
+      ],
+      "per_cell_dti": [
+        0.05932,
+        0.07991,
+        0.0561,
+        0.09684,
+        0.06427,
+        0.07578,
+        0.05385,
+        0.09132
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1280,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 704,
+      "basin_recovery_rate": 0.352176088044022,
+      "basin_recovery_ci95": [
+        0.3315390642908151,
+        0.3733801656379189
+      ]
+    },
+    {
+      "name": "REGISTRY gems24-h24-0-mirror-h19-5-group-best-20261002-e27054cf-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.07120613242443212,
+      "tp": 4509.35358174234,
+      "fp": 221567.462890625,
+      "fn": 18131.64641825766,
+      "n_emitted": 226212,
+      "coverage": 0.1991675977979038,
+      "n_emitted_per_draw": 113106.0,
+      "ci95_bootstrap_cells": [
+        0.06158450049323349,
+        0.08236351939143297
+      ],
+      "per_cell_dti": [
+        0.05925,
+        0.08127,
+        0.0562,
+        0.09568,
+        0.06297,
+        0.07373,
+        0.05377,
+        0.09147
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1306,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 739,
+      "basin_recovery_rate": 0.3696848424212106,
+      "basin_recovery_ci95": [
+        0.34879260321425676,
+        0.39107697173137845
+      ]
+    },
+    {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.10106964768349222,
+      "tp": 3532.068665928339,
+      "fp": 80638.322265625,
+      "fn": 19108.93133407166,
+      "n_emitted": 82388,
+      "coverage": 0.15600320948404836,
+      "n_emitted_per_draw": 41194.0,
+      "ci95_bootstrap_cells": [
+        0.08650299026430025,
+        0.11733972171612815
+      ],
+      "per_cell_dti": [
+        0.08895,
+        0.12282,
+        0.0769,
+        0.12705,
+        0.09516,
+        0.11125,
+        0.07154,
+        0.1244
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1201,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 681,
+      "basin_recovery_rate": 0.34067033516758377,
+      "basin_recovery_ci95": [
+        0.3202176992758278,
+        0.3617341610703711
+      ]
+    },
+    {
+      "name": "REGISTRY gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.09629960357014325,
+      "tp": 3981.8969437646774,
+      "fp": 112199.34375,
+      "fn": 18659.103056235323,
+      "n_emitted": 114616,
+      "coverage": 0.17587107211539585,
+      "n_emitted_per_draw": 57308.0,
+      "ci95_bootstrap_cells": [
+        0.08322419767251638,
+        0.11105574205748858
+      ],
+      "per_cell_dti": [
+        0.08414,
+        0.11422,
+        0.07469,
+        0.12371,
+        0.08936,
+        0.10214,
+        0.07049,
+        0.11921
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1258,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 714,
+      "basin_recovery_rate": 0.3571785892946473,
+      "basin_recovery_ci95": [
+        0.3364655544583258,
+        0.37843948833237995
+      ]
+    },
+    {
+      "name": "REGISTRY gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.03127301096950355,
+      "tp": 1040.872333458572,
+      "fp": 74812.15966796875,
+      "fn": 21600.127666541426,
+      "n_emitted": 75374,
+      "coverage": 0.04597289578457542,
+      "n_emitted_per_draw": 37687.0,
+      "ci95_bootstrap_cells": [
+        0.02681314121453695,
+        0.03615985353787614
+      ],
+      "per_cell_dti": [
+        0.02804,
+        0.03401,
+        0.02228,
+        0.04007,
+        0.02914,
+        0.03787,
+        0.02426,
+        0.03784
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 599,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 345,
+      "basin_recovery_rate": 0.17258629314657328,
+      "basin_recovery_ci95": [
+        0.1566526949890852,
+        0.18977585319486226
+      ]
+    },
+    {
+      "name": "REGISTRY gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.03023990707136331,
+      "tp": 977.8368580513614,
+      "fp": 70138.03466796875,
+      "fn": 21663.163141948637,
+      "n_emitted": 70662,
+      "coverage": 0.043188766311177136,
+      "n_emitted_per_draw": 35331.0,
+      "ci95_bootstrap_cells": [
+        0.026043852725983075,
+        0.0348622048457977
+      ],
+      "per_cell_dti": [
+        0.02711,
+        0.03482,
+        0.0219,
+        0.03797,
+        0.02828,
+        0.03469,
+        0.02312,
+        0.03725
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 560,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 308,
+      "basin_recovery_rate": 0.15407703851925963,
+      "basin_recovery_ci95": [
+        0.1389156115142415,
+        0.17056542908041042
+      ]
+    },
+    {
+      "name": "REGISTRY gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.10106964768349222,
+      "tp": 3532.068665928339,
+      "fp": 80638.322265625,
+      "fn": 19108.93133407166,
+      "n_emitted": 82388,
+      "coverage": 0.15600320948404836,
+      "n_emitted_per_draw": 41194.0,
+      "ci95_bootstrap_cells": [
+        0.08650299026430025,
+        0.11733972171612815
+      ],
+      "per_cell_dti": [
+        0.08895,
+        0.12282,
+        0.0769,
+        0.12705,
+        0.09516,
+        0.11125,
+        0.07154,
+        0.1244
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1201,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 681,
+      "basin_recovery_rate": 0.34067033516758377,
+      "basin_recovery_ci95": [
+        0.3202176992758278,
+        0.3617341610703711
+      ]
+    },
+    {
+      "name": "REGISTRY gems46-h46-1-dfa-regime-break-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.0004904893888094108,
+      "tp": 15.97163544175885,
+      "fp": 72233.2900390625,
+      "fn": 22625.02836455824,
+      "n_emitted": 72246,
+      "coverage": 0.0007054297708475268,
+      "n_emitted_per_draw": 36123.0,
+      "ci95_bootstrap_cells": [
+        0.00039753678137431577,
+        0.0005921393384087766
+      ],
+      "per_cell_dti": [
+        0.0007,
+        0.00034,
+        0.00032,
+        0.00063,
+        0.00044,
+        0.00069,
+        0.00045,
+        0.00043
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 8,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 7,
+      "basin_recovery_rate": 0.003501750875437719,
+      "basin_recovery_ci95": [
+        0.001697280838004407,
+        0.007210792611297148
+      ]
+    },
+    {
+      "name": "REGISTRY gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.0,
+      "tp": 0.0,
+      "fp": 74918.0,
+      "fn": 22641.0,
+      "n_emitted": 74918,
+      "coverage": 0.0,
+      "n_emitted_per_draw": 37459.0,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0
+      ],
+      "per_cell_dti": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.001918004445921314
+      ]
+    },
+    {
+      "name": "REGISTRY gems57-faultzone-anatomy-60000px-20261009T054251Z.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.0,
+      "tp": 0.0,
+      "fp": 112956.0,
+      "fn": 22641.0,
+      "n_emitted": 112956,
+      "coverage": 0.0,
+      "n_emitted_per_draw": 56478.0,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0
+      ],
+      "per_cell_dti": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 0,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.001918004445921314
+      ]
+    },
+    {
+      "name": "REGISTRY gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.04824372761727701,
+      "tp": 1681.7268505841039,
+      "fp": 82049.1435546875,
+      "fn": 20959.273149415894,
+      "n_emitted": 83082,
+      "coverage": 0.07427794048779222,
+      "n_emitted_per_draw": 41541.0,
+      "ci95_bootstrap_cells": [
+        0.03994513257716385,
+        0.0566860755192356
+      ],
+      "per_cell_dti": [
+        0.04761,
+        0.0563,
+        0.03565,
+        0.05821,
+        0.03878,
+        0.04504,
+        0.0317,
+        0.06862
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 469,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 251,
+      "basin_recovery_rate": 0.12556278139069535,
+      "basin_recovery_ci95": [
+        0.11175145044601706,
+        0.14081045683539575
+      ]
+    },
+    {
+      "name": "REGISTRY gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.10106964768349222,
+      "tp": 3532.068665928339,
+      "fp": 80638.322265625,
+      "fn": 19108.93133407166,
+      "n_emitted": 82388,
+      "coverage": 0.15600320948404836,
+      "n_emitted_per_draw": 41194.0,
+      "ci95_bootstrap_cells": [
+        0.08650299026430025,
+        0.11733972171612815
+      ],
+      "per_cell_dti": [
+        0.08895,
+        0.12282,
+        0.0769,
+        0.12705,
+        0.09516,
+        0.11125,
+        0.07154,
+        0.1244
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 1201,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 681,
+      "basin_recovery_rate": 0.34067033516758377,
+      "basin_recovery_ci95": [
+        0.3202176992758278,
+        0.3617341610703711
+      ]
+    },
+    {
+      "name": "REGISTRY gemsdoe31-h27-4-solo-d28-20261004-8acb75e1-allfinite.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.03127301096950355,
+      "tp": 1040.872333458572,
+      "fp": 74812.15966796875,
+      "fn": 21600.127666541426,
+      "n_emitted": 75374,
+      "coverage": 0.04597289578457542,
+      "n_emitted_per_draw": 37687.0,
+      "ci95_bootstrap_cells": [
+        0.02681314121453695,
+        0.03615985353787614
+      ],
+      "per_cell_dti": [
+        0.02804,
+        0.03401,
+        0.02228,
+        0.04007,
+        0.02914,
+        0.03787,
+        0.02426,
+        0.03784
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 599,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 345,
+      "basin_recovery_rate": 0.17258629314657328,
+      "basin_recovery_ci95": [
+        0.1566526949890852,
+        0.18977585319486226
+      ]
+    },
+    {
+      "name": "REGISTRY gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.004384809290509451,
+      "tp": 141.44240077765528,
+      "fp": 70581.390625,
+      "fn": 22499.557599222346,
+      "n_emitted": 70690,
+      "coverage": 0.0062471799292281825,
+      "n_emitted_per_draw": 35345.0,
+      "ci95_bootstrap_cells": [
+        0.0037981035753543897,
+        0.005053986325522046
+      ],
+      "per_cell_dti": [
+        0.00512,
+        0.00572,
+        0.00366,
+        0.00348,
+        0.0031,
+        0.00581,
+        0.00417,
+        0.00429
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 140,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 85,
+      "basin_recovery_rate": 0.04252126063031516,
+      "basin_recovery_ci95": [
+        0.03451850326585254,
+        0.05227891050682884
+      ]
+    },
+    {
+      "name": "REGISTRY gemsdoe36-anderson-geothermal-pinn-38854-20261004T230000Z-9b9ea4e6-zeros.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.00448199294412047,
+      "tp": 146.60333310759717,
+      "fp": 72836.43359375,
+      "fn": 22494.396666892404,
+      "n_emitted": 72950,
+      "coverage": 0.0064751262359258495,
+      "n_emitted_per_draw": 36475.0,
+      "ci95_bootstrap_cells": [
+        0.003925053444403817,
+        0.005096901922728565
+      ],
+      "per_cell_dti": [
+        0.00525,
+        0.00571,
+        0.00385,
+        0.00353,
+        0.00326,
+        0.0058,
+        0.00443,
+        0.00427
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 145,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 88,
+      "basin_recovery_rate": 0.04402201100550275,
+      "basin_recovery_ci95": [
+        0.035869823638344775,
+        0.05392333399292813
+      ]
+    },
+    {
+      "name": "REGISTRY tip_stepover_r30_02632.tif",
+      "kind": "registry",
+      "budget": null,
+      "pooled_dti": 0.05456282154537134,
+      "tp": 1853.66222072112,
+      "fp": 77447.29052734375,
+      "fn": 20787.33777927888,
+      "n_emitted": 78426,
+      "coverage": 0.0818719235334623,
+      "n_emitted_per_draw": 39213.0,
+      "ci95_bootstrap_cells": [
+        0.04788815944806788,
+        0.06165430150363018
+      ],
+      "per_cell_dti": [
+        0.05661,
+        0.05992,
+        0.04149,
+        0.06645,
+        0.05199,
+        0.06211,
+        0.04121,
+        0.06356
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 859,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 467,
+      "basin_recovery_rate": 0.2336168084042021,
+      "basin_recovery_ci95": [
+        0.21558964876710543,
+        0.25266581633289764
+      ]
+    },
+    {
+      "name": "X1a pure basement-step ribbons @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "pooled_dti": 0.019265467956755586,
+      "tp": 503.55409576915883,
+      "fp": 39620.70556640625,
+      "fn": 22137.445904230844,
+      "n_emitted": 40000,
+      "coverage": 0.022240806314613257,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.016806281010843634,
+        0.021431773513405174
+      ],
+      "per_cell_dti": [
+        0.0127,
+        0.01832,
+        0.02395,
+        0.01634,
+        0.01693,
+        0.01963,
+        0.01955,
+        0.02305
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 162,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 120,
+      "basin_recovery_rate": 0.060030015007503754,
+      "basin_recovery_ci95": [
+        0.05043653218518583,
+        0.07131122660439676
+      ]
+    },
+    {
+      "name": "X1b persistent-step ribbons @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "pooled_dti": 0.017227718222005257,
+      "tp": 419.3203221876328,
+      "fp": 30716.000732421875,
+      "fn": 22221.679677812368,
+      "n_emitted": 31032,
+      "coverage": 0.018520397605566574,
+      "n_emitted_per_draw": 15516.0,
+      "ci95_bootstrap_cells": [
+        0.014816561222575169,
+        0.01981698526028285
+      ],
+      "per_cell_dti": [
+        0.01249,
+        0.0158,
+        0.01982,
+        0.0157,
+        0.01946,
+        0.01655,
+        0.01346,
+        0.02344
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 125,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 100,
+      "basin_recovery_rate": 0.05002501250625312,
+      "basin_recovery_ci95": [
+        0.041301969885984585,
+        0.06047416317965444
+      ]
+    },
+    {
+      "name": "X2 corridor x slope-ridge (basin interior) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "pooled_dti": 0.02669999356337286,
+      "tp": 698.6657965143046,
+      "fp": 39573.6572265625,
+      "fn": 21942.334203485698,
+      "n_emitted": 40000,
+      "coverage": 0.030858433660805817,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.024013398939206794,
+        0.029436965864819864
+      ],
+      "per_cell_dti": [
+        0.02667,
+        0.0195,
+        0.02281,
+        0.02688,
+        0.027,
+        0.03259,
+        0.03112,
+        0.02681
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 203,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 180,
+      "basin_recovery_rate": 0.09004502251125562,
+      "basin_recovery_ci95": [
+        0.07827052061082089,
+        0.10339211535059233
+      ]
+    },
+    {
+      "name": "X2b corridor x slope-ridge (any depth) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "pooled_dti": 0.025488929483516075,
+      "tp": 666.9925537385993,
+      "fp": 39608.66357421875,
+      "fn": 21974.0074462614,
+      "n_emitted": 40000,
+      "coverage": 0.02945950062888562,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.02242298334709294,
+        0.029312755966175563
+      ],
+      "per_cell_dti": [
+        0.02584,
+        0.02414,
+        0.01983,
+        0.02046,
+        0.02881,
+        0.03716,
+        0.02628,
+        0.0248
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 186,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 85,
+      "basin_recovery_rate": 0.04252126063031516,
+      "basin_recovery_ci95": [
+        0.03451850326585254,
+        0.05227891050682884
+      ]
+    },
+    {
+      "name": "C3 slope-ridge outside corridor (basin interior) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "pooled_dti": 0.026916140743840238,
+      "tp": 704.4257573950415,
+      "fp": 39587.212890625,
+      "fn": 21936.57424260496,
+      "n_emitted": 40000,
+      "coverage": 0.031112837657128287,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.021107246053796904,
+        0.03389535186624252
+      ],
+      "per_cell_dti": [
+        0.02515,
+        0.01801,
+        0.02636,
+        0.04868,
+        0.01229,
+        0.02524,
+        0.02514,
+        0.02842
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 161,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 161,
+      "basin_recovery_rate": 0.08054027013506754,
+      "basin_recovery_ci95": [
+        0.06939982732772636,
+        0.0932897641959405
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 20000",
+      "kind": "lines",
+      "budget": 20000,
+      "pooled_dti": 0.022013470475766347,
+      "tp": 576.1138223357751,
+      "fp": 39714.72412109375,
+      "fn": 22064.886177664222,
+      "n_emitted": 40000,
+      "coverage": 0.025445599679156185,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.019278688185631464,
+        0.024996070879165194
+      ],
+      "per_cell_dti": [
+        0.01933,
+        0.01825,
+        0.02297,
+        0.02036,
+        0.0319,
+        0.0233,
+        0.02517,
+        0.01589
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 171,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 113,
+      "basin_recovery_rate": 0.05652826413206603,
+      "basin_recovery_ci95": [
+        0.0472291615227073,
+        0.06752852826349504
+      ]
+    },
+    {
+      "name": "CONTROL random dots inside corridor+basin @ 20000",
+      "kind": "corridor",
+      "budget": 20000,
+      "pooled_dti": 0.025051501377920123,
+      "tp": 655.8501042371471,
+      "fp": 39680.5087890625,
+      "fn": 21985.149895762854,
+      "n_emitted": 40000,
+      "coverage": 0.028967364702846478,
+      "n_emitted_per_draw": 20000.0,
+      "ci95_bootstrap_cells": [
+        0.023070016689292698,
+        0.026920479719306688
+      ],
+      "per_cell_dti": [
+        0.02119,
+        0.02526,
+        0.02085,
+        0.0279,
+        0.02322,
+        0.0277,
+        0.02794,
+        0.02526
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 252,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 200,
+      "basin_recovery_rate": 0.10005002501250625,
+      "basin_recovery_ci95": [
+        0.08765333179966242,
+        0.11398092988569433
+      ]
+    },
+    {
+      "name": "X1a pure basement-step ribbons @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.022976232609197816,
+      "tp": 672.6216303922631,
+      "fp": 55136.72900390625,
+      "fn": 21968.37836960774,
+      "n_emitted": 55650,
+      "coverage": 0.02970812377510989,
+      "n_emitted_per_draw": 27825.0,
+      "ci95_bootstrap_cells": [
+        0.02061273353005444,
+        0.025442945089634968
+      ],
+      "per_cell_dti": [
+        0.01842,
+        0.01925,
+        0.02513,
+        0.02231,
+        0.02768,
+        0.02024,
+        0.02075,
+        0.0288
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 213,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 132,
+      "basin_recovery_rate": 0.06603301650825413,
+      "basin_recovery_ci95": [
+        0.05595751497216974,
+        0.07777321925177898
+      ]
+    },
+    {
+      "name": "X1b persistent-step ribbons @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.017227718222005257,
+      "tp": 419.3203221876328,
+      "fp": 30716.000732421875,
+      "fn": 22221.679677812368,
+      "n_emitted": 31032,
+      "coverage": 0.018520397605566574,
+      "n_emitted_per_draw": 15516.0,
+      "ci95_bootstrap_cells": [
+        0.014816561222575169,
+        0.01981698526028285
+      ],
+      "per_cell_dti": [
+        0.01249,
+        0.0158,
+        0.01982,
+        0.0157,
+        0.01946,
+        0.01655,
+        0.01346,
+        0.02344
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 125,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 100,
+      "basin_recovery_rate": 0.05002501250625312,
+      "basin_recovery_ci95": [
+        0.041301969885984585,
+        0.06047416317965444
+      ]
+    },
+    {
+      "name": "X2 corridor x slope-ridge (basin interior) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.046504803513711855,
+      "tp": 1591.5433403946267,
+      "fp": 78960.47265625,
+      "fn": 21049.456659605374,
+      "n_emitted": 80000,
+      "coverage": 0.07029474583254391,
+      "n_emitted_per_draw": 40000.0,
+      "ci95_bootstrap_cells": [
+        0.04214325650932585,
+        0.05066048017118602
+      ],
+      "per_cell_dti": [
+        0.04108,
+        0.04582,
+        0.03831,
+        0.04751,
+        0.03769,
+        0.05334,
+        0.04917,
+        0.05714
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 453,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 351,
+      "basin_recovery_rate": 0.17558779389694848,
+      "basin_recovery_ci95": [
+        0.1595357504605368,
+        0.19288428544059372
+      ]
+    },
+    {
+      "name": "X2b corridor x slope-ridge (any depth) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.04790241658244888,
+      "tp": 1639.8346291035484,
+      "fp": 78960.2470703125,
+      "fn": 21001.16537089645,
+      "n_emitted": 80000,
+      "coverage": 0.07242765907440256,
+      "n_emitted_per_draw": 40000.0,
+      "ci95_bootstrap_cells": [
+        0.04392263629387826,
+        0.05215411478025035
+      ],
+      "per_cell_dti": [
+        0.05347,
+        0.04783,
+        0.03973,
+        0.04148,
+        0.04594,
+        0.05914,
+        0.04812,
+        0.05051
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 440,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 245,
+      "basin_recovery_rate": 0.12256128064032017,
+      "basin_recovery_ci95": [
+        0.10890514383315207,
+        0.13766527573107767
+      ]
+    },
+    {
+      "name": "C3 slope-ridge outside corridor (basin interior) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.035852024607662764,
+      "tp": 1226.5015824525835,
+      "fp": 79260.03125,
+      "fn": 21414.498417547416,
+      "n_emitted": 80000,
+      "coverage": 0.05417170542169443,
+      "n_emitted_per_draw": 40000.0,
+      "ci95_bootstrap_cells": [
+        0.03093413794518847,
+        0.042121338648928086
+      ],
+      "per_cell_dti": [
+        0.03081,
+        0.03478,
+        0.03551,
+        0.05448,
+        0.02339,
+        0.03802,
+        0.02968,
+        0.0373
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 312,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 312,
+      "basin_recovery_rate": 0.15607803901950976,
+      "basin_recovery_ci95": [
+        0.14082950148477522,
+        0.1726458642546654
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 40000",
+      "kind": "lines",
+      "budget": 40000,
+      "pooled_dti": 0.03141382104713175,
+      "tp": 1074.9378256298837,
+      "fp": 79454.197265625,
+      "fn": 21566.062174370116,
+      "n_emitted": 80000,
+      "coverage": 0.04747748887548623,
+      "n_emitted_per_draw": 40000.0,
+      "ci95_bootstrap_cells": [
+        0.02824302937445006,
+        0.034091835908101865
+      ],
+      "per_cell_dti": [
+        0.02446,
+        0.02515,
+        0.03597,
+        0.032,
+        0.03431,
+        0.02748,
+        0.03622,
+        0.03235
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 324,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 215,
+      "basin_recovery_rate": 0.10755377688844422,
+      "basin_recovery_ci95": [
+        0.09471722709629762,
+        0.12189575388201679
+      ]
+    },
+    {
+      "name": "CONTROL random dots inside corridor+basin @ 40000",
+      "kind": "corridor",
+      "budget": 40000,
+      "pooled_dti": 0.033482728722820765,
+      "tp": 1145.5691000785919,
+      "fp": 79359.08984375,
+      "fn": 21495.430899921404,
+      "n_emitted": 80000,
+      "coverage": 0.050597107021712474,
+      "n_emitted_per_draw": 40000.0,
+      "ci95_bootstrap_cells": [
+        0.031080388393114732,
+        0.0357924767235469
+      ],
+      "per_cell_dti": [
+        0.02957,
+        0.03023,
+        0.03196,
+        0.03831,
+        0.02738,
+        0.03569,
+        0.03738,
+        0.03444
+      ],
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 408,
+      "segments_withheld_basin_interior": 1999,
+      "segments_recovered_basin_interior": 315,
+      "basin_recovery_rate": 0.15757878939469736,
+      "basin_recovery_ci95": [
+        0.14226551887400518,
+        0.17420559072402697
+      ]
+    }
+  ],
+  "best_candidate": "X2b corridor x slope-ridge (any depth) @ 40000",
+  "best_vs_random_lines": {
+    "candidate": 0.04790241658244888,
+    "random_lines": 0.03141382104713175,
+    "ratio": 1.524883474397414
+  },
+  "best_vs_random_in_corridor": {
+    "candidate": 0.04790241658244888,
+    "random_corridor": 0.033482728722820765
+  },
+  "registry_reference_best": {
+    "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "pooled_dti": 0.10106964768349222
+  },
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.5576993057395875,
+    "passed": true,
+    "per_feature": {
+      "inverted depth": {
+        "auc": 0.5076084219447021,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "inverted-depth HGM": {
+        "auc": 0.5230377529978799,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 19 slope": {
+        "auc": 0.5576993057395875,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 13 gravity": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 18 iso_grav_anom_hg": {
+        "auc": 0.5012896890596705,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "corridor indicator": {
+        "auc": 0.5080026834614195,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "slope ridge indicator": {
+        "auc": 0.5017976482101055,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "note": "HOLDOUT-DTI is an evaluator-version index on withheld catalogue traces; it is not a competition score. Registry rows are scored as-is: files pruned against the FULL catalogue lose the dots next to withheld segments, which biases them downward on this instrument.",
+  "elapsed_s": 920.5
+}

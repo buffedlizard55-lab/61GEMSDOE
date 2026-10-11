@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why 0.2778 · 61GEMSDOE</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status.ok{border-color:var(--ok);background:#0f2a16}
+.status.bad{border-color:var(--bad);background:#2a0f0f}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
+.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
+nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+</style></head><body><div class="wrap">
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+
+<h1>Why <code>h33-h33-2-b2</code> scored 0.2778 — and whether we can beat it</h1>
+<p class="small">All live numbers in this page are <span class="tag o">ORGANIZER-CONFIRMED</span> leaderboard values recorded in <code>reports/forensics.json</code> and on the sibling site
+<a href="https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html">GEMSDOE32</a>; holdout numbers are <span class="tag h">HOLDOUT-DTI</span> from this session's evaluator.</p>
+
+<h2>1. The metric decides the geometry of a good file</h2>
+<p>DTI = TP / (TP + α·FP + β·FN) with α = 0.2, β = 0.8, TP soft-credited through k(d) = max(1 − d/300 m, 0). Writing K for the kernel mass of the hidden
+test faults, 1/DTI = 0.2 + 0.2·FP/TP + 0.8·K/TP. Two consequences follow. (i) Because β = 4α, a missed truth pixel costs four times a wrong prediction,
+so the optimum is <i>broad coverage with sparse marks</i>: a mark is worth emitting whenever its expected kernel credit exceeds α·DTI ≈ 0.056 at the current score.
+(ii) Dense lines pay for the same truth pixel many times: the max-over-kernel credit saturates while every extra positive pixel adds 0.2 to the denominator.
+This is exactly the lineage of the 0.2778 file: h19-5 topographic <b>lines</b> (113 k px) scored 0.1922; thinning the same field to <b>dots</b> at 2.8 px spacing (44 k px)
+scored 0.2600 — +0.068 from geometry alone, with no new geology. Our evaluator reproduces the ordering (0.0712 → 0.1011).</p>
+
+<h2>2. The last +0.018 came from the definition of the test set</h2>
+<p>The test labels are faults <i>not</i> in the USGS database. Any mark on a mapped trace is therefore a guaranteed false positive. Deleting dots within 1 px of the catalogue
+took 0.2600 → 0.2708 (40,199 dots); within 2 px → 0.2778 (37,654 dots; only 2,171 remain within 3 px of a mapped trace). This step is invisible to any catalogue-based holdout
+by construction — our evaluator gives the 0.2778 file 0.0044 because it has nothing left near withheld catalogue segments
+(<a href="irregularities.html">IR-61-INSTR-02</a>). Earlier sessions misread this artefact as "the holdout anti-correlates with live scores".</p>
+
+<h2>3. What the dots actually are</h2>
+<p>The h19-5 field is a multi-scale <b>topographic lineament</b> detector on the organiser's detrended elevation and slope (bands 12, 19), corroborated across scales and
+power-law budgeted. Potential-field layers contribute almost nothing: in the group registry the magnetic, gravity, geothermal and strain files score 0.03–0.15 live, and in this session
+the pure gravity-step construction scores 0.0230 HOLDOUT-DTI against 0.0314 for random lines.
+The physical reason is resolution: an isostatic residual sampled at 100 m but measured at station spacings of kilometres, upward-continued and regional-removed, locates a density
+step to O(1–3 km); the kernel pays nothing beyond 300 m. Faults that the expert mappers added to the test set were recognised from <i>surface</i> expression (scarps, lineaments,
+vegetation/drainage offsets) in exactly the data the 0.2778 file uses.</p>
+
+<h2>4. Where the ceiling is <span class="tag p">PROJECTION</span></h2>
+<p>From the live portfolio slope we estimate K ≈ 37 k truth-kernel px and TP ≈ 10.3 k for the 0.2778 file (a projection: the organiser publishes no K). Reaching the leader's 0.4133
+at the same K requires TP ≈ 13.2 k with zero FP, or ≈ 15 k TP with 20 k FP — i.e. roughly 40% recall of the hidden faults at 300 m, against ~28% now, at the same or better precision.
+That is a <b>locator-recall</b> problem (find more of the unmapped scarps, to 100 m), not a prior problem. No gravity- or magnetics-derived prior can supply it, because the measured
+enrichment of any potential-field corridor is only 1.3–1.8× random (screen table on the <a href="method.html">method page</a>).</p>
+
+<h2>5. Can we beat 0.2778?</h2>
+<p><b>Inside this lane: no</b> — the best lane-consistent construction is HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507) versus 0.1011 for the current base on the same evaluator, and a union with the 0.2778
+dots would fail the 70% overlap gate. <b>Overall: yes, in principle</b>, through three measured levers, in order of expected value:
+(1) a higher-recall surface-scarp detector — the 1 m 3DEP lidar that the organiser links in <code>1m_DEM_links.csv</code> is the data the mappers used; the group mirror
+<code>GEMSDOE24/data/external/lidar_scarp_features_u8.tif</code> (36.9 MB, blob <code>da733b53…</code>) already exists and is obtainable through the GitHub API;
+(2) keep the two proven geometry rules — ≥ 3 px dot packing and the 2 px catalogue prune — and add greedy marginal-credit packing with a scatter kernel (GEMSDOE32's model-only +0.025 claim, unconfirmed);
+(3) validate every candidate on a segment-withholding holdout that prunes only against the <i>visible</i> catalogue (this session's evaluator), never with the full-catalogue prune that produced the earlier false negatives.
+The gravity corridor remains useful only as a weak prior (×1.3 precision inside the corridor at equal budget: 0.0465 vs 0.0359 outside it).</p>
+
+<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
+<code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
+(gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
+<span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
+</div></body></html>

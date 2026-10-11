@@ -1,0 +1,104 @@
+{
+  "evidence_class": "MEASURED",
+  "inversion_grid": {
+    "decimation": 4,
+    "pixel_m": 400.0,
+    "shape": [
+      932,
+      823
+    ],
+    "valid_fraction": 0.4188643036311203
+  },
+  "regional_residual_separation": {
+    "method": "Gaussian regional removed before the slab inversion",
+    "sigma_km": 15.0,
+    "why": "Blakely & Jachens (1991) invert the basin field after removing a smooth basement field; without bedrock station locations the separation is a declared low-pass"
+  },
+  "calibration": {
+    "best": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.5,
+      "stats": {
+        "n": 321284,
+        "p50": 462.2573547363281,
+        "p90": 1343.3979248046876,
+        "p99": 2125.57255859375,
+        "mean": 508.8574333212868,
+        "vmax": 2589.3759765625,
+        "fraction_gt_1km": 0.20323763399360067,
+        "fraction_gt_2km": 0.016664384158563764
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.01605853866907435,
+      "penalty": 0.01605853866907435,
+      "rms_residual_mgal": 2.425341944786814
+    },
+    "anchors": {
+      "deep_fraction_gt_1km": 0.2,
+      "median_depth_m_range": [
+        250.0,
+        700.0
+      ],
+      "p90_depth_m_range": [
+        900.0,
+        2000.0
+      ]
+    },
+    "source": "USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "n_combinations": 72
+  },
+  "inversion": {
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
+    "rms_residual_mgal": 2.425341944786814,
+    "delta_rho": -300.0,
+    "z0_m": 500.0,
+    "regional_sigma_km": 15.0,
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "depth_stats": {
+    "n": 321284,
+    "p50": 462.2573547363281,
+    "p90": 1343.3979248046876,
+    "p99": 2125.57255859375,
+    "mean": 569.2534968347006,
+    "vmax": 2589.3759765625,
+    "fraction_gt_1km": 0.20323763399360067,
+    "fraction_gt_2km": 0.016664384158563764
+  },
+  "cross_check_vs_supplied_band15": {
+    "n": 5164312,
+    "pearson_r": 0.7382397545865853,
+    "slope_published_on_inverted": 0.9463551776663338,
+    "published_p50": 316.3645324707031,
+    "inverted_p50": 464.37564321052014,
+    "published_p90": 1279.3229614257814,
+    "inverted_p90": 1340.8730887848847,
+    "note": "a high r with a slope near 1 says the inversion reproduces the supplied product; it is a check, not an input",
+    "corr_depth_vs_gravity": -0.8411415382159257
+  },
+  "steps": {
+    "n_hgm_maxima_400m": 8999,
+    "n_steps_throw_filtered": 7527,
+    "min_throw_m": 80.0,
+    "throw_p50_m": 180.69647216796875,
+    "throw_p90_m": 342.3658691406252,
+    "n_persistent_steps": 4104,
+    "persistence_scales_px": [
+      0,
+      2,
+      5
+    ],
+    "n_step_px_100m": 120432,
+    "n_persistent_px_100m": 65664
+  },
+  "sources": {
+    "parker": "Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb02307.x",
+    "oldenburg": "Oldenburg (1974) Geophysics 39(4):526-536, doi:10.1190/1.1440444",
+    "blakely_simpson": "Blakely & Simpson (1986) Geophysics 51(7):1494-1498, doi:10.1190/1.1442197",
+    "blakely_jachens": "Blakely & Jachens (1991) GSA Bulletin 103:795-803",
+    "gp1012": "Saltus & Jachens (1995) USGS GP-1012, doi:10.3133/gp1012"
+  },
+  "elapsed_s": 344.6
+}

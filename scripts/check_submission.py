@@ -20,9 +20,22 @@ TEMPLATE = ROOT / "data" / "raw" / "example_submission.tif"
 LABELS = ROOT / "data" / "raw" / "existing_faults.tif"
 
 
-def main(path: str | None = None) -> int:
-    card = json.loads((ROOT / "evidence" / "e3_submission.json").read_text())
-    tif = pathlib.Path(path) if path else ROOT / "docs" / "downloads" / card["submission_name"]
+def _load_card(card_path: str | None) -> dict:
+    """Newest run card by default (H61-G); the e3 card remains selectable."""
+    candidates = [card_path] if card_path else ["evidence/h61g_run_card.json", "evidence/e3_submission.json"]
+    for c in candidates:
+        cp = ROOT / c
+        if cp.exists():
+            card = json.loads(cp.read_text())
+            name = card["submission_name"]
+            card["_tif_name"] = name if name.endswith(".tif") else name + ".tif"
+            return card
+    raise FileNotFoundError("no run card found")
+
+
+def main(path: str | None = None, card_path: str | None = None) -> int:
+    card = _load_card(card_path)
+    tif = pathlib.Path(path) if path else ROOT / "docs" / "downloads" / card["_tif_name"]
     with rasterio.open(TEMPLATE) as t:
         tmpl = t.read(1)
         exp = dict(width=t.width, height=t.height, crs=str(t.crs), count=t.count,
@@ -64,4 +77,4 @@ def main(path: str | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1] if len(sys.argv) > 1 else None))
+    raise SystemExit(main(sys.argv[1] if len(sys.argv) > 1 else None, sys.argv[2] if len(sys.argv) > 2 else None))

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "IR-61-MERGE-01",
+    "finding": "Merged main was broken: submission_writer imported assert_submittable, which PR #3's validate.py did not define; tests could not import.",
+    "action": "Fixed: validate.py now exposes the union API (validate, assert_submittable, template_meta, write_submission). 22 tests pass."
+  },
+  {
+    "id": "IR-61-TEST-01",
+    "finding": "tests/ imported gems57.* (a sibling package name) and an older uniqueness API.",
+    "action": "Fixed: imports renamed to gems61; uniqueness.py re-implemented with surface_rho / dot_overlap / compare / load_registry; limits 0.90 / 0.70 / Jaccard 0.50."
+  },
+  {
+    "id": "IR-61-DATA-01",
+    "finding": "Three data layouts (data/official, data/bridge, data/raw) expected by three generations of code; the link directories are git-ignored, so a fresh clone failed.",
+    "action": "Fixed: prepare_data.py now creates the data/bridge and data/raw symlinks (recorded in evidence/data_preparation.json)."
+  },
+  {
+    "id": "IR-61-INSTR-02",
+    "finding": "Earlier sessions reported that the catalogue-frame holdout anti-correlates with live scores (\u03c1 \u2248 \u22120.93) and treated the instrument as inverted. The anti-correlation is an artefact: the top live files were pruned against the full catalogue, which removes exactly the dots a catalogue holdout rewards.",
+    "action": "Protocol corrected: withhold whole segments; prune only against the visible catalogue; score registry files as-is with the caveat; use the unpruned dotted base as the bar."
+  },
+  {
+    "id": "IR-61-UNIQ-01",
+    "finding": "An earlier raster in this repo (gems61-lane-buried-step-\u2026-k400k, 311,617 px) is a near-blanket: 95.8% of the footprint is within 3 px of it, so the one-sided 70% overlap rule flags every file as a duplicate of it.",
+    "action": "Gate uses Jaccard (limit 0.50) when the reference has > 5\u00d7 the candidate's support; raw overlap, base rate and Jaccard are all reported (evidence/h61g_uniqueness.json)."
+  },
+  {
+    "id": "IR-61-ARTIFACT-01",
+    "finding": "Before this session the repo advertised three different 'primary' files (root index.html said READY TO DOWNLOAD for one, README named another, the run card said negative).",
+    "action": "All three are marked SUPERSEDED; a single status block now appears on index.html, the executive summary and README."
+  },
+  {
+    "id": "IR-61-CONV-01",
+    "finding": "Undamped Oldenburg iteration diverges on the isostatic residual (reproduced).",
+    "action": "Damped, band-limited iteration (kc_scale 0.5); documented in method."
+  },
+  {
+    "id": "IR-61-RIBBON-01",
+    "finding": "The lane brief's 3 \u00d7 3 ribbons halve the holdout score for a 100 m-accurate locator (0.0465 \u2192 0.0216 on identical cells).",
+    "action": "Shipped the validated dots; multi-line character kept at corridor scale; both variants reported."
+  },
+  {
+    "id": "IR-61-NET-01",
+    "finding": "The sandbox allow-list blocks drivendata.org downloads and raw.githubusercontent.com; data came from the hash-pinned public bridge, not from an organiser receipt.",
+    "action": "Provenance class recorded as 'public bridge' in evidence/data_preparation.json; sha256 pins verified."
+  }
+]
