@@ -5,26 +5,56 @@
 [Why 0.2778](https://buffedlizard55-lab.github.io/61GEMSDOE/docs/analysis.html) ·
 [Competition #306](https://www.drivendata.org/competitions/306/competition-doe-gems/)
 
-## Status of the newest file (read this first)
+## Status of the newest file (read this first) — H61-O variable-density inversion
 
-**Newest file: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`**
-(this session, `arena/2a87ed28-61gemsdoe`, H61-MH).
+**Newest file: `gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif`**
+(this session, `arena/ac3f2948-61gemsdoe`, H61-O).
 
 | question | answer |
 |---|---|
-| Is the file safe to download and submit? | **YES — FORMAT-VALID and UNIQUE.** 19 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside the footprint, zero dots on the mapped catalogue). Uniqueness verdict **UNIQUE** against 28 earlier rasters (worst Spearman +0.1961 vs h61g, limit 0.90; worst one-sided 3 px overlap 0.431 vs h61g, limit 0.70; worst Jaccard 0.008 against the one dense reference, limit 0.50). |
-| Should it be given a weekly slot? | **NOT RECOMMENDED.** HOLDOUT-DTI 0.0606 (95 % CI 0.0494–0.0727; 22,641 withheld positive px; `gems61.holdout_segmented v2`, seeds 20+21, α 0.2 / β 0.8 / R 300 m) beats random lines (0.0314) and the previous session's best lane construction (H61-G X2, 0.0465). But the spatially blocked leave-one-quadrant-out retest puts **every** locator we have at the random baseline (LOQO-DTI 0.0140–0.0718, blocked canary AUC 0.518–0.618). Run-card verdict: **negative** — a valid, unique, honest negative result. |
-| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI or LOQO-DTI. |
+| Is the file safe to download and submit? | **YES — FORMAT-VALID and UNIQUE.** 27 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside footprint, zero dots on mapped catalogue). Uniqueness **UNIQUE** vs 11 registry rasters (worst Spearman +0.127 vs h61g, limit 0.90; worst one-sided 3px overlap 0.313 vs gravstep-liveband, limit 0.70; dense reference Jaccard 0.008 vs limit 0.50). |
+| Should it be given a weekly slot? | **NOT RECOMMENDED — honest negative.** HOLDOUT-DTI 0.0542 (95% CI 0.0440–0.0656; 22,641 withheld positive px; `gems61.holdout_segmented v2`, seeds 20+21, α 0.2/β 0.8/R 300m) beats random lines 0.0314 and random dots 0.0412. LOQO-DTI mean 0.0376 (range 0.0315–0.0503, canary AUC 0.51–0.608) — at random baseline, so no spatial generalization. Verdict **negative** but valid, unique, and the first variable-density implementation in this repo. |
+| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number is HOLDOUT-DTI or LOQO-DTI, never a projection. |
 
-**[↓ Download the GeoTIFF](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif)** ·
-[zip](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip) ·
-[format receipt](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json) ·
-[run card](evidence/h61m_run_card.json)
+**[↓ Download the GeoTIFF](docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif)** (133 kB) ·
+[zip](docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.zip) ·
+[format receipt](docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.json) ·
+[run card](evidence/h61o_run_card.json) ·
+[LOQO](evidence/h61o_loqo.json) ·
+[holdout](evidence/h61o_holdout.json)
 
-- Submission name: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros`
-- Note (140/140 chars): `H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED`
-- sha256 `4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179` (130,225 bytes); 40,000 single-pixel dots (value 1.0) at 3 px spacing, every dot more than 3 px from a mapped fault; median distance to the catalogue 19.8 px (1985 m).
-- Withheld basin-interior segments recovered: **353 of 1982** (95 % CI 16.2–19.6 %) versus **213 of 1982** for random lines at the same budget — a 1.6× recovery rate on the segments the lane is asked to find.
+- Submission name: `gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros`
+- Note (100/140 chars): `H61-O var-density inversion Hildenbrand 1999 + Euler+mag mimic filter none; 40000 dots 3px 3px prune`
+- sha256 `34218a188aa865923bc15a032767a7e633141afcd63139c1614d1cf346671a61` (133,448 bytes); 40,000 single-pixel dots (value 1.0) at 3 px spacing, every dot >3 px from mapped fault; median distance to catalogue 16.0 px (1603 m), 0% within 3 px.
+- Withheld basin-interior segments recovered: **463 of 2915** (CI 14.6–17.3 %) versus **309 of 2915** for random lines at same budget (10.6 %) — 1.5× recovery rate on the segments the lane is asked to find.
+- Previous session best (H61-MH): HOLDOUT-DTI 0.0606 CI 0.0494–0.0727, 353/1982 basin recovery, median 19.8 px. This file is slightly lower on holdout but uses a physically distinct inversion (variable density vs constant) and is UNIQUE vs all registry including H61-MH (Spearman 0.127 vs H61-G, overlap 0.313).
+
+### Why h33-h33-2-b2 scored 0.2778 (PhD-level)
+
+The file `gems32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif` (37,654 dots, 0.73% footprint, zero on catalogue, median 19.6 px from catalogue) is the exact set difference of the 0.2600 file (`d28-poisson300m-offcat-44090`, 44,090 dots) with 6,436 dots within 3 px of the mapped catalogue deleted — verified in `reports/forensics.json` (`top_is_strict_subset=true`). That deletion moved score 0.2600→0.2778, so dots adjacent to mapped catalogue were net-negative on live metric. Budget ladder: 37,654→0.2778, 40,199→0.2708, 44,090→0.2600, 60,069→0.2477, 61,328→0.2449 — optimum ~38–40k dots at 3 px spacing. Dotted beats multiline (0.1922→0.2600) because metric charges 0.2 per extra positive pixel (binary beats calibrated, marginal bar ~0.06 truth credit per dot at DTI 0.28). The lane's gravity HGM is enriched only 0.99–1.32× over random within 300 m kernel (corridor canary AUC 0.510), so gravity can say where to look but not where to put dot to 300 m. The 0.2778 files use a conjunction of detrended-elevation slope (AUC 0.66 at dots vs random) and magnetic HG (0.57) — signal in conjunction, not single layer. Our variable-density inversion improves depth scale calibration (p50 671 m, p90 1379 m, frac>1km 23.8% vs GP-1012 anchor 20%) and cross-check r vs band15 0.736, but still cannot localize to 300 m without metre-scale topography (hypothesis H61-N, USGS 3DEP 1 m lidar, free public domain, blocked in sandbox).
+
+### What this session adds
+
+- **Variable-density Parker-Oldenburg inversion** (H61-B): Hildenbrand et al. 1999 profile 1900/2100/2300/2450 kg/m3, basement 2670, Δρ -770/-570/-370/-220, reference z0 700 m, kc_scale 0.5, Butterworth order 4, FFT with exp(k*z0) downward continuation, then Newton solve for Δt from dg = 2πG[I(z0+Δt)-I(z0)]*1e5. Calibrated to GP-1012 shape: p50 671 m (range 250–700), p90 1379 m (900–2000), frac>1km 23.8% (anchor 20%).
+- **Competing explanation tested**: intrabasement lithologic contact Δρ~200 kg/m3 over 2 km mimics 1000 m basement step at 400 kg/m3. Discriminated by Euler SI=0 source depth (band18 HG / band11 VG, doi:10.1190/1.1442789) consistency |log(Euler/depth)|<log2 and magnetic edge demotion (band3 TMI HG maxima within 2 px). Euler_cons weight -0.97 in SE fold (negative, i.e., consistency not helpful as hard gate, but kept as feature).
+- **Leakage canary**: worst AUC 0.627 (habitat OOF prob) <0.90 threshold, passed. Per-feature AUCs: var-depth 0.512, var-depth HGM 0.516, throw 0.500, corridor 0.500, Euler 0.493, mag_edge 0.503, band13 grav 0.478, band19 slope 0.558.
+- **LOQO**: mean DTI 0.0376, range 0.0315–0.0503, mean canary AUC 0.51–0.608 — at random baseline, confirming no spatial generalization, same finding as H61-MH (LOQO 0.0395).
+- **Uniqueness**: UNIQUE vs 11 registry (worst Spearman 0.127 vs h61g, worst overlap 0.313 vs gravstep-liveband, dense ref Jaccard 0.008). Previous H61-MH worst Spearman 0.196, overlap 0.431 — more unique now.
+- **Budget**: 3 experiments planned, 2 run (features+holdout+final+unique+card = exp1, LOQO = exp2, single-band ablation = exp3 within holdout). Stop after 3.
+
+### Candidate board update (all parallel sessions merged on main, newest first)
+
+| file | session / PR | positive px | HOLDOUT-DTI | verdict |
+|---|---|---|---|---|
+| **`gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif`** | this session arena/ac3f2948 (H61-O) | 40,000 | 0.0542 CI 0.0440–0.0656 vs random 0.0314, basin 463/2915 vs 309/2915 random | FORMAT-VALID+UNIQUE, negative for slot |
+| `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif` | arena/2a87ed28 (H61-MH) | 40,000 | 0.0606 CI 0.0494–0.0727 vs random 0.0314 | FORMAT-VALID+UNIQUE, negative |
+| `61gemsdoe-basement-step-ribbon-20261011T054408Z` | arena/241cb85c | 40,000 | 0.045563 headline / 0.002715 shipped re-measured | negative |
+| `gems61-h61x-x3c-coarse-corridor-10128dots-…` | H61-X | 10,128 | 0.0085 below random 0.0352 | negative diagnostic |
+| `gems61-h61l-relief-any-corr10-40000dots-…` | H61-L PR#13 | 40,000 | 0.0443 vs random 0.0314 | negative |
+| `gems61-h61m-gravmag-corridor-ribbon-40000dots-…` | H61-M PR#11 | 55,301 | no segment-holdout | not comparable |
+| `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-…` | H61-G PR#9 | 40,000 | 0.0465 | negative |
+
+All remain in `docs/downloads/` as uniqueness references.
 
 ### Naming: two parallel sessions both used "H61-M" (IR-61-NAME-01)
 
