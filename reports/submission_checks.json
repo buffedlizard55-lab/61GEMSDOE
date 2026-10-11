@@ -1,0 +1,76 @@
+{
+ "path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+ "checks": {
+  "single_band": [
+   true,
+   1
+  ],
+  "dtype_float": [
+   true,
+   "float32"
+  ],
+  "crs_matches_template": [
+   true,
+   "EPSG:32611"
+  ],
+  "crs_is_epsg32611": [
+   true,
+   "EPSG:32611"
+  ],
+  "shape_matches_template": [
+   true,
+   [
+    3730,
+    3292
+   ]
+  ],
+  "shape_is_expected": [
+   true,
+   [
+    3730,
+    3292
+   ]
+  ],
+  "transform_matches_template": [
+   true,
+   [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ]
+  ],
+  "no_nan_anywhere": [
+   true,
+   0
+  ],
+  "min_ge_0": [
+   true,
+   0.0
+  ],
+  "max_le_1": [
+   true,
+   1.0
+  ],
+  "all_values_in_0_1": [
+   true,
+   null
+  ]
+ },
+ "pass": true,
+ "stats": {
+  "n_positive": 311617,
+  "n_pixels": 12279160,
+  "positive_fraction": 0.025378,
+  "unique_values_leq_8": [
+   0.0,
+   1.0
+  ],
+  "min": 0.0,
+  "max": 1.0,
+  "n_unique": 2
+ },
+ "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2"
+}

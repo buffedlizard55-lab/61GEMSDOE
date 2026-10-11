@@ -1,0 +1,259 @@
+{
+ "generated_utc": "2026-10-11T00:40:16Z",
+ "method": "read the published bytes, measure them; no filename is trusted",
+ "registry_dir": "/tmp/refs/registry",
+ "labels_reference": {
+  "path": "data/labels.tif",
+  "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "n_valid": 5167373,
+  "n_gt": 60988
+ },
+ "rasters": [
+  {
+   "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+   "claimed_score_by_group": 0.26,
+   "sha256": "3e78737f0da8dd2ca66cc6caac0ce8eeefcd6715707f8d1bd3091845cd9bcc30",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 44090,
+   "mass": 44090.0,
+   "sparse_fraction_of_valid": 0.008532,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 8607,
+   "n_pixels_within_10px": 17796,
+   "median_distance_to_visible_catalogue_px": 15.0,
+   "distance_buckets": {
+    "lt3": 8047,
+    "b3_10": 9529,
+    "b10_30": 12981,
+    "ge30": 13533
+   }
+  },
+  {
+   "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+   "claimed_score_by_group": 0.2449,
+   "sha256": "a9bf76b57453a5b3af74c8eef837df53c29a0931162aa540b8763220b36ba3bb",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 61328,
+   "mass": 61328.0,
+   "sparse_fraction_of_valid": 0.011868,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 12187,
+   "n_pixels_within_10px": 25530,
+   "median_distance_to_visible_catalogue_px": 14.142135623730951,
+   "distance_buckets": {
+    "lt3": 11329,
+    "b3_10": 13895,
+    "b10_30": 17751,
+    "ge30": 18353
+   }
+  },
+  {
+   "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+   "claimed_score_by_group": 0.2708,
+   "sha256": "2fc94a38d77f74d4f4ed1a97a83e7bb71a1ceea090515ec641e6681cc47c44c8",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 40199,
+   "mass": 40199.0,
+   "sparse_fraction_of_valid": 0.007779,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 4716,
+   "n_pixels_within_10px": 13905,
+   "median_distance_to_visible_catalogue_px": 17.69180601295413,
+   "distance_buckets": {
+    "lt3": 4156,
+    "b3_10": 9529,
+    "b10_30": 12981,
+    "ge30": 13533
+   }
+  },
+  {
+   "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+   "claimed_score_by_group": 0.271,
+   "sha256": "7c74270ad48fa0b865163853046a6d3815967c5bf37bbda5b74ca7fa22583a32",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 37660,
+   "mass": 37660.0,
+   "sparse_fraction_of_valid": 0.007288,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 4377,
+   "n_pixels_within_10px": 12936,
+   "median_distance_to_visible_catalogue_px": 17.72004514666935,
+   "distance_buckets": {
+    "lt3": 3891,
+    "b3_10": 8847,
+    "b10_30": 12226,
+    "ge30": 12696
+   }
+  },
+  {
+   "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+   "claimed_score_by_group": 0.26,
+   "sha256": "4dc4cc54b061cb4567a5500c8fa2bfe750a39340b02c8cdbb4308916f36cbcc3",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 44090,
+   "mass": 44090.0,
+   "sparse_fraction_of_valid": 0.008532,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 8607,
+   "n_pixels_within_10px": 17796,
+   "median_distance_to_visible_catalogue_px": 15.0,
+   "distance_buckets": {
+    "lt3": 8047,
+    "b3_10": 9529,
+    "b10_30": 12981,
+    "ge30": 13533
+   }
+  },
+  {
+   "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+   "claimed_score_by_group": 0.2376,
+   "sha256": "3722e26fbf9129874be1fb8c687825803952c57ef1154ed0a21029596bc412f1",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 40000,
+   "mass": 40000.0,
+   "sparse_fraction_of_valid": 0.007741,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 0,
+   "n_pixels_within_10px": 12558,
+   "median_distance_to_visible_catalogue_px": 19.209372712298546,
+   "distance_buckets": {
+    "lt3": 0,
+    "b3_10": 12340,
+    "b10_30": 13970,
+    "ge30": 13690
+   }
+  },
+  {
+   "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+   "claimed_score_by_group": 0.0512,
+   "sha256": "9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 44090,
+   "mass": 44090.0,
+   "sparse_fraction_of_valid": 0.008532,
+   "n_pixels_on_visible_catalogue": 647,
+   "n_pixels_within_3px_of_visible_catalogue": 4915,
+   "n_pixels_within_10px": 14815,
+   "median_distance_to_visible_catalogue_px": 18.027756377319946,
+   "distance_buckets": {
+    "lt3": 4493,
+    "b3_10": 10104,
+    "b10_30": 15295,
+    "ge30": 14198
+   }
+  },
+  {
+   "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "claimed_score_by_group": 0.26,
+   "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 44090,
+   "mass": 44090.0,
+   "sparse_fraction_of_valid": 0.008532,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 8607,
+   "n_pixels_within_10px": 17796,
+   "median_distance_to_visible_catalogue_px": 15.0,
+   "distance_buckets": {
+    "lt3": 8047,
+    "b3_10": 9529,
+    "b10_30": 12981,
+    "ge30": 13533
+   }
+  },
+  {
+   "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+   "claimed_score_by_group": 0.2778,
+   "sha256": "c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9",
+   "min": 0.0,
+   "max": 1.0,
+   "is_binary_0_1": true,
+   "n_nonzero": 37654,
+   "mass": 37654.0,
+   "sparse_fraction_of_valid": 0.007287,
+   "n_pixels_on_visible_catalogue": 0,
+   "n_pixels_within_3px_of_visible_catalogue": 2171,
+   "n_pixels_within_10px": 11360,
+   "median_distance_to_visible_catalogue_px": 19.6468827043885,
+   "distance_buckets": {
+    "lt3": 1611,
+    "b3_10": 9529,
+    "b10_30": 12981,
+    "ge30": 13533
+   }
+  }
+ ],
+ "irregularities": [
+  {
+   "id": "IR-61-SCORE-01",
+   "severity": "high",
+   "statement": "Every score in CLAIMED is a group/owner report. None is an organizer receipt linking those bytes to a leaderboard row. The public leaderboard rows are the only observed scores and they belong to other teams."
+  },
+  {
+   "id": "IR-61-FOOTPRINT-01",
+   "severity": "medium",
+   "statement": "This project measures 5,165,852 finite footprint pixels from the official labels; the group's record says 5,167,373. A 0.03% difference in the footprint criterion."
+  },
+  {
+   "id": "IR-61-PROVENANCE-01",
+   "severity": "high",
+   "statement": "The competition rasters used here were obtained from a public GitHub mirror of the official data (the DrivenData data page is login-walled). All three match the official SHA-256 pins recorded by the mirror, but they are not organizer-authenticated."
+  }
+ ],
+ "pairwise_iou_over_80pct": {
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 91.175,
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 100.0,
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 100.0,
+  "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403,
+  "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gems32-probe-S1-ANCHOR-identical-to-live-02600.tif": 91.175,
+  "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 91.175,
+  "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 93.669,
+  "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif": 100.0,
+  "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403,
+  "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif vs gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 85.403
+ },
+ "set_difference_forensics": {
+  "top_minus_core": {
+   "core": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+   "top": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+   "core_n": 44090,
+   "top_n": 37654,
+   "removed_n": 6436,
+   "removed_all_within_3px_of_catalogue": true,
+   "removed_within_3px": 6436,
+   "top_is_strict_subset": true,
+   "verified_as_exact_set_difference": true
+  },
+  "solo_minus_core": {
+   "core_n": 44090,
+   "solo_n": 40199,
+   "removed_n": 3891,
+   "removed_all_within_3px_of_catalogue": true,
+   "removed_within_3px": 3891,
+   "solo_is_strict_subset": true
+  }
+ },
+ "conclusions": [
+  "Every registry raster is binary {0,1}; none uses soft probabilities.",
+  "Every registry raster is sparse: 0.73-1.19 percent of the 5,165,852 valid pixels.",
+  "Every high-scoring raster contains ZERO pixels on a visible catalogue fault; the one raster that does contain them (647 px) is the lowest scorer (0.0512).",
+  "The 0.2778 raster is the 0.2600 raster with every pixel within 3 px of the visible catalogue deleted -- an exact set difference, verified above.",
+  "Three filenames carry byte-identical rasters, so the group's apparent 0.2600 plateau is one artifact under three names."
+ ]
+}

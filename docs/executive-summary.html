@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Executive summary - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a><a href="submit.html">How to submit</a><a href="methodology.html">Method</a><a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<h1>Executive summary</h1>
+<div class="card">
+<h2>The 60-second version</h2>
+<ol>
+<li><strong>What is being scored.</strong> The DOE GEMS Prize scores fault predictions
+with a distance-weighted Tversky index (alpha 0.2, beta 0.8, 300&nbsp;m triangular
+kernel). Phase 1 is scored against faults <em>withheld</em> from the data you are given.</li>
+<li><strong>What that means operationally.</strong> Copying <code>existing_faults.tif</code>
+cannot work, and the measured evidence says it actively hurts: the best-scoring raster in
+the group's registry contains <em>zero</em> pixels on the visible catalogue.</li>
+<li><strong>What this repository does.</strong> It inverts the isostatic gravity band for
+basement relief, turns the relief's horizontal-gradient ridges into multi-pixel
+ribbons, removes everything within a tuned radius of the previous catalogue, and emits
+a binary all-finite GeoTIFF on the competition grid.</li>
+<li><strong>What to do with it.</strong> Open <a href="index.html">the home page</a>,
+click the download button, and submit that file with the supplied note. Full
+walkthrough: <a href="submit.html">How to submit</a>.</li>
+</ol>
+</div>
+<div class="card">
+<h2>Verified facts behind the method</h2>
+<table><thead><tr><th>Fact</th><th>Value</th><th>How it was verified</th></tr></thead><tbody><tr><td>Grid</td><td>3292 x 3730, EPSG:32611, 100 m, origin (243350, 4508550)</td><td>read from the official rasters with rasterio</td></tr><tr><td>Valid footprint</td><td>5167373 px</td><td>counted from <code>labels.tif</code>, where the value is not -1</td></tr><tr><td>Visible catalogue</td><td>60988 px (0.011803 of valid)</td><td>counted from <code>labels.tif</code></td></tr><tr><td>Metric identity</td><td>DTI == F2; TP_w + FN_w == |G|</td><td>13/13 tests in <code>src/gems_metric.py</code> against a brute-force transcription</td></tr><tr><td>Inversion check</td><td>Pearson r = -0.1822 vs band 15</td><td>inverted relief compared with the competition's own depth-to-basement band</td></tr><tr><td>Leakage canary</td><td>clean (all AUC &lt; 0.55)</td><td>single-band rank AUC, <a href='evidence.html'>Evidence</a></td></tr></tbody></table>
+</div>
+<h2>How to make a submission (short form)</h2>
+<ol>
+<li>Download the GeoTIFF from the home page.</li>
+<li>On the competition submission page, choose that file, paste the note, submit.</li>
+<li>Confirm the receipt shows a score, and record it (an organizer receipt is the only
+thing this project treats as a confirmed number).</li>
+</ol>
+<p>Full detail, including what to do if the form complains: <a href="submit.html">How to submit</a>.</p>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>

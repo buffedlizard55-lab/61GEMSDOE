@@ -1,0 +1,7 @@
+data/*.tif
+data/*.zip
+data/*.part-*
+__pycache__/
+*.pyc
+.venv/
+venv/

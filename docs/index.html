@@ -1,0 +1,84 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a><a href="submit.html">How to submit</a><a href="methodology.html">Method</a><a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+
+<div class="card hero">
+<h2>Download the submission</h2>
+<p><span class="pill ok">READY TO DOWNLOAD AND SUBMIT</span>
+<span class="pill ok">format validated</span>
+<span class="pill ok">
+uniqueness: unique</span></p>
+<p class="big"><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</a></p>
+<p><a class="btn" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">&#11015; Download the GeoTIFF</a>
+<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.sha256">SHA-256 file</a>
+<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.json">Validation report (JSON)</a></p>
+<p class="mono-sm">sha256 a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2</p>
+<p><strong>Note to paste into the submission form</strong>
+<span class="dim">(the "Note" field; 122 of 140 characters)</span></p>
+<pre>Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.</pre>
+<p>311617 pixels set to 1 of 5,165,852 valid; all other pixels are exactly 0.0.
+Values are finite everywhere &mdash; there is no NaN, so the form's
+"Predicted values must be in range [0, 1]" check cannot fail.</p>
+<p class="dim">This file is generated from scratch by the code in this repository from
+the official competition rasters. It is <strong>not</strong> a copy of any earlier
+submission, and it is not derived from any other team's file. You may download it and
+submit it.</p>
+<hr style="border:0;border-top:1px solid #30363d;margin:16px 0">
+<h3 style="margin-top:0">Should you spend a weekly submission slot on it? &mdash; <span class="warn">No.</span></h3>
+<p><strong>Is it safe to submit?</strong> <span class="ok">Yes.</span> It is a
+single-band float32 GeoTIFF, all values finite and in [0, 1], on the exact competition
+grid (12279160 px, EPSG:32611), and the validator
+passes every check. It is unique against the whole registry.</p>
+<p><strong>Will it score well?</strong> <span class="warn">No evidence says so.</span>
+The run card verdict is <code>negative</code>. On the spatially blocked
+same-catalogue holdout, this lane's field scored
+0.08875
+(95% CI [0.07688,
+0.10042]) while a
+<strong>random</strong> dot field of the same size scored
+0.05429. The field does
+not beat random. Read <a href="evidence.html">Evidence</a> before submitting anything.</p>
+<p class="dim">The honest recommendation: this file is a valid, unique, format-compliant
+submission and it is yours to send. The evidence does not justify a slot. Use
+<a href="next-steps.html">Next steps</a> for what to try instead.</p>
+</div>
+<h2>What this is</h2>
+<p>One competition lane: <em>buried fault structure from gravity inversion</em>. The
+provided isostatic-gravity band is inverted for basement relief with the Parker
+(1973) / Oldenburg (1974) iteration, the result is verified against the competition's
+own depth-to-basement band, and the maxima of the relief's horizontal gradient are
+emitted as candidate buried range-front faults.</p>
+
+<div class="card">
+<h2>What this repository has established (all measured)</h2>
+<ul>
+<li><strong>The Phase 1 target is not the file you are given.</strong> The official rules
+say submissions are evaluated against "a privately withheld subset of the original new
+fault dataset compiled by expert reviewers". <code>existing_faults.tif</code> is the
+previous catalogue, so predicting it is not the task.</li>
+<li><strong>The metric is exactly F<sub>2</sub></strong> once you substitute
+<code>FN_w = |G| &minus; TP_w</code>, and it is dominated by false-positive mass because
+<code>alpha = 0.2</code>. See <code>src/gems_metric.py</code>, 13/13 tests, including the
+official worked example from the problem page (0.60).</li>
+<li><strong>Every previously scored raster in the group's registry is binary and sparse
+(0.73-1.19% of valid pixels) and contains zero pixels on the visible catalogue</strong> -
+and the exact set difference between the 0.2600 raster and the 0.2778 raster is the
+6,436 pixels nearest the visible catalogue. See <a href="evidence.html">Evidence</a>.</li>
+<li><strong>The Parker-Oldenburg inversion of the isostatic gravity band reproduces the
+competition's own depth-to-basement band at Pearson r = -0.1822</strong>
+over the study footprint (5167373 pixels).</li>
+<li><strong>Leakage canary is clean:</strong> no single band linearly separates the
+catalogue (best AUC 0.533).</li>
+</ul>
+</div>
+<div class="card"><h2>Best holdout operating point</h2><p>RANDOM_control, catalogue exclusion radius 0 px, 45000 emissions, ribbon half-width 0.</p><p class="big">HOLDOUT-DTI 0.05385 <span class="dim">95% CI [0.04916741394803854, 0.058053887090036525]</span></p><p class="dim">Random lines at the identical pixel budget: 0.05429 &plusmn; 0.000926.</p></div>
+<div class="card"><h2>Read next</h2>
+<p><a href="submit.html">How to submit</a> &middot; <a href="executive-summary.html">Executive summary</a>
+&middot; <a href="methodology.html">Method</a> &middot; <a href="limitations.html">Limitations</a></p></div>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>
