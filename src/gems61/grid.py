@@ -46,7 +46,27 @@ SHA256_EXISTING_FAULTS = "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7
 SHA256_SAMPLE_SUBMISSION = "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DATA_DIR = REPO_ROOT / "data" / "bridge"
+
+
+def _default_data_dir() -> Path:
+    """Locate the pinned rasters.
+
+    IR-61-PATH-01: this module was written against a ``data/bridge/`` layout that
+    does not exist in this repository -- the pinned rasters live in
+    ``data/official/`` (``scripts/prepare_data.py`` writes them there and verifies
+    their sha256).  ``load_grid()`` therefore raised ``FileNotFoundError`` for every
+    caller that did not pass ``data_dir`` explicitly.  Fixed once, here, rather than
+    forked: try ``data/bridge`` first (the original layout, still honoured if a
+    caller creates it), then ``data/official``.
+    """
+    for name in ("bridge", "official"):
+        candidate = REPO_ROOT / "data" / name
+        if (candidate / "existing_faults.tif").exists() and (candidate / "sample_submission.tif").exists():
+            return candidate
+    return REPO_ROOT / "data" / "official"
+
+
+DATA_DIR = _default_data_dir()
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,260 @@
+{
+ "generated_utc": "2026-10-11T02:07:00+00:00",
+ "lane": "61 buried-structure: basement-depth steps from gravity inversion",
+ "hypothesis": "Alluvial cover hides range-front and intrabasin faults from a surface-mapped catalogue; a Parker-Oldenburg inversion of the supplied isostatic residual recovers basement relief whose horizontal-gradient maxima, filtered by a MEASURED throw >= 120 m, are those steps; weighting them by a declared basin-floor habitat ramp places dots where the live truth (new faults NOT in the USGS database) is more likely than a catalogue-offset field does.",
+ "mechanism": "band 13 -> Parker(1973)/Oldenburg(1974) first iterate (z0=400 m, drho=-600 kg/m^3, Butterworth-4 kc_scale=0.25, GP-1012 calibrated) -> basement depth -> Blakely-Simpson HGM maxima with throw >= 120 m -> 2 px ribbons -> fused belief (declared weights) x concealment_prior^1.0 -> hard-core top-38000 over footprint >= 3 px from catalogue -> binary float32 GeoTIFF, zeros outside.",
+ "competing_non_fault_process": "Density contrasts INSIDE basement (pluton margins, basement lithologic contacts, buried volcanic centres) produce the same horizontal-gradient ridge as a fault step; this lane cannot separate them, and neither can the supplied depth_to_base_surf band it is cross-checked against.",
+ "declared_design": {
+  "prune_px": 3.0,
+  "k_dots": 38000,
+  "separation_px": 3,
+  "habitat_exponent": 0.25,
+  "seed": 61202610
+ },
+ "inversion": {
+  "z0_m": 400.0,
+  "delta_rho": -600.0,
+  "filter": "Butterworth order 4.0, kc = 3.125e-04 rad/m (kc_scale=0.25)",
+  "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+  "rms_residual_mgal": 4.28319214212109,
+  "sign_guard_corr_depth_vs_band13": -0.9342,
+  "source_doi": "doi:10.1190/1.1440444",
+  "calibration_source": "USGS GP-1012, doi:10.3133/gp1012 (1:2,500,000 - scale anchor only, NOT a truth mask)"
+ },
+ "property_vector": {
+  "label": "MEASURED on this file",
+  "n_dots": 38000,
+  "mean_distance_px": 16.865162537823863,
+  "median_distance_px": 7.615773105863909,
+  "p25_distance_px": 5.0,
+  "p75_distance_px": 28.160255680657446,
+  "frac_within_1px": 0.0,
+  "frac_within_2px": 0.0,
+  "frac_within_3px": 0.028921052631578948,
+  "frac_on_catalogue": 0.0,
+  "median_INVERTED_depth_m_at_dots": 729.1033895256819,
+  "median_band15_depth_m_at_dots": 344.3547058105469,
+  "band15_depth_median_footprint_m": 316.3645324707031,
+  "band15_depth_median_eligible_m": 315.5627899169922,
+  "note_depth_scales": "the registry comparison is like-for-like only on band 15 (published depth_to_base_surf, footprint median 316 m); the inverted surface has a different calibrated scale (footprint median ~689 m) and must not be compared to it",
+  "frac_dots_deeper_than_footprint_median": 0.5623684210526316,
+  "eligible_area_median_depth_m": 684.7289204528948,
+  "eligible_area_frac_deeper_than_footprint_median": 0.4944208723749745
+ },
+ "holdout_dti": {
+  "value": 0.03949,
+  "evaluator": "surrogate-truth DTI from evidence/e1_habitat_instrument.json (alpha 0.2, beta 0.8, R = 300 m triangular kernel)",
+  "instrument_gamma": 0.15,
+  "instrument_N": 30000,
+  "instrument_validity": "instrument NOT usable - do not promote on it",
+  "instrument_in_sample_spearman_vs_live": 0.6071,
+  "instrument_loo_mean_rank_error": 1.1428571428571428,
+  "withheld_positives": 12222,
+  "label": "HOLDOUT-DTI - INSTRUMENT NOT VALIDATED: it reproduces the owner-reported live ordering at rho = 0.607 (p = 0.148) with leave-one-out rank error 1.14, below the declared usability bar (rho >= 0.80, LOO MAE <= 1.0). This number is a measurement on a ruler known to be soft. It is NOT a projection and NOT a score.",
+  "registry_reference": {
+   "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": {
+    "surrogate_dti": 0.05681,
+    "owner_reported_live": 0.2778,
+    "n_dots": 37654
+   },
+   "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif": {
+    "surrogate_dti": 0.05547,
+    "owner_reported_live": 0.271,
+    "n_dots": 37660
+   },
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": {
+    "surrogate_dti": 0.05644,
+    "owner_reported_live": 0.2708,
+    "n_dots": 40199
+   },
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": {
+    "surrogate_dti": 0.05526,
+    "owner_reported_live": 0.26,
+    "n_dots": 44090
+   },
+   "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif": {
+    "surrogate_dti": 0.05774,
+    "owner_reported_live": 0.2449,
+    "n_dots": 61328
+   },
+   "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": {
+    "surrogate_dti": 0.05807,
+    "owner_reported_live": 0.2376,
+    "n_dots": 40000
+   },
+   "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif": {
+    "surrogate_dti": 0.04934,
+    "owner_reported_live": 0.0512,
+    "n_dots": 44090
+   }
+  }
+ },
+ "leakage_canary": {
+  "auc_per_feature_alone": {
+   "ribbon_lane": 0.4065,
+   "concealed_ribbon": 0.4065,
+   "edge_gravity": 0.4259,
+   "offset_band_visible_only": 0.6897,
+   "habitat_depth": 0.5448,
+   "fused_p": 0.1592,
+   "final_score": 0.017
+  },
+  "threshold": 0.9,
+  "flagged": [],
+  "withheld_positives": 12222,
+  "domain_pixels": 4942579,
+  "note": "each feature tested alone against withheld trace segments with the visible traces masked pixel-exactly"
+ },
+ "withheld_segment_recovery": {
+  "label": "MEASURED; the lane's required test",
+  "n_segments_scored": 1370,
+  "n_segments_basin_interior": 0,
+  "candidate_all": 0.14453,
+  "candidate_basin_interior": 0.0,
+  "random_lines_all": {
+   "mean": 0.18437,
+   "std": 0.10004,
+   "max": 0.33333,
+   "n_draws": 8
+  },
+  "random_lines_basin_interior": {
+   "mean": 0.0,
+   "std": 0.0,
+   "max": 0.0,
+   "n_draws": 8
+  },
+  "lift_all": 0.78,
+  "lift_basin_interior": 0.0,
+  "recovered_within_m": 300
+ },
+ "uniqueness": {
+  "thresholds": {
+   "rank_correlation": 0.9,
+   "raw_dot_overlap_3px": 0.7
+  },
+  "worst_rank_correlation": 0.010504,
+  "worst_raw_3px_fraction": 0.213237,
+  "worst_3px_enrichment": 1.2939,
+  "worst_jaccard": 0.006867,
+  "per_raster": [
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "n_other": 44090,
+    "shared_pixels": 359,
+    "jaccard": 0.004392,
+    "frac_my_dots_within_3px": 0.196684,
+    "eligible_base_rate_within_3px": 0.156,
+    "enrichment": 1.2608,
+    "rank_correlation": 0.005455
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+    "n_other": 61328,
+    "shared_pixels": 498,
+    "jaccard": 0.005039,
+    "frac_my_dots_within_3px": 0.213237,
+    "eligible_base_rate_within_3px": 0.167975,
+    "enrichment": 1.2695,
+    "rank_correlation": 0.00641
+   },
+   {
+    "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+    "n_other": 40199,
+    "shared_pixels": 359,
+    "jaccard": 0.004612,
+    "frac_my_dots_within_3px": 0.189974,
+    "eligible_base_rate_within_3px": 0.154771,
+    "enrichment": 1.2275,
+    "rank_correlation": 0.006022
+   },
+   {
+    "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+    "n_other": 37660,
+    "shared_pixels": 322,
+    "jaccard": 0.004274,
+    "frac_my_dots_within_3px": 0.186632,
+    "eligible_base_rate_within_3px": 0.152731,
+    "enrichment": 1.222,
+    "rank_correlation": 0.005448
+   },
+   {
+    "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+    "n_other": 40000,
+    "shared_pixels": 532,
+    "jaccard": 0.006867,
+    "frac_my_dots_within_3px": 0.200395,
+    "eligible_base_rate_within_3px": 0.154881,
+    "enrichment": 1.2939,
+    "rank_correlation": 0.010504
+   },
+   {
+    "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+    "n_other": 44090,
+    "shared_pixels": 382,
+    "jaccard": 0.004675,
+    "frac_my_dots_within_3px": 0.140868,
+    "eligible_base_rate_within_3px": 0.119054,
+    "enrichment": 1.1832,
+    "rank_correlation": 0.006019
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "n_other": 37654,
+    "shared_pixels": 359,
+    "jaccard": 0.004768,
+    "frac_my_dots_within_3px": 0.182132,
+    "eligible_base_rate_within_3px": 0.152873,
+    "enrichment": 1.1914,
+    "rank_correlation": 0.00643
+   }
+  ],
+  "verdict": "unique",
+  "note": "the protocol gate is the RAW fraction of my dots within 3 px of a registry raster's dots (< 0.70). The enrichment over the eligible-area base rate is reported as the IR-61-UNIQ-01 correction, since a dense reference absorbs dots by geometry."
+ },
+ "validator": {
+  "path": "/home/user/61GEMSDOE/out/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
+  "grid": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "count": 1,
+   "dtype": "float32",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "nodata": null
+  },
+  "in_footprint_pixels": 5167373,
+  "positive_pixels": 38000,
+  "footprint_fraction": 0.007353833369489681,
+  "in_footprint_min": 0.0,
+  "in_footprint_max": 1.0,
+  "checks": {
+   "single_band": true,
+   "dtype_float32": true,
+   "dimensions_3730x3292": true,
+   "crs_epsg_32611": true,
+   "transform_matches": true,
+   "in_footprint_all_finite": true,
+   "in_footprint_range_0_1": true,
+   "whole_raster_all_finite": true,
+   "whole_raster_range_0_1": true,
+   "no_float32_sentinel": true
+  },
+  "all_checks_passed": true
+ },
+ "raster_sha256": "5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591",
+ "tif": "out/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif",
+ "zip": "out/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.zip",
+ "tif_bytes": 823776,
+ "zip_bytes": 171680,
+ "submission_name": "gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106",
+ "submission_note": "H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue",
+ "note_chars": 114,
+ "seconds": 62.7
+}

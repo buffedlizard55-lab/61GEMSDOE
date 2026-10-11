@@ -31,8 +31,15 @@ FUSION_WEIGHTS = {
 }
 
 LANE_DECIMATION = 4        # the inversion is run on a 400 m grid
-INVERSION_Z0_M = 500.0     # reference level; GP-1012 median-depth band selects it
-INVERSION_KC_SCALE = 0.5   # filter corner = kc_scale/(2 z0); calibrated against GP-1012
+# IR-61-CALIB-01: these three were stale.  The GP-1012 calibration sweep recorded
+# in evidence/measure.json (21 x 4 = 84 candidates, anchors: median depth in
+# 250-700 m, p90 in 900-2000 m, ~20 % of the grid deeper than 1 km) selects
+# z0 = 400 m, delta_rho = -600 kg/m^3, kc_scale = 0.25, penalty 0.00441.  The
+# module previously carried z0 = 500 / kc_scale = 0.5 / delta_rho = -400, i.e. a
+# point that was NOT the calibrated optimum.  Set to the calibrated values so the
+# belief field and the published calibration agree.
+INVERSION_Z0_M = 400.0     # reference level; GP-1012 median-depth band selects it
+INVERSION_KC_SCALE = 0.25  # filter corner = kc_scale/(2 z0); calibrated against GP-1012
 BLAKELY_MIN_THROW_M = 120.0
 BLAKELY_RIBBON_HALF_PX = 2
 RIBBON_DENSITY_SIGMA_PX = 12.0
@@ -174,7 +181,8 @@ def build_belief(grid, inversion: dict | None = None) -> dict:
 # The density contrast is set by the GP-1012 calibration (see the driver's
 # ``measure`` stage, evidence/measure.json); the module default is the value
 # that calibration selected, kept here so the belief can be rebuilt standalone.
-INVERSION_DELTA_RHO = -400.0
+# IR-61-CALIB-01: was -400.0; the calibrated optimum is -600.0 kg/m^3.
+INVERSION_DELTA_RHO = -600.0
 
 
 # --------------------------------------------------------------------------- #

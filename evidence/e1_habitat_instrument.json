@@ -1,0 +1,173 @@
+{
+ "evidence_class": "MEASURED on registry bytes; live scores are OWNER-REPORTED",
+ "purpose": "calibrate a surrogate truth that reproduces the LIVE ordering, because the catalogue-frame holdout is measured anti-correlated with live (IR-57-INSTR-01)",
+ "official_basis": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ - test set is 'newly identified faults ... NOT INCLUDED IN THE EXISTING USGS fault database', so the live truth is disjoint from the visible catalogue",
+ "eligible_pixels": 4761049,
+ "footprint_pixels": 5167373,
+ "catalogue_pixels": 60988,
+ "habitat_layer": "band 15 depth_to_base_surf (m), q ~ depth^gamma on the eligible area",
+ "n_registry_fields": 7,
+ "best": {
+  "gamma": 0.15,
+  "N": 30000,
+  "spearman_rho": 0.6071,
+  "p_value": 0.14823116148116164,
+  "surrogate_dti": {
+   "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 0.05655,
+   "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif": 0.0552,
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 0.05617,
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": 0.05499,
+   "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif": 0.05748,
+   "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": 0.05427,
+   "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif": 0.04594
+  },
+  "live": {
+   "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif": 0.2778,
+   "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif": 0.271,
+   "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif": 0.2708,
+   "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif": 0.26,
+   "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif": 0.2449,
+   "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif": 0.2376,
+   "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif": 0.0512
+  }
+ },
+ "gamma_scan_top10": [
+  {
+   "gamma": 0.15,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.2,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.25,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.3,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.35,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.4,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.45,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.5,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.55,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  },
+  {
+   "gamma": 0.6,
+   "N": 30000,
+   "rho": 0.6071428571428572,
+   "p": 0.14823116148116164
+  }
+ ],
+ "leave_one_out": {
+  "rows": [
+   {
+    "held": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "live": 0.2778,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.6,
+    "predicted_rank_among_7": 6,
+    "true_rank_among_7": 7,
+    "rank_error": 1
+   },
+   {
+    "held": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+    "live": 0.271,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.6571,
+    "predicted_rank_among_7": 4,
+    "true_rank_among_7": 6,
+    "rank_error": 2
+   },
+   {
+    "held": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+    "live": 0.2708,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.6571,
+    "predicted_rank_among_7": 5,
+    "true_rank_among_7": 5,
+    "rank_error": 0
+   },
+   {
+    "held": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "live": 0.26,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.6,
+    "predicted_rank_among_7": 3,
+    "true_rank_among_7": 4,
+    "rank_error": 1
+   },
+   {
+    "held": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+    "live": 0.2449,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.9429,
+    "predicted_rank_among_7": 7,
+    "true_rank_among_7": 3,
+    "rank_error": 4
+   },
+   {
+    "held": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+    "live": 0.2376,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.3714,
+    "predicted_rank_among_7": 2,
+    "true_rank_among_7": 2,
+    "rank_error": 0
+   },
+   {
+    "held": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+    "live": 0.0512,
+    "gamma": 0.15,
+    "N": 30000,
+    "fit_rho_on_6": 0.3714,
+    "predicted_rank_among_7": 1,
+    "true_rank_among_7": 1,
+    "rank_error": 0
+   }
+  ],
+  "mean_absolute_rank_error": 1.1428571428571428,
+  "exact_rank_recoveries": "3/7"
+ },
+ "verdict": "instrument NOT usable - do not promote on it"
+}
