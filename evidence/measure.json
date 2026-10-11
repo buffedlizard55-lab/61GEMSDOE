@@ -1697,9 +1697,9 @@
       "rms_residual_mgal": 1.4038001769620843
     }
   ],
-  "divergence_finding": "The full Parker-Oldenburg non-linear iteration does NOT converge on this input. Iteration 1 leaves the smallest forward residual; every later correction raises it and the relief then grows without bound. An isostatic RESIDUAL carries crustal- and mantle-scale field, and a single-interface Parker series can only absorb that field as relief, so it does. The lane therefore uses the first iterate (low-passed Bouguer slab) and reports the rejected correction instead of hiding it.",
+  "divergence_finding": "One recorded Parker-Oldenburg nonlinear run did not meet the 1 m convergence tolerance within six corrections: the maximum change was still 130.546 m at iteration 6 and the RMS residual was 1.4038 mGal. The residual fell over those six iterations, so this trace does not establish residual divergence or prove that every damped/filter configuration fails. Production retained the first low-passed Bouguer-slab iterate; a converged nonlinear solution remains unverified.",
   "inversion": {
-    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "stage": "first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated by the recorded six-iteration test",
     "rms_residual_mgal": 4.28319214212109,
     "delta_rho": -600.0,
     "z0_m": 400.0,

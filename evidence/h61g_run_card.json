@@ -19,20 +19,15 @@
     }
   },
   "correlation_overlap_vs_registry": {
-    "worst_spearman": {
-      "file": "gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-allfinite.tif",
-      "value": 0.015285099819131428
-    },
-    "worst_overlap": {
-      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
-      "value": 0.985925,
-      "base_rate": 0.9581822330224662,
-      "gate_rule": "Jaccard (reference is dense: >5x my support)",
-      "gate_value": 0.0074812467407437125,
-      "gate_limit": 0.5
-    },
-    "n_compared": 24,
-    "verdict": "UNIQUE"
+    "worst_spearman": 0.015285099819141699,
+    "worst_overlap_fraction": 0.985925,
+    "overlap_limit": 0.7,
+    "worst_overlapping_raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "n_compared": 27,
+    "declared_scope_complete": true,
+    "organizer_registry_complete": false,
+    "verdict": "DUPLICATE_LANE_DRIFT",
+    "jaccard_exception_used": false
   },
   "raster_sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
   "validator_output": {
@@ -72,7 +67,7 @@
     "cross_check_r_vs_band15": 0.7382397545865853
   },
   "verdict": "negative",
-  "verdict_reason": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "verdict_reason": "DO NOT SPEND A SLOT or submit this file: its final dots fail the literal >70% one-sided 3 px overlap rule against a previous raster.",
   "candidate_selection": {
     "rule": "max pooled HOLDOUT-DTI over candidates and budgets; ties (overlapping 95% CIs) broken toward the lane's stated population (basin interior) and higher basin-interior segment recovery",
     "shipped": "X2 corridor x slope-ridge (basin interior)",
@@ -81,5 +76,8 @@
   },
   "organizer_confirmed_score": null,
   "experiments_run": 3,
-  "budget_experiments": 3
+  "budget_experiments": 3,
+  "download_verdict": "DIAGNOSTIC ONLY \u2014 DO NOT SUBMIT; strict one-sided 3 px uniqueness threshold fails",
+  "strict_uniqueness_passed": false,
+  "experiment_budget_note": "Historical H61-G holdout selection remains; this turn performed a strict uniqueness audit and one H61-L surface preflight. H61-L holdout was stopped before evaluation."
 }

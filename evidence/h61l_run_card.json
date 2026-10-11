@@ -1,0 +1,333 @@
+{
+  "schema": "gems61-run-card-v1",
+  "run_id": "H61-L-preplacement-screen-20261011",
+  "card_scope": "Sole current terminal run card; evidence/h61g_run_card.json is retained as a historical H61-G card.",
+  "created_utc": "2026-10-11T05:31:57Z",
+  "last_reviewed_utc": "2026-10-11T05:39:37Z",
+  "branch": "arena/1f8f2833-61gemsdoe",
+  "evidence_class": "MEASURED pre-placement gate; historical proxy results are HOLDOUT-DTI; no ORGANIZER-CONFIRMED score",
+  "overall_verdict": "NEGATIVE — H61-L stopped before holdout; NO TIFF IS CLEARED FOR SUBMISSION",
+  "submission_decision": {
+    "status": "DO NOT SUBMIT ANY FILE FROM THIS RUN",
+    "weekly_slot_used": false,
+    "organizer_receipt": null,
+    "organizer_confirmed_score": null,
+    "h61l_tiff_emitted": false,
+    "h61l_tiff_path": null,
+    "h61l_download_url": null,
+    "h61l_sha256": null,
+    "h61l_format_validation": "NOT RUN — no H61-L GeoTIFF was written",
+    "h61l_submission_note": null,
+    "note_verdict": "No submission note is issued because no candidate TIFF exists. Do not reuse the archived H61-G note."
+  },
+  "lane": {
+    "objective": "Infer basement relief from the supplied isostatic gravity; use USGS GP-1012 only to calibrate regional depth scale; identify basement-depth horizontal-gradient steps; emit multi-line ribbons; compare withheld basin-interior segment recovery with equal-budget random lines.",
+    "named_non_fault_mimic": "Intrabasement lithologic/density contrasts can create a gravity step without a fault. Terrain mimics include alluvial-fan toes, terrace risers, channels, landslides, roads, and mines.",
+    "score_definition": {
+      "name": "pooled DTI",
+      "alpha": 0.2,
+      "beta": 0.8,
+      "kernel": "300 m triangular",
+      "holdout_protocol": "spatially blocked hide-and-recover; whole mapped segments withheld; catalogue-derived features use visible catalogue only; pixel-exact masking",
+      "shared_components": [
+        "gems61.holdout_segmented",
+        "gems61.evaluate_holdout",
+        "gems61.submission_writer"
+      ],
+      "private_tool_fork_created": false
+    }
+  },
+  "production_inversion_status": {
+    "surface_used_for_corridor": "First low-passed Bouguer-slab iterate, not a demonstrated converged nonlinear Parker–Oldenburg inversion",
+    "calibration_source": "Saltus & Jachens (1995), USGS GP-1012; regional depth-scale calibration only",
+    "z0_m": 500,
+    "delta_rho_kg_m3": -300,
+    "regional_separation_sigma_km": 15,
+    "kc_scale": 0.5,
+    "depth_p50_m": 462,
+    "depth_p90_m": 1343,
+    "fraction_depth_gt_1km": 0.203,
+    "correlation_with_supplied_band15": 0.738,
+    "nonlinear_convergence": {
+      "status": "UNVERIFIED",
+      "recorded_corrections": 6,
+      "tolerance_m": 1,
+      "final_maximum_change_m": 130.546,
+      "final_residual_mgal": 1.4038,
+      "interpretation": "Residual fell during the recorded steps, but the 1 m tolerance was not met; this trace does not establish general divergence or convergence."
+    }
+  },
+  "top_candidate": {
+    "id": "H61-L",
+    "hypothesis": "Use 3DEP-derived terrain scarp descriptors to build three-cell ribbons inside the inverted basement-step corridor and basin fill.",
+    "layers": "Public 12-band terrain-descriptor raster derived upstream from USGS 3DEP 1 m DEM work; provisional basement-depth HGM steps and basin mask; no catalogue features in surface generation.",
+    "physical_signature": "Metre-scale slope breaks with paired crest/base curvature and coherent strike, spatially associated with a basement-depth step.",
+    "catalogue_gap_rationale": "Low scarps in Quaternary fans may be below regional mapping scale; high-resolution terrain descriptors could expose concealed young splays, while the gravity corridor constrains them to a buried step.",
+    "difference_from_implemented_work": "The archived H61-G construction used in-corridor elevation-slope dots, not lidar-derived ribbons. This H61-L screen is a distinct terrain-plus-gravity-surface hypothesis, and sibling terrain rasters are not used as predictions.",
+    "expected_dti_gain": "Highest qualitative prior among the five candidates; PROJECTION ONLY, not measured. The candidate failed the pre-placement uniqueness gate, so gain was not holdout-tested.",
+    "implementation_cost": "High data volume; one surface screen; no H61-L holdout or weekly slot.",
+    "source_evidence": "evidence/h61l_lidar_source.json",
+    "measured_surface_evidence": "evidence/h61l_surface.json"
+  },
+  "ranked_hypotheses": [
+    {
+      "rank": 1,
+      "id": "H61-L",
+      "name": "3DEP scarp ribbons restricted to gravity corridors",
+      "expected_gain": "Highest qualitative prior; stopped by measured pre-placement uniqueness failure",
+      "cost": "High"
+    },
+    {
+      "rank": 2,
+      "id": "H61-I",
+      "name": "Basinward piedmont belt at the inverted bedrock–fill contact",
+      "expected_gain": "Moderate; projection only",
+      "cost": "Low"
+    },
+    {
+      "rank": 3,
+      "id": "H61-H",
+      "name": "Gravity-step and magnetic-edge conjunction",
+      "expected_gain": "Low–moderate; projection only",
+      "cost": "Low"
+    },
+    {
+      "rank": 4,
+      "id": "H61-J",
+      "name": "Source-depth consistency filter for intrabasement contacts",
+      "expected_gain": "Low; projection only",
+      "cost": "Medium"
+    },
+    {
+      "rank": 5,
+      "id": "H61-K",
+      "name": "Spatially blocked learned fusion inside basins",
+      "expected_gain": "Uncertain; projection only",
+      "cost": "Medium–high"
+    }
+  ],
+  "input_provenance": {
+    "pinned_competition_feature_bands": 19,
+    "terrain_descriptor_source": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features_u8.tif",
+    "terrain_descriptor_metadata": "https://github.com/buffedlizard55-lab/GEMSDOE24/blob/main/data/external/lidar_scarp_features.json",
+    "upstream_commit": "2e7bf080270493f77286fd62f2db958805053ba5",
+    "upstream_git_blob_sha": "da733b53147efad5c141ffdb96e469ec5b4da8b8",
+    "terrain_descriptor_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+    "terrain_descriptor_bytes": 36943606,
+    "terrain_descriptor_shape_bands": [3730, 3292, 12],
+    "terrain_descriptor_footprint_coverage_fraction": 0.7536552906089806,
+    "terrain_source_caveat": "Public sibling-repository derivative, not raw lidar, not organizer-provided, and not a fault prediction; upstream metadata reports 10 failed tiles of 716 and an approximately 1–2 m datum offset.",
+    "registry_inventory": {
+      "declared_public_paths": 21,
+      "declared_public_paths_fetched_and_verified": 21,
+      "local_prior_geotiffs": 7,
+      "h61l_surface_comparisons": 28,
+      "h61g_final_dot_comparisons_after_exact_candidate_mirror_exclusion": 27,
+      "declared_scope_complete": true,
+      "organizer_registry_complete": false,
+      "inventory_path": "evidence/registry_accessible_index.json"
+    }
+  },
+  "strict_uniqueness_gate": {
+    "policy": "Stop if signed full-footprint Spearman > 0.90 OR if >70% of candidate positive cells fall within 3 pixels of any one prior raster. Count every value >0. Jaccard is diagnostic only.",
+    "h61l_preplacement_surface": {
+      "evidence_class": "MEASURED",
+      "phase": "surface",
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "unique": false,
+      "candidate_positive_pixels": 614556,
+      "worst_signed_full_footprint_spearman": 0.17298578757937788,
+      "worst_one_sided_3px_overlap_fraction": 0.9466915952329812,
+      "overlap_stop_threshold": 0.7,
+      "matching_prior_raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "inventory_verified": true,
+      "organizer_registry_complete": false,
+      "evidence_path": "evidence/h61l_surface.json"
+    },
+    "h61l_final_dot_gate": "NOT REACHED — surface uniqueness stop; no placement or TIFF by protocol",
+    "h61g_archived_final_dots": {
+      "evidence_class": "MEASURED",
+      "phase": "dots",
+      "preplacement_surface_receipt": "NOT FOUND for this archived output; do not infer a pre-placement pass.",
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "unique": false,
+      "candidate_positive_pixels": 40000,
+      "worst_signed_full_footprint_spearman": 0.015285099819141699,
+      "worst_one_sided_3px_overlap_fraction": 0.985925,
+      "overlap_stop_threshold": 0.7,
+      "matching_prior_raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "inventory_verified": true,
+      "organizer_registry_complete": false,
+      "evidence_path": "evidence/h61g_uniqueness.json"
+    }
+  },
+  "holdout": {
+    "h61l_status": "NOT RUN — strict pre-placement uniqueness gate failed",
+    "h61l_withheld_positive_count": null,
+    "h61l_holdout_dti": null,
+    "h61l_95_percent_ci": null,
+    "h61l_feature_alone_leakage_canary": "NOT RUN — candidate did not reach holdout",
+    "planned_shared_evaluator": "gems61.holdout_segmented v2",
+    "planned_masking": "Visible-catalogue-only feature derivation and pixel-exact mask",
+    "planned_metric": {
+      "alpha": 0.2,
+      "beta": 0.8,
+      "kernel_m": 300,
+      "kernel_shape": "triangular"
+    },
+    "proxy_context_scores": [
+      {
+        "artifact": "H61-G archived 40,000-dot corridor × slope-ridge candidate",
+        "score_label": "HOLDOUT-DTI",
+        "value": 0.046504803513711855,
+        "95_percent_ci": [0.04214325650932585, 0.05066048017118602],
+        "withheld_positive_count": 22641,
+        "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
+        "basin_interior_segments_recovered": 351,
+        "basin_interior_segments_withheld": 1999
+      },
+      {
+        "artifact": "Equal-budget random lines control",
+        "score_label": "HOLDOUT-DTI",
+        "value": 0.03141382104713175,
+        "95_percent_ci": [0.02824302937445006, 0.034091835908101865],
+        "withheld_positive_count": 22641,
+        "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
+        "basin_interior_segments_recovered": 215,
+        "basin_interior_segments_withheld": 1999
+      },
+      {
+        "artifact": "As-published H19-5 dotted registry reference",
+        "score_label": "HOLDOUT-DTI",
+        "value": 0.10106964768349222,
+        "95_percent_ci": [0.08650299026430025, 0.11733972171612815],
+        "withheld_positive_count": 22641,
+        "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
+        "basin_interior_segments_recovered": 681,
+        "basin_interior_segments_withheld": 1999
+      },
+      {
+        "artifact": "H19-5 power-law multi-line registry reference",
+        "score_label": "HOLDOUT-DTI",
+        "value": 0.07120613242443212,
+        "95_percent_ci": [0.06158450049323349, 0.08236351939143297],
+        "withheld_positive_count": 22641,
+        "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
+        "basin_interior_segments_recovered": 739,
+        "basin_interior_segments_withheld": 1999
+      },
+      {
+        "artifact": "H61-G hypothetical 3×3 ribbons, not shipped",
+        "score_label": "HOLDOUT-DTI",
+        "value": 0.021645645549291177,
+        "95_percent_ci": [0.019311243305548308, 0.024306743311927507],
+        "withheld_positive_count": 22641,
+        "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, four eroded quadrants, seeds 20+21, mode all)",
+        "note": "Historical comparison only; not a submission artifact or unique candidate."
+      }
+    ],
+    "historical_h61g_feature_alone_canary": {
+      "evidence_class": "MEASURED diagnostic",
+      "worst_auc": 0.5576993057395875,
+      "leakage_threshold": 0.9,
+      "passed_threshold": true,
+      "evaluator": "gems61.holdout_segmented v2",
+      "withheld_positive_count": 22641
+    }
+  },
+  "historic_download_not_submission": {
+    "submission_name": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
+    "tiff_path": "docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+    "sha256": "fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077",
+    "local_format_validator_checks_passed": "19/19",
+    "strict_uniqueness": "FAIL — 98.5925% one-sided 3-pixel overlap; DUPLICATE_LANE_DRIFT",
+    "download_verdict": "AUDIT/LEARNING ONLY — NOT SAFE TO SUBMIT",
+    "archived_note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
+    "archived_note_characters": 133,
+    "note_reuse": "PROHIBITED — applies to a historical diagnostic file only"
+  },
+  "leaderboard_context": {
+    "classification": "DATED PUBLIC LEADERBOARD CONTEXT — not a score for a repository artifact and not an artifact-bound submission receipt",
+    "fetch_date": "2026-10-11",
+    "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "rank_1_public_value": 0.4133,
+    "rank_8_public_value": 0.3195,
+    "interpretation": "The user-provided 0.3195 high is discrepant with this fetched official table: 0.3195 was rank #8; #1 was 0.4133. No project artifact score is ORGANIZER-CONFIRMED without a receipt tying its exact bytes to the submission."
+  },
+  "experiment_accounting": {
+    "historical_h61g_candidate_budget_experiments": 3,
+    "h61l_preplacement_surface_screens": 1,
+    "new_model_trials_in_this_code_review": 0,
+    "h61l_holdout_trials": 0,
+    "weekly_slots_used": 0,
+    "aggregate_count_if_all_lineage_activity_is_counted": 4,
+    "budget_note": "The historical H61-G card records 3 candidate/budget experiments and H61-L has 1 pre-placement surface screen. If the cap is counted across the entire lineage, that is 4 and exceeds a strict 3-experiment limit. No additional model/holdout trial was run during this review; stop further candidate experiments and do not use a slot without a new eligible candidate and selector approval. The elapsed-time cap was not independently measured here."
+  },
+  "review_passes": [
+    {
+      "pass": 1,
+      "focus": "Technical gate and experiment correctness",
+      "result": "PASS",
+      "checks": [
+        "Strict H61-G final-dot gate re-run over 27 hash-pinned raster comparisons; DUPLICATE_LANE_DRIFT at 98.5925% one-sided overlap. No pre-placement uniqueness receipt was found for the archived H61-G output; no pass is inferred.",
+        "Literal gate tests include dense-prior one-sided overlap, exact 70% boundary, empty-prior edge handling, Jaccard-only diagnostics, missing pins, malformed rows/error lists, grid checks, expected-grid and progress logging.",
+        "Full current test suite: 32 passed, 1 pending-deprecation warning in a rasterio test fixture.",
+        "Python compilation of the status builders, H61-L runner, gates and uniqueness module passed."
+      ]
+    },
+    {
+      "pass": 2,
+      "focus": "Evidence, score provenance, and site-link review",
+      "result": "PASS",
+      "checks": [
+        "Cross-checked H61-G bytes/hash, 19/19 format receipt, H61-G and H61-L strict gate results, inventory counts, DTI/CIs, and basin-interior recovery against source evidence JSON.",
+        "Confirmed every historical score is labelled HOLDOUT-DTI with evaluator, 22,641 withheld positives and 95% CI; no H61-L score is invented.",
+        "Validated 185 local href targets across the 11 current generated pages; no broken local download or run-card links remain.",
+        "Recorded leaderboard context with its 2026-10-11 fetch date and distinguished it from scores for repository artifacts."
+      ]
+    },
+    {
+      "pass": 3,
+      "focus": "Diff, user-protocol, and submission-safety review",
+      "result": "PASS",
+      "checks": [
+        "git diff --check passed; the fixed Arena branch remains arena/1f8f2833-61gemsdoe.",
+        "README retains the complete standing brief and clearly marks the only available TIFF as diagnostic-only; no H61-L TIFF or weekly submission slot was created/used.",
+        "All site-builder entry points delegate to the same evidence-driven status renderer, preventing older page generators from restoring stale clearance claims.",
+        "No private evaluator, feature stack, or submission writer fork was introduced; no competition credentials or portal upload were used.",
+        "Budget review flags 4 aggregate model/surface activities if the historical H61-G three-budget run and H61-L surface screen are counted together; no further experiment was run."
+      ]
+    }
+  ],
+  "remaining_work_and_limitations": [
+    "No competition TIFF is cleared. H61-G fails final-dot uniqueness; H61-L fails before holdout. Do not upload either.",
+    "The accessible raster inventory (21 declared public paths plus 7 local priors) is hash/grid-verified but is not the organizer's complete registry.",
+    "H61-L has no HOLDOUT-DTI, withheld-positive count, CI, feature-alone canary, final-dot test, or TIFF because its pre-placement gate failed.",
+    "The production basement surface is a first low-pass slab iterate; nonlinear Parker–Oldenburg convergence is unverified.",
+    "The historical proxy holdout is mapped-catalogue hide-and-recover, not undisclosed organizer truth. All listed proxy values remain HOLDOUT-DTI.",
+    "No artifact-bound organizer receipt was located for the group/owner-reported H33 score 0.2778."
+  ],
+  "trusted_sources": {
+    "competition": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+    "leaderboard": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+    "submissions": "https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/",
+    "competition_metric_and_format": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "parker_1973": "https://doi.org/10.1111/j.1365-246X.1973.tb06513.x",
+    "oldenburg_1974": "https://doi.org/10.1190/1.1440444",
+    "saltus_jachens_gp1012": "https://doi.org/10.3133/gp1012",
+    "usgs_3dep": "https://www.usgs.gov/3d-elevation-program"
+  },
+  "workspace_evidence": [
+    "README.md",
+    "docs/index.html",
+    "docs/executive-summary.html",
+    "docs/holdout.html",
+    "docs/hypotheses.html",
+    "docs/verify.html",
+    "evidence/h61l_surface.json",
+    "evidence/h61g_uniqueness.json",
+    "evidence/h61g_holdout.json",
+    "evidence/registry_accessible_index.json",
+    "evidence/h61g_hypotheses.json"
+  ]
+}

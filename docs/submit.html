@@ -1,51 +1,40 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How to submit - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>SUPERSEDED PAGE.</b> This page describes an earlier session of this repository. The current status, download and evidence are on <a href="index.html">index.html</a> (session arena/c57b45ae, H61-G).</div><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-<h1>How to submit</h1>
-<div class="card hero">
-<h2>Step 1 &mdash; download the file</h2>
-<p><a class="btn" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">&#11015; gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.sha256">SHA-256</a>
-<a class="btn alt" href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif.json">Checks</a></p>
-<p>Optionally verify the bytes: <code>sha256sum gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code> should print
-<span class="mono-sm">a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2</span></p>
+<title>Submission instructions · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html" class=active>Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
+
+<h1>Submission instructions</h1>
+
+<div class="status">
+<h2>NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION</h2>
+<p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes (19/19 checks),
+but strict uniqueness fails: <b>98.5925%</b> of its positive pixels fall within 3 px of
+<code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
+<p><b>Top new hypothesis H61-L:</b> its pre-placement scarp-ribbon surface also fails, at
+<b>94.6692%</b> one-sided overlap. The prescribed stop was applied: <b>no H61-L holdout, final dots, or TIFF</b> were generated.
+The accessible public inventory is not organizer-complete.</p>
+<p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
+No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
 </div>
-<div class="card">
-<h2>Step 2 &mdash; open the submission page</h2>
-<p><code>https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></p>
-<p class="dim">You must be logged in. The data and submission tabs require an account.</p>
-</div>
-<div class="card">
-<h2>Step 3 &mdash; choose the file, paste the note</h2>
-<p>The form asks for a "File to submit" and an optional "Note". Paste exactly this into
-the Note field (122 of the 140 allowed characters):</p>
-<pre>Parker-Oldenburg inversion of isostatic gravity; 3-px catalogue-excluded HGM maxima of basement relief, binary all-finite.</pre>
-<p>Then press submit.</p>
-</div>
-<div class="card">
-<h2>Step 4 &mdash; read the receipt</h2>
-<p>The page returns a score. That number, on that page, is an
-<strong>organizer receipt</strong> and is the only kind of score this project will
-report as confirmed. Every other score you will see in the group's repositories is a
-claim. See <a href="evidence.html">Evidence</a> for why that distinction is enforced here.</p>
-</div>
-<h2>If the form complains</h2>
-<table><thead><tr><th>Message</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td>Predicted values must be in range [0, 1]</td><td>The raster contained NaN outside the study footprint. The example submission ships with NaN, which is legal under the metric but rejected by the form.</td><td>This repository emits all-finite rasters: 0.0 outside the footprint. Re-check with <code>python scripts/validate_submission.py</code>.</td></tr><tr><td>Raster does not match the submission format</td><td>CRS, shape or geotransform differs from <code>sample_submission.tif</code>.</td><td>The writer copies the profile from <code>sample_submission.tif</code> and the validator asserts equality on all three.</td></tr><tr><td>File must be single-band GeoTIFF</td><td>A multi-band or zipped raster.</td><td>The writer always emits <code>count=1</code>, float32.</td></tr></tbody></table>
-<h2>What is safe to do</h2>
-<ul>
-<li><strong>Downloading and submitting the file on this site is expected and fine.</strong>
-It was produced by the code in this repository from the official competition rasters.</li>
-<li>It is not a copy of another team's submission and not a copy of any earlier
-submission of ours. The uniqueness check that demonstrates this runs against the
-registry and its output is on <a href="evidence.html">Evidence</a>.</li>
-<li>Do not submit a raster you have not validated. Run
-<code>python scripts/validate_submission.py</code> first; it is what the
-"format validated" pill on the home page reflects.</li>
-</ul>
-<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
-</div></body></html>
+<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit the current H61-G diagnostic TIFF.</b></p>
+<ol><li>Verify a current run card names an exact TIFF and reports both uniqueness phases passed.</li>
+<li>Verify the same card reports format checks passed and a holdout result above the selector's bar.</li>
+<li>Download that exact TIFF; use its SHA-256 and note from the run card.</li>
+<li>Log in to <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">DrivenData submissions</a>, upload the GeoTIFF, paste the note (≤140 characters), and save the organizer receipt.</li>
+<li>Only label a score ORGANIZER-CONFIRMED when the receipt identifies those exact artifact bytes.</li></ol>
+<p>No automatic portal upload was attempted; no competition slot was used.</p>
+
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

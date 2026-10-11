@@ -1,5 +1,5 @@
 {
-  "evidence_class": "MEASURED (file) + HOLDOUT-DTI (selection)",
+  "evidence_class": "MEASURED (format) + HOLDOUT-DTI (legacy selection) + MEASURED (strict uniqueness failure)",
   "submission": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros",
   "note": "H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED",
   "note_chars": 133,
@@ -83,6 +83,20 @@
     "n_withheld_truth_px": 22641,
     "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
   },
-  "slot_recommendation": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
-  "organizer_receipt": null
+  "slot_recommendation": "DO NOT SPEND A SLOT or submit this file: its final dots fail the literal >70% one-sided 3 px overlap rule against a previous raster.",
+  "organizer_receipt": null,
+  "local_format_status": "FORMAT-VALID",
+  "download_verdict": "DIAGNOSTIC ONLY \u2014 DO NOT SUBMIT; strict one-sided 3 px uniqueness threshold fails",
+  "artifact_status": "STRICT_UNIQUENESS_FAIL",
+  "uniqueness": {
+    "evidence_class": "MEASURED",
+    "verdict": "DUPLICATE_LANE_DRIFT",
+    "unique": false,
+    "declared_scope_rasters_compared": 27,
+    "organizer_registry_complete": false,
+    "worst_spearman": 0.015285099819141699,
+    "worst_overlap_fraction": 0.985925,
+    "overlap_limit": 0.7,
+    "worst_overlapping_raster": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif"
+  }
 }

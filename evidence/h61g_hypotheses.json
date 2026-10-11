@@ -7,8 +7,13 @@
     "signature": "Metre-scale topographic steps (scarp height 0.5\u20135 m, slope break, curvature couplet) \u2014 the primary evidence the test-set mappers used.",
     "why": "The 1:24k\u20131:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.",
     "diff": "Repo has no lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.043 live) used the whole area and no gravity prior.",
-    "gain": "Highest: this is the lever the leader (0.4133) most plausibly uses. PROJECTION only; no holdout yet.",
-    "cost": "High (data volume). Obtainable now without 3DEP download: GEMSDOE24/data/external/lidar_scarp_features_u8.tif, 36,943,606 bytes, blob da733b53147efad5c141ffdb96e469ec5b4da8b8, via api.github.com (raw.githubusercontent.com is outside this sandbox's allow-list)."
+    "gain": "Highest expected value by expert prior (PROJECTION, not a score); PRE-PLACEMENT UNIQUENESS STOP: 94.6692% of positive scarp-ribbon surface pixels are within 3 px of the prior near-blanket raster, above the literal 70% threshold. HOLDOUT NOT RUN.",
+    "cost": "High data volume; public sibling-derived 12-band descriptor file already fetched and SHA-256 verified. One candidate surface built; no holdout or submission slot used.",
+    "preplacement_status": "DUPLICATE_LANE_DRIFT \u2014 STOP",
+    "surface_positive_pixels": 614556,
+    "one_sided_overlap_fraction": 0.9466915952329812,
+    "holdout_status": "NOT RUN \u2014 strict surface gate stop",
+    "organizer_confirmed_score": null
   },
   {
     "id": "H61-I",
