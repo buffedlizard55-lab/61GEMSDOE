@@ -46,12 +46,55 @@ lidar = load("evidence/h61l_lidar_source.json")
 hyps = load("evidence/h61g_hypotheses.json")
 registry = load("evidence/registry_accessible_index.json")
 artifact_audit = load("evidence/local_artifact_strict_dot_audit.json")
-current_run_card = load("evidence/h61l_run_card.json")
-h61mh_holdout = next(row for row in current_run_card["holdout"]["proxy_context_scores"]
+# Two cards. ``evidence/run_card.json`` is the current submission-status card
+# (H61-O, cleared under main's Jaccard exception, PR #22/#23); the legacy H61-L
+# card is the only one that carries the ``proxy_context_scores`` rows used for
+# the archived H61-MH comparison, so both stay loaded and both are linked.
+current_run_card = load("evidence/run_card.json")
+h61l_run_card = load("evidence/h61l_run_card.json")
+h61o_final = load("evidence/h61o_final.json")
+h61o_holdout = load("evidence/h61o_holdout.json")
+h61o_uniqueness = load("evidence/h61o_uniqueness.json")
+h61o_loqo = load("evidence/h61o_loqo.json")
+H61O_TIF = h61o_final["download_tif"]
+H61O_ZIP = h61o_final["download_zip"]
+H61O_RECEIPT = str(Path(H61O_TIF).with_suffix(".json"))
+DOWNLOAD_H61O_TIF = f"downloads/{Path(H61O_TIF).name}"
+DOWNLOAD_H61O_ZIP = f"downloads/{Path(H61O_ZIP).name}"
+DOWNLOAD_H61O_RECEIPT = f"downloads/{Path(H61O_RECEIPT).name}"
+H61O_NAME = current_run_card["submission_name"]
+H61O_NOTE = current_run_card["note"]
+H61O_SHA = current_run_card["raster"]["sha256"]
+H61O_BYTES = int(current_run_card["raster"]["bytes"])
+H61O_DOTS = int(current_run_card["raster"]["positive_pixels"])
+H61O_HOLDOUT = current_run_card["holdout_dti"]
+H61O_REGISTRY = current_run_card["correlation_vs_registry"]
+H61O_CHECKS = sum(bool(v) for v in h61o_final["validator"].values())
+H61O_CHECKS_TOTAL = len(h61o_final["validator"])
+H61O_MEDIAN_PX = float(h61o_final["dots_distance_to_catalogue_px"]["median"])
+H61O_O2 = next(r for r in h61o_holdout["results"]
+               if r["name"] == "O2 habitat no gate (prune 3px) @ 40000")
+H61O_RANDOM_LINES = next(r for r in h61o_holdout["results"]
+                         if r["name"] == "CONTROL random lines @ 40000")
+H61O_RANDOM_DOTS = next(r for r in h61o_holdout["results"]
+                        if r["name"] == "CONTROL random dots anywhere @ 40000")
+h61mh_holdout = next(row for row in h61l_run_card["holdout"]["proxy_context_scores"]
                      if row.get("artifact", "").startswith("H61-MH"))
 h61mh_audit = next(row for row in artifact_audit["candidates"]
                    if any("gems61-h61m-invfeat-habitat" in name for name in row["paths"]))
 forensics = load("reports/forensics.json")
+h61w_sub = load("evidence/h61w_submission.json")
+h61w_holdout = load("evidence/h61w_holdout.json")
+h61w_audit = next(row for row in artifact_audit["candidates"]
+                  if any("h61w-p60-dip-projected" in name for name in row["paths"]))
+H61W_TIF = h61w_sub["file"]
+H61W_ZIP = str(Path(H61W_TIF).with_suffix(".zip"))
+H61W_RECEIPT = str(Path(H61W_TIF).with_suffix(".json"))
+DOWNLOAD_H61W_TIF = f"downloads/{Path(H61W_TIF).name}"
+DOWNLOAD_H61W_ZIP = f"downloads/{Path(H61W_ZIP).name}"
+DOWNLOAD_H61W_RECEIPT = f"downloads/{Path(H61W_RECEIPT).name}"
+H61W_P60 = next(r for r in h61w_holdout["results"] if r["name"].startswith("P60 dip-projected trace 60deg"))
+H61W_RANDOM = next(r for r in h61w_holdout["results"] if r["name"].startswith("CONTROL random lines @ 40000"))
 
 TIF = fin["download_tif"]
 ZIP = fin["download_zip"]
@@ -103,6 +146,8 @@ NAV = [
 BASE_CSS = """
 .status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
 .status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
 .btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
 .btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
 .tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
@@ -131,18 +176,34 @@ ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact 
 
 def status_box() -> str:
     return f"""
-<div class="status">
-<h2>NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION</h2>
-<p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes ({sum(bool(v) for v in fin['validator'].values())}/{len(fin['validator'])} checks),
-but strict uniqueness fails: <b>{H61G_DENSE['my_dots_within_3px_of_theirs']:.4%}</b> of its positive pixels fall within 3 px of
-<code>{esc(H61G_DENSE['file'])}</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
-<p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
-<b>{LIDAR_DENSE['my_dots_within_3px_of_theirs']:.4%}</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
-A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
-<p><b>Post-merge local-artifact audit:</b> <b>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']}</b> local candidate TIFFs fail the same literal final-dot threshold, including H61-MH at {h61mh_audit['one_sided_overlap_fraction']:.4%}.
-The audited main-branch H61-L/H61-M/H61-MH/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. H61-MH's {h61mh_holdout['score_label']} {h61mh_holdout['value']:.6f} is proxy evidence only; its strict final-dot failure remains controlling. The accessible inventory is not organizer-complete.</p>
-<p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
-No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
+<div class="status ok">
+<h2>CLEARED — FORMAT-VALID and UNIQUE — OK TO DOWNLOAD AND SUBMIT</h2>
+<p><b>File to submit:</b> <code>{esc(Path(H61O_TIF).name)}</code> — {H61O_DOTS:,} single-pixel dots, {H61O_BYTES:,} bytes,
+sha256 <code>{H61O_SHA[:16]}…</code>. <b>{H61O_CHECKS}/{H61O_CHECKS_TOTAL} local validator checks pass</b>
+(single band, float32, EPSG:32611, 3730×3292, the sample-submission transform, no NaN/Inf anywhere, min 0 / max 1,
+0.0 outside the footprint, zero dots on the mapped catalogue, median {H61O_MEDIAN_PX:.1f} px from it).</p>
+<p><b>Uniqueness:</b> verdict <b>{esc(H61O_REGISTRY['verdict'])}</b> against {H61O_REGISTRY['n_compared']} registry rasters under the
+<b>Jaccard-exception gate</b> (IR-61-UNIQ-01, added on main in PR #22/#23) — worst Spearman {H61O_REGISTRY['worst_spearman']['value']:+.4f} (limit 0.90) vs
+<code>{esc(Path(H61O_REGISTRY['worst_spearman']['file']).name)}</code>; worst one-sided 3 px overlap
+{H61O_REGISTRY['worst_gate']['value']:.4%} (limit 70%) vs <code>{esc(Path(H61O_REGISTRY['worst_gate']['file']).name)}</code>.</p>
+<p><b>HOLDOUT-DTI:</b> {H61O_HOLDOUT['value']:.6f} (95% CI [{H61O_HOLDOUT['ci95'][0]:.6f}, {H61O_HOLDOUT['ci95'][1]:.6f}];
+{H61O_HOLDOUT['n_withheld_truth_px']:,} withheld positives; evaluator <code>{esc(H61O_HOLDOUT['evaluator'].split(' (')[0])}</code>)
+versus {H61O_HOLDOUT['random_lines_same_budget']:.6f} for equal-budget random lines and {H61O_RANDOM_DOTS['pooled_dti']:.6f} for random dots anywhere;
+basin-interior recovery {H61O_HOLDOUT['basin_interior_segments']} versus {H61O_RANDOM_LINES['segments_recovered_basin_interior']}/{H61O_RANDOM_LINES['segments_withheld_basin_interior']} random lines.
+The run card's verdict is <b>negative</b>: cleared to download and submit, but the selector should not spend a weekly slot on it.</p>
+</div>
+<div class="status audit">
+<h2>STRICT LITERAL LEG IS REGISTRY-DEGENERATE (IR-61-UNIQ-01) — OLDER FILES REMAIN NOT CLEARED</h2>
+<p>The strict literal rule (no more than 70% of a candidate's positives within 3 px of any single prior raster) is kept as an audit leg, not a submission rule:
+H61-O itself measures {H61O_REGISTRY['worst_overlap']['value']:.4%} against <code>{esc(Path(H61O_REGISTRY['worst_overlap']['file']).name)}</code>,
+whose 3 px dilation already covers {H61O_REGISTRY['worst_overlap']['base_rate']:.4%} of the valid footprint, and all
+{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']} earlier local candidate TIFFs stop at that leg, including H61-MH at {h61mh_audit['one_sided_overlap_fraction']:.4%}.
+No in-lane dotted candidate can pass it, which is why main added the Jaccard exception. The older files stay <b>NOT CLEARED</b> and must not be uploaded.</p>
+<p><b>Audit-only artifact of this session (H61-W):</b> the dip-projected basement-step file <code>{esc(Path(H61W_TIF).name)}</code>
+is format-valid and re-derived independently, but its honest holdout result is <b>HOLDOUT-DTI {H61W_P60['pooled_dti']:.6f}</b>
+(95% CI [{H61W_P60['ci95_bootstrap_cells'][0]:.6f}, {H61W_P60['ci95_bootstrap_cells'][1]:.6f}]) against <b>{H61W_RANDOM['pooled_dti']:.6f}</b>
+for equal-budget random lines — it loses to its own random control, so its run card is <b>negative</b> with <code>okay_to_submit: false</code>
+and <code>download_class: AUDIT-ONLY</code>. Download it for audit/learning only; <b>DO NOT SUBMIT</b> those bytes.</p>
 </div>"""
 
 
@@ -157,48 +218,83 @@ status = status_box()
 index_body = f"""
 <h1>61GEMSDOE — buried-structure lane</h1>
 <p>Basement relief from the supplied isostatic gravity; USGS GP-1012 used only for regional depth-scale calibration.
-The first question is whether an artifact is safe to submit. The answer is currently <b>no</b>.</p>
+The first question is whether an artifact is safe to submit. For the current file the answer is <b>yes</b> under the two-gate
+uniqueness policy on <code>main</code>, with an honest negative on the holdout: it may be uploaded, but the selector should
+not spend a weekly slot on it.</p>
 {status}
+<p><a class="btn" href="{esc(DOWNLOAD_H61O_TIF)}" download>↓ Download the submission GeoTIFF ({H61O_BYTES:,} bytes)</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61O_ZIP)}" download>ZIP</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61O_RECEIPT)}">Format receipt</a>
+<a class="btn sec" href="../evidence/run_card.json">Current JSON run card</a></p>
+<p class="small">Submission name <code>{esc(H61O_NAME)}</code> · note <code>{esc(H61O_NOTE)}</code> ({current_run_card['note_chars']}/140) ·
+SHA-256 <code>{H61O_SHA}</code>.</p>
 <h2>Current evidence</h2>
 <table><tr><th>Artifact/result</th><th>What is measured</th><th>Decision</th></tr>
-<tr><td>H61-G existing TIF</td><td>One-band float32, EPSG:32611, 3730×3292, template transform, all finite, [0,1]. SHA-256 <code>{SHA}</code>.</td><td>Format-valid only; strict uniqueness fails ({H61G_DENSE['my_dots_within_3px_of_theirs']:.4%} &gt; 70%). Diagnostic only.</td></tr>
+<tr><td>H61-O current submission file</td><td>One-band float32, EPSG:32611, 3730×3292, template transform, all finite, values in [0,1]; {H61O_DOTS:,} single-pixel dots; sha256 <code>{H61O_SHA[:16]}…</code>; variable-density Parker–Oldenburg inversion (Hildenbrand 1999) with Euler depth consistency and magnetic-edge mimic demotion. HOLDOUT-DTI {H61O_HOLDOUT['value']:.6f} (95% CI [{H61O_HOLDOUT['ci95'][0]:.6f}, {H61O_HOLDOUT['ci95'][1]:.6f}]; {H61O_HOLDOUT['n_withheld_truth_px']:,} withheld positives; evaluator <code>{esc(H61O_HOLDOUT['evaluator'].split(' (')[0])}</code>) versus {H61O_HOLDOUT['random_lines_same_budget']:.6f} random lines; basin {H61O_HOLDOUT['basin_interior_segments']} versus {H61O_RANDOM_LINES['segments_recovered_basin_interior']}/{H61O_RANDOM_LINES['segments_withheld_basin_interior']} random; LOQO mean {h61o_loqo['mean_dti']:.6f}.</td><td>FORMAT-VALID + UNIQUE under the Jaccard-exception gate; <b>OK TO DOWNLOAD AND SUBMIT</b>; holdout verdict <b>negative</b> (no weekly slot recommended).</td></tr>
+<tr><td>H61-G existing TIF</td><td>One-band float32, EPSG:32611, 3730×3292, template transform, all finite, [0,1]. SHA-256 <code>{SHA}</code>.</td><td>Format-valid only; strict literal gate fails ({H61G_DENSE['my_dots_within_3px_of_theirs']:.4%} &gt; 70%); audit-only, NOT CLEARED.</td></tr>
 <tr><td>H61-G old holdout</td><td>{metric_label(CANDIDATE, hold['evaluator'], hold['n_withheld_truth_px'])}. Random lines at equal budget: {metric_label(RANDOM_LINES, hold['evaluator'], hold['n_withheld_truth_px'])}.</td><td>Historical proxy evidence; not an organizer score.</td></tr>
-<tr><td>H61-L current-run surface</td><td>{LIDAR_GATE['candidate_support_pixels']:,} positive surface pixels; full-footprint Spearman max {LIDAR_GATE['worst_spearman']:.4f}; worst one-sided 3 px overlap {LIDAR_GATE['worst_overlap']:.4%}.</td><td>Pre-placement uniqueness stop; this run made no holdout or TIFF.</td></tr>
-<tr><td>Archived H61-MH inversion-feature variant</td><td>HOLDOUT-DTI {h61mh_holdout['value']:.6f} (95% CI [{h61mh_holdout['95_percent_ci'][0]:.6f}, {h61mh_holdout['95_percent_ci'][1]:.6f}]; {h61mh_holdout['withheld_positive_count']:,} withheld positives; {esc(h61mh_holdout['evaluator'])}); basin recovery {h61mh_holdout['basin_interior_segments_recovered']}/{h61mh_holdout['basin_interior_segments_withheld']} (rate 95% CI [{h61mh_holdout['basin_interior_recovery_ci95'][0]:.6f}, {h61mh_holdout['basin_interior_recovery_ci95'][1]:.6f}]).</td><td>Historical proxy only; strict one-sided final-dot overlap {h61mh_audit['one_sided_overlap_fraction']:.4%}; NOT CLEARED.</td></tr>
-<tr><td>Archived local candidate TIFFs</td><td>{artifact_audit['summary']['candidate_artifacts']} unique TIFF artifacts audited against <code>{esc(Path(artifact_audit['comparator']['path']).name)}</code>; one-sided overlap range {min(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}–{max(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}.</td><td>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']} strict final-dot stops; no file cleared. <a href="../evidence/local_artifact_strict_dot_audit.json">Audit receipt</a>.</td></tr>
+<tr><td>H61-L current-run surface</td><td>{LIDAR_GATE['candidate_support_pixels']:,} positive surface pixels; full-footprint Spearman max {LIDAR_GATE['worst_spearman']:.4f}; worst one-sided 3 px overlap {LIDAR_GATE['worst_overlap']:.4%}.</td><td>Pre-placement uniqueness stop; that run made no holdout or TIFF.</td></tr>
+<tr><td>Archived H61-MH inversion-feature variant</td><td>HOLDOUT-DTI {h61mh_holdout['value']:.6f} (95% CI [{h61mh_holdout['95_percent_ci'][0]:.6f}, {h61mh_holdout['95_percent_ci'][1]:.6f}]; {h61mh_holdout['withheld_positive_count']:,} withheld positives; {esc(h61mh_holdout['evaluator'])}); basin recovery {h61mh_holdout['basin_interior_segments_recovered']}/{h61mh_holdout['basin_interior_segments_withheld']} (rate 95% CI [{h61mh_holdout['basin_interior_recovery_ci95'][0]:.6f}, {h61mh_holdout['basin_interior_recovery_ci95'][1]:.6f}]).</td><td>Historical proxy only; strict literal overlap {h61mh_audit['one_sided_overlap_fraction']:.4%}; NOT CLEARED.</td></tr>
+<tr><td>H61-W newest session artifact ({esc(h61w_sub['arm'])})</td><td>One-band float32, template grid, {h61w_sub['positive_pixels']:,} single-pixel dots, sha256 <code>{h61w_sub['sha256'][:16]}…</code>, re-derived independently (<a href="../evidence/h61w_independent_check.json">independent_check.json</a>); HOLDOUT-DTI {H61W_P60['pooled_dti']:.6f} (95% CI [{H61W_P60['ci95_bootstrap_cells'][0]:.6f}, {H61W_P60['ci95_bootstrap_cells'][1]:.6f}]; {h61w_holdout['n_withheld_truth_px']:,} withheld positives; evaluator <code>{esc(h61w_holdout['evaluator'].split(' --')[0])}</code>) vs {H61W_RANDOM['pooled_dti']:.6f} random lines.</td><td>Format-valid; result <b>negative</b> (below its random control); strict literal overlap {h61w_audit['one_sided_overlap_fraction']:.4%}; <code>okay_to_submit: false</code>, AUDIT-ONLY.</td></tr>
+<tr><td>Archived local candidate TIFFs</td><td>{artifact_audit['summary']['candidate_artifacts']} unique TIFF artifacts audited against <code>{esc(Path(artifact_audit['comparator']['path']).name)}</code>; one-sided overlap range {min(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}–{max(r['one_sided_overlap_fraction'] for r in artifact_audit['candidates']):.4%}.</td><td>{artifact_audit['summary']['strict_overlap_stops']}/{artifact_audit['summary']['candidate_artifacts']} strict literal stops; none of the older files is cleared. <a href="../evidence/local_artifact_strict_dot_audit.json">Audit receipt</a>.</td></tr>
 <tr><td>Current accessible raster inventory</td><td>{registry['scope']['declared_public_source_count']} declared public paths + {registry['scope']['repository_prior_file_count']} local prior TIFFs = {registry['scope']['total_raster_records']} records.</td><td>Declared scope complete; organizer-side registry completeness is not claimed. <a href="../evidence/registry_accessible_index.json">Current inventory</a>.</td></tr>
 </table>
-<p><b>Download for audit only:</b> {file_link(Path(TIF).name, DOWNLOAD_TIF, download=True)} · {file_link("ZIP", DOWNLOAD_ZIP, download=True)} ·
-{file_link("format receipt", DOWNLOAD_RECEIPT)}. Do not upload these archived bytes. A future submission needs both a passing pre-placement and final-dot gate plus an eligible holdout result.</p>
+<p><b>Download for audit only (never upload these):</b> {file_link(Path(TIF).name, DOWNLOAD_TIF, download=True)} · {file_link("ZIP", DOWNLOAD_ZIP, download=True)} ·
+{file_link("format receipt", DOWNLOAD_RECEIPT)}. The older archived bytes are not cleared by the Jaccard exception, which applies only to the
+H61-O file named above and only after its own receipt records a passing verdict.</p>
+<p><b>Download for audit only (H61-W, newest session artifact):</b> {file_link(Path(H61W_TIF).name, DOWNLOAD_H61W_TIF, download=True)} · {file_link("ZIP", DOWNLOAD_H61W_ZIP, download=True)} ·
+{file_link("format receipt", DOWNLOAD_H61W_RECEIPT)} · <a href="../evidence/h61w_run_card.json">run card</a>. <b>DO NOT SUBMIT</b> these bytes; the run card says <code>okay_to_submit: false</code>.</p>
+<p><a class="btn warn" href="{esc(DOWNLOAD_H61W_TIF)}" download>Download the newest H61-W TIFF — DO NOT SUBMIT (negative result, audit-only)</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61W_ZIP)}" download>ZIP</a>
+<a class="btn sec" href="../evidence/h61w_run_card.json">H61-W run card</a></p>
 <p><a href="executive-summary.html">Submission safety and upload steps</a> · <a href="analysis.html">Score provenance</a> ·
-<a href="hypotheses.html">Ranked hypotheses</a> · <a href="verify.html">Strict uniqueness evidence</a> ·
-<a href="../evidence/h61l_run_card.json">Current JSON run card</a>.</p>
+<a href="hypotheses.html">Ranked hypotheses</a> · <a href="verify.html">Uniqueness evidence</a> ·
+<a href="../evidence/run_card.json">Current H61-O run card</a> · <a href="../evidence/h61l_run_card.json">H61-L stopped-run card</a>.</p>
 """
 
 exec_body = f"""
 <h1>Executive summary &amp; how to submit</h1>
 {status}
-<h2>Download status</h2>
-<p>The H61-G file below is a format-valid research artifact, <b>not cleared for submission</b>. It is linked so reviewers can reproduce the local format and uniqueness checks.</p>
+<h2>Is it safe to download and submit?</h2>
+<p><b>Yes — for the current file.</b> <code>{esc(Path(H61O_TIF).name)}</code> is the file the current run card
+<code>evidence/run_card.json</code> authorises (<code>okay_to_download: true</code>, <code>okay_to_submit: true</code>):
+{H61O_CHECKS}/{H61O_CHECKS_TOTAL} local validator checks pass, the values are inside [0, 1] everywhere (the exact failure mode behind the
+reported “Predicted values must be in range [0, 1]” rejection), and the uniqueness verdict is <b>{esc(H61O_REGISTRY['verdict'])}</b>
+under the Jaccard-exception gate. Its own holdout result is a negative (HOLDOUT-DTI {H61O_HOLDOUT['value']:.6f} versus
+{H61O_HOLDOUT['random_lines_same_budget']:.6f} for random lines and {H61O_RANDOM_DOTS['pooled_dti']:.6f} for random dots), so it is cleared to
+submit but not recommended for a weekly slot.</p>
+<h2>Download &amp; upload steps (exact)</h2>
+<ol>
+<li>Download the file: <a class="btn" href="{esc(DOWNLOAD_H61O_TIF)}" download>↓ Download the submission GeoTIFF ({H61O_BYTES:,} bytes)</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61O_ZIP)}" download>ZIP</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61O_RECEIPT)}">Format receipt</a>
+<a class="btn sec" href="../evidence/run_card.json">Run card</a>.</li>
+<li>Verify SHA-256 <code>{H61O_SHA}</code> (this exact file — do not substitute an older download).</li>
+<li>Open the <a href="{COMP}submissions/">official submissions page</a> while logged into the competition account.</li>
+<li>Upload the GeoTIFF, set the submission name to <code>{esc(H61O_NAME)}</code> and the note to <code>{esc(H61O_NOTE)}</code>
+({current_run_card['note_chars']}/140 characters).</li>
+<li>Save the platform receipt; only then label those exact bytes ORGANIZER-CONFIRMED.</li>
+</ol>
+<h2>What must not be submitted</h2>
+<p><b>Audit-only, DO NOT SUBMIT:</b> the archived H61-G file below is a format-valid research artifact whose strict literal overlap is
+{H61G_DENSE['my_dots_within_3px_of_theirs']:.4%}. <b>DO NOT SUBMIT</b> it, the archived file under <code>docs/submissions/</code>
+(strict literal overlap 99.1475%), or the H61-MH / H61-L / H61-W downloads: none of them is cleared by the Jaccard exception,
+which applies only to the H61-O bytes named above. H61-MH's historical HOLDOUT-DTI does not waive its
+{h61mh_audit['one_sided_overlap_fraction']:.4%} strict literal stop, and H61-W's run card says <code>okay_to_submit: false</code>.</p>
 <p><a class="btn warn" href="{esc(DOWNLOAD_TIF)}" download>Download H61-G diagnostic TIFF — DO NOT SUBMIT</a>
 <a class="btn sec" href="{esc(DOWNLOAD_ZIP)}" download>Diagnostic ZIP</a>
-<a class="btn sec" href="{esc(DOWNLOAD_RECEIPT)}">Format receipt</a></p>
-<p><b>Archived file under <code>docs/submissions/</code> — DO NOT SUBMIT:</b> its strict final-dot overlap is 99.1475%.
-<a href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">View the historical TIFF only with this warning</a> ·
-<a href="../evidence/local_artifact_strict_dot_audit.json">full strict artifact audit</a>.</p>
-<p>SHA-256 <code>{SHA}</code> · submission-form note attached to the historic artifact ({fin['note_chars']}/140 chars):
-<code>{esc(NOTE)}</code>. That note does not make the file cleared.</p>
-<h2>How to submit a future cleared file</h2>
-<ol>
-<li>Use only a candidate whose run card says pre-placement surface uniqueness passed, final-dot uniqueness passed, local validation passed, and holdout evidence supports promotion.</li>
-<li>Download the exact one-band GeoTIFF named by that run card and verify its SHA-256.</li>
-<li>Open the <a href="{COMP}submissions/">official submissions page</a> while logged into the competition account; upload the GeoTIFF and paste the note from the run card (at most 140 characters).</li>
-<li>Save the platform's submission receipt and score; only then label the value ORGANIZER-CONFIRMED for those exact bytes.</li>
-</ol>
-<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-MH/H61-X downloads.</b> H61-MH's historical HOLDOUT-DTI does not waive its {h61mh_audit['one_sided_overlap_fraction']:.4%} strict final-dot failure. The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
-<h2>Why the old range error should not recur</h2>
-<p>The H61-G diagnostic file passes its local template/range validator: single-band float32, EPSG:32611, 3730×3292, sample transform, finite everywhere,
-values in [0,1], zero outside the footprint. These checks establish local formatting only—not uniqueness, upload acceptance, or score.</p>
+<a class="btn sec" href="{esc(DOWNLOAD_RECEIPT)}">Format receipt</a>
+<a class="btn sec" href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">Historical TIFF (warning)</a></p>
+<p>H61-G SHA-256 <code>{SHA}</code> · historical submission-form note ({fin['note_chars']}/140 chars): <code>{esc(NOTE)}</code>.
+That note does not clear the older file.</p>
+<h2>Why the “Predicted values must be in range [0,1]” error should not recur</h2>
+<p>The competition validator rejects NaN, Inf, negative or &gt;1 values anywhere in the raster. The H61-O file passes
+{H61O_CHECKS} checks: single band, float32, EPSG:32611, 3730×3292, the sample-submission transform, no NaN/Inf anywhere,
+values in [0,1], 0.0 outside the footprint. These checks establish local formatting and the declared-uniqueness gate — not
+organizer acceptance and not a score.</p>
+<h2>Provenance of the numbers</h2>
+<p>Every number above is HOLDOUT-DTI (evaluator <code>gems61.holdout_segmented v2</code>) or LOQO-DTI, with its CI and withheld-positive count.
+No projection is presented as a score, and no organizer score exists yet for any repository artifact.</p>
 """
 
 # No organizer receipt was found for the owner-reported H33 score.
@@ -253,7 +349,8 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 </p>
 """ + "".join(hyp_rows) + """
 <h2>Selection rule</h2>
-<p>A hypothesis may proceed to holdout only after its pre-placement surface clears both literal thresholds against every raster in the declared inventory.
+<p>A hypothesis may proceed to holdout only after its pre-placement surface passes the declared-uniqueness gate against every raster in the declared inventory:
+signed Spearman &le; 0.90, one-sided 3 px overlap &le; 70 %, with the Jaccard exception (IR-61-UNIQ-01) waived only where the comparator is itself a near-blanket.
 A passing surface would then be tested by the shared spatially blocked hide-and-recover evaluator, with a feature-alone leakage canary and a matched random-line control.
 Weekly promotion is a separate selector decision. The current-run H61-L candidate failed before holdout, so no score or TIFF is imputed for that run. A separate archived main-branch H61-L TIFF is retained as historical, and fails the strict final-dot gate.</p>
 """
@@ -305,21 +402,37 @@ for name in (
     basin_recovery = (f"{recovered:,}/{withheld:,} ({row.get('basin_recovery_rate', 0):.1%})"
                       if recovered is not None and withheld else "not reported")
     hold_rows.append(f"<tr><td>{esc(row['name'])}</td><td>{row.get('n_emitted_per_draw',0):,.0f}</td><td>{row['pooled_dti']:.6f}</td><td>[{row['ci95_bootstrap_cells'][0]:.6f}, {row['ci95_bootstrap_cells'][1]:.6f}]</td><td>{row.get('coverage',0):.4f}</td><td>{basin_recovery}</td></tr>")
+h61o_hold_rows = []
+for row in (H61O_O2, H61O_RANDOM_LINES, H61O_RANDOM_DOTS):
+    h61o_hold_rows.append(
+        f"<tr><td>{esc(row['name'])} — H61-O session</td><td>{row['n_emitted_per_draw']:,.0f}</td>"
+        f"<td>{row['pooled_dti']:.6f}</td><td>[{row['ci95_bootstrap_cells'][0]:.6f}, {row['ci95_bootstrap_cells'][1]:.6f}]</td>"
+        f"<td>{row['coverage']:.4f}</td><td>{row['segments_recovered_basin_interior']:,}/{row['segments_withheld_basin_interior']:,} "
+        f"({row['basin_recovery_rate']:.1%})</td></tr>")
 hold_body = f"""
-<h1>Holdout evidence: legacy H61-G and controls</h1>
+<h1>Holdout evidence: current H61-O file, legacy H61-G and controls</h1>
 <p>All numerical rows below are <b>HOLDOUT-DTI</b> under <code>{esc(hold['evaluator'])}</code>, with
 {hold['n_withheld_truth_px']:,} withheld positive pixels, α={hold['alpha']}, β={hold['beta']}, {hold['kernel_m']} m triangular kernel, and the listed 95% CI.
 These are proxy scores on withheld catalogue segments, not live organizer scores.</p>
 <table><tr><th>Arm</th><th>Positive pixels per draw</th><th>HOLDOUT-DTI</th><th>95% CI</th><th>coverage</th><th>Basin-interior segment recovery</th></tr>
+{''.join(h61o_hold_rows)}
 {''.join(hold_rows)}</table>
 <p>The historical H61-G construction is below the as-published dotted H19-5 reference and is not eligible for a slot. Its strict final-dot uniqueness verdict is
 <code>{esc(uni['verdict'])}</code>. The current-run H61-L surface stopped before holdout, so that run has no H61-L HOLDOUT-DTI. A separate archived main-branch H61-L variant was measured at <b>HOLDOUT-DTI 0.044330</b> (95% CI [0.041405, 0.047832]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2</code>), but its final TIFF has 98.6375% strict one-sided overlap and is not eligible for a slot. The archived H61-MH inversion-feature variant measured <b>{h61mh_holdout['score_label']} {h61mh_holdout['value']:.6f}</b> (95% CI [{h61mh_holdout['95_percent_ci'][0]:.6f}, {h61mh_holdout['95_percent_ci'][1]:.6f}]; {h61mh_holdout['withheld_positive_count']:,} withheld positives; evaluator <code>{esc(h61mh_holdout['evaluator'])}</code>) and recovered {h61mh_holdout['basin_interior_segments_recovered']}/{h61mh_holdout['basin_interior_segments_withheld']} basin-interior segments (recovery-rate 95% CI [{h61mh_holdout['basin_interior_recovery_ci95'][0]:.6f}, {h61mh_holdout['basin_interior_recovery_ci95'][1]:.6f}]) versus {h61mh_holdout['basin_interior_random_lines_recovered']}/{h61mh_holdout['basin_interior_random_lines_withheld']} for equal-budget random lines (recovery-rate 95% CI [{h61mh_holdout['basin_interior_random_lines_recovery_ci95'][0]:.6f}, {h61mh_holdout['basin_interior_random_lines_recovery_ci95'][1]:.6f}]), but its TIFF fails the strict gate at {h61mh_audit['one_sided_overlap_fraction']:.4%}. The separate spatially blocked LOQO-DTI logistic mean is 0.039489 (range across four quadrants 0.032545–0.054939; evaluator <code>gems61.holdout_segmented v2</code>, 22,641 withheld positives); the historical receipt reports no 95% CI for this mean or range. Feature-model canary AUC is 0.559341. The archived multi-line comparison is also labelled: 3×3 ribbon HOLDOUT-DTI {H61MH_RIBBON['pooled_dti']:.6f} (95% CI [{H61MH_RIBBON['ci95_bootstrap_cells'][0]:.6f}, {H61MH_RIBBON['ci95_bootstrap_cells'][1]:.6f}]; {h61mh_holdout_source['n_withheld_truth_px']:,} withheld positives; evaluator <code>{esc(h61mh_holdout_source['evaluator'])}</code>; {H61MH_RIBBON['n_emitted_per_draw']:,.0f} emitted pixels/draw) versus dots HOLDOUT-DTI {H61MH_DOTS['pooled_dti']:.6f} (95% CI [{H61MH_DOTS['ci95_bootstrap_cells'][0]:.6f}, {H61MH_DOTS['ci95_bootstrap_cells'][1]:.6f}]; same evaluator/count; {H61MH_DOTS['n_emitted_per_draw']:,.0f} emitted pixels/draw). These are historical diagnostics, not an organizer result or submission clearance.</p>
 <p>On the same 1,999 withheld basin-interior segments, historical H61-G recovered {CANDIDATE['segments_recovered_basin_interior']:,} ({CANDIDATE['basin_recovery_rate']:.1%}) versus {RANDOM_LINES['segments_recovered_basin_interior']:,} ({RANDOM_LINES['basin_recovery_rate']:.1%}) for equal-budget random lines. This is proxy recovery, not hidden organizer truth.</p>
+<p><b>Current submission file H61-O (variable-density inversion):</b> HOLDOUT-DTI {H61O_O2['pooled_dti']:.6f}
+(95% CI [{H61O_O2['ci95_bootstrap_cells'][0]:.6f}, {H61O_O2['ci95_bootstrap_cells'][1]:.6f}]; {H61O_O2['n_emitted_per_draw']:,.0f} emitted pixels/draw;
+evaluator <code>gems61.holdout_segmented v2</code>) versus random lines {H61O_RANDOM_LINES['pooled_dti']:.6f} and random dots anywhere
+{H61O_RANDOM_DOTS['pooled_dti']:.6f} at the same 40,000-dot budget; basin-interior recovery
+{H61O_O2['segments_recovered_basin_interior']:,}/{H61O_O2['segments_withheld_basin_interior']:,} versus
+{H61O_RANDOM_LINES['segments_recovered_basin_interior']:,}/{H61O_RANDOM_LINES['segments_withheld_basin_interior']:,} for random lines;
+LOQO-DTI mean {h61o_loqo['mean_dti']:.6f} (four quadrants {min(r['loqo_dti'] for r in h61o_loqo['rows']):.6f}–{max(r['loqo_dti'] for r in h61o_loqo['rows']):.6f}).
+Format-valid and unique, and an honest negative on the selector's bar.</p>
 <p>Feature-alone canary on the historical H61-G holdout: worst AUC {hold['leakage_canary']['worst_auc']:.3f}, threshold 0.90.
 The current-run H61-L surface did not reach holdout, so no canary or DTI is claimed for that run. The separate main-branch H61-L variant's historical HOLDOUT-DTI is documented above and does not clear its strict final-dot failure.</p>
 """
 
-irr = load("evidence/h61g_irregularities.json")
+irr = load("evidence/h61g_irregularities.json") + load("evidence/h61w_irregularities.json")
 irr_body = "<h1>Irregularities and corrections</h1><table><tr><th>ID</th><th>Finding</th><th>Action</th></tr>" + "".join(
     f"<tr><td><code>{esc(row['id'])}</code></td><td>{esc(row.get('finding',row.get('statement','')))}</td><td>{esc(row.get('action',''))}</td></tr>"
     for row in irr) + "</table>"
@@ -327,12 +440,14 @@ irr_body = "<h1>Irregularities and corrections</h1><table><tr><th>ID</th><th>Fin
 next_body = f"""
 <h1>Next steps and remaining limitations</h1>
 <h2>Decision</h2>
-<p><b>No candidate is cleared and no weekly slot should be spent.</b> The old H61-G TIFF fails the explicit strict final-dot gate;
-H61-L fails before placement. No organizer score exists for a repository artifact.</p>
+<p><b>H61-O is cleared to download and submit (format-valid + UNIQUE under the Jaccard-exception gate), but its own holdout evidence is a negative, so no weekly slot should be spent on it.</b>
+The older H61-G / H61-M / H61-MH / H61-L files fail the strict literal leg, which is registry-degenerate for in-lane dotted candidates (IR-61-UNIQ-01), and H61-W's card says
+<code>okay_to_submit: false</code>. No organizer score exists for any repository artifact.</p>
 <h2>What would unblock a new candidate</h2>
 <ol>
 <li>Start from a new in-lane hypothesis and build a pre-placement surface from permitted geological inputs.</li>
-<li>Compare that surface against every raster in the declared accessible inventory; stop if positive Spearman &gt;0.90 or if more than 70% of positive pixels are within 3 px of any single prior raster.</li>
+<li>Compare that surface against every raster in the declared accessible inventory; stop if positive Spearman &gt;0.90 or if more than 70% of positive pixels are within 3 px of any single prior raster
+(the Jaccard exception waives that leg only for a near-blanket comparator, and drift into another lane still stops the run).</li>
 <li>Only after a passing surface, run the shared spatially blocked hide-and-recover evaluator, visible-only catalogue features, pixel-exact masking, the feature-alone leakage canary, and a matched random-line control.</li>
 <li>Write ribbons, check the final raster with the same strict gate, validate with the shared writer, and promote only if the holdout selector says it beats the holdout best. A weekly slot remains separate.</li>
 </ol>
@@ -370,8 +485,24 @@ for row in artifact_audit["candidates"]:
         f"<td>{'STOP' if row['overlap_stop'] else 'not cleared'}</td></tr>"
     )
 
+h61o_verify_rows = []
+for row in h61o_uniqueness["rows"]:
+    gate = "exception waives literal leg" if row.get("overlap_gate_exceeded") else "pass"
+    h61o_verify_rows.append(
+        f"<tr><td><code>{esc(row['file'])}</code></td><td>{row['spearman_footprint']:+.5f}</td>"
+        f"<td>{row['frac_my_dots_within_3px_of_theirs']:.5%}</td><td>{row['jaccard']:.5f}</td>"
+        f"<td>{gate}</td></tr>")
 verify_body = f"""
 <h1>Format and uniqueness verification</h1>
+<h2>H61-O submission clearance (current file)</h2>
+<p>File <code>{esc(Path(H61O_TIF).name)}</code>, SHA-256 <code>{H61O_SHA}</code>; <b>{H61O_CHECKS}/{H61O_CHECKS_TOTAL} local validator checks pass</b>
+(<a href="../evidence/h61o_final.json">final receipt</a>). Uniqueness verdict <b>{esc(h61o_uniqueness['verdict'])}</b> against
+{h61o_uniqueness['n_registry_rasters_compared']} registry rasters: worst Spearman {h61o_uniqueness['worst_spearman']['value']:+.5f} (limit {h61o_uniqueness['rho_limit']:.2f}) vs
+<code>{esc(Path(h61o_uniqueness['worst_spearman']['file']).name)}</code>; worst one-sided 3 px overlap {h61o_uniqueness['worst_overlap_gate']['value']:.4%}
+(limit {h61o_uniqueness['worst_overlap_gate']['limit']:.0%}) vs <code>{esc(Path(h61o_uniqueness['worst_overlap_gate']['file']).name)}</code>.
+The literal overlap leg is waived only where the comparator is itself a near-blanket (IR-61-UNIQ-01); no row is byte-identical to any registry raster
+(<a href="../evidence/h61o_uniqueness.json">uniqueness receipt</a>).</p>
+<table><tr><th>Raster</th><th>Spearman</th><th>Candidate positives within 3 px</th><th>Jaccard (diagnostic)</th><th>Literal leg</th></tr>{''.join(h61o_verify_rows)}</table>
 <h2>H61-G archived TIFF local-format validation</h2>
 <p>File <code>{esc(Path(TIF).name)}</code>, SHA-256 <code>{SHA}</code>; local writer/validator checks only.
 All listed format/range checks pass; this does not clear uniqueness or organizer acceptance.</p>
@@ -399,19 +530,25 @@ The archived main-branch pre-placement receipts are not accepted as strict-gate 
 submit_body = f"""
 <h1>Submission instructions</h1>
 {status}
-<p>These instructions describe the portal procedure for a future file that has passed the project's gates. <b>Do not submit any current or archived repository TIFF, including the file under <code>docs/submissions/</code>.</b></p>
-<ol><li>Verify a current run card names an exact TIFF and reports both uniqueness phases passed.</li>
-<li>Verify the same card reports format checks passed and a holdout result above the selector's bar.</li>
-<li>Download that exact TIFF; use its SHA-256 and note from the run card.</li>
-<li>Log in to <a href="{COMP}submissions/">DrivenData submissions</a>, upload the GeoTIFF, paste the note (≤140 characters), and save the organizer receipt.</li>
-<li>Only label a score ORGANIZER-CONFIRMED when the receipt identifies those exact artifact bytes.</li></ol>
-<p>No automatic portal upload was attempted; no competition slot was used.</p>
+<h2>Exact upload procedure for the current cleared file</h2>
+<ol>
+<li>Confirm <code>evidence/run_card.json</code> names <code>{esc(Path(H61O_TIF).name)}</code> with <code>okay_to_submit: true</code>.</li>
+<li>Download that exact file: <a class="btn" href="{esc(DOWNLOAD_H61O_TIF)}" download>↓ Download the submission GeoTIFF ({H61O_BYTES:,} bytes)</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61O_ZIP)}" download>ZIP</a> and verify SHA-256 <code>{H61O_SHA}</code>.</li>
+<li>Log in to <a href="{COMP}submissions/">DrivenData submissions</a>.</li>
+<li>Upload the GeoTIFF; submission name <code>{esc(H61O_NAME)}</code>; note <code>{esc(H61O_NOTE)}</code>
+({current_run_card['note_chars']}/140 characters).</li>
+<li>Save the organizer receipt. Only then is a score ORGANIZER-CONFIRMED for those exact bytes.</li>
+</ol>
+<p><b>Do not submit</b> the older H61-G / H61-M / H61-MH / H61-L / H61-W files or the file under <code>docs/submissions/</code>:
+they are NOT CLEARED under the current gates (H61-W carries <code>okay_to_submit: false</code>).</p>
+<p>No automatic portal upload was attempted and no competition slot has been used by this repository.</p>
 """
 
 limitations_body = f"""
 <h1>Limitations</h1>
 <ul>
-<li>No unique competition TIFF is currently cleared. H61-G fails the literal overlap rule; the current-run H61-L surface stopped before holdout; all {artifact_audit['summary']['candidate_artifacts']} local candidate TIFFs fail the strict final-dot overlap audit.</li>
+<li>Uniqueness is a two-tier policy: <b>H61-O is cleared</b> under the Jaccard exception, while all {artifact_audit['summary']['candidate_artifacts']} earlier local candidate TIFFs fail the strict literal leg, which is registry-degenerate for in-lane dotted candidates (IR-61-UNIQ-01). Clearance is not a score, and nothing in this lane has beaten its holdout bar, so no weekly slot is recommended.</li>
 <li>Registry coverage is a declared accessible scope ({registry['scope']['declared_public_source_count']} GitHub paths plus {registry['scope']['repository_prior_file_count']} local TIFFs across downloads/submissions/out; total {registry['scope']['total_raster_records']} raster records), not an organizer-side inventory.</li>
 <li>The archived H61-MH result is HOLDOUT-DTI {h61mh_holdout['value']:.6f} (95% CI [{h61mh_holdout['95_percent_ci'][0]:.6f}, {h61mh_holdout['95_percent_ci'][1]:.6f}]; {h61mh_holdout['withheld_positive_count']:,} withheld positives; evaluator {esc(h61mh_holdout['evaluator'])}), but its TIFF fails strict one-sided overlap at {h61mh_audit['one_sided_overlap_fraction']:.4%}. It is not a competition score or submission candidate.</li>
 <li>The existing basement-depth surface is the first low-passed slab iterate. Nonlinear convergence is unverified.</li>
@@ -442,7 +579,7 @@ for filename, (title, body) in pages.items():
 # Older parallel-session pages remain accessible but are explicitly marked historical.
 banner = (f'<div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0">'
           '<b>HISTORICAL PAGE — SUPERSEDED.</b> Legacy score, “UNIQUE,” or “ready” labels are not current clearance. '
-          f'The current status is no TIFF cleared; the strict audit blocks {artifact_audit["summary"]["strict_overlap_stops"]}/{artifact_audit["summary"]["candidate_artifacts"]} local artifacts. '
+          f'Current status: H61-O is cleared under the Jaccard-exception gate, while the strict audit blocks {artifact_audit["summary"]["strict_overlap_stops"]}/{artifact_audit["summary"]["candidate_artifacts"]} local artifacts. '
           '<a href="index.html">Current status</a> · '
           '<a href="../evidence/local_artifact_strict_dot_audit.json">strict audit</a>. '
           'Do not treat this page as a current submission clearance.</div>')
@@ -463,10 +600,16 @@ for old in DOCS.glob("*.html"):
 
 (ROOT / "index.html").write_text(f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta http-equiv="refresh" content="0; url=docs/index.html"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>61GEMSDOE — no submission cleared</title><link rel="stylesheet" href="docs/assets/site.css"></head><body><main class="wrap">
-<h1>61GEMSDOE</h1><p><b>NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION.</b></p>
-<p>The H61-G file passes local format checks but fails the strict uniqueness threshold. The H61-L surface was stopped before holdout.
+<title>61GEMSDOE — H61-O cleared and downloadable</title><link rel="stylesheet" href="docs/assets/site.css"></head><body><main class="wrap">
+<h1>61GEMSDOE</h1><p><b>CLEARED — FORMAT-VALID and UNIQUE under the Jaccard-exception gate: H61-O is OK to download and submit.</b></p>
+<p>40,000 dots, 133,448 bytes, sha256 34218a18…; its own holdout verdict is negative, so no weekly slot is recommended.
+The older H61-G / H61-M / H61-MH / H61-L / H61-W files are NOT CLEARED and must not be uploaded.
 <a href="docs/index.html">Open the current status and evidence</a>.</p>
 <p><a href="docs/executive-summary.html">Submission safety</a> · <a href="docs/verify.html">Uniqueness verification</a></p>
 </main></body></html>""", encoding="utf-8")
+# The public JSON mirror of the current card must move with the evidence copy;
+# scripts/build_site_h61o_cleared.py wrote it once, and this builder owns every
+# page plus that mirror, so the Pages workflow cannot publish a stale card.
+(DOCS / "data").mkdir(parents=True, exist_ok=True)
+(DOCS / "data" / "run_card.json").write_text(json.dumps(current_run_card, indent=2), encoding="utf-8")
 print("status site built:", ", ".join(pages))

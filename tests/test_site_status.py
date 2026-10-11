@@ -36,6 +36,8 @@ class _HrefParser(HTMLParser):
 
 
 def test_current_status_pages_are_explicit_and_all_local_links_resolve():
+    audit_top = json.loads((ROOT / "evidence/local_artifact_strict_dot_audit.json").read_text())
+    audit_n = audit_top["summary"]["candidate_artifacts"]
     for name in CURRENT_PAGES:
         page = DOCS / name
         assert page.is_file(), f"missing generated page {name}"
@@ -56,13 +58,17 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
         assert "HISTORICAL PAGE — SUPERSEDED." in text, page.name
         assert 'href="index.html"' in text, page.name
         assert "../evidence/local_artifact_strict_dot_audit.json" in text, page.name
-        assert "strict audit blocks 11/11 local artifacts" in text, page.name
+        assert f"strict audit blocks {audit_n}/{audit_n} local artifacts" in text, page.name
 
     index = (DOCS / "index.html").read_text(encoding="utf-8")
     executive = (DOCS / "executive-summary.html").read_text(encoding="utf-8")
     holdout = (DOCS / "holdout.html").read_text(encoding="utf-8")
     verify = (DOCS / "verify.html").read_text(encoding="utf-8")
-    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in index
+    # policy on main is the two-gate rule: an authorised run card must publish the
+    # exact submission link, and the refused-banner text is retired for the index.
+    assert "CLEARED —" in index
+    assert "Download the submission GeoTIFF" in index
+    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" not in index
     assert "DO NOT SUBMIT" in executive
     assert "pre-placement surface-uniqueness receipt was found" in verify
     assert "current-run H61-L surface stopped before holdout" in holdout
@@ -70,7 +76,7 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
     assert "HOLDOUT-DTI 0.060633" in holdout  # archived H61-MH, still proxy-only and not cleared
     assert "99.64000%" in holdout or "99.6400%" in holdout
     assert "351" in holdout and "215" in holdout
-    assert "11/11" in verify and "strict final-dot" in verify
+    assert f"{audit_n}/{audit_n}" in verify and "strict final-dot" in verify
     assert "99.1475%" in executive and "DO NOT SUBMIT" in executive
     assert "../evidence/h61l_run_card.json" in index
 
@@ -85,8 +91,8 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
     assert inventory["declared_scope_complete"] is True
     assert inventory["organizer_registry_complete"] is False
     assert inventory["scope"]["declared_public_source_count"] == 21
-    assert inventory["scope"]["repository_prior_file_count"] == 12
-    assert inventory["scope"]["total_raster_records"] == 33
+    assert inventory["scope"]["repository_prior_file_count"] == 14
+    assert inventory["scope"]["total_raster_records"] == 35
     assert set(inventory["scope"]["repository_prior_roots"]) == {
         "docs/downloads", "docs/submissions", "out"
     }
@@ -94,8 +100,8 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
                for row in inventory["rasters"])
 
     audit = json.loads((ROOT / "evidence/local_artifact_strict_dot_audit.json").read_text())
-    assert audit["summary"]["candidate_artifacts"] == 11
-    assert audit["summary"]["strict_overlap_stops"] == 11
+    assert audit["summary"]["candidate_artifacts"] == 12
+    assert audit["summary"]["strict_overlap_stops"] == 12
     assert audit["summary"]["cleared_for_submission"] == 0
     mh = next(row for row in audit["candidates"]
               if any("gems61-h61m-invfeat-habitat" in path for path in row["paths"]))
@@ -171,6 +177,6 @@ def test_h61m_legacy_site_builder_delegates_to_strict_status_builder():
     assert result.returncode == 0, result.stdout + result.stderr
     assert "delegating to scripts/build_site_status.py" in result.stderr
     index = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in index
+    assert "CLEARED —" in index and "Download the submission GeoTIFF" in index
     assert "H61-MH" in index and "NOT CLEARED" in index
     assert "UNIQUE (safe to upload)" not in index

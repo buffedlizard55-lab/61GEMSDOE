@@ -1,6 +1,6 @@
 {
   "schema": "gems61-accessible-raster-index-v1",
-  "generated_utc": "2026-10-11T15:34:51Z",
+  "generated_utc": "2026-10-11T16:07:22Z",
   "declared_scope_complete": true,
   "organizer_registry_complete": false,
   "completeness_note": "All paths explicitly declared in scripts/registry_sources.tsv and every TIFF in the configured local artifact roots were opened and matched to the pinned competition grid; this is not the organizer-side registry and cannot include unlisted, private, or inaccessible files.",
@@ -13,8 +13,8 @@
       "docs/submissions",
       "out"
     ],
-    "repository_prior_file_count": 12,
-    "total_raster_records": 33
+    "repository_prior_file_count": 14,
+    "total_raster_records": 35
   },
   "grid": {
     "shape": [
@@ -832,6 +832,33 @@
       "grid_ok": true
     },
     {
+      "file": "gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "repo_relative_path": "docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif"
+      ],
+      "bytes": 90194,
+      "sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
       "file": "gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
       "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
       "repo_relative_path": "docs/downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif",
@@ -949,6 +976,33 @@
       ],
       "bytes": 137204,
       "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
+      "file": "gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/submissions/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "repo_relative_path": "docs/submissions/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/submissions/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif"
+      ],
+      "bytes": 90194,
+      "sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
       "count": 1,
       "shape": [
         3730,

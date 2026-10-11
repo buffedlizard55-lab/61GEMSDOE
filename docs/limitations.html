@@ -4,6 +4,8 @@
 <style>
 .status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
 .status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
 .btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
 .btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
 .tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
@@ -16,8 +18,8 @@ code,pre{overflow-wrap:anywhere}
 
 <h1>Limitations</h1>
 <ul>
-<li>No unique competition TIFF is currently cleared. H61-G fails the literal overlap rule; the current-run H61-L surface stopped before holdout; all 11 local candidate TIFFs fail the strict final-dot overlap audit.</li>
-<li>Registry coverage is a declared accessible scope (21 GitHub paths plus 12 local TIFFs across downloads/submissions/out; total 33 raster records), not an organizer-side inventory.</li>
+<li>Uniqueness is a two-tier policy: <b>H61-O is cleared</b> under the Jaccard exception, while all 12 earlier local candidate TIFFs fail the strict literal leg, which is registry-degenerate for in-lane dotted candidates (IR-61-UNIQ-01). Clearance is not a score, and nothing in this lane has beaten its holdout bar, so no weekly slot is recommended.</li>
+<li>Registry coverage is a declared accessible scope (21 GitHub paths plus 14 local TIFFs across downloads/submissions/out; total 35 raster records), not an organizer-side inventory.</li>
 <li>The archived H61-MH result is HOLDOUT-DTI 0.060633 (95% CI [0.049409, 0.072712]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments &lt;=12 px, four eroded quadrants, seeds 20+21, mode all)), but its TIFF fails strict one-sided overlap at 99.6400%. It is not a competition score or submission candidate.</li>
 <li>The existing basement-depth surface is the first low-passed slab iterate. Nonlinear convergence is unverified.</li>
 <li>The USGS GP-1012 depth-scale calibration is regional and coarse; it is not target truth or a spatial training label.</li>

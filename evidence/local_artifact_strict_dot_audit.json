@@ -1,6 +1,6 @@
 {
   "schema": "gems61-local-artifact-strict-dot-audit-v1",
-  "generated_utc": "2026-10-11T15:35:03Z",
+  "generated_utc": "2026-10-11T16:07:34Z",
   "evidence_class": "MEASURED final-raster one-sided overlap audit; not an organizer receipt",
   "policy": {
     "support": "every finite value strictly >0 inside the scored footprint",
@@ -10,12 +10,12 @@
   },
   "inventory": {
     "path": "evidence/registry_accessible_index.json",
-    "sha256": "8b848a78420270c7cdb91f2f6dad0eddc5950a0f43a4aba6726f0e2800c7b4c0",
+    "sha256": "e239f89ff493574543fd1e008de859bee6ca6b0fe03ea804bcc49015493a68ea",
     "declared_scope_complete": true,
     "organizer_registry_complete": false,
     "declared_public_sources": 21,
-    "local_prior_tiffs": 12,
-    "indexed_records": 33,
+    "local_prior_tiffs": 14,
+    "indexed_records": 35,
     "roots": [
       "docs/downloads",
       "docs/submissions",
@@ -30,8 +30,8 @@
   },
   "execution_note": "The comparator already breaches the literal one-sided overlap stop for every listed local candidate. The gate therefore stops on that measured failure; no Jaccard exception, holdout, or submission clearance is inferred. These post-placement checks do not replace a required pre-placement surface gate.",
   "summary": {
-    "candidate_artifacts": 11,
-    "strict_overlap_stops": 11,
+    "candidate_artifacts": 12,
+    "strict_overlap_stops": 12,
     "cleared_for_submission": 0,
     "holdout_reached": 0
   },
@@ -182,6 +182,26 @@
       "candidate_positive_pixels_within_3px": 52361,
       "one_sided_overlap_fraction": 0.9468364044049836,
       "one_sided_overlap_percent": 94.68364044049837,
+      "overlap_stop": true,
+      "verdict": "DUPLICATE_LANE_DRIFT",
+      "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",
+      "preplacement_surface_gate": "NOT_RECORDED_FOR_THIS_ARCHIVED_OUTPUT",
+      "cleared_for_submission": false
+    },
+    {
+      "paths": [
+        "docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+        "docs/submissions/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif"
+      ],
+      "sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
+      "positive_pixels": 16894,
+      "comparator": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "comparator_sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2",
+      "comparator_positive_pixels": 311617,
+      "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+      "candidate_positive_pixels_within_3px": 16703,
+      "one_sided_overlap_fraction": 0.9886942109624719,
+      "one_sided_overlap_percent": 98.8694210962472,
       "overlap_stop": true,
       "verdict": "DUPLICATE_LANE_DRIFT",
       "rank_correlation": "NOT_EVALUATED \u2014 overlap already exceeds the strict stop threshold",

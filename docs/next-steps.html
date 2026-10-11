@@ -4,6 +4,8 @@
 <style>
 .status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
 .status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.status.ok{border-color:#3fb950;background:#0f2312}.status.ok h2{color:#3fb950}
+.status.audit{border-color:#d29922;background:#241d08}.status.audit h2{color:#f2cc60}
 .btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
 .btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
 .tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
@@ -16,19 +18,21 @@ code,pre{overflow-wrap:anywhere}
 
 <h1>Next steps and remaining limitations</h1>
 <h2>Decision</h2>
-<p><b>No candidate is cleared and no weekly slot should be spent.</b> The old H61-G TIFF fails the explicit strict final-dot gate;
-H61-L fails before placement. No organizer score exists for a repository artifact.</p>
+<p><b>H61-O is cleared to download and submit (format-valid + UNIQUE under the Jaccard-exception gate), but its own holdout evidence is a negative, so no weekly slot should be spent on it.</b>
+The older H61-G / H61-M / H61-MH / H61-L files fail the strict literal leg, which is registry-degenerate for in-lane dotted candidates (IR-61-UNIQ-01), and H61-W's card says
+<code>okay_to_submit: false</code>. No organizer score exists for any repository artifact.</p>
 <h2>What would unblock a new candidate</h2>
 <ol>
 <li>Start from a new in-lane hypothesis and build a pre-placement surface from permitted geological inputs.</li>
-<li>Compare that surface against every raster in the declared accessible inventory; stop if positive Spearman &gt;0.90 or if more than 70% of positive pixels are within 3 px of any single prior raster.</li>
+<li>Compare that surface against every raster in the declared accessible inventory; stop if positive Spearman &gt;0.90 or if more than 70% of positive pixels are within 3 px of any single prior raster
+(the Jaccard exception waives that leg only for a near-blanket comparator, and drift into another lane still stops the run).</li>
 <li>Only after a passing surface, run the shared spatially blocked hide-and-recover evaluator, visible-only catalogue features, pixel-exact masking, the feature-alone leakage canary, and a matched random-line control.</li>
 <li>Write ribbons, check the final raster with the same strict gate, validate with the shared writer, and promote only if the holdout selector says it beats the holdout best. A weekly slot remains separate.</li>
 </ol>
 <h2>Limitations</h2>
 <ul>
-<li>The current index covers 21 paths from <code>scripts/registry_sources.tsv</code> and 12 TIFFs across local roots (33 records); it is not the organizer-side registry. The original H61-G/H61-L run receipts retain their 21+7 pre-merge snapshot.</li>
-<li>All 11 locally published candidate TIFFs exceed the literal final-dot overlap stop against the hash-pinned HGM prior. The archived main-branch "UNIQUE" labels are retired; see <a href="../evidence/local_artifact_strict_dot_audit.json">the measured audit</a>. This short-circuit final-dot audit does not supply missing pre-placement receipts.</li>
+<li>The current index covers 21 paths from <code>scripts/registry_sources.tsv</code> and 14 TIFFs across local roots (35 records); it is not the organizer-side registry. The original H61-G/H61-L run receipts retain their 21+7 pre-merge snapshot.</li>
+<li>All 12 locally published candidate TIFFs exceed the literal final-dot overlap stop against the hash-pinned HGM prior. The archived main-branch "UNIQUE" labels are retired; see <a href="../evidence/local_artifact_strict_dot_audit.json">the measured audit</a>. This short-circuit final-dot audit does not supply missing pre-placement receipts.</li>
 <li>The current-run H61-L 3DEP-derived descriptor source is a public repository derivative. Its surface was not holdout-scored. Archived H61-L and H61-MH variants have HOLDOUT-DTI proxy values, but their final TIFFs fail the strict final-dot gate; H61-MH is 99.6400% one-sided overlap.</li>
 <li>The production basement surface is a first low-pass slab iterate; a converged nonlinear Parker–Oldenburg inversion remains unverified.</li>
 <li>HOLDOUT-DTI uses mapped catalogue segments as proxy truth, while competition truth is undisclosed/unmapped. No HOLDOUT-DTI value is a live score.</li>

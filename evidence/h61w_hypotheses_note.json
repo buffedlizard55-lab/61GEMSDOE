@@ -1,0 +1,3 @@
+{
+  "note": "Rank 1 is the hypothesis this session implemented and measured on the shared holdout instrument (gems61.holdout_segmented v2, seeds 20+21, mode all, 22,641 withheld truth px, alpha 0.2 / beta 0.8 / 300 m). Ranks 2-6 are proposals: none has been implemented, and every one of them is scored as a PROJECTION, never as a score. Ranks 5 and 6 restate two of the four hypotheses parked by the previous session (H61-R, H61-Q) with the conditioning that the previous session could not test because the corridor was not yet the artefact; they are kept because the layer weights are the measured reason to keep them."
+}
