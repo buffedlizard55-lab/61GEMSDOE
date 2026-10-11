@@ -68,11 +68,12 @@ Candidates are pruned only against the <i>visible</i> catalogue inside each fold
 <p>3 of 3 experiments used (inversion + screen; segment holdout of five candidates and two controls; final build with the dots-vs-ribbons check). Wall-clock within the 2-hour cap.</p>
 
 <h2>Candidate board — every gems61 file in <code>docs/downloads/</code> (merged, newest first)</h2>
-<p class="small">Five sessions worked this lane in parallel (PRs #5–#8, H61-G PR #9, and this session H61-L on <code>arena/a7790b7f</code>). Each row carries the verdict its own session recorded;
+<p class="small">Six sessions worked this lane in parallel (PRs #5–#8, H61-G PR #9, H61-M PR #11 on main, and this session H61-L on <code>arena/a7790b7f</code>). Each row carries the verdict its own session recorded;
 the last column scores the <i>shipped file of that row</i> on the segment-holdout instrument where files pruned against the full catalogue are ~0 by construction (IR-61-INSTR-02);
 the only within-protocol numbers (visible-only pruning) exist for H61-G and H61-L. Nothing here is a slot decision; the selector step is separate.</p>
 <table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session's verdict</th><th>shipped file on this evaluator (HOLDOUT-DTI)</th></tr>
 <tr class="hl"><td><code>gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif</code></td><td>H61-L, this session <code>arena/a7790b7f</code></td><td>40,000</td><td>FORMAT-VALID + UNIQUE (rho 0.293 vs H61-G, 69.8% overlap just under 70% gate; rho 0.011 vs external registry); HOLDOUT-DTI 0.0443 (CI 0.0414–0.0478) vs random lines 0.0314; below 0.1011 bar → negative for a slot</td><td>0.0443 (this file)</td></tr>
+<tr class=""><td><code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></td><td>H61-M, main PR #11</td><td>55,301</td><td>FORMAT-VALID + UNIQUE (rho 0.0018 vs external registry, 18.35% overlap); no segment-holdout on same evaluator — screen mean distance 31.5 px vs H61-L 18.1 px; expected negative, not compared on bar</td><td>— (not on this evaluator)</td></tr>
 <tr class=""><td><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></td><td>H61-G, PR #9</td><td>40,000</td><td>FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421–0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar → negative for a slot</td><td>0.0045</td></tr>
 <tr class=""><td><code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>e3, PR #3</td><td>40,000</td><td>kept; superseded</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>H61-A, PR #5</td><td>25,285</td><td>catalogue-frame holdout 0.0000 vs random 0.0089 → SUPERSEDED</td><td>0.0000</td></tr>
@@ -81,9 +82,21 @@ the only within-protocol numbers (visible-only pruning) exist for H61-G and H61-
 <tr class=""><td><code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code></td><td>e3, PR #3</td><td>311,617</td><td>311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>session C, PR #8</td><td>40,000</td><td>its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 &lt; random lines 0.0092 (gems61-pooled-hide-v2); 'value unproven', declared weight 0.10</td><td>0.0007</td></tr>
 </table>
+<h2>NEW: H61-M Gravity + Magnetic Submission</h2>
+<div class="status">
+<h2 style="margin:.2em 0;border:0">NEW FILE: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE</span></h2>
+<p><b>What it is:</b> <code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code> — 55,301 ribbon pixels from 7,942 dots, float32, EPSG:32611, 3730 × 3292, 100 m, no NaN/Inf, min 0 / max 1. All 19 validator checks pass. <b>UNIQUE</b> method: gravity inversion corridors + magnetic edges.</p>
+<p><b>What's new:</b> First submission combining <strong>gravity inversion</strong> (lane requirement) with <strong>magnetic data</strong> (band 3 TMI). Gravity identifies basement steps at ~1 km resolution; magnetic edges localize faults at higher resolution where they offset magnetized basement or volcanic flows. The conjunction filters out intrabasement density contrasts (the lane's competing explanation).</p>
+<p><a class="btn" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif" download>⬇ Download NEW H61-M TIF (800 KB)</a>
+<a class="btn sec" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.json" download>receipt</a>
+<a class="btn sec" href="executive-summary.html">How to submit</a></p>
+<p class="small">sha256 <code>94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6</code> · note (138 chars): <code>H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED</code></p>
+</div>
+
 <h2>Older files in <code>docs/downloads/</code></h2>
 <p>Three earlier rasters from previous sessions (<code>gems61-lane-buried-step-…</code>, <code>gems61-buried-basement-step-…</code>, <code>gems61-h61a-…</code>) are <b>SUPERSEDED</b>:
 their own holdout numbers were 0.0000–0.0089 and the first of them is a near-blanket raster (311,617 px). They stay only as the uniqueness registry. Do not upload them.</p>
+<p><b>H61-G</b> (<code>gems61-h61g-…</code>, HOLDOUT-DTI 0.0465) and <b>H61-M</b> (<code>gems61-h61m-…</code>, gravity×magnetic, 55,301 px) are both FORMAT-VALID and UNIQUE but likewise <b>negative for a slot</b>; they are superceded as <i>newest file</i> by H61-L (this session, 05:19Z vs H61-M 05:14Z), which is statistically tied with H61-G on the same evaluator. None is expected to move 0.2778.</p>
 
 <hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
