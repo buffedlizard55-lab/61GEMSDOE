@@ -184,11 +184,28 @@ def test_dot_leg_is_skipped_for_a_dense_probability_field(tmp_path):
     _fake_registry(tmp_path, [dense])
     out = uq.check(np.zeros((40, 40), np.float32), dots, fp, root=tmp_path)
     assert out["dot_leg_scope"]["applicable"] == 0
-    assert out["dot_leg_scope"]["dense_excluded"] == 1
+    assert out["dot_leg_scope"]["vacuous_excluded"] == 1
     assert out["per_raster"][0]["dot_overlap_3px"] is None
     # and the gate fails closed rather than reporting a vacuous pass
     assert out["dot_gate_pass"] is False
     assert out["unique"] is False
+
+
+def test_dot_leg_is_skipped_for_a_uniform_lattice(tmp_path):
+    """A 5 px lattice is only 4 % dense but lies within 3 px of ~100 % of the
+    footprint, so the raw overlap test is just as vacuous as for a dense map.
+    Density alone is not the right criterion; footprint coverage is."""
+    fp = np.ones((40, 40), bool)
+    lattice = np.zeros((40, 40), np.float32)
+    lattice[::5, ::5] = 1.0
+    assert 0.0 < lattice.mean() < 0.05                 # sparse by density ...
+    dots = np.zeros((40, 40), bool)
+    dots[5, 5:15] = True
+    _fake_registry(tmp_path, [lattice])
+    out = uq.check(np.zeros((40, 40), np.float32), dots, fp, root=tmp_path)
+    assert out["per_raster"][0]["footprint_coverage_within_3px"] > 0.9   # ... not by coverage
+    assert out["dot_leg_scope"]["applicable"] == 0
+    assert out["per_raster"][0]["dot_overlap_3px"] is None
 
 
 def test_dot_leg_runs_for_a_sparse_raster(tmp_path):

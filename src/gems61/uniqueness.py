@@ -27,9 +27,12 @@ from scipy.ndimage import distance_transform_edt
 SPEARMAN_LIMIT = 0.90
 OVERLAP_LIMIT = 0.70
 OVERLAP_RADIUS_PX = 3.0
-# The dot-overlap leg is only defined against a sparse (dot or line) raster.
-# Above this positive fraction the test is vacuous and the surface leg decides.
-DOT_LEG_MAX_DENSITY = 0.05
+# The dot-overlap leg is only meaningful against a raster that does not already
+# cover the footprint: ``DOT_LEG_MAX_BASELINE`` is the fraction of the scored
+# footprint that already lies within 3 px of the comparator's positives -- i.e.
+# the score a random candidate would get.  At or above the 70 % overlap limit
+# the test cannot discriminate, so the surface leg decides instead.
+DOT_LEG_MAX_BASELINE = 0.70
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -170,15 +173,22 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
         if candidate_dots is not None:
             pos = finite & (arr > 0)
             density = float(pos.sum()) / max(int(np.asarray(footprint).sum()), 1)
+            # How much of the scored footprint already lies within 3 px of this
+            # raster's positives.  That is the score a *random* candidate would
+            # get, so if it already reaches the 70 % limit the overlap test
+            # cannot discriminate and must not be used.  This catches both
+            # continuous probability maps (density ~1) and uniform lattices
+            # (e.g. a 5 px lattice is only 4 % dense but covers ~100 % of the
+            # footprint within 3 px).
+            baseline = float("nan")
+            if pos.any():
+                dpos = distance_transform_edt(~pos)
+                baseline = float((dpos[np.asarray(footprint, bool)] <= OVERLAP_RADIUS_PX).mean())
             row["positive_fraction_of_footprint"] = density
-            if density > DOT_LEG_MAX_DENSITY:
-                # The 3 px overlap test is vacuous against a dense field: a
-                # continuous probability map is positive almost everywhere, so
-                # ANY candidate lands within 3 px of one of its positives and
-                # scores 1.0.  Such a raster is compared on the surface leg
-                # alone, and that is recorded rather than silently skipped.
+            row["footprint_coverage_within_3px"] = baseline
+            if not (baseline < DOT_LEG_MAX_BASELINE):
                 row["dot_overlap_3px"] = None
-                row["dot_leg"] = "not_applicable_dense_field"
+                row["dot_leg"] = "not_applicable_vacuous_comparator"
                 n_dense += 1
             else:
                 ov = dot_overlap(candidate_dots, pos)
@@ -208,11 +218,12 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
                                                       / max(surface_stride, 1) ** 2),
                                    note=("lattice subsample of the surface leg; the dot leg "
                                          "is computed on every candidate dot")),
-        dot_leg_scope=dict(applicable=n_sparse, dense_excluded=n_dense,
-                           max_density=DOT_LEG_MAX_DENSITY,
-                           note=("rasters denser than the threshold are continuous "
-                                 "probability fields; the 3 px overlap test is vacuous "
-                                 "against them, so they are compared on the surface leg")),
+        dot_leg_scope=dict(applicable=n_sparse, vacuous_excluded=n_dense,
+                           max_baseline_coverage=DOT_LEG_MAX_BASELINE,
+                           note=("a comparator whose positives already lie within 3 px of "
+                                 ">= 70 % of the scored footprint (continuous probability "
+                                 "maps, uniform lattices) would flag a random candidate as a "
+                                 "duplicate; those rasters are compared on the surface leg")),
         surface_gate_pass=bool(surface_pass),
         dot_gate_pass=bool(dot_pass),
         unique=bool(surface_pass and dot_pass),
