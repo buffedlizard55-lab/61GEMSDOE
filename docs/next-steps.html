@@ -35,6 +35,33 @@ one ORGANIZER-CONFIRMED score for a lane file so the proxy can be calibrated aga
 <li><b>Weekly submission slots are capped</b> (see the submission page). Promotion of any file is a
 separate selector step; this session's card records a negative verdict and does not spend a slot.</li>
 </ol>
+<h2>Next session: concrete suggestions (arena/f1bed08d, H61-T, 2026-10-11)</h2>
+<ol>
+<li><b>Record one ORGANIZER-CONFIRMED number.</b> The cheapest calibration of the whole programme:
+spend one weekly slot on the best-expected file (the selector's choice; this repo's candidates are on
+the <a href="index.html">status page</a>) and write the receipt back into the run card. Every lane
+verdict until now rests on the hide-and-recover proxy; one live number pins it to reality.</li>
+<li><b>Run the two untested lane hypotheses:</b> H61-T5 (upward continuation of band 13 to +0.5/+1/+2 km;
+keep steps whose normalised HGM persists &mdash; deep-source separation, FFT chain on cached data) and
+H61-T3 (band-17 conductivity HGM maxima gated to the &plusmn;1 km gravity-step corridor). Both are
+one-session experiments on cached bands. H61-T4 (geodetic gate, bands 4/7/8) only as a secondary gate,
+because as a primary locator it belongs to another lane's paragraph.</li>
+<li><b>Get metre-scale evidence into the sandbox.</b> Fetch USGS 3DEP 1 m DEM/lidar over the high-prior
+basin tiles on an unrestricted machine, mirror into a pinned bridge repository
+(<code>scripts/prepare_data.py</code> pattern), then test H61-N (scarp likelihood inside the gravity
+corridor). This is the only lever identified across three sessions that the supplied 100 m grid cannot
+provide.</li>
+<li><b>Fix the shared-tool debt flagged for consolidation:</b> <code>gems61.h61mh.dot_thin</code> treats a
+score of 0 as emit-eligible (IR-61-DOTFILL-01) &mdash; the H61-T driver masks non-emission pixels to
+&minus;inf, but the shared semantics should carry a warning or a <code>strict=True</code> option once the
+parallel lanes agree. Also deduplicate the two holdout modules (<code>holdout.py</code> vs
+<code>holdout_segmented.py</code>) &mdash; three merge-time import bugs came from that ambiguity
+(IR-61-MERGE-01/-OFFCAT-01/-FIT-01, all fixed this session).</li>
+<li><b>Do not re-litigate the prune or the dot spacing.</b> The forensics are settled: zero dots within
+2&ndash;3 px of the catalogue, ~38&ndash;40 k dots at ~300 m spacing is the live optimum for the current
+base surface (<a href="analysis.html">analysis &sect;5</a>). Effort belongs on the base surface.</li>
+</ol>
+
 <h2>Limitations of this session's evidence</h2>
 <ul>
 <li>The group's own scores are owner reports (IR-61-SCORE-01); the public leaderboard belongs to other

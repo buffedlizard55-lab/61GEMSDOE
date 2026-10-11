@@ -30,6 +30,9 @@ ALLOWED_HOSTS = {
     "api.crossref.org", "store.usgs.gov", "pubs.usgs.gov",
     "www.energy.gov", "www.nlr.gov", "github.com", "raw.githubusercontent.com",
     "buffedlizard55-lab.github.io", "docs.nlr.gov", "www.crossref.org",
+    # USGS The National Map downloader, cited in irregularity IR-61-SRC-01 as the
+    # free official source for the 3DEP 1 m lidar hypothesis (H61-N).
+    "apps.nationalmap.gov",
 }
 
 HREF = re.compile(r'href="([^"]+)"')
@@ -67,24 +70,45 @@ def main() -> int:
             if not target.exists():
                 problems.append(f"{page.name}: broken internal link -> {href}")
 
-    # the banner and the run card must agree
+    # The banner and the run cards must agree.  Every card that declares
+    # ``okay_to_download`` is enforced: if it says NO, index must not link its
+    # raster; the NEWEST flagged card is the site's headline and index must
+    # link it.  Cards without the flag pre-date the gate and are skipped.
     import json
-    card = None
-    for base in (ROOT / "evidence", DOCS / "data"):
-        p = base / "run_card.json"
-        if p.exists():
-            card = json.loads(p.read_text())
-            break
+    cards = []
+    card_paths = sorted((ROOT / "evidence").glob("*run_card*.json")) + \
+        sorted((DOCS / "data").glob("*run_card*.json"))
+    for p in card_paths:
+        try:
+            d = json.loads(p.read_text())
+        except Exception:
+            continue
+        if isinstance(d, dict) and "okay_to_download" in d:
+            cards.append((p, d))
     index = DOCS / "index.html"
-    if index.exists() and card is not None:
+    if index.exists() and cards:
         text = index.read_text()
-        authorised = bool(card.get("okay_to_download", False))
-        publishes_link = "Download the submission GeoTIFF" in text
+
+        def linked(raster_file: str) -> bool:
+            name = Path(raster_file).name
+            return bool(name) and re.search(r'href="[^"]*' + re.escape(name), text) is not None
+
+        for p, d in cards:
+            raster = ((d.get("raster") or {}).get("file")) or ""
+            if linked(raster) and not d.get("okay_to_download", False):
+                problems.append(f"run card {p.name} does NOT authorise the download "
+                                f"but index links {Path(raster).name}")
+        newest_path, newest = max(cards, key=lambda t: t[0].stat().st_mtime)
+        raster = ((newest.get("raster") or {}).get("file")) or ""
+        authorised = bool(newest.get("okay_to_download", False))
+        publishes_link = linked(raster)
         if authorised and not publishes_link:
-            problems.append("run card authorises the download but the page publishes no link")
+            problems.append(f"newest run card {newest_path.name} authorises "
+                            f"{Path(raster).name} but the page publishes no link")
         if not authorised and publishes_link:
             problems.append("run card does NOT authorise the download but the page publishes a link")
-        print(f"[site] run card okay_to_download={authorised}, page publishes link={publishes_link}")
+        print(f"[site] run-card gate: {len(cards)} flagged card(s); newest {newest_path.name} "
+              f"okay_to_download={authorised}, page publishes link={publishes_link}")
     elif index.exists():
         problems.append("index.html exists but no run_card.json was found")
 

@@ -46,7 +46,9 @@ from scipy import ndimage as ndi
 from .anatomy import offset_components
 from .faultzone import SENSE_CODE, trace_sense_raster
 from .grid import Grid
-from .holdout import DOMAIN_ERODE, FOLD_NAMES, quadrant_ids
+# DOMAIN_ERODE, FOLD_NAMES and quadrant_ids live in holdout_segmented (the
+# segmented evaluator); gems61.holdout never defined them (IR-61-OFFCAT-01).
+from .holdout_segmented import DOMAIN_ERODE, FOLD_NAMES, quadrant_ids
 from .network import STRUCT3, local_strike
 
 VERSION = 'gems61-offcatalogue-loqo-v1'

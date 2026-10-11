@@ -79,4 +79,45 @@ prune, not the budget.</li>
 metre-scale topographic locator inside a gravity corridor, which is hypothesis H61-N on the
 <a href="hypotheses.html">next-hypotheses page</a> and needs the 3DEP tiles named there.</p>
 
+<h3>5. Addendum, session arena/f1bed08d (H61-T, 2026-10-11): the full 0.2600 &rarr; 0.2778 trajectory</h3>
+<p>Re-verified this session from the published bytes (<code>reports/forensics.json</code>,
+<code>data/registry/audit-h33-2-b2.json</code>). The three organiser-confirmed steps are one dot set
+under progressive catalogue-flank pruning, and every step is an <i>exact set difference</i>:</p>
+<table>
+<tr><th>file (owner-reported name)</th><th>dots</th><th>score</th><th>relation</th></tr>
+<tr><td><code>gemsdoe30-d28-poisson300m-offcat-44090</code> (= <code>gems25-dotted-h19-5-d2-8</code> =
+<code>gems32-probe-S1-ANCHOR</code>; three filenames, byte-identical bytes)</td><td>44,090</td>
+<td>0.2600 (group report)</td><td>core: Poisson-300 m dots from the h19-5 power-law-budget
+multiline-corroborated surface, off-catalogue</td></tr>
+<tr><td><code>gems28-h27-4-r1-solo-d2-8</code></td><td>40,199</td><td>0.2708 (group report)</td>
+<td>core minus 3,891 dots; <b>all 3,891 were within 3 px of the visible catalogue</b>
+(<code>removed_all_within_3px_of_catalogue = true</code>, strict subset verified)</td></tr>
+<tr class="hl"><td><code>gemsdoe32-h33-h33-2-b2</code></td><td>37,654</td><td><b>0.2778 (group report)</b></td>
+<td>core minus 6,436 dots; <b>all 6,436 were within 3 px of the visible catalogue</b>;
+strict subset verified on bytes</td></tr>
+</table>
+<p>Reading: the organiser masks mapped faults out of the hidden truth, so a dot on the flank of a
+mapped trace can never earn truth credit and always costs the &alpha; = 0.2 false-positive weight.
+Deleting exactly those dots is pure gain: 0.2600 &rarr; 0.2708 &rarr; 0.2778 with nothing else
+changed. The group's own note on the 0.2778 file records the expectation before scoring
+(&ldquo;live-mirror +0.004870 in 4/4 folds, projected live 0.2747; UNSCORED&rdquo;), and the organiser
+receipt came back at 0.2778 &mdash; the mirror slightly under-predicted the gain. Two corollaries:</p>
+<ul>
+<li><b>The prune is saturated.</b> The 0.2778 file already has zero dots within 2 px and zero within
+3 px of the catalogue (<code>data/registry/audit-h33-2-b2.json</code>). Further pruning cannot help;
+only a better base surface can.</li>
+<li><b>Every high scorer behaves the same way.</b> Across the nine measured registry rasters, all
+rasters scoring &ge; 0.20 have zero pixels on visible catalogue faults; the one raster that carries
+catalogue pixels (647 px) is the lowest scorer measured (0.0512). Any new submission &mdash; this
+lane's included &mdash; must emit zero mass on the mapped catalogue or it pays for nothing.</li>
+</ul>
+<p>What this session (H61-T) adds to the picture: a direct measurement of <i>why the lane's own
+constructions cannot build such a base surface</i>. Of the 22,316 Blakely&ndash;Simpson step pixels of
+the GP-1012-calibrated 200 m inversion, only 2.5 % survive the monopole-persistence test
+(IR-61-DIPDOM-01); the rest are regional-dip gradients that a plane fit removes. On the segmented
+holdout the lane's pure step field and both new discriminators (persistence, independent-depth
+consensus) sit at or below the random-lines control, and no arm recovers withheld basin-interior
+segments above that control. See the <a href="index.html">status panel</a> and
+<code>evidence/h61t_run_card.json</code>.</p>
+
 </div></body></html>

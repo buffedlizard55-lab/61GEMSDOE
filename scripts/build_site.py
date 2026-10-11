@@ -28,6 +28,9 @@ PAGES = [
     ("data-sources.html", "Data"),
     ("sources.html", "Sources"),
     ("irregularities.html", "Irregularities"),
+    # Hand-written this session (arena/f1bed08d); vetted by check_site.py but
+    # NOT emitted by build_site.py's builders dict, which must not overwrite it.
+    ("h61t.html", "H61-T session"),
 ]
 
 

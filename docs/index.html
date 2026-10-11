@@ -17,50 +17,50 @@ th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim
 <nav><a href="index.html" class=active>Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
 <div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file:
- <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to download and upload</span>
- · <span style="color:var(--warn)">HOLDOUT-DTI 0.0606 – above our random baseline, below our best live file – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; every other cell 0.0),
-float32, EPSG:32611, 3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>,
-no NaN/Inf anywhere, min 0 / max 1 (<a href="verify.html">validator receipt</a>: 19 checks, all passed).
-Uniqueness against 28 earlier rasters: worst Spearman
-+0.1961 (limit 0.9), worst one-sided 3 px dot overlap
-0.431 (limit 0.7; the one
-reference denser than ours is gated on Jaccard instead — worst
-0.008 against a limit of 0.5).
-Verdict <b>UNIQUE</b>.</p>
-<p class="small"><b>Naming (IR-61-NAME-01).</b> Two parallel lane sessions independently
-labelled their work "H61-M". The gravity + magnetic conjunction construction merged from PR #21 owns
-<code>src/gems61/h61m.py</code> and <code>scripts/run_h61m.py</code>; this out-of-fold logistic habitat
-model owns the <code>h61mh</code> (H61-M habitat) namespace. Both bodies of work are on
-<code>main</code>. Four other lane files are also merged and all are negative for a slot:
-<code>61gemsdoe-basement-step-ribbon-20261011T054408Z</code> (0.045563 headline / 0.002715 shipped file
-re-measured), <code>gems61-h61x-x3c-coarse-corridor-10128dots</code> (0.0085, below random lines),
-<code>gems61-h61l-relief-any-corr10-40000dots</code> (0.0443) and
-<code>gems61-h61m-gravmag-corridor-ribbon-40000dots</code> (no segment holdout recorded).</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0606
-(95 % CI 0.0494–0.0727; 22,641 withheld
-positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0314.
-Previous session's best lane construction (H61-G X2): 0.0465.
-Withheld basin-interior segments recovered:
-<b>353 of 1982</b> (95 % CI
-16.2–19.6 %) against
-<b>213/1982 (CONTROL random lines @ 40000)</b> for random lines at the same budget. Leakage canary worst AUC
-0.626 (limit 0.90) — no leakage.
-But the spatially blocked leave-one-quadrant-out test puts every locator we have at the random
-baseline (No locator generalises across space: all four sit at 0.01-0.07 DTI and 0.56-0.59 mean canary AUC, i.e. at or just above the random baseline. The lane&#x27;s corridor x slope locator has the highest and most consistent blocked AUC (0.590) but not the highest blocked DTI.), so this file is an honest
-<b>negative result</b>, not a slot candidate.</p>
-<p><a class="btn" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif" download>⬇ Download gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif (127 kB) — this is the file to submit</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip" download>zip (single TIFF)</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json">format receipt (JSON)</a>
+<h2 style="margin:.2em 0;border:0">Status of the newest file (session H61-T, arena/f1bed08d):
+ <span style="color:var(--ok)">FORMAT-VALID and UNIQUE &ndash; OK to download and upload</span>
+ &middot; <span style="color:var(--warn)">HOLDOUT-DTI 0.0068 &ndash; below random lines &ndash; NOT recommended for a weekly slot</span></h2>
+<p><b>What it is:</b> <code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif</code> &mdash; 4,583 single-pixel dots (value 1.0; every other cell 0.0),
+float32, EPSG:32611, 3730 &times; 3292, 100 m, identical grid to <code>sample_submission.tif</code>,
+no NaN/Inf anywhere, values exactly {0.0, 1.0}; zero dots on the mapped catalogue.
+Uniqueness verdict <b>UNIQUE</b> against every earlier raster: all 748 competition-grid rasters of the
+62 sibling repositories (fresh complete scan this session, 0 errors) plus every raster published in this
+repository &mdash; surface Spearman and 3 px dot-overlap legs, limits 0.90 / 0.70
+(<code>evidence/h61t_uniqueness.json</code>).</p>
+<p><b>What we measured (all HOLDOUT-DTI, evaluator <code>gems61.holdout_segmented v2</code>, 22,641 withheld px, seeds 20+21):</b>
+T0 pure lane field 0.0068 (CI 0.0050&ndash;0.0088); T1 monopole-persistent steps 0.0007 at 125 dots; T2 band-13&times;band-15 consensus 0.0021 at 1,438 dots;
+controls: random lines 0.0187 @20k and 0.0306 @40k, random dots 0.0364 @40k; at the lane's own 4,024-dot emission: random lines 0.0052, random dots 0.0082.
+Withheld basin-interior segments: <b>36/1,982 by the steps vs 23/1,982 random lines and 26/1,982 random dots at equal dot count</b> &mdash; a real 1.6&times;
+per-dot enrichment, far too small to win at &beta; = 0.8. Leakage canary worst AUC 0.516 (limit 0.90) &mdash; clean. Verdict: <b>negative</b> &mdash; a valid, unique, honest negative result.
+The scientific reason (most lane "steps" are regional dip, only 2.5 % monopole-persistent) is recorded as IR-61-DIPDOM-01.</p>
+<p><a class="btn" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download>&#11015; Download gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif (68 kB) &mdash; this session's unique submission file</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip (single TIFF)</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">format receipt (JSON)</a>
+<a class="btn sec" href="h61t.html">H61-T session page</a>
 <a class="btn sec" href="executive-summary.html">How to submit, step by step</a></p>
-<p class="small">sha256 <code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code> · submission name <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros</code> ·
-note (140/140 chars): <code>H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED</code> ·
-median dot distance to the mapped catalogue 19.8 px
-(1985 m); the group's best scorer (<code>h33-h33-2-b2</code>, 0.2778) sits at 19.6 px, and the nine rasters scored at or above 0.20 sit between 14.1 and 19.6 px.</p>
+<p class="small">sha256 <code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code> (69,096 bytes) &middot; submission name <code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros</code> &middot;
+note (113/140 chars): <code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code> &middot;
+every dot &gt; 2 px from the catalogue (min 2.24 px, median 21.2 px). The previous session's file
+(<code>gems61-h61m-invfeat-habitat-40000dots-&hellip;</code>, HOLDOUT-DTI 0.0606, LOQO-negative) remains in
+<a href="downloads/">downloads/</a>, also not slot-recommended.</p>
 </div>
 
-<h2>One-paragraph result</h2>
+<h2>One-paragraph result (this session, H61-T)</h2>
+<p>The lane paragraph's two testable claims were measured directly. First, the named competing
+explanation &mdash; density contrasts within basement &mdash; plus regional dip dominate the step field:
+of 22,316 Blakely&ndash;Simpson step pixels (throw &ge; 80 m) on the GP-1012-calibrated 200 m inversion,
+the median plane-removed near-field offset is ~3 m and only 2.5 % pass the monopole-persistence test
+(E2). Second, the independent-depth consensus (E3) between the lane's band-13 inversion and the
+organiser-supplied band-15 depth surface &mdash; used as a lane locator for the first time &mdash; keeps
+6,611 px and recovers 12 withheld basin-interior segments. On the shared segmented holdout all three
+arms sit below random lines (T0 0.0068 vs 0.0187&ndash;0.0306; T1 0.0007; T2 0.0021), while per-dot the
+step field recovers 36/1,982 basin-interior segments against 23&ndash;26/1,982 for random &mdash; a real
+1.6&times; enrichment that cannot overcome the coverage deficit. The shipped artifact is the lane's pure
+step field, format-valid, uniqueness-checked against all 748 registry rasters, verdict
+<b>UNIQUE / negative</b>. Full numbers: <a href="h61t.html">H61-T session page</a>,
+<code>evidence/h61t_run_card.json</code>.</p>
+
+<h2>One-paragraph result (previous session, H61-MH)</h2>
 <p>The lane asked for a Parker/Oldenburg inversion of the supplied isostatic-residual gravity,
 calibrated only against the USGS GP-1012 basin-depth maps, and for the horizontal-gradient maxima of the
 inverted basement surface as candidate buried range-front and intrabasin faults. We did that, at a
@@ -81,7 +81,7 @@ the previous session's corridor × slope-ridge locator. The <a href="analysis.ht
 explains why 0.2778 is where it is, and the <a href="holdout.html">holdout page</a> shows the
 leave-one-quadrant-out test that keeps this file off a slot.</p>
 
-<h2>What is new this session (H61-MH)</h2>
+<h2>What was new in session H61-MH (kept for the audit trail)</h2>
 <ol>
 <li><b>200 m inversion.</b> The previous session inverted at 400 m. Halving the cell is the direct
 response to the lane's "a few hundred metres" resolution statement; the two solutions agree at

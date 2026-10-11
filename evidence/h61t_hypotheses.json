@@ -1,0 +1,86 @@
+{
+  "evidence_class": "HYPOTHESIS-BOARD (fixed before results are looked at)",
+  "session": "H61-T (arena/f1bed08d-61gemsdoe, 2026-10-11)",
+  "lane": "buried-structure: basement-depth steps from gravity inversion",
+  "protocol": "3-5 candidate geological hypotheses not yet tried, each naming layer(s), physical signature, why it catches a fault missing from the USGS/INGENIOUS catalogue, and how it differs from anything in this repo; ranked by expected DTI improvement and implementation cost. All five are validatable on data already cached in this repository (.cache/features/band-*.npy + the lane's own inversion cache); none needs new external data. The prior board's top hypothesis H61-N (1 m lidar in corridor) is NOT listed here because its external data (USGS 3DEP lidar point cloud, free via The National Map API) was not confirmed obtainable from this sandbox's network allow-list; it stays parked until a session with direct USGS access validates it.",
+  "hypotheses": [
+    {
+      "id": "H61-T2",
+      "rank": 1,
+      "title": "Independent-depth consensus: lane inversion x supplied band-15 depth surface",
+      "layers": ["band 13 iso_grav_anom (inverted: Parker/Oldenburg 200 m)", "band 15 depth_to_base_surf (organiser-supplied, independent processing chain)"],
+      "physical_signature": "Blakely-Simpson maxima of |grad depth| with measured throw >= 80 m computed on BOTH surfaces; mutual +/-5 px corridor intersection (edge-of-consensus gate).",
+      "why_off_catalogue": "Single-chain gravity inversion is non-unique: smearing and regional/residual leakage create phantom steps anywhere, including deep basins where the catalogue is blind. An independent depth model (band 15) was built by a different method; its edges agreeing with the lane's inverted edges within 500 m is a coincidence a phantom is unlikely to reproduce, while a real buried range-front offsets both surfaces. The catalogue misses these faults because alluvium covers them.",
+      "differs_from_existing": "Band 15 has only ever been a calibration target (corr 0.745 with the lane inversion, evidence/h61m_features.json) and a habitat covariate (weight -0.036); it has never been a lane LOCATOR. No previous raster conjoins two basement-depth surfaces.",
+      "expected_dti_gain": "+0.005..+0.02 over the T0 baseline (budget concentration on agreed edges; removes phantom-step false positives)",
+      "implementation_cost": "low (band cached; HGM + maxima reused)",
+      "new_external_data_needed": null,
+      "validated_this_session": "E3 arm T2_consensus in evidence/h61t_holdout.json"
+    },
+    {
+      "id": "H61-T1",
+      "rank": 2,
+      "title": "Monopole step persistence: fault steps persist along-strike-normal, density bodies close",
+      "layers": ["band 13 iso_grav_anom -> inverted basement depth (200 m)"],
+      "physical_signature": "At each HGM step maximum, measure the depth offset across the ridge along the local gradient direction at +/-200 m (near) and +/-800 m (far) on the locally-detrended (600 m) surface. Keep steps with same sign and far/near >= 0.6 (monopole). A finite intrabasement density body (sill/dike/pluton flank) is a closing dipole: its far-field offset shrinks or flips.",
+      "why_off_catalogue": "The lane's named competing explanation -- density contrasts within basement -- generates the same horizontal-gradient maximum as a buried fault. Previous lane constructions ranked steps only by throw and multi-scale persistence, so phantom edges spent the dot budget exactly where the basin is deepest and the catalogue blind. Measuring source closure directly reallocates the budget.",
+      "differs_from_existing": "h61m.persistent_steps tests persistence across SMOOTHING SCALES of the depth surface; H61-T1 measures directional far-field/near-field offset PERSISTENCE of the step itself (monopole vs dipole discrimination). Never computed in this repo.",
+      "expected_dti_gain": "+0.003..+0.015 over the T0 baseline (false-positive removal in basin interiors)",
+      "implementation_cost": "low-medium (map_coordinates sampling along gradient direction)",
+      "new_external_data_needed": null,
+      "validated_this_session": "E2 arm T1_persistent_step in evidence/h61t_holdout.json"
+    },
+    {
+      "id": "H61-T5",
+      "rank": 3,
+      "title": "Upward-continuation persistence: deep steps survive continuation, shallow mimics decay",
+      "layers": ["band 13 iso_grav_anom (Fourier upward-continued to +500/+1000/+2000 m)"],
+      "physical_signature": "Continue the isostatic residual by e^{-|k| dz}; recompute HGM maxima at each level; keep steps whose normalized HGM persists at dz >= 1 km (deep source). Shallow alluvial density variations decay exponentially with continuation height; basement steps of regional extent do not.",
+      "why_off_catalogue": "Faults with > 1 km of fill above them are invisible to any surface mapping (the catalogue), yet their long-wavelength gravity signature survives continuation. Persistence across continuation height is the classic depth-separation test (Blakely, Potential Techniques in Gravity and Magnetic Analysis).",
+      "differs_from_existing": "Earlier multi-scale tests (h61m.persistent_steps) smoothed the INVERTED depth surface; this continues the GRAVITY FIELD itself, which is the physically correct depth/wavelength separation. The h16-continuation raster (GEMSDOE10, 0.0461) continued magnetic data in a different lane's construction; no gravity-continuation step field exists in the registry.",
+      "expected_dti_gain": "+0.005..+0.02 over T0",
+      "implementation_cost": "low-medium (FFT chain; already have wavenumber helpers in gems61.buried)",
+      "new_external_data_needed": null,
+      "validated_this_session": null,
+      "note": "not run this session: budget cap of 3 experiments reached with E1-E3"
+    },
+    {
+      "id": "H61-T3",
+      "rank": 4,
+      "title": "Conductivity-edge coincidence inside the gravity-step corridor",
+      "layers": ["band 17 cond_surf", "lane corridor from band-13 inversion"],
+      "physical_signature": "HGM maxima of log10 conductivity, gated to lie within the +/-1 km gravity-step corridor; emit on the coincidence.",
+      "why_off_catalogue": "Fault damage zones channel geothermal fluids and produce linear conductivity edges under cover; an intrabasement density contact has no reason to make one. Buried, fluid-bearing range fronts are exactly the population the catalogue misses.",
+      "differs_from_existing": "cond_surf entered only as a habitat covariate (logistic weight +0.069, evidence/h61m_holdout.json); never as a lane edge detector.",
+      "expected_dti_gain": "+0..+0.015 over T0 (coupling unknown)",
+      "implementation_cost": "low",
+      "new_external_data_needed": null,
+      "validated_this_session": null,
+      "note": "kept as a GATE on gravity steps (not a standalone locator) to stay inside the lane paragraph; budget cap reached this session"
+    },
+    {
+      "id": "H61-T4",
+      "rank": 5,
+      "title": "Geodetic strain-rate gate on basement steps",
+      "layers": ["bands 4/7/8 (geodetic second invariant, shear rate, dilatation rate)", "lane step field"],
+      "physical_signature": "Rank gravity steps by strain-rate quantile; emit on steps in the top strain quartile. Actively loading blind faults concentrate geodetic strain; static density contacts do not.",
+      "why_off_catalogue": "Creeping/locking blind faults load the surface strain field even with zero mapped trace; the catalogue is blind to them by definition.",
+      "differs_from_existing": "bands 4/7/8 entered only as habitat covariates (band07 shear-rate carries the second-largest positive logistic weight, +0.89); never used as a gate on the lane's steps.",
+      "expected_dti_gain": "+0..+0.02 over T0, but HIGH lane-drift risk",
+      "implementation_cost": "low",
+      "new_external_data_needed": null,
+      "validated_this_session": null,
+      "note": "ranked last: using geodetic strain as the PRIMARY locator is another lane's paragraph; acceptable only as a secondary gate on gravity steps, and only after E1-E3 results are known"
+    }
+  ],
+  "ranking_rule": "expected DTI improvement divided by implementation cost, with lane-drift risk as a penalty",
+  "selection": "Ranks 1 and 2 validated this session as arms T2_consensus (E3) and T1_persistent_step (E2), with T0_steps_basin (E1) as the shared baseline. Protocol budget: 3 experiments.",
+  "sources": [
+    {"name": "Parker (1973)", "link": "https://doi.org/10.1111/j.1365-246X.1973.tb02307.x"},
+    {"name": "Oldenburg (1974)", "link": "https://doi.org/10.1190/1.1440444"},
+    {"name": "Blakely & Jachens (1991), GSA Bulletin 103:795-803", "link": "https://doi.org/10.1130/0016-7606(1991)103<0795:RAOTBA>2.3.CO;2"},
+    {"name": "Blakely & Simpson (1986), Geophysics 51:1494-1498", "link": "https://doi.org/10.1190/1.1442197"},
+    {"name": "Saltus & Jachens (1995), USGS GP-1012", "link": "https://doi.org/10.3133/gp1012"},
+    {"name": "Blakely (1996), Potential Techniques in Gravity and Magnetic Analysis (upward continuation)", "link": "https://doi.org/10.1017/CBO9780511549816"}
+  ]
+}

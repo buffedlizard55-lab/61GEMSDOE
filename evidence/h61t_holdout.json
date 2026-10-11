@@ -1,0 +1,520 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "instruments": {
+    "E2_step_persistence": {
+      "detrend": "local plane fit +/-1 km window",
+      "near_px": 2.0,
+      "far_px": 8.0,
+      "persist_min": 0.6,
+      "min_near_m": 40.0,
+      "qualified_px": 558,
+      "steps_px": 22316,
+      "qualified_fraction": 0.02500448108980104
+    },
+    "E3_consensus": {
+      "band15_steps_px": 47716,
+      "consensus_union_px": 6611,
+      "corridor_px": 5,
+      "note": "band 15 HGM steps (throw >= 80 m) within +/-5 px of the lane-inversion steps, and vice versa"
+    }
+  },
+  "results": [
+    {
+      "name": "CONTROL random lines @ 20000",
+      "kind": "lines",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.018746737352983038,
+      "tp": 490.4766896145605,
+      "fp": 39762.0703125,
+      "fn": 22150.52331038544,
+      "n_emitted": 40000,
+      "coverage": 0.021663207880153725,
+      "ci95_bootstrap_cells": [
+        0.01656799034664465,
+        0.020547036328684026
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 162,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 104,
+      "basin_recovery_rate": 0.05247225025227043,
+      "basin_recovery_ci95": [
+        0.043492812742989315,
+        0.06318310435066844
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 40000",
+      "kind": "lines",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0305615969262424,
+      "tp": 1045.7723079074135,
+      "fp": 79482.77734375,
+      "fn": 21595.227692092583,
+      "n_emitted": 80000,
+      "coverage": 0.046189316192191764,
+      "ci95_bootstrap_cells": [
+        0.027221754043887787,
+        0.03375903558825798
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 312,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 187,
+      "basin_recovery_rate": 0.09434914228052473,
+      "basin_recovery_ci95": [
+        0.08225334615526723,
+        0.10801433968836392
+      ]
+    },
+    {
+      "name": "CONTROL random dots anywhere @ 40000",
+      "kind": "dots",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.036434580324983035,
+      "tp": 1248.1096534545381,
+      "fp": 79468.8056640625,
+      "fn": 21392.89034654546,
+      "n_emitted": 80000,
+      "coverage": 0.055126083364451135,
+      "ci95_bootstrap_cells": [
+        0.03400785653426446,
+        0.03859828140498624
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 373,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 232,
+      "basin_recovery_rate": 0.1170534813319879,
+      "basin_recovery_ci95": [
+        0.10363533400203843,
+        0.131953190320494
+      ]
+    },
+    {
+      "name": "T0_steps_basin @ 20000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0067812819189520665,
+      "tp": 133.79974179694617,
+      "fp": 7955.923400878906,
+      "fn": 22507.200258203055,
+      "n_emitted": 8048,
+      "coverage": 0.005909621562516946,
+      "ci95_bootstrap_cells": [
+        0.004953789069907574,
+        0.008751251280421762
+      ],
+      "n_emitted_per_draw": 4024.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 43,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 36,
+      "basin_recovery_rate": 0.018163471241170535,
+      "basin_recovery_ci95": [
+        0.013148579427175674,
+        0.02504251507614243
+      ]
+    },
+    {
+      "name": "T0_steps_basin @ 20000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.005126712321793442,
+      "tp": 100.9013889591927,
+      "fp": 7742.5989990234375,
+      "fn": 22540.09861104081,
+      "n_emitted": 7809,
+      "coverage": 0.004456578285375766,
+      "ci95_bootstrap_cells": [
+        0.0033677730821773896,
+        0.006798289157122783
+      ],
+      "n_emitted_per_draw": 3904.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 36,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 30,
+      "basin_recovery_rate": 0.015136226034308779,
+      "basin_recovery_ci95": [
+        0.010622882546691614,
+        0.021525433492772993
+      ]
+    },
+    {
+      "name": "T0_steps_basin @ 40000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0067812819189520665,
+      "tp": 133.79974179694617,
+      "fp": 7955.923400878906,
+      "fn": 22507.200258203055,
+      "n_emitted": 8048,
+      "coverage": 0.005909621562516946,
+      "ci95_bootstrap_cells": [
+        0.004953789069907574,
+        0.008751251280421762
+      ],
+      "n_emitted_per_draw": 4024.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 43,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 36,
+      "basin_recovery_rate": 0.018163471241170535,
+      "basin_recovery_ci95": [
+        0.013148579427175674,
+        0.02504251507614243
+      ]
+    },
+    {
+      "name": "T0_steps_basin @ 40000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.005126712321793442,
+      "tp": 100.9013889591927,
+      "fp": 7742.5989990234375,
+      "fn": 22540.09861104081,
+      "n_emitted": 7809,
+      "coverage": 0.004456578285375766,
+      "ci95_bootstrap_cells": [
+        0.0033677730821773896,
+        0.006798289157122783
+      ],
+      "n_emitted_per_draw": 3904.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 36,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 30,
+      "basin_recovery_rate": 0.015136226034308779,
+      "basin_recovery_ci95": [
+        0.010622882546691614,
+        0.021525433492772993
+      ]
+    },
+    {
+      "name": "T1_persistent_step @ 20000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007133455067352792,
+      "tp": 12.957003265169348,
+      "fp": 241.60947561264038,
+      "fn": 22628.042996734832,
+      "n_emitted": 250,
+      "coverage": 0.000572280520523358,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0014739963362356378
+      ],
+      "n_emitted_per_draw": 125.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.0019344237201971146
+      ]
+    },
+    {
+      "name": "T1_persistent_step @ 20000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0006139981869672462,
+      "tp": 11.152265411044983,
+      "fp": 241.60947561264038,
+      "fn": 22629.847734588955,
+      "n_emitted": 249,
+      "coverage": 0.0004925694718009356,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0012712305320683867
+      ],
+      "n_emitted_per_draw": 124.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.0019344237201971146
+      ]
+    },
+    {
+      "name": "T1_persistent_step @ 40000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007133455067352792,
+      "tp": 12.957003265169348,
+      "fp": 241.60947561264038,
+      "fn": 22628.042996734832,
+      "n_emitted": 250,
+      "coverage": 0.000572280520523358,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0014739963362356378
+      ],
+      "n_emitted_per_draw": 125.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.0019344237201971146
+      ]
+    },
+    {
+      "name": "T1_persistent_step @ 40000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0006139981869672462,
+      "tp": 11.152265411044983,
+      "fp": 241.60947561264038,
+      "fn": 22629.847734588955,
+      "n_emitted": 249,
+      "coverage": 0.0004925694718009356,
+      "ci95_bootstrap_cells": [
+        0.0,
+        0.0012712305320683867
+      ],
+      "n_emitted_per_draw": 124.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 0,
+      "basin_recovery_rate": 0.0,
+      "basin_recovery_ci95": [
+        0.0,
+        0.0019344237201971146
+      ]
+    },
+    {
+      "name": "T2_consensus @ 20000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.002083739109527799,
+      "tp": 38.946362719857454,
+      "fp": 2850.1220703125,
+      "fn": 22602.05363728014,
+      "n_emitted": 2877,
+      "coverage": 0.0017201697239458266,
+      "ci95_bootstrap_cells": [
+        0.0008678099490482794,
+        0.0036585350920969708
+      ],
+      "n_emitted_per_draw": 1438.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 13,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 12,
+      "basin_recovery_rate": 0.006054490413723511,
+      "basin_recovery_ci95": [
+        0.0034668250638709565,
+        0.010553155584033153
+      ]
+    },
+    {
+      "name": "T2_consensus @ 20000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.001896809539185337,
+      "tp": 35.42214904706148,
+      "fp": 2773.550506591797,
+      "fn": 22605.57785095294,
+      "n_emitted": 2796,
+      "coverage": 0.001564513451131199,
+      "ci95_bootstrap_cells": [
+        0.0007596591889976571,
+        0.00337689448628637
+      ],
+      "n_emitted_per_draw": 1398.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 11,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 10,
+      "basin_recovery_rate": 0.005045408678102927,
+      "basin_recovery_ci95": [
+        0.002742886747031559,
+        0.009262834412921386
+      ]
+    },
+    {
+      "name": "T2_consensus @ 40000 (prune 2px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.002083739109527799,
+      "tp": 38.946362719857454,
+      "fp": 2850.1220703125,
+      "fn": 22602.05363728014,
+      "n_emitted": 2877,
+      "coverage": 0.0017201697239458266,
+      "ci95_bootstrap_cells": [
+        0.0008678099490482794,
+        0.0036585350920969708
+      ],
+      "n_emitted_per_draw": 1438.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 13,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 12,
+      "basin_recovery_rate": 0.006054490413723511,
+      "basin_recovery_ci95": [
+        0.0034668250638709565,
+        0.010553155584033153
+      ]
+    },
+    {
+      "name": "T2_consensus @ 40000 (prune 3px)",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.001896809539185337,
+      "tp": 35.42214904706148,
+      "fp": 2773.550506591797,
+      "fn": 22605.57785095294,
+      "n_emitted": 2796,
+      "coverage": 0.001564513451131199,
+      "ci95_bootstrap_cells": [
+        0.0007596591889976571,
+        0.00337689448628637
+      ],
+      "n_emitted_per_draw": 1398.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 11,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 10,
+      "basin_recovery_rate": 0.005045408678102927,
+      "basin_recovery_ci95": [
+        0.002742886747031559,
+        0.009262834412921386
+      ]
+    }
+  ],
+  "best_candidate": "T0_steps_basin @ 20000 (prune 2px)",
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.5161101556633982,
+    "worst_feature": "band 15 depth",
+    "passed": true,
+    "per_feature": {
+      "corridor indicator": {
+        "auc": 0.5096650425389779,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "step persistence (E2)": {
+        "auc": 0.5003754818415707,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "consensus indicator (E3)": {
+        "auc": 0.4999411022867806,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "inverted depth (200 m)": {
+        "auc": 0.5054025825659202,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "step throw": {
+        "auc": 0.5000217255200742,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 15 depth": {
+        "auc": 0.5161101556633982,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 13 gravity": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "note": "HOLDOUT-DTI is an evaluator-version index on withheld catalogue traces; it is not a competition score. No arm trains on the catalogue: every score field is a catalogue-free physics construction, pruned only against the visible catalogue of its own cell, per parallel-run protocol rule 2.",
+  "elapsed_s": 366.2,
+  "equal_emission_controls": {
+    "matched_to": "T0_steps_basin @ 20000 (prune 2px) (n_emitted_per_draw=4024.0)",
+    "t0_segments_recovered_basin_interior": 36,
+    "rows": [
+      {
+        "name": "CONTROL random lines @ 4024 (equal-emission)",
+        "budget": 4024,
+        "pooled_dti": 0.005195804335225403,
+        "tp": 102.52683573016641,
+        "fp": 7996.576232910156,
+        "fn": 22538.47316426983,
+        "n_emitted": 8048,
+        "coverage": 0.004528370466417845,
+        "ci95_bootstrap_cells": [
+          0.0037092980535212102,
+          0.006477390136635369
+        ],
+        "n_emitted_per_draw": 4024.0,
+        "segments_withheld_basin_interior": 1982,
+        "segments_recovered_basin_interior": 23
+      },
+      {
+        "name": "CONTROL random dots @ 4024 (equal-emission)",
+        "budget": 4024,
+        "pooled_dti": 0.008233398192533459,
+        "tp": 162.5408331664764,
+        "fp": 7981.6895751953125,
+        "fn": 22478.459166833523,
+        "n_emitted": 8048,
+        "coverage": 0.0071790483267733934,
+        "ci95_bootstrap_cells": [
+          0.006406531773817148,
+          0.009695930577593662
+        ],
+        "n_emitted_per_draw": 4024.0,
+        "segments_withheld_basin_interior": 1982,
+        "segments_recovered_basin_interior": 26
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "file": "gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif",
+  "sha256": "717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d",
+  "bytes": 69096,
+  "submission_name": "gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros",
+  "note": "H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED",
+  "note_chars": 113,
+  "validator": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches_template": true,
+    "nodata_unset_or_nan": true,
+    "in_footprint_all_finite": true,
+    "in_footprint_no_nan": true,
+    "in_footprint_no_inf": true,
+    "in_footprint_no_sentinel": true,
+    "in_footprint_range_0_1": true,
+    "outside_footprint_zero": true,
+    "zero_on_catalogue": true,
+    "nonempty": true,
+    "zero_dots_on_mapped_catalogue": true,
+    "transform_matches": true,
+    "transform_matches_sample_submission": true,
+    "no_nan_anywhere": true,
+    "no_inf_anywhere": true,
+    "no_sentinel_values": true,
+    "no_float32_sentinel": true,
+    "range_0_1_guaranteed": true,
+    "min_ge_0": true,
+    "max_le_1": true,
+    "in_footprint_range_0_1_legacy": true,
+    "whole_raster_all_finite": true,
+    "whole_raster_range_0_1": true
+  },
+  "template_report": {
+    "ok": true,
+    "problems": [],
+    "sha256": "717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d",
+    "bytes": 69096,
+    "shape": [
+      3730,
+      3292
+    ],
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "n_nonzero": 4583,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0,
+    "path": "/home/user/61GEMSDOE/out/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif"
+  },
+  "zip_file": "gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip",
+  "zip_sha256": "2cc332c0482e66be24278d85a24f5f9bcfa78e36e889e3113cd4491718f5e4f9",
+  "approved_for_weekly_slot": false,
+  "promoted": false,
+  "submission_slots_used": 0,
+  "status": "locally validated; verdict negative on holdout (see evidence/h61t_run_card.json); not slot approval",
+  "metadata": {
+    "arm": "T0_steps_basin",
+    "arm_description": "Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth (measured throw >= 80 m), basin interior, ranked by throw",
+    "lane": "buried structures from gravity inversion",
+    "budget": 20000,
+    "prune_px": 2.0,
+    "tile_px": 3,
+    "n_dots": 4583,
+    "holdout": {
+      "dti": 0.0067812819189520665,
+      "ci95": [
+        0.004953789069907574,
+        0.008751251280421762
+      ],
+      "random_lines": 0.018746737352983038,
+      "beats_random_lines": false,
+      "segments_withheld_basin_interior": 1982,
+      "segments_recovered_basin_interior": 36,
+      "basin_recovery_ci95": [
+        0.013148579427175674,
+        0.02504251507614243
+      ],
+      "random_lines_segments_recovered_basin_interior": 104,
+      "n_withheld_truth_px": 22641,
+      "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
+    }
+  }
+}

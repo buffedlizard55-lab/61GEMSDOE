@@ -14,94 +14,96 @@ th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim
 .tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
 .small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
 </style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="h61t.html">H61-T session</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
 <div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file:
- <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to download and upload</span>
- · <span style="color:var(--warn)">HOLDOUT-DTI 0.0606 – above our random baseline, below our best live file – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; every other cell 0.0),
-float32, EPSG:32611, 3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>,
-no NaN/Inf anywhere, min 0 / max 1 (<a href="verify.html">validator receipt</a>: 19 checks, all passed).
-Uniqueness against 28 earlier rasters: worst Spearman
-+0.1961 (limit 0.9), worst one-sided 3 px dot overlap
-0.431 (limit 0.7; the one
-reference denser than ours is gated on Jaccard instead — worst
-0.008 against a limit of 0.5).
-Verdict <b>UNIQUE</b>.</p>
-<p class="small"><b>Naming (IR-61-NAME-01).</b> Two parallel lane sessions independently
-labelled their work "H61-M". The gravity + magnetic conjunction construction merged from PR #21 owns
-<code>src/gems61/h61m.py</code> and <code>scripts/run_h61m.py</code>; this out-of-fold logistic habitat
-model owns the <code>h61mh</code> (H61-M habitat) namespace. Both bodies of work are on
-<code>main</code>. Four other lane files are also merged and all are negative for a slot:
-<code>61gemsdoe-basement-step-ribbon-20261011T054408Z</code> (0.045563 headline / 0.002715 shipped file
-re-measured), <code>gems61-h61x-x3c-coarse-corridor-10128dots</code> (0.0085, below random lines),
-<code>gems61-h61l-relief-any-corr10-40000dots</code> (0.0443) and
-<code>gems61-h61m-gravmag-corridor-ribbon-40000dots</code> (no segment holdout recorded).</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0606
-(95 % CI 0.0494–0.0727; 22,641 withheld
-positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0314.
-Previous session's best lane construction (H61-G X2): 0.0465.
-Withheld basin-interior segments recovered:
-<b>353 of 1982</b> (95 % CI
-16.2–19.6 %) against
-<b>213/1982 (CONTROL random lines @ 40000)</b> for random lines at the same budget. Leakage canary worst AUC
-0.626 (limit 0.90) — no leakage.
-But the spatially blocked leave-one-quadrant-out test puts every locator we have at the random
-baseline (No locator generalises across space: all four sit at 0.01-0.07 DTI and 0.56-0.59 mean canary AUC, i.e. at or just above the random baseline. The lane&#x27;s corridor x slope locator has the highest and most consistent blocked AUC (0.590) but not the highest blocked DTI.), so this file is an honest
-<b>negative result</b>, not a slot candidate.</p>
-<p><a class="btn" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif" download>⬇ Download gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif (127 kB) — this is the file to submit</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip" download>zip (single TIFF)</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json">format receipt (JSON)</a>
-<a class="btn sec" href="executive-summary.html">How to submit, step by step</a></p>
-<p class="small">sha256 <code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code> · submission name <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros</code> ·
-note (140/140 chars): <code>H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED</code> ·
-median dot distance to the mapped catalogue 19.8 px
-(1985 m); the group's best scorer (<code>h33-h33-2-b2</code>, 0.2778) sits at 19.6 px, and the nine rasters scored at or above 0.20 sit between 14.1 and 19.6 px.</p>
+<h2 style="margin:.2em 0;border:0">Newest file (session H61-T, 2026-10-11):
+<span style="color:var(--ok)">FORMAT-VALID and UNIQUE &mdash; OK to download and upload</span>
+&middot; <span style="color:var(--warn)">HOLDOUT-DTI 0.0068 &mdash; below random lines &mdash; NOT recommended for a weekly slot</span></h2>
+<p><b>What it is:</b>
+<code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif</code> &mdash;
+4,583 single-pixel dots (value 1.0; every other cell 0.0), float32, EPSG:32611, 3730 &times; 3292,
+100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, values in [0, 1]
+(<a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">validator
+receipt written by the fail-closed writer on the exact shipped bytes</a>, all checks passed).
+Uniqueness gate: <b>UNIQUE</b> against every earlier raster &mdash; all 748 competition-grid rasters of the
+62 sibling repositories (complete scan, 0 errors) plus every raster published in this repository &mdash;
+surface Spearman and 3 px dot-overlap legs, limits 0.90 / 0.70
+(<code>evidence/h61t_uniqueness.json</code>).</p>
+<p><b>What we measured (all HOLDOUT-DTI; nothing ORGANIZER-CONFIRMED):</b>
+0.0068 (95 % CI 0.0050&ndash;0.0088; 22,641 withheld positive px; evaluator
+<code>gems61.holdout_segmented v2</code>, seeds 20+21, &alpha; 0.2 / &beta; 0.8, 300 m kernel) against
+0.0187 for random lines at the same 20 k budget. The step field cannot emit more than its own 4.5 k-dot
+set; at that exact dot count it recovers <b>36/1,982</b> withheld basin-interior segments vs <b>23/1,982</b>
+for random lines and <b>26/1,982</b> for random dots &mdash; a real 1.6&times; per-dot enrichment that is far
+too small to win the metric. Leakage canary worst AUC 0.516 (limit 0.90) &mdash; clean. Run-card verdict:
+<b>negative</b>. The two new in-lane discriminators (E2 monopole step persistence; E3 band-13 &times;
+band-15 consensus) were also measured and both sit below random: see the
+<a href="h61t.html">H61-T session page</a>.</p>
+<p><a class="btn" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download>&#11015; Download gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif (68 kB) &mdash; the file this session generated</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip (single TIFF)</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">format receipt (JSON)</a>
+<a class="btn sec" href="../evidence/h61t_run_card.json">run card (JSON)</a></p>
+<p class="small">sha256 <code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code> (69,096 bytes) &middot;
+submission name <code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros</code> &middot;
+note (113/140 chars): <code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code> &middot;
+every dot &gt; 2 px from the mapped catalogue (min 2.24 px, median 21.2 px).</p>
 </div>
 
 <h2>Decision in one line</h2>
-<p>The upload is <b>safe</b>: the format is pinned to the organiser's sample grid, every one of the
-40,000 positive cells is exactly 1.0, every other cell is 0.0, and all
-19 validator checks pass. The expected score is <b>not</b> competitive with our
-best live file: HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) against
-0.0314 for random lines, and the spatially blocked retest puts it at the
-random baseline. Spend a weekly slot on it only to obtain an ORGANIZER-CONFIRMED number for the
-gravity-inversion lane itself.</p>
+<p>The upload is <b>format-safe</b> and <b>unique</b>; it is <b>not</b> score-competitive on our own
+instrument (HOLDOUT-DTI 0.0068, below random lines). Under protocol rule 6 this session does not pick
+submissions: promotion to a weekly slot is a separate selector step. The strongest file the repo has
+produced remains the previous session's habitat model
+(<code>gems61-h61m-invfeat-habitat-40000dots-&hellip;-zeros.tif</code>, HOLDOUT-DTI 0.0606, itself
+LOQO-negative and not slot-recommended). If the selector wants an ORGANIZER-CONFIRMED number for the
+gravity-inversion lane, the H61-T file is the honest, cheapest ticket &mdash; nothing more.</p>
 
 <h2>How to submit (step by step)</h2>
 <ol>
-<li>Download <a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif" download><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code></a> (127 kB), or the
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip" download>zip</a> which contains exactly that one TIFF. Verify the digest if you like:
-<code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code>.</li>
+<li>Download <a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download><code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif</code></a> (68 kB), or the
+<a href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip</a>
+which contains exactly that one TIFF. Verify the digest if you like:
+<code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code>.</li>
 <li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
 while logged in to the competition account.</li>
 <li>In <b>File to submit</b>, choose the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the
 zip is only a convenience copy). The format the portal expects is a single-band 32-bit float GeoTIFF in
-EPSG:32611, 3730 × 3292, 100 m, values in [0, 1] — exactly what the validator receipt records.</li>
-<li>In <b>Note (optional)</b>, paste the ≤ 140-character note (140 characters here):
-<code>H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED</code></li>
+EPSG:32611, 3730 &times; 3292, 100 m, values in [0, 1] &mdash; exactly what the validator receipt records.</li>
+<li>In <b>Note (optional)</b>, paste the &le; 140-character note (117 characters here):
+<code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code></li>
 <li>Submit. The note and the submission name are what let us tell this file apart later.</li>
-<li>When the platform returns a score, copy it into <code>evidence/h61m_run_card.json</code> →
-<code>organizer_confirmed_score</code> and rebuild the site. Until then every number on this site is
-HOLDOUT-DTI or LOQO-DTI, never a projection of a live score.</li>
+<li>When the platform returns a score, copy it into <code>evidence/h61t_run_card.json</code> &rarr;
+<code>submission.organizer_confirmed_score</code> and rebuild the site. Until then every number on this
+site is HOLDOUT-DTI, never a projection of a live score.</li>
 </ol>
 
-<h2>Why the "Predicted values must be in range [0, 1]" error cannot happen with this file</h2>
+<h2>Why the &ldquo;Predicted values must be in range [0, 1]&rdquo; error cannot happen with this file</h2>
 <p>That error has two causes, both engineered out here and both re-checked against the bytes on disk:
 (1) the GeoDAWN feature raster's float32 sentinel <code>-3.4028234663852886e+38</code> leaking into the
-prediction, and (2) a footprint mask derived from a feature band leaving 3,061 scored pixels as NaN.
+prediction, and (2) a footprint mask derived from a feature band leaving scored pixels as NaN.
 This file is written by <code>gems61.submission_writer.write_submission</code>, which refuses to write
 anything that is not already finite and inside [0, 1], then re-reads the TIFF from disk and aborts unless
-every one of the 12,279,160 cells passes. The receipt is in
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json"><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json</code></a>.</p>
+every one of the 12,279,160 cells passes. In practice this file's values are exactly {0.0, 1.0}.</p>
 
 <h2>What the file is, physically</h2>
-<p>40,000 binary dots on the 100 m competition grid, one per 3 × 3 tile (the spacing at which two dots
-stop duplicating each other's 300 m kernel credit), ranked by an out-of-fold logistic habitat model
-trained on the visible mapped faults over 28 catalogue-independent channels, and pruned so that no dot
-lies within 3 px (300 m) of a mapped trace. Median distance from a dot to the nearest mapped fault:
-19.8 px (1985 m);
-0.0 % of dots are within 3 px of one.</p>
+<p>4,583 binary dots on the 100 m competition grid, one per 3 &times; 3 tile, at the Blakely&ndash;Simpson
+maxima of |grad depth| of the 200 m Parker/Oldenburg inversion of the isostatic residual (band 13),
+restricted to steps with a measured throw &ge; 80 m that sit in the basin interior
+(depth &gt; 100 m, the buried domain), ranked by throw, and pruned so that no dot lies within 2 px
+(200 m) of a mapped trace. This is the lane paragraph's construction, emitted as dots because the metric
+charges 0.2 per extra positive pixel (ribbons were re-measured this lane and cost ~2&times; more than they
+return). The same construction also exists as multi-pixel ribbons in earlier lane files
+(<code>gems61-h61m-gravmag-corridor-ribbon-&hellip;</code>, <code>61gemsdoe-basement-step-ribbon-&hellip;</code>)
+kept for the audit trail.</p>
+
+<h2>Previous session's file (kept, also NOT slot-recommended)</h2>
+<p class="small"><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code>:
+40,000 dots, HOLDOUT-DTI 0.0606 (CI 0.0494&ndash;0.0727) vs random lines 0.0314 &mdash; the best holdout
+number this repo has produced &mdash; but leave-one-quadrant-out at the random baseline, so its own run card
+also says <b>negative for a slot</b>.
+<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif">tif</a> &middot;
+<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip">zip</a> &middot;
+<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json">receipt</a>.</p>
 
 </div></body></html>

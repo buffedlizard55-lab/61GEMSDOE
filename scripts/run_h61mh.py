@@ -29,7 +29,9 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from gems61 import buried as B                       # noqa: E402
 from gems61 import grid as gridmod                   # noqa: E402
-from gems61 import h61m as M                         # noqa: E402
+# IR-61-NAME-01 fix: the habitat model (build_feature_stack / train_habitat /
+# predict_habitat / TILE_PX) lives in gems61.h61mh, not gems61.h61m.
+from gems61 import h61mh as M                        # noqa: E402
 from gems61 import holdout_segmented as holdoutmod   # noqa: E402
 from gems61 import submission_writer                 # noqa: E402
 from gems61.metric import ALPHA, BETA, EPS, kernel   # noqa: E402

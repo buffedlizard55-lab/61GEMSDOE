@@ -63,6 +63,41 @@ direct check of the data tab was possible.</td></tr>
 codeload.github.com, registry.npmjs.org, pypi.org and files.pythonhosted.org. usgs.gov,
 drivendata.org and the 3DEP S3 endpoint all fail, so no new external raster was fetched this session;
 the one named obtainable source (3DEP 1 m DEM) is listed as a next step, not claimed as used.</td></tr>
+<tr><td>IR-61-MERGE-01</td><td>high</td><td><b>Session arena/f1bed08d (H61-T).</b> After the parallel-lane
+merges, <code>src/gems61/h61mh.py</code> carried a bare &ldquo;NOTE ON NAMING&rdquo; text block outside its
+docstring &mdash; a SyntaxError that made the module (the entire habitat pipeline of the previous session)
+unimportable on <code>main</code> &mdash; and <code>scripts/run_h61mh.py</code> imported
+<code>gems61.h61m</code> while calling <code>build_feature_stack</code>/<code>train_habitat</code> which
+live in <code>gems61.h61mh</code>. Both fixed once in the template; all 64 tests pass and every module imports.</td></tr>
+<tr><td>IR-61-OFFCAT-01</td><td>medium</td><td><code>src/gems61/offcatalogue.py</code> imported
+<code>DOMAIN_ERODE</code>, <code>FOLD_NAMES</code> and <code>quadrant_ids</code> from
+<code>gems61.holdout</code>, which defines none of them; the module failed to import. Fixed to import
+from <code>gems61.holdout_segmented</code> (where they live). Flagged by the previous session's README,
+resolved this session.</td></tr>
+<tr><td>IR-61-FIT-01</td><td>medium</td><td><code>src/gems61/fitting.py</code> imported
+<code>Cell</code> and <code>HoldoutContext</code> from <code>gems61.holdout</code>; both live in
+<code>gems61.holdout_segmented</code>. Same defect class as IR-61-OFFCAT-01 (merge-time imports pointed
+at the wrong holdout module). Fixed.</td></tr>
+<tr><td>IR-61-DOTFILL-01</td><td>high</td><td><code>gems61.h61mh.dot_thin</code> treats any finite tile
+score &mdash; including 0 &mdash; as emit-eligible. An arm whose score field is zero-filled outside its
+emission set silently spends the remaining budget on arbitrary active pixels: measured on this session's
+T1 arm, 337 candidate pixels emitted n/draw = 40,000. Fixed in the H61-T driver by masking non-emission
+pixels to &minus;inf (the arm then emits at most its own set size). The shared <code>dot_thin</code>
+semantics are deliberately unchanged because parallel lanes depend on them; flagged for the consolidation pass.</td></tr>
+<tr><td>IR-61-E2NAN-01</td><td>medium</td><td>The NaN holes at the GeoDAWN survey rim fabricate
+far-field depth offsets whenever a sampling span crosses a hole in a zero/mean-filled surface (measured:
+offsets of hundreds of metres on pure regional dips). Fixed by diffusion-inpainting
+(<code>gems61.buried.inpaint_smooth</code>, multi-scale normalised convolution) the depth surface once
+before any directional measurement in H61-T.</td></tr>
+<tr><td>IR-61-DIPDOM-01</td><td>medium</td><td>Scientific finding: most of the lane's 22,316
+&ldquo;step&rdquo; pixels are regional-dip gradients, not fault scarps. After removing the local plane in a
+&plusmn;1 km window the median near-field offset at step pixels is ~3 m, and only 2.5 % of steps
+qualify as monopole-persistent (sign-keeping far/near offset ratio &ge; 0.6 with |near| &ge; 40 m).
+This is the mechanism behind the pure step field scoring at the random-lines level on the segmented
+holdout, and it explains the lane's repeated negative results better than any implementation defect.</td></tr>
+<tr><td>IR-61-README-01</td><td>low</td><td>The README stated that <code>scikit-learn</code> is missing
+from <code>requirements.txt</code>; it was present (the second pin block). The file did carry duplicate,
+partly conflicting pins (numpy listed twice); deduplicated this session and the stale README claim corrected.</td></tr>
 </table>
 
 </div></body></html>
