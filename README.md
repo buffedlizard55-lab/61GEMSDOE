@@ -5,7 +5,7 @@
 [Why 0.2778](https://buffedlizard55-lab.github.io/61GEMSDOE/docs/analysis.html) ·
 [Competition #306](https://www.drivendata.org/competitions/306/competition-doe-gems/)
 
-## Status of the newest file (read this first) — UPDATED 2026-10-11T05:20Z (arena/a7790b7f)
+## Status of the newest file (read this first) — UPDATED 2026-10-11T05:23Z (arena/a7790b7f + main H61-M merged)
 
 | question | answer |
 |---|---|
@@ -18,15 +18,17 @@
 - Submission name: `gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros`
 - Note (84/140 chars): `H61-L: lidar relief maxima inside GP-1012 corridor (any depth); 40000 dots; UNSCORED`
 - sha256 `685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9` (133,987 bytes); 40,000 single-pixel dots (value 1.0) at ≥3 px spacing, none within 2 px of mapped fault; median distance to catalogue 18.1 px; 6.6% within 3 px.
-- Previous primary `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif` (HOLDOUT-DTI 0.0465, sha256 fdbc7b…, 135 kB, note 133 chars) remains in `docs/downloads/` and is also FORMAT-VALID and UNIQUE — likewise negative for a slot, kept as diagnostic reference. Do not upload superseded early files (`gems61-lane-buried-step-…` 311k px near-blanket, `gems61-buried-…` etc., holdouts 0.0000–0.0089).
+- Second newest H61-M: [`gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif`](docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif) (55,301 px, 800 kB, sha256 94cbefd…, note 86 chars `H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED`) — also FORMAT-VALID and UNIQUE (merged from main PR #11).
+- Previous primaries `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif` (HOLDOUT-DTI 0.0465, 135 kB) and `gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif` (55,301 px, gravity×magnetic, 800 kB) remain in `docs/downloads/` and are also FORMAT-VALID and UNIQUE — likewise negative for a slot, kept as diagnostic references. Do not upload superseded early files (`gems61-lane-buried-step-…` 311k px near-blanket, `gems61-buried-…` etc., holdouts 0.0000–0.0089).
 
-## Candidate board — all gems61 files in `docs/downloads/` (five sessions merged, newest first)
+## Candidate board — all gems61 files in `docs/downloads/` (six sessions merged, newest first)
 
 Each row carries the verdict its own session recorded. The last column scores the *shipped file* on this session's evaluator (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all); 22,641 withheld px): every file is ≈ 0 there **by construction**, because all of them were pruned against the full catalogue (IR-61-INSTR-02); the only within-protocol numbers (construction re-emitted with visible-only pruning) exist for H61-G and H61-L. This board is not a slot decision — the selector step is separate — but it is the evidence a selector should read.
 
 | file | session / PR | positive px | its own session's verdict | shipped file on this evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
 | **`gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif`** | **H61-L, this session `arena/a7790b7f` (2026-10-11)** | **40,000** | **FORMAT-VALID + UNIQUE (69.8% overlap vs H61-G, rho 0.293; rho 0.011 vs registry); HOLDOUT-DTI 0.0443 (CI 0.0414–0.0478) vs random 0.0314 — below 0.1011 bar → negative for a slot** | **0.0443 (this file, visible-only)** / 0.0045 if scored pruned-against-full |
+| `gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif` | H61-M, main PR #11 (2026-10-11) | 55,301 | FORMAT-VALID + UNIQUE (rho 0.0018 vs external registry, 18.35% overlap); no segment-holdout on same evaluator — screen mean distance 31.5 px vs H61-L 18.1 px; expected negative | — (not on this evaluator) |
 | `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif` | H61-G, PR #9 (2026-10-11) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421–0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar → negative for a slot | 0.0045 (pruned-against-full artefact) / 0.0465 visible-only |
 | `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif` | e3, PR #3 | 40,000 | kept; superseded | 0.0000 |
 | `gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif` | H61-A, PR #5 | 25,285 | catalogue-frame holdout 0.0000 vs random 0.0089 → SUPERSEDED | 0.0000 |
@@ -37,7 +39,7 @@ Each row carries the verdict its own session recorded. The last column scores th
 
 The parallel sessions' own pages remain in `docs/` (`session-c.html`, `candidate-h62.html`, `instrument.html`, …) with a SUPERSEDED-context banner; their evidence files (`evidence/e4_*.json`, `e1_habitat_instrument.json`, `e2_candidate.json`, …) are kept untouched. Shared-tool duplication found while merging: `uniqueness.py` carried two shadowed copies of its protocol helpers (IR-61-MERGE-02, removed).
 
-## What this session found (H61-G + H61-L on arena/a7790b7f, 2026-10-11)
+## What this session found (H61-G + H61-L on arena/a7790b7f, 2026-10-11; H61-M gravity×magnetic merged from main)
 
 1. **The inversion works as specified.** Parker/Oldenburg (damped) on the isostatic residual, regional removed at 15 km, z0 500 m, drho -300 kg/m3, calibrated only on the GP-1012 statistic (~20% of basin area deeper than 1 km -> achieved 0.203); r = 0.738 against the organiser's own depth layer, which was never used in the fit. 8,999 HGM maxima -> 7,527 steps with >=80 m throw; 4,104 persistent over three scales (evidence/h61g_invert.json).
 2. **Pure basement steps do not locate faults to 300 m.** X1a step ribbons: HOLDOUT-DTI 0.0230 vs random lines 0.0314 at 40 k dots. Gravity fixes a step to kilometres; the metric pays within 300 m.
