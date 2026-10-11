@@ -9,16 +9,21 @@
 
 | question | answer |
 |---|---|
-| Is the file safe to download and upload? | **YES — FORMAT-VALID and UNIQUE.** 19 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside the footprint, zero dots on the mapped catalogue). Uniqueness verdict **UNIQUE** against 24 earlier rasters (worst Spearman +0.0153). |
-| Should it be given a weekly slot? | **NOT RECOMMENDED.** HOLDOUT-DTI 0.0465 (95 % CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0314. The unpruned base of our ORGANIZER-CONFIRMED 0.2778 scores 0.1011 on the same evaluator. Run-card verdict: **negative** — "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result". |
-| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI. |
+| Is the file safe to download and submit? | **YES — FORMAT-VALID and UNIQUE.** 19 validator checks pass (float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, min 0 / max 1, 0.0 outside the footprint, zero dots on the mapped catalogue). Uniqueness verdict **UNIQUE** against 28 earlier rasters (worst Spearman +0.1961 vs h61g, limit 0.90; worst one-sided 3 px overlap 0.431 vs h61g, limit 0.70; worst Jaccard 0.008 against the one dense reference, limit 0.50). |
+| Should it be given a weekly slot? | **NOT RECOMMENDED.** HOLDOUT-DTI 0.0606 (95 % CI 0.0494–0.0727; 22,641 withheld positive px; HOLDOUT-DTI (gems61.holdout_segmented v2, 22,641 withheld positive px, seeds 20+21, mode all, pooled alpha 0.2 beta 0.8 R 300 m)) beats random lines (0.0314) and the previous session's best lane construction (0.0465), but the spatially blocked leave-one-quadrant-out retest puts **every** locator we have at the random baseline (0.02–0.05 LOQO-DTI, 0.56–0.59 blocked canary AUC). Run-card verdict: **negative** — a valid, unique, honest negative result. |
+| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI or LOQO-DTI. |
 
-**[↓ Download the GeoTIFF](docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif)** · [zip](docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip) · [format receipt](docs/downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json) · [run card](evidence/h61g_run_card.json)
+**[↓ Download the GeoTIFF](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif)** ·
+[zip](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip) ·
+[format receipt](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json) ·
+[run card](evidence/h61m_run_card.json)
 
-- Submission name: `gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros`
-- Note (133/140 chars): `H61-G: GP-1012-calibrated gravity inversion -> basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED`
-- sha256 `fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077` (135,152 bytes); 40,000 single-pixel dots (value 1.0) at ≥ 3 px spacing, none within 2 px of a mapped fault; median distance to the catalogue 17.5 px.
-- Earlier files in `docs/downloads/` (`gems61-lane-buried-step-…`, `gems61-buried-basement-step-…`, `gems61-h61a-…`) are **SUPERSEDED** (their own holdouts were 0.0000–0.0089); they remain only as uniqueness references. Do not upload them.
+- Submission name: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros`
+- Note (140/140 chars): `H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED`
+- sha256 `4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179` (130,225 bytes); 40,000 single-pixel dots (value 1.0) at 3 px spacing, every dot more than 3 px from a mapped fault; median distance to the catalogue 19.8 px (1985 m) — the group's 0.2778 file sits at 19.6 px.
+- Withheld basin-interior segments recovered: **353 of 1982** (95 % CI 16.2–19.6 %) versus **213 of 1982** for random lines at the same budget (`evidence/h61m_holdout.json`) — a 1.6× recovery rate on the segments the lane is asked to find.
+
+Earlier files in `docs/downloads/` (`gems61-h61g-…`, `gems61-h61a-…`, `gems61-h61b-…`, `gems61-lane-buried-step-…`, `gems61c-…`) are **SUPERSEDED**; they remain only as uniqueness references. Do not upload them.
 
 ## Candidate board — all gems61 files in `docs/downloads/` (four parallel sessions merged on `main`)
 
@@ -26,6 +31,7 @@ Each row carries the verdict its own session recorded. The last column scores th
 
 | file | session / PR | positive px | its own session's verdict | shipped file on this evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
+| **`gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`** | this session (H61-M) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) vs random lines 0.0314 within protocol; LOQO-DTI at the random baseline → **negative for a slot** | 0.0606 |
 | `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif` | e3, PR #3 | 40,000 | kept; superseded | 0.0000 |
 | `gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif` | H61-A, PR #5 | 25,285 | catalogue-frame holdout 0.0000 vs random 0.0089 → SUPERSEDED | 0.0000 |
 | `gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif` | H61-B, PR #6 | 88,796 | format-valid + unique; no holdout number above random in its run card | 0.0000 |
@@ -47,6 +53,26 @@ The parallel sessions' own pages remain in `docs/` (`session-c.html`, `candidate
 
 The PhD-level answer to *why `h33-h33-2-b2` scored 0.2778 and whether we can beat it* is on [docs/analysis.html](docs/analysis.html); the ranked new hypotheses (H61-L lidar-in-corridor, H61-I piedmont belt, H61-H gravity × magnetic conjunction, H61-J source-depth filter, H61-K learned basin fusion) with layers, signature, catalogue-gap reason, difference from the repo, expected gain and cost are on [docs/hypotheses.html](docs/hypotheses.html) and in `evidence/h61g_hypotheses.json`.
 
+> H61-M **replaced** that list rather than renumbering it. Two of the five survive under new ids so that ids stay unique across sessions: H61-L (1 m lidar in corridor) → **H61-N**, now ranked first and unchanged in substance; H61-H (magnetic-edge conjunction) → **H61-P**. The other three (piedmont belt, source-depth filter, learned basin fusion) were dropped because this session's blocked measurements showed that adding more 100 m channels to a locator that does not generalise cannot help. Three new hypotheses were added in their place: H61-Q (geodetic strain), H61-R (seismicity nucleation) and H61-S (emission on disagreement between decorrelated locators). The authoritative list is `evidence/h61m_hypotheses.json`; the H61-G list is kept for the audit trail.
+
+## What this session found (H61-M)
+
+1. **The inversion works, at a finer grid.** Parker/Oldenburg (damped) on the isostatic residual, regional removed at 15 km, GP-1012-calibrated (≈ 20 % of basin area deeper than 1 km → achieved 0.198). Run at **200 m** as well as 400 m: the two agree at ρ = 0.999, the inverted surface correlates 0.745 with the organiser's own depth layer (never used in the fit) and anti-correlates with gravity at -0.833. 12,572 Blakely-Simpson maxima → 5,579 steps with ≥ 80 m throw.
+2. **The step field cannot place a dot to 300 m — confirmed, not assumed.** The corridor indicator's leakage-canary AUC against withheld faults is 0.510; a hard corridor gate *reduces* the score (0.0364–0.0409 gated vs 0.0606 ungated at the same budget). The lane's instruments are in the final model as features and carry small weight (corridor +0.194, inv_depth -0.172, euler_depth -0.053, step_throw -0.046).
+3. **An out-of-fold habitat model is the best locator we have.** 28 catalogue-independent channels, L2 logistic regression trained only on the *visible* faults of each holdout cell: HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) against 0.0314 for random lines and 0.0465 for H61-G's corridor × slope-ridge locator. Leakage canary worst AUC 0.626 (limit 0.90) — clean.
+4. **But nothing generalises across space (the decisive result).** Leave-one-quadrant-out — retrain with *no* training pixel inside the scored quadrant — puts logistic at 0.0395, gradient boosting at 0.0376, the single strongest band at 0.0206 and the lane's corridor × slope locator at 0.0315, all with mean blocked canary AUC 0.56–0.59 (range 0.518–0.618). The lane's corridor locator has the highest and most consistent blocked AUC (0.590).
+5. **A leakage finding (IR-61-LEAK-01).** A gradient-boosted version of the same model reached HOLDOUT-DTI 0.1670 and a canary AUC of 0.901 — above the protocol's 0.90 line. The LOQO retest shows the AUC falls to 0.518–0.618 across all 16 blocked retests, with no training pixel inside the scored quadrant: the skill was **adjacency to visible traces, not generalisation**. The shipped file therefore uses the logistic model.
+6. **Dots, not ribbons — re-confirmed at the new budget.** 3 × 3 ribbons score 0.0184 against 0.0409 for the same dots (256,096 emitted px vs 39,794): the metric charges 0.2 per extra positive pixel.
+7. **Reverse engineering of the group's scored rasters** (`evidence/registry_habitat.json`, 28 rasters): every high scorer is binary, sparse, carries zero dots on the catalogue and sits ~15–20 px from it; no single band separates the ≥ 0.20 scorers from the rest by more than 0.02 AUC, so their signal is in the conjunction.
+
+8. **A 12-row configuration sweep** (`evidence/h61m3_sweep.json`) confirms the ranking under the same
+   instrument: the best configuration is `S gbm prune2 tile4 @ 60000` at HOLDOUT-DTI 0.1693 — again the
+   gradient-boosted model, again leakage-flagged. The best *logistic* configuration measured anywhere
+   this session is 0.0546 (prune 3, no prior, `evidence/h61m2_holdout.json`) — below the ungated
+   0.0606 shipped here.
+
+The PhD-level answer to *why `h33-h33-2-b2` scored 0.2778 and whether we can beat it* is on [docs/analysis.html](docs/analysis.html); the ranked new hypotheses (H61-N lidar in corridor, H61-Q geodetic strain, H61-R seismicity, H61-P magnetic-edge conjunction, H61-S decorrelated ensemble) are on [docs/hypotheses.html](docs/hypotheses.html) and in `evidence/h61m_hypotheses.json`.
+
 ## Reproduce
 
 ```bash
@@ -61,7 +87,23 @@ PYTHONPATH=src .venv/bin/python scripts/build_site_h61g.py                      
 
 Checks run at the end of this session: `pytest -q tests` → 22 passed; `scripts/run_h61g.py unique` → UNIQUE; validator receipt all-pass; the site builder reads every number from JSON.
 
-## Session record (arena/c57b45ae, 2026-10-11)
+## Session record (arena/c57b45ae, 2026-10-11 — H61-G)
+
+- `src/gems61/h61g.py` — inversion, steps, corridor, slope-ridge locator, dot packing, controls, Wilson CI, AUC.
+- `scripts/run_h61g.py` — stages `invert | screen | holdout | final | unique | card | all`.
+- `evidence/h61g_invert.json`, `h61g_screen.json`, `h61g_holdout.json`, `h61g_final.json`, `h61g_uniqueness.json`, `h61g_run_card.json`, `h61g_hypotheses.json`, `h61g_irregularities.json`.
+
+## Session record (arena/2a87ed28, 2026-10-11 — H61-M)
+
+- `src/gems61/h61m.py` — 200 m and 400 m Parker/Oldenburg inversions, basement steps, Euler SI = 0 source depth, the 28-channel habitat stack (written channel-by-channel into a memmap because the sandbox has ~3.9 GB of RAM), the logistic habitat model, dot packing, controls, Wilson CI, AUC.
+- `scripts/run_h61m.py` — stages `features | holdout | final | unique | card`, with `--candidate / --prune / --budget / --tile` overrides.
+- `scripts/run_h61m2.py` — experiment 2 (model class, soft step prior).
+- `scripts/run_h61m3.py` — experiment 3 (leave-one-quadrant-out generalisation test; configuration sweep).
+- `scripts/run_h61m4.py` — experiment 4 (every locator through the same blocked test).
+- `scripts/registry_habitat.py` — reverse engineering of the group's scored rasters.
+- `scripts/h61m_card.py`, `scripts/build_site_h61m.py` — run card and site, both read every number from JSON.
+- `evidence/h61m_features.json`, `h61m_holdout.json`, `h61m2_holdout.json`, `h61m3_loqo.json`, `h61m3_sweep.json`, `h61m4_loqo.json`, `h61m_final.json`, `h61m_uniqueness.json`, `h61m_run_card.json`, `h61m_hypotheses.json`, `registry_habitat.json`.
+- Shared tools fixed in place (no private forks): `scripts/run_h61m.py` gained explicit `--prune/--budget/--tile` overrides so the live-metric and holdout-metric disagreement about the prune is stated rather than inherited.
 
 - `src/gems61/h61g.py` — inversion, steps, corridor, slope-ridge locator, dot packing, controls, Wilson CI, AUC.
 - `scripts/run_h61g.py` — stages `invert | screen | holdout | final | unique | card | all`.
@@ -70,7 +112,11 @@ Checks run at the end of this session: `pytest -q tests` → 22 passed; `scripts
 
 ## Irregularities (full list on [docs/irregularities.html](docs/irregularities.html))
 
-IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before this session (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt.
+IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before this session (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt ·
+**IR-61-LEAK-01** a gradient-boosted habitat model's 0.901 canary AUC was adjacency to visible traces, not skill (proved by the leave-one-quadrant-out retest) ·
+**IR-61-PRUNE-01** the holdout prefers a 2 px catalogue prune, the group's organizer-scored pair prefers 3 px — the shipped file follows the live evidence and reports the holdout cost ·
+**IR-61-BUDGET-01** the holdout prefers more dots monotonically, the live ladder prefers ~38–40 k — shipped at 40 k ·
+**IR-61-MEM-01** ~3.9 GB RAM: the 28-channel stack is streamed into a memmap and predictions are chunked.
 
 ## Core values
 
@@ -163,6 +209,8 @@ uniqueness-checked against every earlier raster.
 | leaderboard | https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/ |
 | official rules PDF | https://docs.nlr.gov/docs/fy26osti/96647.pdf |
 | reference solution | https://github.com/drivendataorg/gems-prize-reference-solution |
+| USGS GP-1012 (Saltus & Jachens 1995) basin-depth maps, the depth-scale calibration | https://pubs.usgs.gov/publication/gp1012 |
+| USGS 3DEP 1 m lidar (the named obtainable source, hypothesis H61-N) | https://www.usgs.gov/3d-elevation-program/about-3dep-products-services |
 | GeoDAWN airborne magnetic + radiometric surveys | https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and |
 | INGENIOUS (Great Basin conductivity / magnetotelluric project) | https://gbcge.org/current-projects/ingenious/ |
 | EPSG:32611 | https://epsg.io/32611 |

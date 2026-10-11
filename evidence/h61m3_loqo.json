@@ -1,0 +1,45 @@
+{
+  "evidence_class": "MEASURED (spatially blocked generalisation test)",
+  "question": "Is the GBM habitat model's 0.901 canary AUC skill or adjacency to the visible traces it was trained on?",
+  "method": "Leave-one-quadrant-out: retrain on the visible catalogue of the other three quadrants only, then score the fourth. No training pixel lies inside the scored quadrant.",
+  "rows": [
+    {
+      "quadrant": "NW",
+      "n_train_positive_px": 50823,
+      "train_auc": 0.9314348384537587,
+      "loqo_canary_auc": 0.5754153225806452,
+      "loqo_pooled_dti": 0.030684658952181688,
+      "loqo_coverage": 0.053431165266125964,
+      "basin_interior": "19/298"
+    },
+    {
+      "quadrant": "NE",
+      "n_train_positive_px": 48477,
+      "train_auc": 0.9365786511167745,
+      "loqo_canary_auc": 0.5248801243386243,
+      "loqo_pooled_dti": 0.014036993785554857,
+      "loqo_coverage": 0.02452641160401135,
+      "basin_interior": "4/338"
+    },
+    {
+      "quadrant": "SW",
+      "n_train_positive_px": 40454,
+      "train_auc": 0.947986988759885,
+      "loqo_canary_auc": 0.5306064432989691,
+      "loqo_pooled_dti": 0.03398622280837084,
+      "loqo_coverage": 0.047016027473411805,
+      "basin_interior": "58/692"
+    },
+    {
+      "quadrant": "SE",
+      "n_train_positive_px": 43210,
+      "train_auc": 0.9342570478282103,
+      "loqo_canary_auc": 0.6076764371349523,
+      "loqo_pooled_dti": 0.07184858446381835,
+      "loqo_coverage": 0.09696149772905227,
+      "basin_interior": "75/654"
+    }
+  ],
+  "worst_loqo_canary_auc": 0.6076764371349523,
+  "verdict": "ADJACENCY: AUC collapses without training data in the scored quadrant"
+}

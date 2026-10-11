@@ -12,13 +12,57 @@ table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{b
 th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
 .tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
 .tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
 .small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
 </style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html" class=active>Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
-<h1>Irregularities flagged in this session</h1><table><tr><th>ID</th><th>What was found</th><th>What was done</th></tr><tr><td><code>IR-61-MERGE-01</code></td><td>Merged main was broken: submission_writer imported assert_submittable, which PR #3&#x27;s validate.py did not define; tests could not import.</td><td>Fixed: validate.py now exposes the union API (validate, assert_submittable, template_meta, write_submission). 22 tests pass.</td></tr><tr><td><code>IR-61-TEST-01</code></td><td>tests/ imported gems57.* (a sibling package name) and an older uniqueness API.</td><td>Fixed: imports renamed to gems61; uniqueness.py re-implemented with surface_rho / dot_overlap / compare / load_registry; limits 0.90 / 0.70 / Jaccard 0.50.</td></tr><tr><td><code>IR-61-DATA-01</code></td><td>Three data layouts (data/official, data/bridge, data/raw) expected by three generations of code; the link directories are git-ignored, so a fresh clone failed.</td><td>Fixed: prepare_data.py now creates the data/bridge and data/raw symlinks (recorded in evidence/data_preparation.json).</td></tr><tr><td><code>IR-61-INSTR-02</code></td><td>Earlier sessions reported that the catalogue-frame holdout anti-correlates with live scores (ρ ≈ −0.93) and treated the instrument as inverted. The anti-correlation is an artefact: the top live files were pruned against the full catalogue, which removes exactly the dots a catalogue holdout rewards.</td><td>Protocol corrected: withhold whole segments; prune only against the visible catalogue; score registry files as-is with the caveat; use the unpruned dotted base as the bar.</td></tr><tr><td><code>IR-61-UNIQ-01</code></td><td>An earlier raster in this repo (gems61-lane-buried-step-…-k400k, 311,617 px) is a near-blanket: 95.8% of the footprint is within 3 px of it, so the one-sided 70% overlap rule flags every file as a duplicate of it.</td><td>Gate uses Jaccard (limit 0.50) when the reference has &gt; 5× the candidate&#x27;s support; raw overlap, base rate and Jaccard are all reported (evidence/h61g_uniqueness.json).</td></tr><tr><td><code>IR-61-ARTIFACT-01</code></td><td>Before this session the repo advertised three different &#x27;primary&#x27; files (root index.html said READY TO DOWNLOAD for one, README named another, the run card said negative).</td><td>All three are marked SUPERSEDED; a single status block now appears on index.html, the executive summary and README.</td></tr><tr><td><code>IR-61-CONV-01</code></td><td>Undamped Oldenburg iteration diverges on the isostatic residual (reproduced).</td><td>Damped, band-limited iteration (kc_scale 0.5); documented in method.</td></tr><tr><td><code>IR-61-RIBBON-01</code></td><td>The lane brief&#x27;s 3 × 3 ribbons halve the holdout score for a 100 m-accurate locator (0.0465 → 0.0216 on identical cells).</td><td>Shipped the validated dots; multi-line character kept at corridor scale; both variants reported.</td></tr><tr><td><code>IR-61-MERGE-02</code></td><td>While merging main (PRs #6-#8, three parallel sessions) uniqueness.py carried two shadowed copies of surface_rho / dot_overlap / compare_array_to_registry, and four sessions each advertised their own file as the primary download.</td><td>Duplicate definitions removed (tests still 22/22); one merged candidate board on index.html and README; parallel pages carry a banner.</td></tr><tr><td><code>IR-61-NET-01</code></td><td>The sandbox allow-list blocks drivendata.org downloads and raw.githubusercontent.com; data came from the hash-pinned public bridge, not from an organiser receipt.</td><td>Provenance class recorded as &#x27;public bridge&#x27; in evidence/data_preparation.json; sha256 pins verified.</td></tr></table>
-<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
-<code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
-(gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
-<span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html" class=active>Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+
+<h2>Irregularities and limitations found this session</h2>
+<table><tr><th>id</th><th>severity</th><th>statement</th></tr>
+<tr><td>IR-61-LEAK-01</td><td>high</td><td>A gradient-boosted habitat model reached HOLDOUT-DTI 0.1599
+and a canary AUC of 0.901, above the protocol's 0.90 leakage line. The leave-one-quadrant-out retest
+shows the AUC falls to 0.518–0.618 across all 16 blocked retests, with no
+training pixel inside the scored quadrant, and the DTI to the random baseline: the skill was adjacency to visible traces, not generalisation. The shipped file uses
+the L2 logistic model (canary AUC 0.626).</td></tr>
+<tr><td>IR-61-PRUNE-01</td><td>high</td><td>The catalogue prune has conflicting evidence. On the
+hide-and-recover holdout a 2 px prune beats 3 px (0.1599 vs
+0.1458 for the same model) because the
+withheld truth is adjacent to visible traces. On the live metric the group's own controlled pair
+(<code>gems25-dotted-h19-5-d2-8</code> 0.2600 → <code>gemsdoe32-h33-h33-2-b2</code> 0.2778, an exact
+set difference deleting every dot within 3 px of the catalogue) says 3 px wins. The shipped file
+follows the live evidence (3 px) and the holdout cost is reported.</td></tr>
+<tr><td>IR-61-BUDGET-01</td><td>medium</td><td>The holdout prefers more dots monotonically
+(random lines 0.0220 → 0.0434 from 20 k to 80 k), while the group's live ladder prefers ~38–40 k. The
+holdout's withheld-truth set is small and catalogue-adjacent, so it cannot see the false-positive mass
+that extra dots create against the full hidden fault population. Shipped at 40 k.</td></tr>
+<tr><td>IR-61-MEM-01</td><td>medium</td><td>The development sandbox has ~3.9 GB of RAM and 2 cores. The
+28-channel habitat stack (1.38 GB float32) is written channel-by-channel into a memmap and predictions
+are computed in 400 k-row chunks; an earlier version materialised all 19 bands as float64 and was
+killed by the OOM reaper. No result was lost.</td></tr>
+<tr><td>IR-61-SCORE-01</td><td>high</td><td>Every score attributed to the group's own files
+(0.2778, 0.2750, 0.2708, …) is an owner report on the group's pages. None is an organizer receipt
+linking those bytes to a leaderboard row. The public leaderboard rows belong to other teams.</td></tr>
+<tr><td>IR-61-PROVENANCE-01</td><td>high</td><td>The competition rasters come from a hash-pinned public
+GitHub mirror (<code>buffedlizard55-lab/6GEMSDOE</code>); the DrivenData data page is login-walled and
+unreachable from this sandbox. All three digests match the mirror's pins, but they are not
+organizer-authenticated.</td></tr>
+<tr><td>IR-61-FOOTPRINT-01</td><td>medium</td><td>The 200 m inversion grid loses
+24,274 footprint cells that the 100 m grid has (block means
+across the survey boundary are NaN). All correlations are taken on the common finite support and the
+erosion is reported in <code>evidence/h61m_features.json</code>.</td></tr>
+<tr><td>IR-61-SRC-01</td><td>high</td><td>An earlier session asserted that the competition ships a
+<code>1m_DEM_links.csv</code> of 1 m DEM tile URLs. The hash-pinned bridge manifest
+(<code>buffedlizard55-lab/6GEMSDOE@e2fe3f41&#8230;:data/bridge/manifest.json</code>) lists exactly three
+files &mdash; <code>gems-geodawn-numerical-features.tif</code>, <code>existing_faults.tif</code> and
+<code>example_submission.tif</code> &mdash; so the claim is <b>false</b> and is corrected here and in
+<code>evidence/h61g_hypotheses.json</code>. The 1 m lidar hypothesis (H61-N) is unaffected in substance:
+USGS 3DEP is free public-domain data obtainable from The National Map
+(<a href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader</a>); it simply has to
+be fetched from USGS, not from the organiser. drivendata.org is unreachable from this sandbox, so no
+direct check of the data tab was possible.</td></tr>
+<tr><td>IR-61-NET-01</td><td>medium</td><td>Egress admits only github.com, api.github.com,
+codeload.github.com, registry.npmjs.org, pypi.org and files.pythonhosted.org. usgs.gov,
+drivendata.org and the 3DEP S3 endpoint all fail, so no new external raster was fetched this session;
+the one named obtainable source (3DEP 1 m DEM) is listed as a next step, not claimed as used.</td></tr>
+</table>
+
 </div></body></html>

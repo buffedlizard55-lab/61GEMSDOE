@@ -15,6 +15,14 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# The H61-M session supersedes this one's site pages. Refuse to clobber them.
+if (ROOT / "evidence" / "h61m_run_card.json").exists():
+    raise SystemExit(
+        "evidence/h61m_run_card.json exists: the H61-M session owns docs/index.html and the other "
+        "site pages. Re-run scripts/build_site_h61m.py instead (it regenerates the same nine pages "
+        "plus the root redirect from the newer evidence).")
+
 DOCS = ROOT / "docs"
 EV = ROOT / "evidence"
 
@@ -283,7 +291,7 @@ enrichment of any potential-field corridor is only 1.3–1.8× random (screen ta
 <h2>5. Can we beat 0.2778?</h2>
 <p><b>Inside this lane: no</b> — the best lane-consistent construction is {hd(DTI, CI)} versus {f4(REF['pooled_dti'])} for the current base on the same evaluator, and a union with the 0.2778
 dots would fail the 70% overlap gate. <b>Overall: yes, in principle</b>, through three measured levers, in order of expected value:
-(1) a higher-recall surface-scarp detector — the 1 m 3DEP lidar that the organiser links in <code>1m_DEM_links.csv</code> is the data the mappers used; the group mirror
+(1) a higher-recall surface-scarp detector — the 1 m 3DEP lidar the mappers used (USGS The National Map; it is <i>not</i> shipped with the competition data — IR-61-SRC-01); the group mirror
 <code>GEMSDOE24/data/external/lidar_scarp_features_u8.tif</code> (36.9 MB, blob <code>da733b53…</code>) already exists and is obtainable through the GitHub API;
 (2) keep the two proven geometry rules — ≥ 3 px dot packing and the 2 px catalogue prune — and add greedy marginal-credit packing with a scatter kernel (GEMSDOE32's model-only +0.025 claim, unconfirmed);
 (3) validate every candidate on a segment-withholding holdout that prunes only against the <i>visible</i> catalogue (this session's evaluator), never with the full-catalogue prune that produced the earlier false negatives.
@@ -444,7 +452,7 @@ next_body = f"""
 <li>Submissions: <a href="{COMP}submissions/">{COMP}submissions/</a></li>
 <li>Organiser reference solution: <a href="https://github.com/drivendataorg/gems-prize-reference-solution">github.com/drivendataorg/gems-prize-reference-solution</a></li>
 <li>USGS GP-1012 (Saltus &amp; Jachens 1995, Gravity and basin-depth maps of the Basin and Range Province): <a href="https://pubs.usgs.gov/publication/gp1012">pubs.usgs.gov/publication/gp1012</a></li>
-<li>USGS 3DEP 1 m DEM (free, public domain): <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov/3d-elevation-program</a> (tile URLs in the organiser's <code>1m_DEM_links.csv</code>)</li>
+<li>USGS 3DEP 1 m DEM (free, public domain): <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov/3d-elevation-program</a>, downloader at <a href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader</a> (not part of the competition data — IR-61-SRC-01)</li>
 <li>This repository and run card: <a href="{REPO}">{REPO}</a> · <a href="{REPO}/blob/main/evidence/h61g_run_card.json">evidence/h61g_run_card.json</a></li>
 </ul>
 """
