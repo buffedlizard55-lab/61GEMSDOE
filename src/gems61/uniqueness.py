@@ -27,6 +27,9 @@ from scipy.ndimage import distance_transform_edt
 SPEARMAN_LIMIT = 0.90
 OVERLAP_LIMIT = 0.70
 OVERLAP_RADIUS_PX = 3.0
+# The dot-overlap leg is only defined against a sparse (dot or line) raster.
+# Above this positive fraction the test is vacuous and the surface leg decides.
+DOT_LEG_MAX_DENSITY = 0.05
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -146,6 +149,7 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
                           if candidate_surface is not None else 1)
     worst_rho, worst_rho_id = -1.0, None
     worst_ov, worst_ov_id = -1.0, None
+    n_dense = n_sparse = 0
     rows = []
     for i, rec in enumerate(rasters):
         path = root / rec["cache_file"]
@@ -164,15 +168,35 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
             if np.isfinite(rho) and rho > worst_rho:
                 worst_rho, worst_rho_id = float(rho), rec["sources"][0]
         if candidate_dots is not None:
-            ov = dot_overlap(candidate_dots, finite & (arr > 0))
-            row["dot_overlap_3px"] = ov["fraction"]
-            if ov["fraction"] > worst_ov:
-                worst_ov, worst_ov_id = ov["fraction"], rec["sources"][0]
+            pos = finite & (arr > 0)
+            density = float(pos.sum()) / max(int(np.asarray(footprint).sum()), 1)
+            row["positive_fraction_of_footprint"] = density
+            if density > DOT_LEG_MAX_DENSITY:
+                # The 3 px overlap test is vacuous against a dense field: a
+                # continuous probability map is positive almost everywhere, so
+                # ANY candidate lands within 3 px of one of its positives and
+                # scores 1.0.  Such a raster is compared on the surface leg
+                # alone, and that is recorded rather than silently skipped.
+                row["dot_overlap_3px"] = None
+                row["dot_leg"] = "not_applicable_dense_field"
+                n_dense += 1
+            else:
+                ov = dot_overlap(candidate_dots, pos)
+                row["dot_overlap_3px"] = ov["fraction"]
+                row["dot_leg"] = "applicable"
+                n_sparse += 1
+                if ov["fraction"] > worst_ov:
+                    worst_ov, worst_ov_id = ov["fraction"], rec["sources"][0]
         rows.append(row)
         if progress and (i + 1) % 50 == 0:
             progress(i + 1, len(rasters))
     surface_pass = worst_rho <= SPEARMAN_LIMIT
     dot_pass = worst_ov <= OVERLAP_LIMIT
+    # Fail closed: if no registry raster was sparse enough for the dot leg the
+    # gate has not been run, and that is a failure, not a pass.
+    if candidate_dots is not None and n_sparse == 0:
+        dot_pass = False
+        worst_ov, worst_ov_id = float("nan"), "no sparse registry raster: gate not run"
     return dict(
         evidence_class="UNIQUENESS-CHECK",
         n_registry_rasters=len(rasters),
@@ -184,6 +208,11 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
                                                       / max(surface_stride, 1) ** 2),
                                    note=("lattice subsample of the surface leg; the dot leg "
                                          "is computed on every candidate dot")),
+        dot_leg_scope=dict(applicable=n_sparse, dense_excluded=n_dense,
+                           max_density=DOT_LEG_MAX_DENSITY,
+                           note=("rasters denser than the threshold are continuous "
+                                 "probability fields; the 3 px overlap test is vacuous "
+                                 "against them, so they are compared on the surface leg")),
         surface_gate_pass=bool(surface_pass),
         dot_gate_pass=bool(dot_pass),
         unique=bool(surface_pass and dot_pass),
