@@ -68,6 +68,19 @@ Candidates are pruned only against the <i>visible</i> catalogue inside each fold
 <h2>Experiment budget</h2>
 <p>3 of 3 experiments used (inversion + screen; segment holdout of five candidates and two controls; final build with the dots-vs-ribbons check). Wall-clock within the 2-hour cap.</p>
 
+<h2>Candidate board - every gems61 file in <code>docs/downloads/</code> (parallel sessions merged on main)</h2>
+<p class="small">Four sessions worked this lane in parallel (PRs #5-#8 and this one). Each row carries the verdict its own session recorded; 
+the last column scores the <i>shipped file</i> on this session's evaluator, where every file is ~0 by construction because all of them were pruned against the full catalogue (IR-61-INSTR-02) - 
+the only within-protocol numbers (construction re-emitted with visible-only pruning) exist for H61-G. Nothing here is a slot decision; the selector step is separate.</p>
+<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session's verdict</th><th>shipped file on this evaluator (HOLDOUT-DTI)</th></tr>
+<tr class=""><td><code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>e3, PR #3</td><td>40,000</td><td>kept; superseded</td><td>0.0000</td></tr>
+<tr class=""><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>H61-A, PR #5</td><td>25,285</td><td>catalogue-frame holdout 0.0000 vs random 0.0089 -&gt; SUPERSEDED</td><td>0.0000</td></tr>
+<tr class=""><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td><td>H61-B, PR #6</td><td>88,796</td><td>format-valid + unique; no holdout number above random recorded in its run card</td><td>0.0000</td></tr>
+<tr class="hl"><td><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></td><td>this session (H61-G), PR #9</td><td>40,000</td><td>FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421-0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar -&gt; negative for a slot</td><td>0.0045</td></tr>
+<tr class=""><td><code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code></td><td>H62, PR #7</td><td>38,000</td><td>its card: surrogate-truth DTI 0.0395 below every one of seven registry rasters -&gt; &#x27;Submit NOT RECOMMENDED&#x27;</td><td>0.0000</td></tr>
+<tr class=""><td><code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code></td><td>e3, PR #3</td><td>311,617</td><td>311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload</td><td>0.0000</td></tr>
+<tr class=""><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>session C, PR #8</td><td>40,000</td><td>its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 &lt; random lines 0.0092 (gems61-pooled-hide-v2); &#x27;value unproven&#x27;, declared weight 0.10</td><td>0.0007</td></tr>
+</table>
 <h2>Older files in <code>docs/downloads/</code></h2>
 <p>Three earlier rasters from previous sessions (<code>gems61-lane-buried-step-…</code>, <code>gems61-buried-basement-step-…</code>, <code>gems61-h61a-…</code>) are <b>SUPERSEDED</b>:
 their own holdout numbers were 0.0000–0.0089 and the first of them is a near-blanket raster (311,617 px). They stay only as the uniqueness registry. Do not upload them.</p>

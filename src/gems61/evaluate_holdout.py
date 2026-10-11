@@ -36,7 +36,11 @@ def evaluate(prediction, fold, valid, block_side=200, *, origin=(0, 0),
         raise ValueError('predictions must be finite in [0,1] before masking')
     valid = np.asarray(valid, bool)
     region = np.asarray(fold['region'], bool)
-    known = np.asarray(fold.get('masked_known', fold['visible']), bool)
+    # Shared-tool fix (session arena/d29229b5, 2026-10-11): the default argument of
+    # dict.get() is evaluated eagerly, so the previous spelling raised KeyError
+    # whenever a caller passed 'masked_known' without 'visible'.  Same semantics,
+    # lazy lookup.
+    known = np.asarray(fold['masked_known'] if 'masked_known' in fold else fold['visible'], bool)
     truth_all = np.asarray(fold['truth'], bool)
     if p.ndim != 2 or any(a.shape != p.shape for a in (valid, region, known, truth_all)):
         raise ValueError('fold/prediction grid shape mismatch')

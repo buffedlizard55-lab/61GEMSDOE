@@ -40,6 +40,11 @@
     "action": "Shipped the validated dots; multi-line character kept at corridor scale; both variants reported."
   },
   {
+    "id": "IR-61-MERGE-02",
+    "finding": "While merging main (PRs #6-#8, three parallel sessions) uniqueness.py carried two shadowed copies of surface_rho / dot_overlap / compare_array_to_registry, and four sessions each advertised their own file as the primary download.",
+    "action": "Duplicate definitions removed (tests still 22/22); one merged candidate board on index.html and README; parallel pages carry a banner."
+  },
+  {
     "id": "IR-61-NET-01",
     "finding": "The sandbox allow-list blocks drivendata.org downloads and raw.githubusercontent.com; data came from the hash-pinned public bridge, not from an organiser receipt.",
     "action": "Provenance class recorded as 'public bridge' in evidence/data_preparation.json; sha256 pins verified."

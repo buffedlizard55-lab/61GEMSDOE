@@ -25,6 +25,38 @@ scr = json.loads((EV / "h61g_screen.json").read_text())
 inv = json.loads((EV / "h61g_invert.json").read_text())
 uni = json.loads((EV / "h61g_uniqueness.json").read_text())
 forensics = json.loads((ROOT / "reports" / "forensics.json").read_text())
+sib = json.loads((EV / "h61g_siblings.json").read_text())
+SIB_META = {
+    "gems61-h61g": ("this session (H61-G), PR #9", "FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421-0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar -> negative for a slot"),
+    "gems61c-gravstep": ("session C, PR #8", "its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 < random lines 0.0092 (gems61-pooled-hide-v2); 'value unproven', declared weight 0.10"),
+    "gems61-h62": ("H62, PR #7", "its card: surrogate-truth DTI 0.0395 below every one of seven registry rasters -> 'Submit NOT RECOMMENDED'"),
+    "gems61-h61b": ("H61-B, PR #6", "format-valid + unique; no holdout number above random recorded in its run card"),
+    "gems61-h61a": ("H61-A, PR #5", "catalogue-frame holdout 0.0000 vs random 0.0089 -> SUPERSEDED"),
+    "gems61-buried-basement-step": ("e3, PR #3", "kept; superseded"),
+    "gems61-lane-buried-step": ("e3, PR #3", "311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload"),
+}
+
+
+def sib_meta(fn):
+    for k, v in SIB_META.items():
+        if fn.startswith(k):
+            return v
+    return ("?", "")
+
+
+def board_html():
+    out = ['<h2>Candidate board - every gems61 file in <code>docs/downloads/</code> (parallel sessions merged on main)</h2>',
+           '<p class="small">Four sessions worked this lane in parallel (PRs #5-#8 and this one). Each row carries the verdict its own session recorded; ',
+           'the last column scores the <i>shipped file</i> on this session\'s evaluator, where every file is ~0 by construction because all of them were pruned against the full catalogue (IR-61-INSTR-02) - ',
+           'the only within-protocol numbers (construction re-emitted with visible-only pruning) exist for H61-G. Nothing here is a slot decision; the selector step is separate.</p>',
+           '<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session\'s verdict</th><th>shipped file on this evaluator (HOLDOUT-DTI)</th></tr>']
+    for r in sib["rows"]:
+        who, verdict = sib_meta(r["file"])
+        cls = "hl" if "h61g" in r["file"] else ""
+        out.append(f'<tr class="{cls}"><td><code>{esc(r["file"])}</code></td><td>{esc(who)}</td><td>{r["n_positive_px"]:,}</td><td>{esc(verdict)}</td><td>{f4(r["pooled_dti"])}</td></tr>')
+    out.append('</table>')
+    return "\n".join(out)
+
 
 NAME = fin["submission"]
 TIF = Path(fin["download_tif"]).name
@@ -173,6 +205,7 @@ Candidates are pruned only against the <i>visible</i> catalogue inside each fold
 <h2>Experiment budget</h2>
 <p>{card['experiments_run']} of {card['budget_experiments']} experiments used (inversion + screen; segment holdout of five candidates and two controls; final build with the dots-vs-ribbons check). Wall-clock within the 2-hour cap.</p>
 
+{board_html()}
 <h2>Older files in <code>docs/downloads/</code></h2>
 <p>Three earlier rasters from previous sessions (<code>gems61-lane-buried-step-…</code>, <code>gems61-buried-basement-step-…</code>, <code>gems61-h61a-…</code>) are <b>SUPERSEDED</b>:
 their own holdout numbers were 0.0000–0.0089 and the first of them is a near-blanket raster (311,617 px). They stay only as the uniqueness registry. Do not upload them.</p>
@@ -378,6 +411,7 @@ irr = [
     ("IR-61-ARTIFACT-01", "Before this session the repo advertised three different 'primary' files (root index.html said READY TO DOWNLOAD for one, README named another, the run card said negative).", "All three are marked SUPERSEDED; a single status block now appears on index.html, the executive summary and README."),
     ("IR-61-CONV-01", "Undamped Oldenburg iteration diverges on the isostatic residual (reproduced).", "Damped, band-limited iteration (kc_scale 0.5); documented in method."),
     ("IR-61-RIBBON-01", "The lane brief's 3 × 3 ribbons halve the holdout score for a 100 m-accurate locator (0.0465 → 0.0216 on identical cells).", "Shipped the validated dots; multi-line character kept at corridor scale; both variants reported."),
+    ("IR-61-MERGE-02", "While merging main (PRs #6-#8, three parallel sessions) uniqueness.py carried two shadowed copies of surface_rho / dot_overlap / compare_array_to_registry, and four sessions each advertised their own file as the primary download.", "Duplicate definitions removed (tests still 22/22); one merged candidate board on index.html and README; parallel pages carry a banner."),
     ("IR-61-NET-01", "The sandbox allow-list blocks drivendata.org downloads and raw.githubusercontent.com; data came from the hash-pinned public bridge, not from an organiser receipt.", "Provenance class recorded as 'public bridge' in evidence/data_preparation.json; sha256 pins verified."),
 ]
 irr_body = "<h1>Irregularities flagged in this session</h1><table><tr><th>ID</th><th>What was found</th><th>What was done</th></tr>" + "".join(

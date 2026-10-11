@@ -1,0 +1,313 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator_version": "gems61-pooled-hide-v2",
+  "instrument": "hide whole catalogue segments (8-connected component, >=20 px) with a 3 px collar; catalogue-based features derived from VISIBLE faults only; visible fault pixels masked from the scored domain; pooled DTI alpha=0.2 beta=0.8 300 m triangular kernel",
+  "candidate_budget": 40000,
+  "min_sep_px": 3,
+  "marginal_rule": {
+    "threshold_h": 0.02470730481880008,
+    "T_anchor": 5220.0,
+    "D_anchor": 18731.0,
+    "multi_cover_e": 2.33,
+    "formula": "h* > alpha*T/(e*D - alpha*T*(e-1))",
+    "evidence_class": "OWNER-REPORTED anchor (portfolio fit) + metric algebra",
+    "note": "Emit while the dot's hit probability exceeds h*.  h cannot be measured for a lane with no hidden labels, so the budget is the largest value inside the band of masses the live evidence brackets (37,654..44,090) and every arm below is reported as HOLDOUT-DTI, never as a score."
+  },
+  "pooled": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "alpha": 0.2,
+    "beta": 0.8,
+    "triangular_radius_m": 300.0,
+    "pooled": true,
+    "scores": {
+      "shipped_rule_lane10": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "dti": 0.054794943943659295,
+        "ci95": [
+          0.048162699018047074,
+          0.06106753808125634
+        ],
+        "withheld_positive_pixels": 39310,
+        "tpw": 3501.3875382650313,
+        "fpw": 158757.75656754826,
+        "fnw": 35808.612461734934
+      },
+      "uniform_flank": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "dti": 0.06460312155465635,
+        "ci95": [
+          0.05713348136352357,
+          0.07184620158594919
+        ],
+        "withheld_positive_pixels": 39310,
+        "tpw": 4133.413735808999,
+        "fpw": 158534.79165268736,
+        "fnw": 35176.58626419099
+      },
+      "lane_only": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "dti": 0.00775958488364842,
+        "ci95": [
+          0.006016080768430313,
+          0.009815853465002284
+        ],
+        "withheld_positive_pixels": 39310,
+        "tpw": 262.91676286124755,
+        "fpw": 11911.276653132916,
+        "fnw": 39047.083237138744
+      },
+      "random_lines": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "dti": 0.009200611971877055,
+        "ci95": [
+          0.007048772738728572,
+          0.011551019235241024
+        ],
+        "withheld_positive_pixels": 39310,
+        "tpw": 405.10753621552453,
+        "fpw": 62507.387457482546,
+        "fnw": 38904.89246378448
+      }
+    },
+    "best_comparable_control": "uniform_flank",
+    "paired_differences": {
+      "uniform_flank": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "delta": -0.009808177610997053,
+        "ci95": [
+          -0.012472925108002061,
+          -0.007276814537311748
+        ],
+        "withheld_positive_pixels": 39310
+      },
+      "lane_only": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "delta": 0.04703535906001088,
+        "ci95": [
+          0.04080870354746454,
+          0.0530945730773327
+        ],
+        "withheld_positive_pixels": 39310
+      },
+      "random_lines": {
+        "evidence_class": "HOLDOUT-DTI",
+        "evaluator_version": "gems61-pooled-hide-v2",
+        "delta": 0.04559433197178224,
+        "ci95": [
+          0.03895043250780726,
+          0.052254359214241555
+        ],
+        "withheld_positive_pixels": 39310
+      }
+    },
+    "bootstrap": {
+      "method": "paired physical spatial-cluster percentile",
+      "clusters": 635,
+      "draws": 1000,
+      "seed": 520810,
+      "confidence": 0.95,
+      "caveat": "Conditional on fitted folds, catalogue labels and fixed budgets; not a leaderboard interval."
+    },
+    "implementation_sha256": {
+      "evaluate_holdout.py": "4699ecba873d84bcc45c25caf77c5bd1be97667242a94ebd9682bd90129bf2d3",
+      "holdout.py": "b5377fc253b09a0587b9bb103b507f3db20d3db2681dc9516d43701af90b8d11",
+      "metric.py": "4c7e56cfebb6d0ad80a57d0c7f51295f789af127bf8b94e42095fab4c18e1e68",
+      "spatial.py": "fad7b09db9efc512247b9a176a7e7ce8631e287592b4e07902d0b9c38bed00f8"
+    }
+  },
+  "per_fold": [
+    {
+      "fold": "NE",
+      "n_segments": 184,
+      "n_hidden": 7962,
+      "n_pred": 40000,
+      "shipped_rule_lane10": {
+        "dti": 0.038076378727084144,
+        "tp": 549.8049336892051,
+        "fp_": 39799.83466197471,
+        "fn": 7412.195066310795,
+        "n_truth": 7962
+      },
+      "uniform_flank": {
+        "dti": 0.05446513517068786,
+        "tp": 788.1090641379022,
+        "fp_": 39713.75857761616,
+        "fn": 7173.890935862098,
+        "n_truth": 7962
+      },
+      "lane_only": {
+        "dti": 0.003914612874112468,
+        "tp": 27.314657209984848,
+        "fp_": 3012.7548510395345,
+        "fn": 7934.685342790015,
+        "n_truth": 7962
+      },
+      "random_lines": {
+        "dti": 0.008137586087456348,
+        "tp": 77.09570579348738,
+        "fp_": 15445.036520719139,
+        "fn": 7884.9042942065125,
+        "n_truth": 7962
+      },
+      "segment_recovery_basin_interior": {
+        "shipped_rule_lane10": {
+          "n": 216,
+          "recovered": 159,
+          "frac": 0.7361111111111112
+        },
+        "random_lines": {
+          "n": 216,
+          "recovered": 27,
+          "frac": 0.125
+        }
+      }
+    },
+    {
+      "fold": "NW",
+      "n_segments": 433,
+      "n_hidden": 16032,
+      "n_pred": 40000,
+      "shipped_rule_lane10": {
+        "dti": 0.0748820914092795,
+        "tp": 1574.5711104254192,
+        "fp_": 39434.12317735563,
+        "fn": 14457.428889574581,
+        "n_truth": 16032
+      },
+      "uniform_flank": {
+        "dti": 0.09070036953913939,
+        "tp": 1911.1078552666888,
+        "fp_": 39313.70740763033,
+        "fn": 14120.89214473331,
+        "n_truth": 16032
+      },
+      "lane_only": {
+        "dti": 0.007995399498908557,
+        "tp": 107.2087420253495,
+        "fp_": 2808.809533724606,
+        "fn": 15924.79125797465,
+        "n_truth": 16032
+      },
+      "random_lines": {
+        "dti": 0.010826841509634377,
+        "tp": 171.78805924612425,
+        "fp_": 15034.549241829554,
+        "fn": 15860.211940753876,
+        "n_truth": 16032
+      },
+      "segment_recovery_basin_interior": {
+        "shipped_rule_lane10": {
+          "n": 568,
+          "recovered": 431,
+          "frac": 0.7588028169014085
+        },
+        "random_lines": {
+          "n": 568,
+          "recovered": 38,
+          "frac": 0.06690140845070422
+        }
+      }
+    },
+    {
+      "fold": "SE",
+      "n_segments": 139,
+      "n_hidden": 8115,
+      "n_pred": 40000,
+      "shipped_rule_lane10": {
+        "dti": 0.046918478227482144,
+        "tp": 684.1779410465613,
+        "fp_": 39767.17456801767,
+        "fn": 7430.8220589534385,
+        "n_truth": 8115
+      },
+      "uniform_flank": {
+        "dti": 0.048490849181579095,
+        "tp": 707.2816687274092,
+        "fp_": 39762.1143580279,
+        "fn": 7407.718331272591,
+        "n_truth": 8115
+      },
+      "lane_only": {
+        "dti": 0.009105014327050742,
+        "tp": 64.7094632148009,
+        "fp_": 3010.3599449413705,
+        "fn": 8050.290536785199,
+        "n_truth": 8115
+      },
+      "random_lines": {
+        "dti": 0.00796895230181945,
+        "tp": 77.25089354194742,
+        "fp_": 15932.667494794805,
+        "fn": 8037.749106458053,
+        "n_truth": 8115
+      },
+      "segment_recovery_basin_interior": {
+        "shipped_rule_lane10": {
+          "n": 171,
+          "recovered": 120,
+          "frac": 0.7017543859649122
+        },
+        "random_lines": {
+          "n": 171,
+          "recovered": 20,
+          "frac": 0.11695906432748537
+        }
+      }
+    },
+    {
+      "fold": "SW",
+      "n_segments": 155,
+      "n_hidden": 7201,
+      "n_pred": 40000,
+      "shipped_rule_lane10": {
+        "dti": 0.050021585634903824,
+        "tp": 692.8335531038472,
+        "fp_": 39756.62416020032,
+        "fn": 6508.166446896153,
+        "n_truth": 7201
+      },
+      "uniform_flank": {
+        "dti": 0.05246505433060371,
+        "tp": 726.9151476770004,
+        "fp_": 39745.21130941302,
+        "fn": 6474.084852323,
+        "n_truth": 7201
+      },
+      "lane_only": {
+        "dti": 0.009967106176126615,
+        "tp": 63.683900411112326,
+        "fp_": 3079.3523234274026,
+        "fn": 7137.3160995888875,
+        "n_truth": 7201
+      },
+      "random_lines": {
+        "dti": 0.008779035264580038,
+        "tp": 78.97287763396527,
+        "fp_": 16095.134200139042,
+        "fn": 7122.027122366035,
+        "n_truth": 7201
+      },
+      "segment_recovery_basin_interior": {
+        "shipped_rule_lane10": {
+          "n": 195,
+          "recovered": 157,
+          "frac": 0.8051282051282052
+        },
+        "random_lines": {
+          "n": 195,
+          "recovered": 24,
+          "frac": 0.12307692307692308
+        }
+      }
+    }
+  ],
+  "three_experiment_budget": "E1 field build + rule selection on the instrument | E2 variant sweep (band edge, lane weight, budget) | E3 final emission+validation+uniqueness",
+  "negative_result": "The pure lane belief ranks withheld catalogue segments WORSE than a uniform sample of the same band and budget (0.0078 vs 0.0659 pooled); any admixture of it costs the instrument score (w=0.10 -> 0.0540). The shipped rule therefore carries only a 0.10 lane weight."
+}

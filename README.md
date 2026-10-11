@@ -20,6 +20,22 @@
 - sha256 `fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077` (135,152 bytes); 40,000 single-pixel dots (value 1.0) at ≥ 3 px spacing, none within 2 px of a mapped fault; median distance to the catalogue 17.5 px.
 - Earlier files in `docs/downloads/` (`gems61-lane-buried-step-…`, `gems61-buried-basement-step-…`, `gems61-h61a-…`) are **SUPERSEDED** (their own holdouts were 0.0000–0.0089); they remain only as uniqueness references. Do not upload them.
 
+## Candidate board — all gems61 files in `docs/downloads/` (four parallel sessions merged on `main`)
+
+Each row carries the verdict its own session recorded. The last column scores the *shipped file* on this session's evaluator (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all); 22,641 withheld px): every file is ≈ 0 there **by construction**, because all of them were pruned against the full catalogue (IR-61-INSTR-02); the only within-protocol numbers (construction re-emitted with visible-only pruning) exist for H61-G. This board is not a slot decision — the selector step is separate — but it is the evidence a selector should read.
+
+| file | session / PR | positive px | its own session's verdict | shipped file on this evaluator (HOLDOUT-DTI) |
+|---|---|---|---|---|
+| `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif` | e3, PR #3 | 40,000 | kept; superseded | 0.0000 |
+| `gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif` | H61-A, PR #5 | 25,285 | catalogue-frame holdout 0.0000 vs random 0.0089 → SUPERSEDED | 0.0000 |
+| `gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif` | H61-B, PR #6 | 88,796 | format-valid + unique; no holdout number above random in its run card | 0.0000 |
+| **`gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif`** | this session (H61-G), PR #9 | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421–0.0507) vs random lines 0.0314 within protocol; below the 0.1011 bar → negative for a slot | 0.0045 |
+| `gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif` | H62, PR #7 | 38,000 | its card: surrogate-truth DTI 0.0395 below every one of seven registry rasters → 'Submit NOT RECOMMENDED' | 0.0000 |
+| `gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif` | e3, PR #3 | 311,617 | 311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload | 0.0000 |
+| `gems61c-gravstep-liveband-40k-20261011.tif` | session C, PR #8 | 40,000 | its card: shipped construction 0.0417, but its own uniform-flank control 0.0649 and pure lane field 0.0078 < random lines 0.0092 (gems61-pooled-hide-v2); 'value unproven', declared weight 0.10 | 0.0007 |
+
+The parallel sessions' own pages remain in `docs/` (`session-c.html`, `candidate-h62.html`, `instrument.html`, …) with a SUPERSEDED-context banner; their evidence files (`evidence/e4_*.json`, `e1_habitat_instrument.json`, `e2_candidate.json`, …) are kept untouched. Shared-tool duplication found while merging: `uniqueness.py` carried two shadowed copies of its protocol helpers (IR-61-MERGE-02, removed).
+
 ## What this session found (H61-G)
 
 1. **The inversion works as specified.** Parker/Oldenburg (damped) on the isostatic residual, regional removed at 15 km, z₀ 500 m, Δρ −300 kg/m³, calibrated only on the GP-1012 statistic (≈ 20 % of basin area deeper than 1 km → achieved 0.203); r = 0.738 against the organiser's own depth layer, which was never used in the fit. 8,999 HGM maxima → 7,527 steps with ≥ 80 m throw; 4,104 persistent over three scales (`evidence/h61g_invert.json`).

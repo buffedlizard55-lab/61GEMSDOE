@@ -1,0 +1,193 @@
+{
+ "evidence_class": "HOLDOUT-DTI",
+ "evaluator_version": "gems61-pooled-hide-v2",
+ "instrument": "hide whole catalogue segments (8-connected component, >=20 px) with a 3 px collar; distance-to-catalogue recomputed from VISIBLE faults only inside each fold; visible fault pixels masked from the scored domain; pooled DTI alpha=0.2 beta=0.8 300 m triangular kernel",
+ "construction": "the shipped bytes: profile_emit(d_vis, lane belief, w=0.10, budget 40000, min_sep 3, seed 17)",
+ "per_fold": [
+  {
+   "fold": "NE",
+   "n_hidden": 7962,
+   "profile_lane10": 0.019696448986261734,
+   "uniform_flank": 0.049853707088146154,
+   "lane_only": 0.003914612874112468,
+   "random_lines": 0.008137586087456348
+  },
+  {
+   "fold": "NW",
+   "n_hidden": 16032,
+   "profile_lane10": 0.03968875917771774,
+   "uniform_flank": 0.09342500899230416,
+   "lane_only": 0.007995399498908557,
+   "random_lines": 0.010826841509634377
+  },
+  {
+   "fold": "SE",
+   "n_hidden": 8115,
+   "profile_lane10": 0.05682848215794789,
+   "uniform_flank": 0.04826703036829112,
+   "lane_only": 0.009105014327050742,
+   "random_lines": 0.00796895230181945
+  },
+  {
+   "fold": "SW",
+   "n_hidden": 7201,
+   "profile_lane10": 0.05163443850456488,
+   "uniform_flank": 0.054902992948265415,
+   "lane_only": 0.009967106176126615,
+   "random_lines": 0.008779035264580038
+  }
+ ],
+ "pooled": {
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator_version": "gems61-pooled-hide-v2",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "triangular_radius_m": 300.0,
+  "pooled": true,
+  "scores": {
+   "profile_lane10": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "dti": 0.04169097460927716,
+    "ci95": [
+     0.03532715019644159,
+     0.048198887600711456
+    ],
+    "withheld_positive_pixels": 39310,
+    "tpw": 2659.4415734713457,
+    "fpw": 159047.47660190286,
+    "fnw": 36650.55842652866
+   },
+   "uniform_flank": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "dti": 0.06493939564504746,
+    "ci95": [
+     0.05765969219774426,
+     0.07289111110140063
+    ],
+    "withheld_positive_pixels": 39310,
+    "tpw": 4155.185776214531,
+    "fpw": 158532.78205754698,
+    "fnw": 35154.814223785455
+   },
+   "lane_only": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "dti": 0.00775958488364842,
+    "ci95": [
+     0.006046228567620368,
+     0.009824532515303932
+    ],
+    "withheld_positive_pixels": 39310,
+    "tpw": 262.91676286124755,
+    "fpw": 11911.276653132916,
+    "fnw": 39047.083237138744
+   },
+   "random_lines": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "dti": 0.009200611971877055,
+    "ci95": [
+     0.007004214220927759,
+     0.011500676125676108
+    ],
+    "withheld_positive_pixels": 39310,
+    "tpw": 405.10753621552453,
+    "fpw": 62507.387457482546,
+    "fnw": 38904.89246378448
+   }
+  },
+  "best_comparable_control": "uniform_flank",
+  "paired_differences": {
+   "uniform_flank": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "delta": -0.023248421035770295,
+    "ci95": [
+     -0.0297859609762379,
+     -0.01690647912209831
+    ],
+    "withheld_positive_pixels": 39310
+   },
+   "lane_only": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "delta": 0.033931389725628744,
+    "ci95": [
+     0.027789406741848377,
+     0.04005637302062878
+    ],
+    "withheld_positive_pixels": 39310
+   },
+   "random_lines": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v2",
+    "delta": 0.03249036263740011,
+    "ci95": [
+     0.02618912555666727,
+     0.03928796562838468
+    ],
+    "withheld_positive_pixels": 39310
+   }
+  },
+  "bootstrap": {
+   "method": "paired physical spatial-cluster percentile",
+   "clusters": 644,
+   "draws": 1000,
+   "seed": 520810,
+   "confidence": 0.95,
+   "caveat": "Conditional on fitted folds, catalogue labels and fixed budgets; not a leaderboard interval."
+  },
+  "implementation_sha256": {
+   "evaluate_holdout.py": "4699ecba873d84bcc45c25caf77c5bd1be97667242a94ebd9682bd90129bf2d3",
+   "holdout.py": "b5377fc253b09a0587b9bb103b507f3db20d3db2681dc9516d43701af90b8d11",
+   "metric.py": "4c7e56cfebb6d0ad80a57d0c7f51295f789af127bf8b94e42095fab4c18e1e68",
+   "spatial.py": "fad7b09db9efc512247b9a176a7e7ce8631e287592b4e07902d0b9c38bed00f8"
+  }
+ },
+ "segment_recovery_basin_interior": {
+  "per_fold": [
+   {
+    "fold": "NE",
+    "n_segments": 216,
+    "shipped_recovered": 65,
+    "shipped_frac": 0.30092592592592593,
+    "random_recovered": 27,
+    "random_frac": 0.125
+   },
+   {
+    "fold": "NW",
+    "n_segments": 568,
+    "shipped_recovered": 296,
+    "shipped_frac": 0.5211267605633803,
+    "random_recovered": 38,
+    "random_frac": 0.06690140845070422
+   },
+   {
+    "fold": "SE",
+    "n_segments": 171,
+    "shipped_recovered": 150,
+    "shipped_frac": 0.8771929824561403,
+    "random_recovered": 20,
+    "random_frac": 0.11695906432748537
+   },
+   {
+    "fold": "SW",
+    "n_segments": 195,
+    "shipped_recovered": 158,
+    "shipped_frac": 0.8102564102564103,
+    "random_recovered": 24,
+    "random_frac": 0.12307692307692308
+   }
+  ],
+  "total": {
+   "n": 1150,
+   "shipped": 669,
+   "shipped_frac": 0.5817391304347826,
+   "random_lines": 109,
+   "random_frac": 0.09478260869565218
+  },
+  "definition": "a withheld 8-connected catalogue segment deeper than 3 px from the visible catalogue is RECOVERED if at least one emitted dot lies within 300 m (3 px) of any of its pixels"
+ }
+}
