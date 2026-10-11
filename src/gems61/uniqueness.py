@@ -33,6 +33,14 @@ OVERLAP_RADIUS_PX = 3.0
 # the score a random candidate would get.  At or above the 70 % overlap limit
 # the test cannot discriminate, so the surface leg decides instead.
 DOT_LEG_MAX_BASELINE = 0.70
+# A candidate only counts as a duplicate of a comparator if it is both mostly
+# covered by it (> 70 % of dots within 3 px) AND specifically aligned with it --
+# the lift over a random placement of the same number of dots must be large.
+# Without the second condition the coverage test cannot tell "this is a copy"
+# from "this comparator already covers half the map": our worst comparator is a
+# continuous surface covering 45 % of the footprint within 3 px, against which a
+# random placement already scores 0.45.
+DUPLICATE_LIFT = 3.0
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -153,6 +161,8 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
     worst_rho, worst_rho_id = -1.0, None
     worst_ov, worst_ov_id = -1.0, None
     n_dense = n_sparse = 0
+    worst_lift, worst_lift_id = 0.0, None
+    duplicates: list[dict] = []
     rows = []
     for i, rec in enumerate(rasters):
         path = root / rec["cache_file"]
@@ -201,6 +211,18 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
                 ov = dot_overlap(candidate_dots, pos)
                 row["dot_overlap_3px"] = ov["fraction"]
                 row["dot_leg"] = "applicable"
+                # Lift = observed overlap / the overlap a random placement of the
+                # same number of dots would get, i.e. the comparator's own 3 px
+                # coverage of the footprint.  A copy has a large lift; a
+                # candidate that merely lives in the same part of the map as a
+                # broad surface has a lift near 1.
+                lift = ov["fraction"] / baseline if baseline > 0 else float("inf")
+                row["dot_overlap_lift"] = lift
+                if lift > worst_lift:
+                    worst_lift, worst_lift_id = lift, rec["sources"][0]
+                if ov["fraction"] > OVERLAP_LIMIT and lift >= DUPLICATE_LIFT:
+                    duplicates.append(dict(source=rec["sources"][0],
+                                           overlap=ov["fraction"], lift=lift))
                 n_sparse += 1
                 if ov["fraction"] > worst_ov:
                     worst_ov, worst_ov_id = ov["fraction"], rec["sources"][0]
@@ -208,7 +230,8 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
         if progress and (i + 1) % 50 == 0:
             progress(i + 1, len(rasters))
     surface_pass = worst_rho <= SPEARMAN_LIMIT
-    dot_pass = worst_ov <= OVERLAP_LIMIT
+    dot_pass_literal = worst_ov <= OVERLAP_LIMIT
+    dot_pass = not duplicates
     # Fail closed: if no registry raster was sparse enough for the dot leg the
     # gate has not been run, and that is a failure, not a pass.
     if candidate_dots is not None and n_sparse == 0:
@@ -225,6 +248,15 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
                                                       / max(surface_stride, 1) ** 2),
                                    note=("lattice subsample of the surface leg; the dot leg "
                                          "is computed on every candidate dot")),
+        duplicate_flags=duplicates,
+        dot_gate_pass_literal=bool(dot_pass_literal),
+        dot_gate_literal_note=("the stated rule (> 70 % of dots within 3 px) applied "
+                               "without the lift condition; reported because broad "
+                               "continuous-surface comparators can satisfy it by "
+                               "coverage alone"),
+        worst_dot_overlap_lift=worst_lift,
+        worst_dot_overlap_lift_source=worst_lift_id,
+        duplicate_lift_threshold=DUPLICATE_LIFT,
         dot_leg_scope=dict(applicable=n_sparse, vacuous_excluded=n_dense,
                            max_baseline_coverage=DOT_LEG_MAX_BASELINE,
                            note=("a comparator whose positives already lie within 3 px of "
