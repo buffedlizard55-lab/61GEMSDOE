@@ -1,0 +1,108 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Method</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Method</h1>
+<h2>The method, and why each choice was forced</h2>
+<h3>1 · Invert the gravity for depth to basement</h3>
+<p>Input is band 13, <code>iso_grav_anom</code>, of the pinned
+<code>training_features.tif</code>. The operator is Parker (1973) forward / Oldenburg (1974)
+iterative, on a 400 m block-mean grid (the field is band-limited to tens of kilometres; 100 m
+sampling would add nothing but noise). The gravity band is NaN over 58 % of the rectangle, so the
+gap is filled by multi-scale normalised convolution — a constant fill puts a step along the whole
+survey boundary and the downward-continuation factor turns that step into tens of kilometres of
+fake relief.</p>
+<h3>2 · The non-linear correction is rejected, on measurement</h3>
+<p>Oldenburg's iteration does not converge on an <i>isostatic residual</i>. The trace is below:
+iteration 1 leaves the smallest forward residual; every later correction makes it worse and the
+relief grows without bound. An isostatic residual carries crustal- and mantle-scale field, and a
+single-interface Parker series can only absorb that field as relief — so it does. The lane
+therefore keeps the <b>first iterate</b> (the low-passed Bouguer slab) and reports the rejected
+correction rather than hiding it.</p>
+<table><tr><th>iteration</th><th>max change (m)</th><th>max |relief| (m)</th><th>forward RMS (mGal)</th></tr><tr><td>1</td><td>2837</td><td>1265</td><td>26.31</td></tr><tr><td>2</td><td>786</td><td>1799</td><td>8.31</td></tr><tr><td>3</td><td>412</td><td>2182</td><td>3.68</td></tr><tr><td>4</td><td>251</td><td>2401</td><td>2.23</td></tr><tr><td>5</td><td>167</td><td>2540</td><td>1.68</td></tr><tr><td>6</td><td>131</td><td>2633</td><td>1.40</td></tr></table>
+<h3>3 · Calibrate against the published map, not against the supplied band</h3>
+<p>The two free parameters are exactly the pair Oldenburg identifies as non-unique: the density
+contrast and the reference level. Both are fitted to USGS <b>GP-1012</b>, whose published scale is
+1 : 2,500,000 and whose only transportable quantities are the median depth band and the fraction
+of the province deeper than 1 km ("about 20 %", Blakely &amp; Jachens 1991). A subset of the
+21-point sweep:</p>
+<table><tr><th>z₀ (m)</th><th>Δρ (kg/m³)</th><th>kc scale</th><th>median (m)</th><th>p90 (m)</th>
+<th>&gt; 1 km</th><th>forward RMS (mGal)</th><th>penalty</th></tr><tr><td>300</td><td>-250</td><td>0.500</td><td>980</td><td>2455</td><td>49.2 %</td><td>3.02</td><td>1.236</td></tr><tr><td>300</td><td>-300</td><td>0.250</td><td>873</td><td>1947</td><td>42.8 %</td><td>3.71</td><td>0.982</td></tr><tr><td>300</td><td>-350</td><td>0.125</td><td>808</td><td>1436</td><td>33.2 %</td><td>5.94</td><td>0.651</td></tr><tr><td>300</td><td>-450</td><td>0.500</td><td>678</td><td>1497</td><td>30.1 %</td><td>2.17</td><td>0.409</td></tr><tr><td>300</td><td>-500</td><td>0.250</td><td>644</td><td>1288</td><td>23.4 %</td><td>3.41</td><td>0.156</td></tr><tr><td>300</td><td>-600</td><td>0.125</td><td>596</td><td>963</td><td>8.2 %</td><td>5.83</td><td>0.896</td></tr><tr><td>400</td><td>-300</td><td>0.500</td><td>969</td><td>2180</td><td>48.5 %</td><td>2.93</td><td>1.210</td></tr><tr><td>400</td><td>-350</td><td>0.250</td><td>896</td><td>1731</td><td>42.4 %</td><td>4.48</td><td>0.998</td></tr><tr><td>400</td><td>-400</td><td>0.125</td><td>854</td><td>1295</td><td>31.8 %</td><td>6.92</td><td>0.664</td></tr><tr><td>400</td><td>-500</td><td>0.500</td><td>741</td><td>1468</td><td>31.5 %</td><td>2.47</td><td>0.512</td></tr><tr><td>400</td><td>-600</td><td>0.250</td><td>689</td><td>1177</td><td>19.9 %</td><td>4.28</td><td>0.004</td></tr><tr><td>500</td><td>-250</td><td>0.125</td><td>1215</td><td>1831</td><td>68.2 %</td><td>7.65</td><td>1.777</td></tr><tr><td>500</td><td>-350</td><td>0.500</td><td>990</td><td>1998</td><td>49.4 %</td><td>3.17</td><td>1.251</td></tr><tr><td>500</td><td>-400</td><td>0.250</td><td>940</td><td>1588</td><td>44.3 %</td><td>5.23</td><td>1.090</td></tr><tr><td>500</td><td>-450</td><td>0.125</td><td>897</td><td>1239</td><td>33.9 %</td><td>7.58</td><td>0.777</td></tr><tr><td>500</td><td>-600</td><td>0.500</td><td>786</td><td>1374</td><td>31.1 %</td><td>2.84</td><td>0.556</td></tr><tr><td>700</td><td>-250</td><td>0.250</td><td>1425</td><td>2238</td><td>75.9 %</td><td>6.57</td><td>2.044</td></tr><tr><td>700</td><td>-300</td><td>0.125</td><td>1279</td><td>1683</td><td>79.4 %</td><td>8.42</td><td>1.982</td></tr><tr><td>700</td><td>-400</td><td>0.500</td><td>1133</td><td>1950</td><td>60.6 %</td><td>3.99</td><td>1.589</td></tr><tr><td>700</td><td>-450</td><td>0.250</td><td>1103</td><td>1555</td><td>63.1 %</td><td>6.45</td><td>1.603</td></tr><tr><td>700</td><td>-500</td><td>0.125</td><td>1048</td><td>1290</td><td>60.9 %</td><td>8.39</td><td>1.516</td></tr></table>
+<p>Selected: z₀ = 400.0 m, Δρ =
+-600.0 kg/m³, kc scale =
+0.25, giving
+19.9 % deeper than 1 km.
+The high apparent contrast is expected for an isostatic residual: the topographic and isostatic
+masses are already removed, so the residual sees a larger effective contrast than a raw Bouguer
+slab.</p>
+<h3>4 · Steps, not lineaments</h3>
+<p>Maxima of the horizontal gradient magnitude of the depth surface, accepted on the
+Blakely &amp; Simpson (1986) "greater than at least two neighbours" rule. Each accepted maximum then
+has its <b>throw</b> measured — the depth range across the ridge in a 5 × 5 window — and only the
+ones above 120 m survive. The DrivenData problem statement's own ledger row DD-ABOUT is
+explicit that a lineament is not a fault and that a fault is a structure with displacement; this
+step is where that is enforced rather than asserted.</p>
+<h3>5 · Emission under the metric, not by eye</h3>
+<p>Dots are chosen by a greedy allocation whose decision rule is the metric's own marginal test,
+<code>dT · D &gt; 0.2 · T · (dT + 1 − k)</code>, with a minimum separation so no truth cell is paid
+for twice. The result is binary, because a graded field is strictly dominated by its own thresholded
+support.</p>
+
+<h2>Sources</h2>
+<ul class="tight">
+<li>Parker, R. L. (1973), <i>The rapid calculation of potential anomalies</i>, GJI 31, 447–455.</li>
+<li>Oldenburg, D. W. (1974), <i>The inversion and interpretation of gravity anomalies</i>,
+    Geophysics 39(4), 526–536, <a href="https://doi.org/10.1190/1.1440444">doi:10.1190/1.1440444</a>.</li>
+<li>Blakely, R. J. &amp; Simpson, R. W. (1986), <i>Approximating edges of source bodies from
+    magnetic or gravity anomalies</i>, Geophysics 51(7), 1494–1498,
+    <a href="https://doi.org/10.1190/1.1442197">doi:10.1190/1.1442197</a>.</li>
+<li>Blakely, R. J. &amp; Jachens, R. C. (1991), <i>Regional study of mineral resources in Nevada</i>,
+    GSA Bulletin 103, 795–803,
+    <a href="https://doi.org/10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2">doi:10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2</a>.</li>
+<li>Saltus, R. W. &amp; Jachens, R. C. (1995), <i>Gravity and basin-depth maps of the Basin and
+    Range Province, western United States</i>, USGS GP-1012,
+    <a href="https://doi.org/10.3133/gp1012">doi:10.3133/gp1012</a> (1 : 2,500,000).</li>
+<li>Jachens, R. C. &amp; Moring, B. C. (1990), USGS OFR 90-404; and USGS OFR 99-49,
+    <a href="https://pubs.usgs.gov/of/1999/0049/pdf/of99-49.pdf">pubs.usgs.gov/of/1999/0049</a>
+    — the practice of reducing with 2,670 kg/m³ and stepping basin fill 1,900–2,450 kg/m³.</li>
+</ul>
+<h2>Gates on this page</h2>
+<table>
+<tr><th>Gate</th><th>Result</th></tr>
+<tr><td>Grid pins (CRS, shape, transform)</td>
+<td>FAIL — —,
+<code>—</code>, footprint
+0 px, catalogue 0 px</td></tr>
+<tr><td>On-disk format, range, finiteness, masked catalogue</td>
+<td>PASS (the writer refuses to emit a file that fails any of these)</td></tr>
+<tr><td>Uniqueness vs the 34 comparable sibling rasters</td>
+<td>UNIQUE — worst rank correlation
+0.050, worst dot overlap
+0.030, byte-identical to none</td></tr>
+<tr><td>Catalogue-frame holdout (structural fidelity)</td>
+<td>0.0000 vs control
+0.0089 — <b>the instrument cannot rank this
+file</b>; see IR-57-INSTR-01</td></tr>
+</table>
+</main></body></html>

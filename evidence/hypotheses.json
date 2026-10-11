@@ -1,0 +1,97 @@
+{
+  "evidence_class": "MEASURED + LITERATURE",
+  "note": "Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.",
+  "ranking_rule": "expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost",
+  "hypotheses": [
+    {
+      "id": "H61-A",
+      "rank": 1,
+      "status": "IMPLEMENTED AND VALIDATED THIS SESSION",
+      "title": "Basement-depth step ribbons from an independent Parker-Oldenburg inversion",
+      "layers": [
+        "13 iso_grav_anom (input to the inversion)",
+        "18 iso_grav_anom_hg (fused as an edge strength)",
+        "own inversion -> depth-to-basement surface",
+        "own inversion -> horizontal-gradient maxima + measured throw"
+      ],
+      "physical_signature": "A basin-margin or intrabasin normal fault puts a step in the basement surface. Gravity of a thin slab is proportional to its thickness, so the step appears as a ridge of the horizontal-gradient magnitude of the depth-to-basement surface. The ridge's throw (depth difference across the ridge) is the fault's displacement.",
+      "why_missing_from_catalogue": "80% of Nevada is covered by Cenozoic deposits and these are thicker than 1 km over about 20% of the state (Blakely & Jachens 1991). A fault under kilometre-scale fill has no surface trace to map; the catalogue is built from surface mapping, so it is blind exactly there. The catalogue reports the fault only if a younger scarp or a mapped unit contact exposes it.",
+      "differs_from_existing": "The sibling repositories invert nothing: they use band 18 (the supplied horizontal gradient) directly, or proximity/strike statistics of the catalogue. This lane re-derives the depth surface from band 13 with the non-linear Parker series, calibrates the density contrast against GP-1012 rather than trusting the supplied slab product, and then filters candidates by MEASURED THROW -- which is what makes a lineament a fault (DD-ABOUT).",
+      "cost": "one calibrable inversion (seconds at 400 m) + one EDT at 100 m",
+      "sources": [
+        "doi:10.1111/j.1365-246X.1973.tb02307.x",
+        "doi:10.1190/1.1440444",
+        "doi:10.1190/1.1442197",
+        "doi:10.3133/gp1012",
+        "doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2"
+      ]
+    },
+    {
+      "id": "H61-B",
+      "rank": 2,
+      "status": "NOT IMPLEMENTED (blocked, see names)",
+      "title": "Concealed-step index from the throw/depth ratio (buried scarp sharpness)",
+      "layers": [
+        "13 iso_grav_anom",
+        "own inverted depth surface",
+        "15 depth_to_base_surf"
+      ],
+      "physical_signature": "The ratio of throw to the depth of burial is a proxy for whether a step is a fault plane or a depositional ramp: a fault keeps a sharp step under fill, whereas a ramp is smoothed by the same fill.",
+      "why_missing_from_catalogue": "Same concealment argument as H-A, plus a filter that removes the drainage/topographic-artefact lineaments the older instruments emit.",
+      "differs_from_existing": "Keys on the ratio, not the magnitude -- no sibling instrument uses an inverted-surface throw/depth ratio.",
+      "cost": "low (one extra ratio field) but needs a truth proxy to calibrate the sharpness cut",
+      "blocked_on": "A population of KNOWN buried faults with independently measured throws to calibrate the sharpness cut. Named free official source: USGS Quaternary Fault and Fold Database slip-rate/throw attributes (https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483); obtainability checked, both are public downloads."
+    },
+    {
+      "id": "H61-C",
+      "rank": 3,
+      "status": "NOT IMPLEMENTED (blocked, see names)",
+      "title": "Basement-fabric (trend) blocking: steps aligned with the magnetic fabric",
+      "layers": [
+        "13 iso_grav_anom",
+        "14 tmi",
+        "2 rtp",
+        "9 tmi_vg",
+        "own depth surface"
+      ],
+      "physical_signature": "In the Walker Lane the basement fabric sets the fault trend. A gravity step whose azimuth agrees with the local magnetic-fabric azimuth is more likely to be a basement-cutting fault than a shallow sedimentary edge.",
+      "why_missing_from_catalogue": "Adds a *consistency* test between two independent physics (density and magnetisation) that a surface-mapping catalogue cannot perform at all.",
+      "differs_from_existing": "Uses the magnetic field as a fabric ORACLE for the gravity step, not as another edge detector.",
+      "cost": "medium (structure-tensor azimuth of two gridded fields)",
+      "blocked_on": "A second magnetic grid at a different flight-line spacing to test azimuth stability. Named free official source: USGS GeoDAWN airborne magnetic surveys, ScienceBase 657e1d85d34e23d3533209f7 / doi:10.5066/P93LGLVQ (area 2 lines 400 m apart, azimuth 90 deg, CC0) -- obtainability checked: the ScienceBase release is public, but the grids are GB-scale and cannot be fetched from this sandbox."
+    },
+    {
+      "id": "H61-D",
+      "rank": 4,
+      "status": "NOT IMPLEMENTED (blocked, see names)",
+      "title": "Isostatic-residual step under a geothermal anomaly (heat-flow guided)",
+      "layers": [
+        "13 iso_grav_anom",
+        "17 cond_surf",
+        "own depth surface",
+        "external heat-flow points"
+      ],
+      "physical_signature": "A buried fault that conducts fluid shows a heat-flow or conductivity anomaly above the gravity step; requiring both raises precision without costing recall where it matters.",
+      "why_missing_from_catalogue": "Concealment again, plus a second independent physical channel to survive the FP penalty.",
+      "differs_from_existing": "No sibling instrument conditions a gravity step on a thermal observation.",
+      "cost": "medium (external point data + interpolation)",
+      "blocked_on": "Heat-flow / temperature-gradient point coverage inside the GeoDAWN footprint. Named free official source: SMU Geothermal Laboratory heat-flow database and the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483, CC BY 4.0); obtainability of the in-footprint subset NOT yet verified from this sandbox."
+    },
+    {
+      "id": "H61-E",
+      "rank": 5,
+      "status": "NOT IMPLEMENTED (blocked, see names)",
+      "title": "Along-strike relief partitioning between adjacent inverted basins",
+      "layers": [
+        "13 iso_grav_anom",
+        "own inverted depth surface",
+        "12/19 detrended elevation"
+      ],
+      "physical_signature": "Two adjacent basins whose depth maxima face each other across a narrow high are separated by an accommodation zone; a fault with opposite dip sense usually occupies it. The signature is a paired depth minimum flanking a narrow basement high at the same along-strike position.",
+      "why_missing_from_catalogue": "Accommodation zones are usually covered by the basin fill they separate -- the classic buried transfer zone.",
+      "differs_from_existing": "Keys on the JOINT geometry of two basins rather than on any single edge, so it cannot be reproduced by thresholding any single supplied band.",
+      "cost": "high (paired-object matching, no supplied layer does it)",
+      "blocked_on": "A buried accommodation zone with independent sub-surface control to test against. Named free official source: USGS/DOE geothermal well temperature logs and the GBCGE Subsurface Database (doi:10.15121/1987556); obtainability NOT yet verified here."
+    }
+  ]
+}

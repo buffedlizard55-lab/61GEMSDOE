@@ -1,0 +1,7 @@
+.cache/
+out/*.tif
+out/*.zip
+__pycache__/
+*.pyc
+data/official/training_features.tif
+data/bridge/*.tif

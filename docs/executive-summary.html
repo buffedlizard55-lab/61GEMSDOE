@@ -1,0 +1,65 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>How to make a submission, exactly</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>How to make a submission, exactly</h1>
+<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the GeoTIFF at the
+top of the <a href="index.html">home page</a>, then paste the name and the note into the
+submission dialog. Nothing else is needed.</div>
+<h2>1 · Download</h2>
+<p>On the <a href="index.html">home page</a>, click <b>Download the GeoTIFF</b>. The file is
+<code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code>. If the portal prefers a ZIP, use <b>Single-TIFF ZIP</b> instead — it
+contains exactly one GeoTIFF and nothing else. Do not upload the JSON run card, this page, or a
+ZIP of the repository.</p>
+<h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
+<p>Re-hash it. On macOS/Linux: <code>shasum -a 256 gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code> — it must print</p>
+<p><code>565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9</code></p>
+<h2>3 · Fill in the dialog</h2>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Name</td><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros</code></td></tr>
+<tr><td>Note (≤ 140 characters)</td><td>H61-A basement-step ribbons from an independent Parker-Oldenburg inversion of iso_grav_anom; 20000 dots, 120 m throw minimum. <span class="pill">125 / 140</span></td></tr>
+<tr><td>File</td><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code> (or the single-TIFF ZIP)</td></tr>
+</table>
+<h2>4 · What happens next, and what does not</h2>
+<ul class="tight">
+<li>Uploading spends one of the three weekly submission slots. <b>This repository has not spent
+    one.</b> Promotion to a slot is your decision.</li>
+<li>When a score comes back, write it down with the date. That number, and only that number, is
+    a competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI or
+    OWNER-REPORTED and none of those is a score.</li>
+<li>If the portal rejects the file, capture the exact error text and add it to
+    <code>evidence/</code> — a rejection is evidence, and the range error reported against an
+    earlier site's download is the reason every value here is checked to be finite and inside
+    [0, 1] before the file is written.</li>
+</ul>
+<h2>Why the file is shaped the way it is</h2>
+<p>The competition metric is
+<code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular kernel of radius 300 m,
+and the mapped-fault catalogue is masked out of scoring. Two consequences decide the shape of
+this file: <b>a dot on a mapped trace earns nothing</b> (the pixel is not scored), and
+<b>a dot only pays if it lands within about 280 m of a hidden truth pixel</b> at the scores
+currently on the board. That is why the dots sit in a band a few pixels off the mapped traces
+rather than on them, and why they are dots and ribbons rather than a smooth probability surface.</p>
+</main></body></html>

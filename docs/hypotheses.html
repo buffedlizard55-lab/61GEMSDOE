@@ -1,0 +1,86 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Hypotheses</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Hypotheses</h1><p>Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.</p><p><b>Ranking rule:</b> expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost</p>
+<div class="banner ok">
+<strong>#1 · H61-A · Basement-depth step ribbons from an independent Parker-Oldenburg inversion</strong>
+<span class="pill">IMPLEMENTED AND VALIDATED THIS SESSION</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom (input to the inversion)<br>18 iso_grav_anom_hg (fused as an edge strength)<br>own inversion -> depth-to-basement surface<br>own inversion -> horizontal-gradient maxima + measured throw</td></tr>
+<tr><th>Physical signature</th><td>A basin-margin or intrabasin normal fault puts a step in the basement surface. Gravity of a thin slab is proportional to its thickness, so the step appears as a ridge of the horizontal-gradient magnitude of the depth-to-basement surface. The ridge's throw (depth difference across the ridge) is the fault's displacement.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>80% of Nevada is covered by Cenozoic deposits and these are thicker than 1 km over about 20% of the state (Blakely & Jachens 1991). A fault under kilometre-scale fill has no surface trace to map; the catalogue is built from surface mapping, so it is blind exactly there. The catalogue reports the fault only if a younger scarp or a mapped unit contact exposes it.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>The sibling repositories invert nothing: they use band 18 (the supplied horizontal gradient) directly, or proximity/strike statistics of the catalogue. This lane re-derives the depth surface from band 13 with the non-linear Parker series, calibrates the density contrast against GP-1012 rather than trusting the supplied slab product, and then filters candidates by MEASURED THROW -- which is what makes a lineament a fault (DD-ABOUT).</td></tr>
+<tr><th>Cost</th><td>one calibrable inversion (seconds at 400 m) + one EDT at 100 m</td></tr>
+
+<tr><th>Sources</th><td>doi:10.1111/j.1365-246X.1973.tb02307.x<br>doi:10.1190/1.1440444<br>doi:10.1190/1.1442197<br>doi:10.3133/gp1012<br>doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2</td></tr>
+</table>
+<div class="banner warn">
+<strong>#2 · H61-B · Concealed-step index from the throw/depth ratio (buried scarp sharpness)</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface<br>15 depth_to_base_surf</td></tr>
+<tr><th>Physical signature</th><td>The ratio of throw to the depth of burial is a proxy for whether a step is a fault plane or a depositional ramp: a fault keeps a sharp step under fill, whereas a ramp is smoothed by the same fill.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Same concealment argument as H-A, plus a filter that removes the drainage/topographic-artefact lineaments the older instruments emit.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Keys on the ratio, not the magnitude -- no sibling instrument uses an inverted-surface throw/depth ratio.</td></tr>
+<tr><th>Cost</th><td>low (one extra ratio field) but needs a truth proxy to calibrate the sharpness cut</td></tr>
+<tr><th>Blocked on</th><td>A population of KNOWN buried faults with independently measured throws to calibrate the sharpness cut. Named free official source: USGS Quaternary Fault and Fold Database slip-rate/throw attributes (https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483); obtainability checked, both are public downloads.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#3 · H61-C · Basement-fabric (trend) blocking: steps aligned with the magnetic fabric</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>14 tmi<br>2 rtp<br>9 tmi_vg<br>own depth surface</td></tr>
+<tr><th>Physical signature</th><td>In the Walker Lane the basement fabric sets the fault trend. A gravity step whose azimuth agrees with the local magnetic-fabric azimuth is more likely to be a basement-cutting fault than a shallow sedimentary edge.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Adds a *consistency* test between two independent physics (density and magnetisation) that a surface-mapping catalogue cannot perform at all.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Uses the magnetic field as a fabric ORACLE for the gravity step, not as another edge detector.</td></tr>
+<tr><th>Cost</th><td>medium (structure-tensor azimuth of two gridded fields)</td></tr>
+<tr><th>Blocked on</th><td>A second magnetic grid at a different flight-line spacing to test azimuth stability. Named free official source: USGS GeoDAWN airborne magnetic surveys, ScienceBase 657e1d85d34e23d3533209f7 / doi:10.5066/P93LGLVQ (area 2 lines 400 m apart, azimuth 90 deg, CC0) -- obtainability checked: the ScienceBase release is public, but the grids are GB-scale and cannot be fetched from this sandbox.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#4 · H61-D · Isostatic-residual step under a geothermal anomaly (heat-flow guided)</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>17 cond_surf<br>own depth surface<br>external heat-flow points</td></tr>
+<tr><th>Physical signature</th><td>A buried fault that conducts fluid shows a heat-flow or conductivity anomaly above the gravity step; requiring both raises precision without costing recall where it matters.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Concealment again, plus a second independent physical channel to survive the FP penalty.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>No sibling instrument conditions a gravity step on a thermal observation.</td></tr>
+<tr><th>Cost</th><td>medium (external point data + interpolation)</td></tr>
+<tr><th>Blocked on</th><td>Heat-flow / temperature-gradient point coverage inside the GeoDAWN footprint. Named free official source: SMU Geothermal Laboratory heat-flow database and the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483, CC BY 4.0); obtainability of the in-footprint subset NOT yet verified from this sandbox.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#5 · H61-E · Along-strike relief partitioning between adjacent inverted basins</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface<br>12/19 detrended elevation</td></tr>
+<tr><th>Physical signature</th><td>Two adjacent basins whose depth maxima face each other across a narrow high are separated by an accommodation zone; a fault with opposite dip sense usually occupies it. The signature is a paired depth minimum flanking a narrow basement high at the same along-strike position.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Accommodation zones are usually covered by the basin fill they separate -- the classic buried transfer zone.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Keys on the JOINT geometry of two basins rather than on any single edge, so it cannot be reproduced by thresholding any single supplied band.</td></tr>
+<tr><th>Cost</th><td>high (paired-object matching, no supplied layer does it)</td></tr>
+<tr><th>Blocked on</th><td>A buried accommodation zone with independent sub-surface control to test against. Named free official source: USGS/DOE geothermal well temperature logs and the GBCGE Subsurface Database (doi:10.15121/1987556); obtainability NOT yet verified here.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table></main></body></html>
