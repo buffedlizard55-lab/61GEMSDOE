@@ -273,6 +273,14 @@ pytest tests -q                         # 50 tests
 7. **The four spatial folds are unbalanced** (NW 6,073 of 12,898 withheld
    positives) because the catalogue is. A weighted or re-blocked bootstrap would
    tighten every interval in this repository.
+8. **The delivered inversion uses Δρ = 400 kg/m³, the calibration objective's
+   runner-up.** The objective's argmin is Δρ = 300 kg/m³ (slope 1.0043,
+   r 0.5481, RMSE 709.5 m); the delivered field has slope 0.9578, r 0.5749,
+   RMSE 631.1 m — worse on |log slope| (0.0431 vs 0.0043) but better on both
+   correlation and RMSE. The two criteria disagree and nothing here resolves
+   them. Re-running `scripts/build_candidate.py --drho 300` is a one-line
+   experiment and is the first thing a follow-up session should do; it is
+   recorded as irregularity IR-2b.
 
 ## 9. Sources
 

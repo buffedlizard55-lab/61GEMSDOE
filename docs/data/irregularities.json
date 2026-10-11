@@ -18,6 +18,14 @@
     "status": "open - documented, not resolved"
   },
   {
+    "id": "IR-2b",
+    "severity": "minor",
+    "title": "The delivered inversion uses the runner-up density contrast, not the objective's argmin",
+    "detail": "At z0 = 3000 m and a 5000 m cutoff the calibration objective (|log slope| − Pearson r) is minimised by drho = 300 kg/m3: slope 1.0043, r 0.5481, RMSE 709.5 m. The delivered field uses drho = 400 kg/m3: slope 0.9578, r 0.5749, RMSE 631.1 m — the objective's runner-up (0.0043 against 0.0431 in |log slope|) but the better of the two on both correlation and RMSE.",
+    "consequence": "The two criteria disagree and nothing in this repository resolves them. Both rows are published in evidence/depth_scale_calibration.json. Because a change in drho mainly rescales the depth field, the crest positions move only slightly, but the delivered numbers were never recomputed at drho = 300 and that gap is stated rather than hidden.",
+    "status": "open - the drho = 300 run is the first thing a follow-up session should repeat"
+  },
+  {
     "id": "IR-3",
     "severity": "major",
     "title": "The measured positional resolution is three times the metric's kernel radius",
