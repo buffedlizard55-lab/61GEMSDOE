@@ -393,14 +393,31 @@ holdout, not assumed.</p>""")
 
 def page_hypotheses() -> str:
     hyp = load("hypotheses.json")
+    def pick(h: dict, *names):
+        """First present key; the evidence files do not all use the same names."""
+        for n in names:
+            if h.get(n) not in (None, "", []):
+                return h[n]
+        return None
+
+    def as_list(v) -> str:
+        if isinstance(v, (list, tuple)):
+            return "<br>".join(esc(x) for x in v)
+        return esc(v)
+
     rows = ""
     for h in (hyp or {}).get("hypotheses", []):
+        gain = pick(h, "expected_dti_gain", "expected_gain", "rank")
+        status = pick(h, "status")
+        gain_cell = esc(gain)
+        if status and gain is pick(h, "rank"):
+            gain_cell = f"rank {esc(gain)}"
         rows += (f"<tr><td><strong>{esc(h.get('id'))}</strong><br>"
-                 f"<span class='small'>{esc(h.get('layers'))}</span></td>"
-                 f"<td>{esc(h.get('signature'))}</td>"
-                 f"<td>{esc(h.get('why_off_catalogue'))}</td>"
-                 f"<td>{esc(h.get('differs_from'))}</td>"
-                 f"<td class='num'>{esc(h.get('expected_dti_gain'))}</td>"
+                 f"<span class='small'>{as_list(h.get('layers'))}</span></td>"
+                 f"<td>{esc(pick(h, 'physical_signature', 'signature'))}</td>"
+                 f"<td>{esc(pick(h, 'why_missing_from_catalogue', 'why_off_catalogue'))}</td>"
+                 f"<td>{esc(pick(h, 'differs_from_existing', 'differs_from'))}</td>"
+                 f"<td class='num'>{gain_cell}</td>"
                  f"<td class='num'>{esc(h.get('cost'))}</td></tr>")
     if not rows:
         rows = "<tr><td colspan='6'>hypotheses file missing</td></tr>"
