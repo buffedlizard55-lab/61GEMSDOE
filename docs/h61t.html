@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H61-T session · 61GEMSDOE</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status.ok{border-color:var(--ok);background:#0f2a16}
+.status.bad{border-color:var(--bad);background:#2a0f0f}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}tr.hl td{background:#102a3a}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
+.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
+.small{font-size:.85rem;color:var(--dim)}code{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+</style></head><body><div class="wrap">
+<div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>HISTORICAL PAGE — SUPERSEDED.</b> Legacy score, “UNIQUE,” or “ready” labels are not current clearance. Current status: H61-O is cleared under the Jaccard-exception gate, while the strict audit blocks 12/12 local artifacts. <a href="index.html">Current status</a> · <a href="../evidence/local_artifact_strict_dot_audit.json">strict audit</a>. Do not treat this page as a current submission clearance.</div>
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="h61t.html" class=active>H61-T session</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+
+<h2>Session H61-T (arena/f1bed08d-61gemsdoe, 2026-10-11) &mdash; step persistence &amp; independent-depth consensus</h2>
+
+<div class="status">
+<p style="margin:.2em 0"><b>Is it OK to download and submit the file this session generated?</b></p>
+<p><span style="color:var(--ok)"><b>YES, the file is FORMAT-VALID and UNIQUE</b></span> &mdash; it will pass the
+platform's format checks (single-band float32 GeoTIFF, EPSG:32611, 3730 &times; 3292, the sample-submission
+transform, values exactly {0.0, 1.0}, no NaN anywhere, zero on the mapped catalogue).
+<span style="color:var(--warn)"><b>Our measurements do NOT recommend spending a weekly slot on it</b></span>:
+its HOLDOUT-DTI sits below random lines, and promotion to a slot is the selector's decision anyway
+(protocol rule 6). It ships as the lane's validated, uniqueness-checked artifact &mdash; a deliverable
+negative result.</p>
+<p><a class="btn" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif" download>&#11015; Download gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif (68 kB)</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip" download>zip (single TIFF)</a>
+<a class="btn sec" href="downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json">format receipt</a></p>
+<p class="small">Submission name: <code>gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros</code> &middot;
+note (113/140 chars): <code>H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED</code> &middot;
+sha256 <code>717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d</code> (69,096 bytes) &middot; 4,583 dots, min distance to the catalogue 2.24 px, median 21.2 px.</p>
+</div>
+
+<h3>The three experiments (budget: 3, per protocol)</h3>
+<table>
+<tr><th>exp</th><th>arm</th><th>construction</th><th>n/draw</th><th>HOLDOUT-DTI (95 % CI)</th><th>basin-interior segments recovered / 1,982</th></tr>
+<tr><td>E1</td><td>T0_steps_basin</td><td>pure lane field: Blakely&ndash;Simpson maxima of the 200 m Parker/Oldenburg inverted depth, throw &ge; 80 m, basin interior, ranked by throw</td><td>4,024</td><td>0.0068 (0.0050&ndash;0.0088)</td><td><b>36</b></td></tr>
+<tr><td>E2</td><td>T1_persistent_step</td><td>monopole-persistence gate: far-field (&plusmn;800 m) depth offset along the local gradient keeps sign and &ge; 60 % of the near-field (&plusmn;200 m) offset on the plane-detrended surface; removes closing intrabasement density bodies</td><td>125</td><td>0.0007 (0.0000&ndash;0.0015)</td><td>0</td></tr>
+<tr><td>E3</td><td>T2_consensus</td><td>independent-depth consensus: steps of the band-13 inversion within &plusmn;5 px of steps of the organiser-supplied band-15 depth surface (first-ever lane use of band 15 as a locator)</td><td>1,438</td><td>0.0021 (0.0009&ndash;0.0037)</td><td>12</td></tr>
+<tr><td rowspan="4">controls</td><td colspan="2">random lines @ 20,000 / @ 40,000</td><td>20,000 / 40,000</td><td>0.0187 (0.0166&ndash;0.0205) / 0.0306 (0.0272&ndash;0.0338)</td><td>104 / 187</td></tr>
+<tr><td colspan="2">random dots anywhere @ 40,000</td><td>40,000</td><td>0.0364 (0.0340&ndash;0.0386)</td><td>232</td></tr>
+<tr><td colspan="2">random lines @ 4,024 (equal-emission)</td><td>4,024</td><td>0.0052</td><td>23</td></tr>
+<tr><td colspan="2">random dots @ 4,024 (equal-emission)</td><td>4,024</td><td>0.0082</td><td>26</td></tr>
+</table>
+<p class="small">Evaluator: <code>gems61.holdout_segmented v2</code> (whole segments &le;12 px, 4 eroded quadrants,
+seeds 20+21, mode all), 22,641 withheld positive px, pooled DTI &alpha; 0.2 / &beta; 0.8, 300 m triangular kernel.
+Every number is HOLDOUT-DTI; nothing is ORGANIZER-CONFIRMED. Source: <code>evidence/h61t_holdout.json</code>.</p>
+
+<h3>The lane requirement, answered: steps vs random lines on withheld basin-interior segments</h3>
+<p>At the lane's own emission budget (4,024 dots &mdash; the step field cannot emit more than its own set),
+the steps recover <b>36 of 1,982</b> withheld basin-interior segments (rate 1.8 %, Wilson 95 % CI 1.3&ndash;2.5 %)
+against <b>23/1,982</b> for random lines and <b>26/1,982</b> for random dots &mdash; a 1.6&times; per-dot enrichment.
+Real, but far too small to overcome the coverage deficit at &beta; = 0.8: pooled DTI punishes the 22,641 truth
+pixels nobody covers, so a 4 k-dot construction cannot beat a 40 k-dot random control on DTI even while
+recovering more segments per dot.</p>
+
+<h3>The competing explanation, measured not asserted</h3>
+<p>The lane names density contrasts within basement as the mimic. This session measured the step field
+directly (IR-61-DIPDOM-01): of 22,316 step pixels, the median plane-removed near-field offset is ~3 m
+&mdash; most &ldquo;steps&rdquo; are regional-dip gradients &mdash; and only <b>2.5 %</b> pass the monopole-persistence
+test (E2). The E3 consensus of two independent depth surfaces keeps 6,611 px and recovers 12 segments.
+Neither discriminator beats random lines on pooled DTI. Leakage canary: worst AUC 0.516 (band-15 depth),
+limit 0.90 &mdash; clean.</p>
+
+<h3>Shared tools fixed this session (protocol rule 2: fix once, never fork)</h3>
+<ul>
+<li><code>src/gems61/h61mh.py</code> &mdash; SyntaxError from a bare text block outside the docstring; module unimportable on <code>main</code>. Fixed.</li>
+<li><code>scripts/run_h61mh.py</code> &mdash; imported <code>gems61.h61m</code> while using <code>build_feature_stack</code>/<code>train_habitat</code> from <code>h61mh</code>. Fixed.</li>
+<li><code>src/gems61/offcatalogue.py</code> and <code>src/gems61/fitting.py</code> &mdash; imports from the wrong holdout module. Fixed.</li>
+<li><code>dot_thin</code> zero-fill hazard (IR-61-DOTFILL-01): a score field zero-filled outside its emission set silently spends the remaining budget on arbitrary pixels. H61-T masks non-emission pixels to &minus;inf; shared semantics left intact for the other lanes.</li>
+<li>NaN survey-rim holes fabricating offsets (IR-61-E2NAN-01) &mdash; diffusion-inpainted surface before any directional sampling.</li>
+</ul>
+
+<h3>What would actually beat 0.2778 (and 0.3195)</h3>
+<p>The <a href="analysis.html">analysis page</a> (now with a &sect;5 addendum) shows the 0.2600 &rarr; 0.2778
+trajectory is pure catalogue-flank pruning of one Poisson-300 m dot set; the prune is saturated. The ranked
+new hypotheses are in <code>evidence/h61t_hypotheses.json</code>: <b>H61-T2 consensus</b> and <b>H61-T1
+persistence</b> were validated this session (negative); <b>H61-T5 continuation-depth persistence</b>,
+<b>H61-T3 conductivity coincidence</b> and <b>H61-T4 geodetic gate</b> remain, plus the parked <b>H61-N</b>
+(1 m 3DEP lidar in corridor, needs USGS egress this sandbox does not have). The honest conclusion is
+unchanged: no construction inside the supplied 19 bands has generalised across space yet (this session's
+arms are catalogue-free physics constructions, so LOQO does not apply to them &mdash; they simply score low),
+and the path to the top of the board runs through metre-scale external evidence or a genuinely new locator.</p>
+
+<p class="small">Run card: <code>evidence/h61t_run_card.json</code> &middot; holdout: <code>evidence/h61t_holdout.json</code> &middot;
+uniqueness: <code>evidence/h61t_uniqueness.json</code> &middot; file: <code>evidence/h61t_final.json</code> &middot;
+hypotheses: <code>evidence/h61t_hypotheses.json</code> &middot; driver: <code>scripts/run_h61t.py</code>.</p>
+
+</div></body></html>

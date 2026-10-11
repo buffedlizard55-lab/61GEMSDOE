@@ -1,0 +1,183 @@
+{
+  "session": "H61-T (arena/f1bed08d-61gemsdoe, 2026-10-11)",
+  "lane": "buried-structure: basement-depth steps from gravity inversion",
+  "hypothesis": "A buried normal fault is a MONOPOLE step in the GP-1012-calibrated inverted basement surface: the depth offset persists along the gradient direction, whereas the lane's named competing explanation -- density contrasts inside the basement -- closes into a dipole.  Additionally, a step seen by BOTH the lane's band-13 inversion and the organiser-supplied band-15 depth surface (independent processing chains) is less likely to be an inversion artefact.",
+  "mechanism": "Isostatic residual gravity (band 13) -> Parker/Oldenburg slab inversion at 200 m, regional removed at 15 km, density contrast calibrated to GP-1012 basin-depth statistics -> Blakely-Simpson maxima of |grad depth| with measured throw >= 80 m -> (E2) far-field/near-field offset persistence along the local gradient on the locally-detrended depth surface; (E3) mutual +/-5 px corridor agreement with band-15 depth-surface steps -> dots at 3 px spacing in the basin interior, pruned >2-3 px from the visible mapped catalogue.",
+  "named_non_fault_process": "Density contrasts within basement (sills, dikes, pluton flanks, intrabasement lithologic contacts) make the same horizontal-gradient maximum.  E2 measures the discriminator directly: a finite body's offset closes over +/-800 m (far/near < 0.6 or sign flip); a fault's offset persists.  E3's independent-depth consensus is the second, unrelated filter.",
+  "experiments": {
+    "E1_baseline": "T0 arm: pure lane field re-measured on the current evaluator",
+    "E2_persistence": "T1 arm: monopole-step persistence gate",
+    "E3_consensus": "T2 arm: band-13 inversion x band-15 supplied depth consensus"
+  },
+  "holdout_dti": {
+    "value": 0.0067812819189520665,
+    "ci95": [
+      0.004953789069907574,
+      0.008751251280421762
+    ],
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "n_withheld_positive_px": 22641,
+    "label": "HOLDOUT-DTI (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all), 22641 withheld positive px, seeds 20+21, mode all, pooled alpha 0.2 beta 0.8 R 300 m)",
+    "random_lines_same_budget": 0.018746737352983038,
+    "lane_previous_best_H61MH": 0.06063316101428559,
+    "beats_random_lines": false,
+    "beats_previous_lane_best": false,
+    "basin_interior_recovery": {
+      "withheld": 1982,
+      "recovered": 36,
+      "rate": 0.018163471241170535,
+      "ci95": [
+        0.013148579427175674,
+        0.02504251507614243
+      ],
+      "random_lines_recovered": 104,
+      "equal_emission_controls": {
+        "matched_to": "T0_steps_basin @ 20000 (prune 2px) (n_emitted_per_draw=4024.0)",
+        "t0_segments_recovered_basin_interior": 36,
+        "rows": [
+          {
+            "name": "CONTROL random lines @ 4024 (equal-emission)",
+            "budget": 4024,
+            "pooled_dti": 0.005195804335225403,
+            "tp": 102.52683573016641,
+            "fp": 7996.576232910156,
+            "fn": 22538.47316426983,
+            "n_emitted": 8048,
+            "coverage": 0.004528370466417845,
+            "ci95_bootstrap_cells": [
+              0.0037092980535212102,
+              0.006477390136635369
+            ],
+            "n_emitted_per_draw": 4024.0,
+            "segments_withheld_basin_interior": 1982,
+            "segments_recovered_basin_interior": 23
+          },
+          {
+            "name": "CONTROL random dots @ 4024 (equal-emission)",
+            "budget": 4024,
+            "pooled_dti": 0.008233398192533459,
+            "tp": 162.5408331664764,
+            "fp": 7981.6895751953125,
+            "fn": 22478.459166833523,
+            "n_emitted": 8048,
+            "coverage": 0.0071790483267733934,
+            "ci95_bootstrap_cells": [
+              0.006406531773817148,
+              0.009695930577593662
+            ],
+            "n_emitted_per_draw": 4024.0,
+            "segments_withheld_basin_interior": 1982,
+            "segments_recovered_basin_interior": 26
+          }
+        ]
+      }
+    }
+  },
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.5161101556633982,
+    "worst_feature": "band 15 depth",
+    "passed": true,
+    "per_feature": {
+      "corridor indicator": {
+        "auc": 0.5096650425389779,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "step persistence (E2)": {
+        "auc": 0.5003754818415707,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "consensus indicator (E3)": {
+        "auc": 0.4999411022867806,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "inverted depth (200 m)": {
+        "auc": 0.5054025825659202,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "step throw": {
+        "auc": 0.5000217255200742,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 15 depth": {
+        "auc": 0.5161101556633982,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band 13 gravity": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "correlation_vs_registry": {
+    "worst_spearman": 0.02678129049638354,
+    "worst_spearman_source": "60GEMSDOE:docs/downloads/gems60-h62-1-undercover-step-48000px-20261011T020550Z-nan.tif",
+    "limit": 0.9,
+    "worst_dot_overlap_3px": 0.6321186995417849,
+    "worst_dot_overlap_source": "13GEMSDOE:docs/downloads/archive/13gems-toporef-holdoutref.tif",
+    "overlap_limit": 0.7,
+    "n_registry_rasters": 748,
+    "verdict": "UNIQUE"
+  },
+  "ribbon_note": "The lane paragraph says 'emit multi-line ribbons rather than thin lines'. The shipped file emits dots because the live metric charges alpha=0.2 per extra positive pixel and this lane measured 3x3 ribbons at roughly half the pooled DTI of the same dots (H61-MH M4 arm, evidence/h61m_holdout.json). The ribbon form of a gravity-step construction exists in this repo for audit (gems61-h61m-gravmag-corridor-ribbon-40000dots, 61gemsdoe-basement-step-ribbon-20261011T054408Z); the selector may emit a ribbon version of this exact dot set with MH.ribbon(dots, 1) at the cost of ~9x positive pixels and the measured DTI penalty.",
+  "raster_sha256": "717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d",
+  "validator": {
+    "all_checks_passed": true,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_template": true,
+      "nodata_unset_or_nan": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_no_nan": true,
+      "in_footprint_no_inf": true,
+      "in_footprint_no_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_on_catalogue": true,
+      "nonempty": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "no_float32_sentinel": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_range_0_1_legacy": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true
+    }
+  },
+  "submission": {
+    "name": "gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros",
+    "note": "H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED",
+    "note_chars": 113,
+    "download_tif": "docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif",
+    "download_zip": "docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip",
+    "n_dots": 4583,
+    "organizer_confirmed_score": null,
+    "organizer_status": "UNSCORED -- no submission-page receipt exists"
+  },
+  "okay_to_download": true,
+  "raster": {
+    "file": "docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif",
+    "sha256": "717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d",
+    "bytes": 69096,
+    "zip_file": "docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip",
+    "positive_pixels": 4583
+  },
+  "verdict": "negative",
+  "verdict_note": "Every number above is HOLDOUT-DTI (evaluator version 'gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)'); nothing is ORGANIZER-CONFIRMED.  A projection is never written as a score."
+}

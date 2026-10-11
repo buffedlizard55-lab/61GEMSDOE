@@ -15,7 +15,10 @@ from sklearn.metrics import roc_auc_score
 
 from .anatomy import FEATURES, fold_geometry
 from .emit import expected_credit, greedy_allocate
-from .holdout import Cell, HoldoutContext
+# Cell / HoldoutContext live in holdout_segmented (the segmented evaluator);
+# gems61.holdout defines neither (IR-61-FIT-01, same defect class as
+# IR-61-OFFCAT-01: merge-time imports pointed at the wrong holdout module).
+from .holdout_segmented import Cell, HoldoutContext
 from . import evaluate_holdout as EH
 from .metric import dti_binary
 

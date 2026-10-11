@@ -71,6 +71,28 @@ The file `gems32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif` (37,654 dots,
 
 All remain in `docs/downloads/` as uniqueness references.
 
+### This session `arena/f1bed08d-61gemsdoe` (H61-T): its own lane artifact
+
+**H61-T file: `gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif`**
+(this session, `arena/f1bed08d-61gemsdoe`, H61-T; a session artifact alongside the H61-O
+clearance above, which remains the file driving `evidence/run_card.json`).
+
+| question | answer |
+|---|---|
+| Is the file safe to download and submit? | **YES — FORMAT-VALID and UNIQUE.** The shared fail-closed writer validated the exact bytes on disk (single band, float32, EPSG:32611, 3730 × 3292, sample-submission transform, no NaN/Inf anywhere, values in [0, 1], 0.0 outside the footprint, zero dots on the mapped catalogue — the organiser error "Predicted values must be in range [0, 1]" cannot occur for these bytes). Uniqueness gate run against **every earlier raster**: 748 registry rasters from all 62 sibling repos (`scripts/refresh_registry.py`, complete scan, 0 errors) plus every raster in this repo's `docs/downloads/` and `docs/submissions/` — verdict **UNIQUE** (numbers in `evidence/h61t_uniqueness.json`). |
+| Should it be given a weekly slot? | **NOT RECOMMENDED — negative result.** HOLDOUT-DTI 0.0068 (95 % CI 0.0050–0.0088; 22,641 withheld positive px; `gems61.holdout_segmented v2`, seeds 20+21, α 0.2 / β 0.8 / R 300 m) is **below** random lines (0.0187 at 20,000 dots, 0.0306 at 40,000). The step field is emission-capped at 4,583 dots (its whole emission set); at that same dot count it recovers **36 of 1,982** withheld basin-interior segments against **23/1,982** for random lines and **26/1,982** for random dots — a real but weak 1.6× per-dot enrichment that cannot overcome the coverage deficit. Run-card verdict: **negative** — a valid, unique, honest negative result. |
+| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI. |
+
+**[↓ Download the GeoTIFF](docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif)** ·
+[zip](docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.zip) ·
+[format receipt](docs/downloads/gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.json) ·
+[run card](evidence/h61t_run_card.json)
+
+- Submission name: `gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros`
+- Note (≤140 chars): `H61-T T0_steps_basin: Blakely-Simpson maxima of the Parker/Oldenburg inverted basement depth; 4583 dots; UNSCORED`
+- sha256 `717d7ee071620a47e9059c13fb3a6686ae66992dc0f1a5fdc944a7d4f153953d` (69,096 bytes); 4,583 single-pixel dots (value 1.0), every dot more than 2 px from a mapped fault (min 2.24 px, median 21.2 px); values strictly {0.0, 1.0}.
+- Lane requirement "steps vs random lines on withheld basin-interior segments": **36/1,982 recovered vs 23/1,982 (random lines, same 4,024-dot budget)** — see `evidence/h61t_holdout.json → equal_emission_controls`.
+
 ### Naming: two parallel sessions both used "H61-M" (IR-61-NAME-01)
 
 Four lane sessions ran in parallel on 2026-10-11 and two of them independently
@@ -215,15 +237,31 @@ The lane's pages were correct locally but the **published** site was not, in fiv
 
 `pages-build-deployment` last built clean at 2026-10-11T06:29Z (`status: built`, `error: null`).
 
-### Known open irregularity in the shared package
+### Shared-package defects found and FIXED this session (arena/f1bed08d, H61-T)
 
-`src/gems61/offcatalogue.py` (added on `origin/main`) imports `DOMAIN_ERODE` from `gems61.holdout`, which does not define it on either side of this merge — the module fails to import on `origin/main` as well. Not fixed here because it belongs to another lane's module; recorded for the consolidation pass. `src/gems61/fitting.py` needs `scikit-learn`, which is not in `requirements.txt`.
+All three merge-time import defects are fixed once in the template (protocol rule 2), and the full
+test suite (64 tests) plus a whole-package import sweep pass:
+
+1. `src/gems61/h61mh.py` had a bare `NOTE ON NAMING` block **outside** its docstring → SyntaxError;
+   the previous session's habitat pipeline was unimportable on `main` (IR-61-MERGE-01). Fixed;
+   `scripts/run_h61mh.py` now imports `gems61.h61mh` (the module that actually defines
+   `build_feature_stack`/`train_habitat`).
+2. `src/gems61/offcatalogue.py` imported `DOMAIN_ERODE`/`FOLD_NAMES`/`quadrant_ids` from
+   `gems61.holdout`, which defines none of them (IR-61-OFFCAT-01). Now imports from
+   `gems61.holdout_segmented`.
+3. `src/gems61/fitting.py` imported `Cell`/`HoldoutContext` from the same wrong module
+   (IR-61-FIT-01). Fixed the same way.
+
+Also corrected: `requirements.txt` carried duplicate, partly conflicting pins (numpy listed twice) —
+deduplicated. The earlier README claim that `scikit-learn` was missing was stale; it was already
+pinned (IR-61-README-01).
 
 ## Candidate board — every gems61 file in `docs/downloads/` (all parallel sessions merged on `main`, newest first)
 
 | file | session / PR | positive px | its own session's verdict | shipped file on the segment-withholding evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
-| **`gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`** | this session (arena/2a87ed28, H61-MH) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) vs random lines 0.0314 within protocol; LOQO-DTI at the random baseline → **negative for a slot** | 0.0606 |
+| **`gems61-h61t-t0-steps-basin-4583dots-20261011T164326Z-7457070659fe-zeros.tif`** | this session (arena/f1bed08d, H61-T) | 4,583 | FORMAT-VALID + UNIQUE vs 748 registry rasters + repo rasters; HOLDOUT-DTI 0.0068 (CI 0.0050–0.0088) **below** random lines 0.0187; 36/1,982 basin segments vs 23/1,982 at equal dot count → **negative, diagnostic** | 0.0068 |
+| `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif` | arena/2a87ed28 (H61-MH) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) vs random lines 0.0314 within protocol; LOQO-DTI at the random baseline → **negative for a slot** | 0.0606 |
 | `docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif` | this session (arena/241cb85c, PR #10) | 40,000 | FORMAT-VALID (14/14) + UNIQUE vs 708 rasters (worst rho 0.1141; worst lift 1.60 vs gate 3.0); HOLDOUT-DTI 0.045563 (CI 0.035640-0.056876) vs random lines 0.035959, P(delta>=0)=0.939 -> negative | 0.045563 (headline, unpruned) / 0.002715 (shipped file re-measured) |
 | **`gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros`** | this session (H61-X) | 10,128 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050–0.0117) **below** random lines 0.0352 → negative, diagnostic | 0.0085 |
 | `gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif` | H61-L, session arena/a7790b7f, PR #13 (2026-10-11) | 40,000 | FORMAT-VALID + UNIQUE (worst Spearman 0.293 vs H61-G; 69.8% of its dots within 3 px of H61-G's - under both gates); HOLDOUT-DTI 0.0443 (CI 0.0414-0.0478) vs random lines 0.0314, 340/1999 basin segments vs 215/1999 random; statistically tied with H61-G 0.0465; negative for a slot | 0.0443 (visible-only) / ≈0 shipped pruned (IR-61-INSTR-02) |
@@ -240,7 +278,42 @@ The parallel sessions' own pages remain in `docs/` with SUPERSEDED-context banne
 
 > H61-M **replaced** that list rather than renumbering it. Two of the five survive under new ids so that ids stay unique across sessions: H61-L (1 m lidar in corridor) → **H61-N**, now ranked first and unchanged in substance; H61-H (magnetic-edge conjunction) → **H61-P**. The other three (piedmont belt, source-depth filter, learned basin fusion) were dropped because this session's blocked measurements showed that adding more 100 m channels to a locator that does not generalise cannot help. Three new hypotheses were added in their place: H61-Q (geodetic strain), H61-R (seismicity nucleation) and H61-S (emission on disagreement between decorrelated locators). The authoritative list is `evidence/h61m_hypotheses.json`; the H61-G list is kept for the audit trail.
 
-## What this session found (H61-MH)
+## What this session found (H61-T, arena/f1bed08d, 2026-10-11)
+
+1. **The merge had broken the template.** Three modules failed to import on `main`
+   (IR-61-MERGE-01 / -OFFCAT-01 / -FIT-01). Fixed once in the template; 64 tests pass; the whole
+   package imports clean.
+2. **The data pipeline re-verified from pins.** `prepare_data.py --fetch --cache-bands`: all five
+   bridge pins verified, 19 bands cached. Inversion re-run: fine (200 m) vs coarse (400 m) agree at
+   ρ = 0.999; correlation with the organiser's band-15 depth layer 0.745; depth anti-correlates with
+   the isostatic residual at −0.833 (sign check).
+3. **Most lane "steps" are regional dip, not faults (IR-61-DIPDOM-01).** Of 22,316 Blakely–Simpson
+   step pixels (throw ≥ 80 m), only 2.5 % pass the monopole-persistence test (far-field offset along
+   the gradient keeps sign and ≥ 60 % of the near-field offset after a ±1 km local-plane removal);
+   the median plane-removed near-field offset at step pixels is ~3 m. The competing explanation the
+   lane is told to treat — density contrasts within basement — plus plain dip dominate the step field.
+4. **Three arms measured on the shared segmented holdout** (`evidence/h61t_holdout.json`;
+   evaluator `gems61.holdout_segmented v2`, 22,641 withheld px, seeds 20+21):
+   - T0 (pure lane field): HOLDOUT-DTI 0.0068 (CI 0.0050–0.0088) at 4,024 emitted dots;
+   - T1 (monopole-persistent steps): 0.0007 at 125 dots, 0 segments recovered;
+   - T2 (band-13 inversion × band-15 consensus, first-ever use of band 15 as a lane locator):
+     0.0021 at 1,438 dots, 12 segments;
+   - controls: random lines 0.0187 @20k / 0.0306 @40k; random dots 0.0364 @40k;
+     at the lane's own 4,024-dot emission: random lines 0.0052 (23 segments), random dots 0.0082
+     (26 segments) vs T0's 36 segments — a real 1.6× per-dot enrichment, far too small to win.
+   Leakage canary: worst AUC 0.516 (band 15 depth), limit 0.90 — clean.
+5. **Why 0.2778 won — re-verified on bytes** (docs/analysis.html §5): the 0.2600 → 0.2708 → 0.2778
+   trajectory is one Poisson-300 m dot set under progressive catalogue-flank pruning; both deletions
+   are exact set differences with every removed dot within 3 px of the mapped catalogue. The prune is
+   now saturated (zero dots within 2–3 px); only a better base surface can move the score. Our lane
+   cannot supply one (point 4); the honest routes are named in `evidence/h61t_hypotheses.json`
+   (H61-T2 consensus — tested here; T1 persistence — tested here; T5 continuation-depth;
+   T3 conductivity coincidence; T4 geodetic gate — lane-drift risk).
+6. **Protocol compliance:** 3 experiments (E1 baseline, E2 persistence, E3 consensus) + one
+   bug-fix control rerun; no submission slot touched; every number labelled HOLDOUT-DTI; the file is
+   uniqueness-checked against every earlier raster (748 registry + repo-local).
+
+## What the previous session found (H61-MH)
 
 1. **The inversion works, at a finer grid.** Parker/Oldenburg (damped) on the isostatic residual, regional removed at 15 km, GP-1012-calibrated (≈ 20 % of basin area deeper than 1 km → achieved 0.198). Run at **200 m** as well as 400 m: the two agree at ρ = 0.999, the inverted surface correlates 0.745 with the organiser's own depth layer (never used in the fit) and anti-correlates with gravity at −0.833. 12,572 Blakely-Simpson maxima → 5,579 steps with ≥ 80 m throw.
 2. **The step field cannot place a dot to 300 m — confirmed, not assumed.** The corridor indicator's leakage-canary AUC against withheld faults is 0.510; a hard corridor gate *reduces* the score (0.0364–0.0409 gated vs 0.0606 ungated at the same budget). The lane's instruments are in the final model as features and carry small weight (corridor +0.194, inv_depth −0.172, inv_depth_hgm −0.204, euler_depth −0.053, step_throw −0.046, step_indicator −0.006).
@@ -260,6 +333,13 @@ git clone https://github.com/buffedlizard55-lab/61GEMSDOE && cd 61GEMSDOE
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 PYTHONPATH=src .venv/bin/python scripts/prepare_data.py --fetch --cache-bands   # hash-pinned bridge; 19 band memmaps; creates data/bridge + data/raw links
 bash scripts/fetch_registry.sh                                                  # 21 earlier group rasters -> /tmp/refs/registry
+PYTHONPATH=src .venv/bin/python scripts/run_h61mh.py features                   # shared 200m+400m inversion cache (.cache/h61m)
+PYTHONPATH=src .venv/bin/python scripts/refresh_registry.py                     # re-scan all sibling repos -> 748 uniqueness references
+PYTHONPATH=src .venv/bin/python scripts/run_h61t.py holdout                     # H61-T (this session): E1/E2/E3 + controls + canary (~35 min)
+PYTHONPATH=src .venv/bin/python scripts/run_h61t.py equaldot                    # equal-emission random controls
+PYTHONPATH=src .venv/bin/python scripts/run_h61t.py final                       # build + validate the GeoTIFF of the holdout's choice
+PYTHONPATH=src .venv/bin/python scripts/run_h61t.py unique                      # uniqueness gate vs registry + repo rasters
+PYTHONPATH=src .venv/bin/python scripts/run_h61t.py card                        # run card
 PYTHONPATH=src .venv/bin/python scripts/run_h61g.py all                         # H61-G: invert -> screen -> holdout -> final -> unique -> card (~25 min)
 PYTHONPATH=src .venv/bin/python scripts/run_h61x.py all                         # H61-X (this session): invert -> holdout -> final -> unique -> card (~20 min)
 PYTHONPATH=src .venv/bin/python scripts/run_h61l.py                            # H61-L (parallel session a7790b7f): lidar relief in corridor
@@ -474,3 +554,122 @@ locally against the mirror manifest before use.
    them. Re-running `scripts/build_candidate.py --drho 300` is a one-line
    experiment and is the first thing a follow-up session should do; it is
    recorded as irregularity IR-2b.
+
+---
+
+## Session prompt (verbatim, arena/f1bed08d, 2026-10-11) — re-read at the start of every session
+
+> Review the repo.
+>
+> THE FOLLOWING IS THE HIGHEST URGENCY AND MUST BE FOLLOWED!
+>
+> MUST GENERATE A UNIQUE TIF SUBMISSION FOR THE COMPETITION.  DO NOT COPY A PREVIOUS SUBMISSION UNLESS IT'S FOR LEARNING AND EDUCATION.  BUT WE MUST GENERATE A UNIQUE TIF SUBMISSION.  IT MUST BE OBVIOUS WHETHER IT IS OK TO DOWNLOAD AND SUBMIT THE GENERATED TIF SUBMISSION.
+>
+> There should be an easy to download submission tif file as described by the prompt.  Read the entire prompt.
+>
+> Buried-structure lane: basement-depth steps from gravity inversion. Alluvial cover is one reason catalogues miss faults. Parker (1973) and Oldenburg (1974) give the standard iterative inversion of gravity to basement relief, and Blakely and Jachens (GSA Bulletin, 1991) applied it to isostatic residual gravity in Nevada to map the pre-Tertiary surface. Invert the provided isostatic-gravity layer. Use the USGS Basin and Range basin-depth maps (Saltus and Jachens, GP-1012, 1995) only to calibrate the density-contrast depth scale, since they are regional (1:2.5M). Map maxima of the horizontal gradient of basement depth as candidate buried range-front or intrabasin faults. Gravity resolves such steps only to a few hundred metres at best, so emit multi-line ribbons rather than thin lines. Report how many withheld basin-interior segments the steps recover versus random lines. Treat density contrasts within basement as the competing explanation. Output the standard validated GeoTIFF, uniqueness-checked against every earlier raster.
+>
+> PARALLEL-RUN PROTOCOL — read first. This session is one of several running from this same prompt.
+>
+> 1. LANE. Your lane is the single method paragraph below. Stay inside it. If your raster's rank-correlation with any registry raster exceeds [0.90], or more than [70%] of your dots fall within 3 px of one registry raster's dots, you have drifted into another lane: log it as a duplicate and stop. Check this on the surface before placement AND on the final dots.
+>
+> 2. REUSE, DON'T REBUILD. Use the template's cached feature stack, evaluate_holdout.py and submission_writer.py. Holdout = hide-and-recover: withhold whole fault segments with a buffer, derive every catalogue-based feature only from the visible faults, mask visible faults pixel-exactly, score pooled DTI (alpha 0.2, beta 0.8, 300 m triangular kernel). If a shared tool is wrong, fix it once in the template and report it; never keep a private fork.
+>
+> 3. LABEL EVERY NUMBER as HOLDOUT-DTI (evaluator version, number of withheld positives, 95% CI) or ORGANIZER-CONFIRMED (copied from a submission-page receipt). A projection is never written as a score.
+>
+> 4. LEAKAGE CANARY. Test each feature alone on the holdout before trusting any result. AUC above [0.90] means leakage until proven otherwise.
+>
+> 5. RUN CARD. End with one JSON card: hypothesis; mechanism; the named non-fault process that could mimic it; holdout DTI + CI; correlation/overlap vs registry; raster sha256; validator output (no NaN inside the footprint, values in [0,1], CRS/shape/transform match); submission name + note of at most 140 characters; verdict promote / negative. Negative results are deliverables.
+>
+> 6. BUDGET. Stop after [3] experiments or [2] hours. Do not pick submissions: promotion to a real slot is a separate selector step, within the weekly cap shown on the submission page.
+>
+> The following sites should serve as a starting point for understanding how to generate TIF submissions. These websites are researched, and tested and have generated TIF submissions. But we need to generate high scoring submissions.
+>
+> Here are the results from submissions into the competition, separated by ....:
+>
+> WE NEED TO STUDY, ANALYZE, AND UNDERSTAND THE HIGHEST SCORE FROM THE GEMDOE SITE WHERE THE SUBMISSION TIF IS DOWNLOADED FROM WHICH IS THE FOLLOWING:
+>
+> https://buffedlizard55-lab.github.io/GEMSDOE32/docs/index.html
+>
+> h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros: 0.2778
+>
+> Why and how did this get the highest score and are we able to generate a submission that scores higher than 0.2778?
+>
+> Answer the question using Phd level experience, knowledge, and judgement. Then use the answer to generate a unique TIF submission into the competition. Must be unique submission unlike any within the GEMSDOE sites above. Verify working line by line no hallucinations.
+>
+> Current competition leaderboard GEMSDOE high score: 0.3774 (site list) / 0.3195 current highest — see the group site score list recorded in docs/data-sources.html and the standing links below. Group-site scores recorded on 2026-10-11 include, among others: GEMSDOE 0.1563; 6GEMSDOE 0.0286; GEMSDOE3 0.1193/0.0830/0.1152; GEMSDOE2 0.1560; GEMSDOE4 0.0343; 5GEMSDOE 0.1563; 7GEMSDOE 0.1461; 8GEMSDOE 0.1563; GEMSDOE9 0.0107; 11GEMSDOE 0.0202; 12GEMSDOE 0.1294; 15GEMSDOE 0.0782; 14GEMSDOE 0.0020; 17GEMSDOE 0.0187; 18GEMSDOE 0.0297; 19GEMSDOE 0.1894/0.1922; GEMSDOE10 0.0461/0.0921/0.1280/0.1839; 13GEMSDOE 0.0904; 16GEMSDOE 0.1855/0.0976/0.0360; GEMSDOE21 0.1894; 20GEMSDOE 0.1890/0.1859; GEMSDOE22 0.1002/0.0748; GEMSDOE23 0.1352; GEMSDOE24 0.2477; GEMSDOE25 0.2600; GEMSDOE26 0.1223; GEMSDOE27 0.2449; GEMSDOE30 0.2600; GEMSDOE31 0.2708; GEMSDOE33 0.2632; GEMSDOE34 0.0778; GEMSDOE35 0.0418; GEMSDOE36 0.2750; GEMSDOE37 0.1193; GEMSDOE38 0.0763; GEMSDOE42 0.0581; GEMSDOE43 0.0424; GEMSDOE45 0.0106; GEMSDOE49 0.2376; GEMSDOE32 0.2778; GEMSDOE28 0.2708/0.2649/0.2710/0.2707; GEMSDOE29 0.2600/0.0041/0.0512/0.2560/0.0532/0.0439/0.0356; GEMSDOE46 0.1589/0.0843; GEMSDOE39 0.0339; GEMSDOE40 0.0355/0.0397/0.0984; GEMSDOE41 0.0245; GEMSDOE44 0.0715; GEMSDOE47 0.0430; GEMSDOE48 0.2296; GEMSDOE50 0.0764; GEMSDOE51 0.1047; GEMSDOE53 0.0159; GEMSDOE54 0.0449; 55GEMSDOE 0.0290; 56GEMSDOE 0.0658; 61GEMSDOE h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros: (unscored).
+>
+> The following is the leaderboard for the competition: https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/
+>
+> See below for more links and information related to the competition:
+> - https://github.com/drivendataorg/gems-prize-reference-solution
+> - https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and
+> - https://gbcge.org/current-projects/ingenious/
+> - https://epsg.io/32611
+> - https://en.wikipedia.org/wiki/Tversky_index
+>
+> We need to quickly look at the results and results from the GEMSDOE websites above.
+>
+> Before implementing, generate 3–5 candidate geological hypotheses we haven't tried yet, each naming: the specific layer(s) involved, the physical signature being targeted (e.g., an edge-detection or curvature transform), why it should catch a fault missing from the USGS/INGENIOUS catalogue rather than one already in it, and how it differs from anything already implemented in this repo. Rank them by expected DTI improvement and implementation cost. Validate the top candidate on our spatially-blocked holdout set before touching a weekly submission slot — do not spend a submission slot on an idea that hasn't beaten the current holdout best. If a candidate can't be validated without new external data, name the specific free, official source needed and check it's obtainable before proposing the idea as viable.
+>
+> Work line by line verifying from official verified trusted sources, provide links for manual review. There should be no manual input, work on your own to complete tasks. Flag any irregularities for review. No hallucinations. Verify no hallucinations.
+>
+> The goal of this project is to get a full list that follow our requirements. No hallucinations. Verify line by line.
+>
+> We have a good understanding of how our hypothesis, methodology, calculations, analysis are done so we should be able to figure out a way to score higher on the leaderboard using previous results and scoring that we have across the sites listed above. We need to come up with distinct and unique strategies to score higher in this competition leaderboard. We need to start doing heavy and deep research into the part of the project that matters the most, which is the scientific discovery of geothermal vents. We should store all of our information and knowledge that we can gather from official verified sources. This will serve as a starting point for other projects as well. We need to think outside the box but still be grounded in proper scientific research, we are ultimately aiming for a top prize that many others are competing for. So it's important to be contrarian but be smart about it. We need to find sources of data that others are overlooking or areas of the project when it comes to geothermal vents. We need to do deep research and critical thinking and come up with new hypothesis to test.
+>
+> 0.3195 is the highest score right now so we need to design a new strategy, research, testing, analyzing, and generating submission system than the current website. It should be unique, take unique approaches to generating a submission that can score higher than 0.3195.
+>
+> Put this prompt into the repo readme and read it everytime we work on the project as a starting point to make sure we are building what we are aiming for and have a strong base to continue building and improving on making something useful for everyday use. It should solve the problem of having to manually check everything ourselves and having an up to date current feed.
+>
+> Review the repo.
+>
+> The following is taken from the Arena AI team and I think it makes a good point on building a successful project, so let's keep the Core Values and Own the Outcome as a focal point when building, developing, researching, suggesting upgrades, and implementing the work.
+>
+> Our Core Values
+>
+> Maximize P(Win) — "Maximize the Probability of Winning": our decision making framework. In every decision, we weigh tradeoffs, assess risk, and choose the path that maximizes the probability that Arena succeeds. We set aside our emotions and make tough decisions in order to maximize P(Win). "Maximize P(Win)" frees us from constraints and clarifies that we must put Arena first.
+>
+> Own the Outcome — We own results end to end — not just our individual slice of the work. When problems arise and we have the means to act, we do so without waiting for permission or assignment. We treat failure and success as signals and use them to improve. At Arena, we stay accountable to the final outcome.
+>
+> Work line by line verifying from official verified trusted sources, provide links for manual review. There should be no manual input, work on your own to complete tasks. Flag any irregularities for review. No hallucinations. Verify no hallucinations.
+>
+> We need to focus on being able to generate a submission into the competition. The site should be able to generate a TIF file that is required for submission. It should be as easy as download to click a File to submit into the competition. This needs to be in the executive summary or the very beginning of the site. it should be obvious when you visit the site.
+>
+> I tried to submit the document that i downloaded from the site but it returned this error on the submission form: "Predicted values must be in range [0, 1]"
+>
+> Also we need to give it a unique name and A short comment to help you or your team tell submissions apart later e.g. clustering with k=25
+>
+> Submission form fields: File to submit (single-band GeoTIFF .tif, or a .zip containing a single GeoTIFF; must match the submission format's CRS, shape, and geotransform) + Note (optional, a short comment).
+>
+> Create a executive summary subpage that explains exactly how to make a submission into the contest.
+>
+> Work on the next steps from the previous sessions first.
+>
+> The goal of this project is to place top of the leaderboard in this competition. Competition pages: overview/problem https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/ ; about https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/ ; data (login-walled) https://www.drivendata.org/competitions/306/competition-doe-gems/data/ ; reference solution https://github.com/drivendataorg/gems-prize-reference-solution .
+>
+> We need to create a project that can compete and place top of the leaderboard. We need to understand the problem, collect all the data and organize it into a clean easily auditable table with official verified links for manual verification.
+>
+> Known limitation carried forward: ❌ No DrivenData auth → cannot auto-download training_features.tif, labels.tif, sample_submission.tif, 1m_DEM_links.csv from the data tab (verified redirect to login). The hash-pinned public bridge (scripts/prepare_data.py) supplies the feature stack instead; provenance is recorded, not claimed as an organiser receipt.
+>
+> Competition-related links used by the project: https://gdr.openei.org/submissions/1391 ; GEMS_96647.pdf and example_submission.tif / existing_faults.tif / gems-geodawn-numerical-features.tif / Digital-elevation-model-links-JSON.pdf via the Dropbox mirrors recorded in docs/data-sources.html .
+>
+> Work line by line verifying from official verified trusted sources, provide links for manual review. There should be no manual input, work on your own to complete tasks. Flag any irregularities for review. No hallucinations.
+>
+> Site creation: Create a github page for this repo that has clean ui, user friendly, simple and easy to use. It should be organized and clean. It should include all relevant information in an easy to read format with official verified links as sources for review. Work line by line verify everything no hallucinations.
+>
+> **The single remaining blocker to training is data placement**: run `bash scripts/download_competition_data.sh` on any unrestricted machine into `data/`, then `python scripts/prepare_data.py` — after that the full train→inference→validate pipeline is ready to run (GPU needed for training; metric/losses/validation all verified working here on CPU).
+>
+> you need to complete the above task by yourself. Work line by line verifying from official verified trusted sources, provide links for manual review. There should be no manual input, work on your own to complete tasks. Flag any irregularities for review. No hallucinations.
+>
+> Run this task through multiple passes.
+>
+> Pass 1: Implement the task completely and verify the result.
+>
+> Pass 2: Review your work for bugs, missing requirements, incorrect assumptions, and edge cases. Fix everything you find.
+>
+> Pass 3: Re-check the entire implementation against the original request. Improve accuracy, reliability, completeness, and code quality. Fix any remaining issues.
+>
+> Do not stop after the first pass. Each pass must build on the previous one. Before finishing, verify that the final result fully satisfies the original request. Work line by line verify everything no hallucinations.
+>
+> Go ahead and create a pull request and then merge the pull request onto the main. Make suggestions for what work still needs to be done and any limitations that is in the way of a successful project. It should be worked on in this next session or the next session. Work line by line verify everything no hallucinations.
