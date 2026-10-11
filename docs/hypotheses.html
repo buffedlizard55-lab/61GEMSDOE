@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · Hypotheses</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="active">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav>
+</div></header>
+<main class="wrap">
+
+<h2>Candidate hypotheses, ranked by expected DTI gain per unit cost</h2>
+<table><thead><tr><th>ID / layers</th><th>Physical signature</th>
+<th>Why it should catch a fault the catalogue lacks</th><th>Differs from</th>
+<th class="num">Expected gain</th><th class="num">Cost</th></tr></thead>
+<tbody><tr><td><strong>H61-A</strong><br><span class='small'>band 13 iso_grav_anom (inverted); band 15 depth_to_base_surf (depth-scale calibration only)</span></td><td>iterative Fourier inversion to basement relief, then non-maximum-suppressed maxima of the horizontal gradient of basement depth, with the throw of each step measured in metres across an 800 m aperture</td><td>A buried range-front or intrabasin normal fault offsets the basement surface even where alluvium hides the scarp, so the structure is in the gravity field but not in a surface-mapped catalogue. Alluvial cover is exactly the reason the catalogue misses it.</td><td>No family repository inverts the gravity layer (code search: 0 hits for oldenburg/parker/inversion). Everyone else consumes the band as a channel.</td><td class='num'>primary; measured on the holdout, see evidence/lane_experiments.json</td><td class='num'>high (~20 min CPU): inversion, calibration grid search, step operator</td></tr><tr><td><strong>H61-B</strong><br><span class='small'>band 13 iso_grav_anom; published density-depth function 1900 / 2100 / 2300 / 2450 kg/m3 over 0-200 / 200-600 / 600-1200 / &gt;1200 m (USGS OF 99-49 Table 1, after Jachens &amp; Moring 1990)</span></td><td>replace the single constant contrast with the layered law, i.e. invert for the sediment thickness whose own weight-dependent density is self-consistent; the correction grows with depth, so deep basin-margin steps sharpen relative to shallow ones</td><td>Deep basins are precisely where cover is thickest and where the catalogue misses most. A constant contrast systematically under-estimates the depth of deep basins and therefore mis-positions their margins.</td><td>H61-A uses one constant contrast. Nothing in the family uses a compaction law at all.</td><td class='num'>moderate; fixes a known systematic in the deepest quartile, which is the lane's target domain</td><td class='num'>medium (~40 min): an extra inner fixed-point loop on the density column</td></tr><tr><td><strong>H61-C</strong><br><span class='small'>inverted basement depth (H61-A)</span></td><td>the second derivative of depth across the crest; a fault offset is asymmetric (short steep limb on the downthrown side, long back-tilted limb), a draped or flexed margin is symmetric</td><td>Suppresses the basin-margin flexures that produce gravity gradients without a fault, which is the main false-positive source for H61-A</td><td>H61-A uses only the first derivative and is blind to this distinction</td><td class='num'>precision gain rather than recall gain; raises DTI by removing false-positive mass</td><td class='num'>low (~5 min, reuses the H61-A field)</td></tr><tr><td><strong>H61-D</strong><br><span class='small'>bands 5 iso_grav_anom_slope, 11 iso_grav_anom_vg, 18 iso_grav_anom_hg</span></td><td>scale-normalised ridge response of the provided gradient products at several smoothing scales, i.e. an edge-focusing operator on the anomaly itself rather than on an inverted interface</td><td>Edges of the anomaly are source edges. Where the anomaly edge is not a mapped structure it is a candidate buried contact; the provided gradient bands are already computed by the organiser and avoid the inversion's regularisation choices</td><td>16GEMSDOE's topographic/geophysical ridge baseline uses these channels inside a 35-channel stack; no repository builds a step/edge product from them or calibrates it</td><td class='num'>unknown; this is the natural control for whether the inversion is worth its cost</td><td class='num'>low (~10 min)</td></tr><tr><td><strong>H61-E</strong><br><span class='small'>external: USGS Geophysical Investigations Map GP-1012 (Saltus &amp; Jachens, 1995), 1:2,500,000</span></td><td>replace the band-15 depth-scale reference with the map the lane prescribes</td><td>calibration only; it does not predict, it fixes the metres-per-mGal scale</td><td>band 15 is the organiser's own derived product, so calibrating to it is partially circular</td><td class='num'>none directly; removes one irregularity and de-biases the depth scale</td><td class='num'>blocked</td></tr></tbody></table>
+<p class="small">Each was checked against the repository's existing code before
+being proposed; the "differs from" column records what that check found.</p>
+<h2>External data needed but not obtainable here</h2>
+<p>USGS Geophysical Investigations Map GP‑1012 (Saltus &amp; Jachens, 1995) is
+the prescribed depth-scale reference. It is a folded paper map
+(<a href="https://store.usgs.gov/product/23063">USGS Store product 23063</a>)
+and its host is outside this sandbox's egress allowance
+(github.com, api.github.com, codeload.github.com, registry.npmjs.org,
+pypi.org, files.pythonhosted.org only). It is named here as the source a future
+session must obtain; the band-15 substitution used instead is recorded as an
+irregularity.</p>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

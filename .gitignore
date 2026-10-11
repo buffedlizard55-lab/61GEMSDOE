@@ -1,0 +1,14 @@
+# large / regenerated artefacts -- never commit
+.cache/
+registry/rasters/
+registry/cache/
+docs/submissions/*.zip
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# memmaps
+*.npy

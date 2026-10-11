@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · Results</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="">Hypotheses</a><a href="results.html" class="active">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav>
+</div></header>
+<main class="wrap">
+
+<h2>Instrument</h2>
+<dl class="kv">
+<dt>Evaluator</dt><dd><code>gems61-pooled-hide-v1</code></dd>
+<dt>Withheld positives</dt><dd>9397 pixels, whole fault components hidden</dd>
+<dt>Visible catalogue masked</dt><dd>45895 pixels (pixel-exact)</dd>
+<dt>Context buffer</dt><dd>3 px around each hidden segment</dd>
+<dt>Folds</dt><dd>{'NW': 2730, 'NE': 3058, 'SW': 3347, 'SE': 262}</dd>
+<dt>Metric</dt><dd>pooled DTI, α=0.2, β=0.8, 300 m triangular kernel; 95% CI by paired 20 km block bootstrap</dd>
+</dl>
+<p class="small"><strong>Limitation, stated before the numbers:</strong> the
+holdout truth is the <em>mapped catalogue</em>, while the organiser scores
+faults the catalogue does not contain. The holdout is a screen and a leakage
+canary, never an estimate of the leaderboard.</p>
+
+<h2>E1 — leakage canary: every feature alone</h2>
+<table><thead><tr><th>Feature</th><th class="num">AUC vs withheld</th><th>Verdict</th></tr></thead>
+<tbody><tr><td><code>band12_det_elev_gradient</code></td><td class='num'>0.624108</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>band13_gravity_gradient</code></td><td class='num'>0.557223</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_gradient_s3</code></td><td class='num'>0.543830</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_gradient_s2</code></td><td class='num'>0.541215</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_gradient_s1</code></td><td class='num'>0.539004</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>band15_depth_gradient</code></td><td class='num'>0.525289</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_throw_s1</code></td><td class='num'>0.502073</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_throw_s2</code></td><td class='num'>0.501150</td><td><span class='pill good'>ok</span></td></tr><tr><td><code>inv_step_throw_s3</code></td><td class='num'>0.499385</td><td><span class='pill good'>ok</span></td></tr></tbody></table>
+<p class="small">Nothing exceeds 0.90, so no feature is flagged as leakage. All
+features are catalogue-independent geophysics, which is the expected result.</p>
+
+<h2>Arm comparison — pooled HOLDOUT-DTI</h2>
+<table><thead><tr><th>Arm</th><th class="num">DTI</th><th class="num">95% CI</th></tr></thead>
+<tbody><tr><td><code>demoted_k3_s6</code></td><td class='num'>0.037859</td><td class='num'>[0.025183, 0.053035]</td></tr><tr><td><code>ribbon_k3_s6</code></td><td class='num'>0.037070</td><td class='num'>[0.024555, 0.052295]</td></tr><tr><td><code>ribbon_k3_s9</code></td><td class='num'>0.036799</td><td class='num'>[0.024913, 0.051631]</td></tr><tr><td><code>ribbon_k1</code></td><td class='num'>0.033992</td><td class='num'>[0.025327, 0.043816]</td></tr><tr><td><code>ribbon_k2_s6</code></td><td class='num'>0.032126</td><td class='num'>[0.022667, 0.042640]</td></tr><tr><td><code>demoted_k1</code></td><td class='num'>0.031335</td><td class='num'>[0.024155, 0.039707]</td></tr><tr><td><code>basin_k2_s6</code></td><td class='num'>0.030240</td><td class='num'>[0.021216, 0.041154]</td></tr><tr><td><code>ribbon_k4_s3</code></td><td class='num'>0.028633</td><td class='num'>[0.016613, 0.042123]</td></tr><tr><td><code>basin_k2_s3</code></td><td class='num'>0.025854</td><td class='num'>[0.017082, 0.036316]</td></tr><tr><td><code>ribbon_k2_s3</code></td><td class='num'>0.025474</td><td class='num'>[0.017079, 0.034697]</td></tr><tr><td><code>basin_k3_s6</code></td><td class='num'>0.023496</td><td class='num'>[0.015748, 0.031871]</td></tr><tr><td><code>basin_k3_s9</code></td><td class='num'>0.022806</td><td class='num'>[0.016064, 0.030647]</td></tr><tr><td><code>basin_k1</code></td><td class='num'>0.020483</td><td class='num'>[0.013839, 0.027626]</td></tr><tr><td><code>basin_k4_s3</code></td><td class='num'>0.017496</td><td class='num'>[0.011412, 0.024068]</td></tr><tr><td><code>basin_topthrow_k1</code></td><td class='num'>0.006262</td><td class='num'>[0.002481, 0.010358]</td></tr></tbody></table>
+
+<h2>E2 — withheld basin-interior segment recovery</h2>
+<table><thead><tr><th>Arm</th><th class="num">basin-interior segments recovered</th>
+<th class="num">rate</th><th class="num">all segments</th></tr></thead><tbody><tr><td><code>ribbon_k1</code></td><td class='num'>80/208</td><td class='num'>0.3846</td><td class='num'>166/500</td></tr><tr><td><code>null__ribbon_k1</code></td><td class='num'>57/208</td><td class='num'>0.2740</td><td class='num'>128/500</td></tr><tr><td><code>ribbon_k2_s3</code></td><td class='num'>53/208</td><td class='num'>0.2548</td><td class='num'>88/500</td></tr><tr><td><code>null__ribbon_k2_s3</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>ribbon_k2_s6</code></td><td class='num'>66/208</td><td class='num'>0.3173</td><td class='num'>119/500</td></tr><tr><td><code>null__ribbon_k2_s6</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>ribbon_k3_s6</code></td><td class='num'>52/208</td><td class='num'>0.2500</td><td class='num'>114/500</td></tr><tr><td><code>null__ribbon_k3_s6</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>ribbon_k4_s3</code></td><td class='num'>33/208</td><td class='num'>0.1587</td><td class='num'>72/500</td></tr><tr><td><code>null__ribbon_k4_s3</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>ribbon_k3_s9</code></td><td class='num'>58/208</td><td class='num'>0.2788</td><td class='num'>127/500</td></tr><tr><td><code>null__ribbon_k3_s9</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>basin_k1</code></td><td class='num'>74/208</td><td class='num'>0.3558</td><td class='num'>75/500</td></tr><tr><td><code>null__basin_k1</code></td><td class='num'>48/208</td><td class='num'>0.2308</td><td class='num'>51/500</td></tr><tr><td><code>basin_k2_s3</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>76/500</td></tr><tr><td><code>null__basin_k2_s3</code></td><td class='num'>106/208</td><td class='num'>0.5096</td><td class='num'>112/500</td></tr><tr><td><code>basin_k2_s6</code></td><td class='num'>108/208</td><td class='num'>0.5192</td><td class='num'>114/500</td></tr><tr><td><code>null__basin_k2_s6</code></td><td class='num'>106/208</td><td class='num'>0.5096</td><td class='num'>112/500</td></tr><tr><td><code>basin_k3_s6</code></td><td class='num'>91/208</td><td class='num'>0.4375</td><td class='num'>96/500</td></tr><tr><td><code>null__basin_k3_s6</code></td><td class='num'>106/208</td><td class='num'>0.5096</td><td class='num'>112/500</td></tr><tr><td><code>basin_k4_s3</code></td><td class='num'>56/208</td><td class='num'>0.2692</td><td class='num'>60/500</td></tr><tr><td><code>null__basin_k4_s3</code></td><td class='num'>106/208</td><td class='num'>0.5096</td><td class='num'>112/500</td></tr><tr><td><code>basin_k3_s9</code></td><td class='num'>109/208</td><td class='num'>0.5240</td><td class='num'>112/500</td></tr><tr><td><code>null__basin_k3_s9</code></td><td class='num'>106/208</td><td class='num'>0.5096</td><td class='num'>112/500</td></tr><tr><td><code>demoted_k1</code></td><td class='num'>77/208</td><td class='num'>0.3702</td><td class='num'>164/500</td></tr><tr><td><code>null__demoted_k1</code></td><td class='num'>45/208</td><td class='num'>0.2163</td><td class='num'>107/500</td></tr><tr><td><code>demoted_k3_s6</code></td><td class='num'>53/208</td><td class='num'>0.2548</td><td class='num'>113/500</td></tr><tr><td><code>null__demoted_k3_s6</code></td><td class='num'>73/208</td><td class='num'>0.3510</td><td class='num'>173/500</td></tr><tr><td><code>basin_topthrow_k1</code></td><td class='num'>14/208</td><td class='num'>0.0673</td><td class='num'>15/500</td></tr><tr><td><code>null__basin_topthrow_k1</code></td><td class='num'>13/208</td><td class='num'>0.0625</td><td class='num'>13/500</td></tr></tbody></table>
+
+<h2>E3 — the competing explanation</h2>
+<p>Magnetic-contact crests: 209343 px.
+Gravity steps within 2 px of one: 25711 px
+(0.1888 of all steps).</p>
+<p>Equivalence used to size the ambiguity:
+[('200 kg/m3 over 2 km against a 400 kg/m3 fill-basement contrast', 1000.0)]</p>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

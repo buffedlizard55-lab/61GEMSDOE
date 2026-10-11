@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · Irregularities</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="active">Irregularities</a></nav>
+</div></header>
+<main class="wrap">
+
+<h2>Irregularities and limitations</h2>
+<table><thead><tr><th>ID</th><th>Summary</th><th>Impact</th><th>Status</th></tr></thead>
+<tbody><tr><td><code>IR-1</code></td><td><span class='pill bad'>blocker</span></td><td><strong>The prescribed calibration reference (GP-1012) is not obtainable from this sandbox</strong><br>The lane prescribes the USGS Basin and Range basin-depth maps of Saltus &amp; Jachens (1995), GP-1012, 1:2,500,000, to calibrate the density-contrast depth scale. The product page confirms the map is real and is sold as a paper, folded map only: no digital raster is published there. The USGS Store and the pubs.usgs.gov data endpoints are outside this sandbox's egress allowance, so the map could not be retrieved.<br><em>Substitution:</em> Band 15 depth_to_base_surf (the organiser's own derived depth-to-basement product) is used as the depth-scale reference instead.</td><td>Band 15 descends from the same gravity/ drill-hole inversion tradition as the map, so calibrating to it is partially circular: it fixes the metres-per-mGal scale but cannot independently validate either depth or position. Every depth number in this lane inherits that caveat.</td><td>open - permanent for this session</td></tr><tr><td><code>IR-2</code></td><td><span class='pill bad'>major</span></td><td><strong>A linear Bouguer slab beats every iterative inversion against the depth reference</strong><br>Across a 48-point grid over density contrast (300-650 kg/m3), reference depth (1000-3000 m) and taper cutoff (2000-5000 m), the best iterative Parker-Oldenburg field reaches Pearson 0.6575 against band 15. The trivial linear estimate depth = -g / (2*pi*G*400) reaches Pearson 0.7318 with a lower RMSE (220.7 m vs 286.5 m).</td><td>The iterative inversion is retained because its regression slope against the reference is 0.958 (near unit, i.e. an unbiased scale) while the slab's is 0.540 (a systematic ~2x compression). The two criteria disagree, and the disagreement is not resolved by any measurement available here. The depth scale is reported with a factor-of-two systematic band attached.</td><td>open - documented, not resolved</td></tr><tr><td><code>IR-3</code></td><td><span class='pill bad'>major</span></td><td><strong>The measured positional resolution is three times the metric's kernel radius</strong><br>Distance from catalogue pixels to the nearest detected step crest: p10 = 2.0 px, p50 = 9.0 px, p90 = 19.2 px (200 m / 900 m / 1900 m at the 100 m grid). The competition metric credits a prediction only inside a 300 m (3 px) triangular kernel.</td><td>Most emitted cells fall outside the kernel entirely. This is a physical limit of potential-field inversion, not a code defect, and it is the single largest term in the lane's error budget. It is why the wide-ribbon arms exist and why none of them recovers the loss.</td><td>open - physical, irreducible without new data</td></tr><tr><td><code>IR-4</code></td><td><span class='pill warn'>minor</span></td><td><strong>The sibling repository's data/official/labels.tif is byte-identical to existing_faults.tif</strong><br>Both files are 425,830 bytes with SHA-256 7ba308cc... .</td><td>It must not be described as an independent official label set. This lane's holdout is built from the mapped-fault catalogue only, and the two names are treated as the same raster throughout.</td><td>documented</td></tr><tr><td><code>IR-5</code></td><td><span class='pill warn'>minor</span></td><td><strong>No leaderboard number in this repository can be ORGANIZER-CONFIRMED</strong><br>The DrivenData data tab and submission pages are behind a login and no credentials exist in this sandbox. Every score quoted anywhere in this family is OWNER-REPORTED and is labelled as such.</td><td>The 0.3195 target and the 0.2778 live reference are owner-reported. Nothing on this site is presented as a contest receipt.</td><td>documented</td></tr><tr><td><code>IR-6</code></td><td><span class='pill warn'>minor</span></td><td><strong>The SE fold carries 262 withheld positives against 2,730-3,347 for NW, NE and SW</strong><br>The catalogue is not uniformly distributed across the four spatial folds, so one quadrant contributes under 3 % of the withheld truth.</td><td>The pooled block bootstrap is effectively driven by three folds. Confidence intervals are reported from the pooled instrument with this asymmetry stated rather than silently averaged away.</td><td>documented</td></tr><tr><td><code>IR-7</code></td><td><span class='pill good'>resolved</span></td><td><strong>3x3 plateau-break thinning deleted 98 % of the step crests</strong><br>Requiring each crest pixel to be the maximum of its 3x3 neighbourhood reduced the crest from 128,323 px to 2,595 px and cut catalogue-within-3px coverage from 16.5 % to 1.5 %. On the smooth, band-limited depth field produced by this inversion the test destroys along-strike continuity.</td><td>Reverted. The test is now opt-in (thin_plateaus=True) and off by default; redundancy is removed by dot thinning, which is the operation the metric actually rewards. A regression test pins the default to False.</td><td>closed</td></tr><tr><td><code>IR-8</code></td><td><span class='pill good'>resolved</span></td><td><strong>Oldenburg's pure cosine taper recovers only a third of the amplitude</strong><br>With plateau_fraction = 0 the taper attenuates from the lowest wavenumbers and an infinite slab loses most of its response. With plateau_fraction = 0.5 the same slab is reproduced to 0.1 %.</td><td>The plateau fraction is fixed at 0.5 everywhere and a test guards against zeroing it.</td><td>closed</td></tr></tbody></table>
+<h2>Standing limitations</h2>
+<ul>
+<li>No DrivenData credential: the competition data tab is behind a login, so
+every input is a hash-pinned public bridge copy. Bridge SHA-256 proves byte
+identity with that bridge, not official origin.</li>
+<li>There is no ORGANIZER-CONFIRMED score in this repository. Every number is
+HOLDOUT-DTI or OWNER-REPORTED.</li>
+<li>The published <code>labels.tif</code> is byte-identical to
+<code>existing_faults.tif</code>: the scored truth is not public, so the
+hide-and-recover holdout is the only local instrument.</li>
+<li>The holdout truth is the mapped catalogue; the organiser scores faults the
+catalogue lacks. The instrument is a screen, not a leaderboard estimator.</li>
+<li>GP-1012, the prescribed depth-scale reference, could not be obtained.</li>
+<li>Egress is limited to github.com, api.github.com, codeload.github.com,
+registry.npmjs.org, pypi.org and files.pythonhosted.org.</li>
+</ul>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

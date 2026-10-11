@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · How to submit</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="active">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav>
+</div></header>
+<main class="wrap">
+<div class="banner hold"><strong>No submission file has been built yet.</strong> Nothing on this site is downloadable for submission until the run card records it.</div>
+<h2>Submit in four steps</h2>
+<div class="card">
+<ol>
+<li><strong>Download the GeoTIFF</strong> from the panel at the top of this page
+(or <code>docs/downloads/&lt;name&gt;.tif</code> in the repository). It is a
+single-band float32 GeoTIFF, 3730 × 3292, EPSG:32611, 100 m cells, values 0/1
+with 0 outside the scored footprint.</li>
+<li><strong>Open</strong>
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the
+competition submissions page</a> (sign-in required) and press
+<em>New submission</em>.</li>
+<li><strong>Choose the file</strong> in <em>File to submit</em>. You may submit
+the <code>.tif</code> directly, or the <code>.zip</code> that contains the same
+single GeoTIFF.</li>
+<li><strong>Paste the note</strong> below into the optional <em>Note</em> field
+so the row is identifiable later, then create the submission.</li>
+</ol>
+</div>
+
+<h2>The note to paste (≤ 140 characters)</h2>
+<pre id="note"></pre>
+<p class="small">Length: <strong>0
+</strong> / 140 characters.</p>
+
+<h2>Why a submission can be rejected</h2>
+<table>
+<thead><tr><th>Symptom</th><th>Cause</th><th>What this file does</th></tr></thead>
+<tbody>
+<tr><td>"Predicted values must be in range [0, 1]"</td>
+<td>values outside [0,1], or NaN/±inf inside the scored footprint being read as
+out-of-range, or a ±3.4e38 sentinel written by the exporter</td>
+<td>every cell is finite and in {0, 1}; NaN, ±inf and &gt;1e30 sentinels are
+rejected at write time, not clipped</td></tr>
+<tr><td>CRS / shape / geotransform mismatch</td>
+<td>reprojection or resampling</td>
+<td>written on the pinned template transform and re-read from disk to prove it</td></tr>
+<tr><td>Multi-band or wrong dtype</td>
+<td>exporting an RGB or int raster</td>
+<td>one band, float32</td></tr>
+</tbody></table>
+
+<h2>Local checks that were run on this exact file</h2>
+<p class="small">Re-derived from the bytes on disk by
+<code>src/gems61/validate.py</code>; the receipt is
+<code>evidence/submission.json</code>.</p>
+<table><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody>
+
+</tbody></table>
+
+<h2>Official pages</h2>
+<ul>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">Competition home</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Problem description (metric definition)</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/">About / rules</a></li>
+<li><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">Official rules PDF</a></li>
+<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Public leaderboard</a></li>
+</ul>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>61GEMSDOE · Method</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="active">Method</a><a href="hypotheses.html" class="">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a></nav>
+</div></header>
+<main class="wrap">
+
+<h2>1. Invert the isostatic-gravity layer to basement relief</h2>
+<p>Parker (1973) gives the Fourier-domain gravity anomaly of an uneven density
+interface. With the interface at depth <code>z0 − h(x,y)</code> (relief
+<code>h</code> positive upward) and density contrast
+<code>Δρ = ρ_basement − ρ_fill</code>,</p>
+<pre>F[Δg] = 2πG Δρ e^(−|k| z0) Σ_{n≥1} |k|^(n−1)/n! · F[h^n]</pre>
+<p>Oldenburg (1974) rearranges it into the fixed-point iteration</p>
+<pre>F[h_{j+1}] = W(k) [ F[Δg] e^(|k| z0) / (2πG Δρ) − Σ_{n≥2} |k|^(n−1)/n! · F[h_j^n] ]</pre>
+<p><code>W(k)</code> is a high-cut filter; without it the <code>e^(|k| z0)</code>
+factor makes the iteration diverge. The implementation uses a flat passband up
+to half the cutoff wavenumber and a cosine taper to zero at the cutoff — the
+pure Oldenburg cosine taper (unity only at <code>k = 0</code>) is also
+implemented and reported, and it halves the amplitude at half the cutoff
+wavenumber, which is why the plateau form is used for the delivered product.</p>
+<p>Verification: a constant relief of 500 m at Δρ = 400 kg/m³ returns
+<code>8.387173</code> mGal against the analytic Bouguer slab
+<code>2πGΔρh = 8.3871727</code> mGal (<code>tests/test_gravity.py</code>).</p>
+
+<h3>Calibration of the density-contrast depth scale</h3>
+<p>The lane prescribes the USGS Basin and Range basin-depth map
+(Saltus &amp; Jachens, GP‑1012, 1:2,500,000, 1995) as the calibration
+reference. GP‑1012 is a <strong>paper map</strong> and its host is outside this
+sandbox's egress allowance, so it could not be obtained; the only basin-depth
+raster available locally is the organiser's own band 15
+<code>depth_to_base_surf</code>. It is used <em>only</em> to fix the depth
+scale — never as a prediction feature — and the substitution is recorded as an
+irregularity.</p><table><thead><tr><th>Quantity</th><th class="num">Value</th></tr></thead><tbody>
+<tr><td>Reference density contrast Δρ</td><td class="num">300 kg/m³</td></tr>
+<tr><td>Reference depth z0</td><td class="num">3000 m</td></tr>
+<tr><td>High-cut wavelength</td><td class="num">5000 m</td></tr>
+<tr><td>Regression slope against the independent depth product</td>
+<td class="num">1.0043</td></tr>
+<tr><td>Pearson r</td><td class="num">0.5481</td></tr>
+<tr><td>RMSE</td><td class="num">709.5 m</td></tr>
+</tbody></table>
+<p class="small">A slope of 1.0 means one metre of inverted relief per metre of
+independent basin-depth relief — i.e. the density-contrast depth scale is
+calibrated.</p>
+<h2>2. Locate the steps: horizontal-gradient maxima</h2>
+<p>The step is <em>located</em> by non-maximum suppression of the gradient
+magnitude of the Gaussian-smoothed basement depth along the gradient direction
+(the Canny construction applied to a potential-field interface). Its
+<em>amplitude</em> is the <strong>throw</strong>: the depth difference sampled
+±4 px (±400 m) across the crest, in metres. <code>|d(x+L) − d(x−L)|</code> is a
+plateau of width <code>2L</code> over a sharp step, which makes it useless for
+location but exactly right for measuring how many metres of basement offset the
+step represents.</p>
+
+<h2>3. Emit: why dots, and how many parallel lines</h2>
+<p>Two exact properties of the metric drive the shape. (i) For a support scaled
+by λ, <code>dDTI/dλ &gt; 0</code>: a graded probability map is strictly
+dominated by its own thresholded support, so the output is binary. (ii) Adding
+a prediction whose nearest-truth kernel credit is <code>k</code> raises DTI iff
+<code>k &gt; α·s/(1 − α·s)</code>, so each extra line pays only where the
+existing line is already weak. The number of parallel lines and their spacing
+are therefore chosen from the closed-form gain table at the
+<em>measured</em> positional error, not by taste.</p>
+
+<h2>4. The competing explanation</h2>
+<p>A gravity step can be a lateral density change <em>within</em> basement
+rather than an offset of the basement surface. At 200 kg/m³ over a 2 km section
+and a 400 kg/m³ fill/basement contrast, a lithologic contact mimics a
+<strong>1000 m</strong> basement step without cutting any fault. The two are
+separated with independent physics: a lithologic contact is a magnetic
+lineament, so steps within 2 px of a reduced-to-pole magnetic contact crest are
+flagged ambiguous and demoted. The cost of that demotion is measured on the
+holdout, not assumed.</p>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

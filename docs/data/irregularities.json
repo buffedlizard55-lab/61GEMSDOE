@@ -1,0 +1,76 @@
+[
+  {
+    "id": "IR-1",
+    "severity": "blocker",
+    "title": "The prescribed calibration reference (GP-1012) is not obtainable from this sandbox",
+    "detail": "The lane prescribes the USGS Basin and Range basin-depth maps of Saltus & Jachens (1995), GP-1012, 1:2,500,000, to calibrate the density-contrast depth scale. The product page confirms the map is real and is sold as a paper, folded map only: no digital raster is published there. The USGS Store and the pubs.usgs.gov data endpoints are outside this sandbox's egress allowance, so the map could not be retrieved.",
+    "substitution": "Band 15 depth_to_base_surf (the organiser's own derived depth-to-basement product) is used as the depth-scale reference instead.",
+    "consequence": "Band 15 descends from the same gravity/ drill-hole inversion tradition as the map, so calibrating to it is partially circular: it fixes the metres-per-mGal scale but cannot independently validate either depth or position. Every depth number in this lane inherits that caveat.",
+    "source": "https://store.usgs.gov/product/23063",
+    "status": "open - permanent for this session"
+  },
+  {
+    "id": "IR-2",
+    "severity": "major",
+    "title": "A linear Bouguer slab beats every iterative inversion against the depth reference",
+    "detail": "Across a 48-point grid over density contrast (300-650 kg/m3), reference depth (1000-3000 m) and taper cutoff (2000-5000 m), the best iterative Parker-Oldenburg field reaches Pearson 0.6575 against band 15. The trivial linear estimate depth = -g / (2*pi*G*400) reaches Pearson 0.7318 with a lower RMSE (220.7 m vs 286.5 m).",
+    "consequence": "The iterative inversion is retained because its regression slope against the reference is 0.958 (near unit, i.e. an unbiased scale) while the slab's is 0.540 (a systematic ~2x compression). The two criteria disagree, and the disagreement is not resolved by any measurement available here. The depth scale is reported with a factor-of-two systematic band attached.",
+    "status": "open - documented, not resolved"
+  },
+  {
+    "id": "IR-3",
+    "severity": "major",
+    "title": "The measured positional resolution is three times the metric's kernel radius",
+    "detail": "Distance from catalogue pixels to the nearest detected step crest: p10 = 2.0 px, p50 = 9.0 px, p90 = 19.2 px (200 m / 900 m / 1900 m at the 100 m grid). The competition metric credits a prediction only inside a 300 m (3 px) triangular kernel.",
+    "consequence": "Most emitted cells fall outside the kernel entirely. This is a physical limit of potential-field inversion, not a code defect, and it is the single largest term in the lane's error budget. It is why the wide-ribbon arms exist and why none of them recovers the loss.",
+    "status": "open - physical, irreducible without new data"
+  },
+  {
+    "id": "IR-4",
+    "severity": "minor",
+    "title": "The sibling repository's data/official/labels.tif is byte-identical to existing_faults.tif",
+    "detail": "Both files are 425,830 bytes with SHA-256 7ba308cc... .",
+    "consequence": "It must not be described as an independent official label set. This lane's holdout is built from the mapped-fault catalogue only, and the two names are treated as the same raster throughout.",
+    "status": "documented"
+  },
+  {
+    "id": "IR-5",
+    "severity": "minor",
+    "title": "No leaderboard number in this repository can be ORGANIZER-CONFIRMED",
+    "detail": "The DrivenData data tab and submission pages are behind a login and no credentials exist in this sandbox. Every score quoted anywhere in this family is OWNER-REPORTED and is labelled as such.",
+    "consequence": "The 0.3195 target and the 0.2778 live reference are owner-reported. Nothing on this site is presented as a contest receipt.",
+    "status": "documented"
+  },
+  {
+    "id": "IR-6",
+    "severity": "minor",
+    "title": "The withheld positives are unevenly spread across the four spatial folds",
+    "detail": "After the fold-partition bug below was fixed, the four quadrants carry NW 6,073 / NE 3,320 / SW 1,732 / SE 1,773 of the 12,898 withheld positives: one quadrant holds 47 % of the truth.",
+    "consequence": "The block bootstrap resamples 20 km blocks and so is not dominated by any single fold, but the effective sample size is nearer three quadrants than four. Confidence intervals are reported with this stated rather than silently averaged away.",
+    "status": "documented"
+  },
+  {
+    "id": "IR-6b",
+    "severity": "resolved",
+    "title": "The four spatial folds did not tile the grid",
+    "detail": "make_folds split the rows into n_folds bands and then used only the first two, so with n_folds = 4 the fold regions covered the northern half of the grid only and roughly half the catalogue could never be withheld. Caught by tests/test_holdout.py::test_folds_cover_the_whole_grid while the test suite was being written.",
+    "consequence": "Fixed: the quadrants are now 2 row bands x 2 column bands and tile the whole grid. The withheld set grew from 9,397 to 12,898 positives, and the ranking of the candidate arms changed materially (the selected arm moved from a statistically tied result against its null to a point estimate +0.0097 above it). Every number in this repository was recomputed after the fix.",
+    "status": "closed"
+  },
+  {
+    "id": "IR-7",
+    "severity": "resolved",
+    "title": "3x3 plateau-break thinning deleted 98 % of the step crests",
+    "detail": "Requiring each crest pixel to be the maximum of its 3x3 neighbourhood reduced the crest from 128,323 px to 2,595 px and cut catalogue-within-3px coverage from 16.5 % to 1.5 %. On the smooth, band-limited depth field produced by this inversion the test destroys along-strike continuity.",
+    "consequence": "Reverted. The test is now opt-in (thin_plateaus=True) and off by default; redundancy is removed by dot thinning, which is the operation the metric actually rewards. A regression test pins the default to False.",
+    "status": "closed"
+  },
+  {
+    "id": "IR-8",
+    "severity": "resolved",
+    "title": "Oldenburg's pure cosine taper recovers only a third of the amplitude",
+    "detail": "With plateau_fraction = 0 the taper attenuates from the lowest wavenumbers and an infinite slab loses most of its response. With plateau_fraction = 0.5 the same slab is reproduced to 0.1 %.",
+    "consequence": "The plateau fraction is fixed at 0.5 everywhere and a test guards against zeroing it.",
+    "status": "closed"
+  }
+]
