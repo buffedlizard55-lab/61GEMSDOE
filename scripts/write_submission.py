@@ -289,6 +289,9 @@ def main() -> int:
                positive_pixels=receipt["validator"]["info"]["positive_pixels"],
                submission_name=name, note=note,
                verdict=card["verdict"], okay_to_submit=card["okay_to_submit"],
+               # the full validator receipt for the shipped bytes, so the site can
+               # print the per-check table straight from this file
+               validation=receipt["validator"],
                files=dict(tif=dict(name=f"submissions/{tif_path.name}",
                                    sha256=receipt["sha256"],
                                    bytes=receipt["bytes"],

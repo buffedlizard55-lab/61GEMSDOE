@@ -194,6 +194,34 @@ contain.</p>
     return shell("Overview", "index.html", "".join(body))
 
 
+def validator_checks(sub: dict | None) -> dict:
+    """The shipped file's format checks, however the receipt happens to store them.
+
+    ``evidence/submission.json`` is the receipt for the shipped bytes and is the
+    first choice; older receipts (and the run card's ``validator`` block) carry
+    the same facts under a different key, so fall back instead of rendering an
+    empty table.
+    """
+    for src in (sub or {}).get("validation", {}), \
+               load("run_card.json").get("validator", {}), \
+               load("final.json").get("validation", {}), \
+               load("final.json").get("validator", {}):
+        checks = (src or {}).get("checks")
+        if checks:
+            return checks
+    return {}
+
+def canonical_checks(checks: dict) -> list[tuple[str, bool]]:
+    """The canonical check list in the validator's own order, aliases dropped."""
+    try:  # the validator also emits alias keys for the parallel lanes
+        from gems61.validate import CHECKS  # noqa: PLC0415
+        order = [k for k in CHECKS if k in checks]
+        if order:
+            return [(k, bool(checks[k])) for k in order]
+    except Exception:
+        pass
+    return [(k, bool(v)) for k, v in checks.items()]
+
 def page_exec() -> str:
     card = load("run_card.json")
     sub = load("submission.json")
@@ -270,7 +298,7 @@ rejected at write time, not clipped</td></tr>
 """ + "".join(
         f"<tr><td><code>{esc(k)}</code></td>"
         f"<td><span class='pill {'good' if v else 'bad'}'>{'PASS' if v else 'FAIL'}</span></td></tr>"
-        for k, v in (sub or {}).get("validation", {}).get("checks", {}).items()
+        for k, v in canonical_checks(validator_checks(sub))
     ) + """
 </tbody></table>
 
