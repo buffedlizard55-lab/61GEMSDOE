@@ -1,0 +1,147 @@
+{
+  "lane": "buried structure",
+  "hypothesis": "A buried range-front or intrabasin normal fault offsets the pre-Tertiary basement surface under alluvial cover; that offset is a step in the basement depth recovered by inverting the isostatic residual gravity, and it is located at the maximum of the horizontal gradient of the inverted depth.",
+  "mechanism": "Parker (1973) Fourier forward operator and Oldenburg (1974) iterative inversion of band 13 iso_grav_anom at drho=400 kg/m3, z0=3000 m, cutoff 5000 m; Canny non-maximum suppression along the gradient; throw measured across an 800 m aperture; emission as multi-line ribbons thinned to isolated dots.",
+  "competing_explanation": "A lateral density contrast WITHIN basement: a granitic/mafic contact, a hydrothermally altered zone, a caldera fill or a palaeo-weathered horizon. 200 kg/m3 over a 2 km section is indistinguishable from a 1000 m step of the basement surface at a 400 kg/m3 contrast, and it cuts no fault at all.",
+  "mimic_control": "Steps within 2 px of a reduced-to-pole magnetic contact crest (band 2) are demoted: 25711 of 136175 (0.189). Measured on the holdout: demotion is not significantly harmful at the same geometry (0.0379 vs 0.0371, see evidence/candidate_arms.json).",
+  "holdout_dti": {
+    "evidence_class": "HOLDOUT-DTI",
+    "evaluator_version": "gems61-pooled-hide-v1",
+    "n_withheld_positives": 12898,
+    "selected_arm_is_the_headline_number": true,
+    "shipped_file_remeasured_dti": 0.00271490753468565,
+    "shipped_file_remeasured_ci95": [
+      0.001970750652329414,
+      0.0035446035763501173
+    ],
+    "shipped_file_remeasured_note": "The shipped file is the selected arm with one extra operation: dots within 2 px of the WHOLE mapped catalogue are removed and the budget is topped back up. The holdout truth is a withheld 20 % of that same catalogue, so this removes precisely the cells the instrument rewards and the re-measured value is not comparable with the arm value. It is reported for completeness only. Under the organiser's rule that mapped faults are removed from every metric term, the deleted cells were inert, so the shipped product's expected score is the arm's.",
+    "selected_arm": "demoted_k3_s6",
+    "selected_arm_dti": 0.045562846832776734,
+    "selected_arm_ci95": [
+      0.03564033574230126,
+      0.0568759968254678
+    ],
+    "matched_random_line_null_dti": 0.03595853811219751,
+    "paired_difference": 0.00969562979613393,
+    "paired_difference_ci95": [
+      -0.001902295456289475,
+      0.021709448195985196
+    ],
+    "beats_matched_null_at_95pct": false
+  },
+  "correlation_vs_registry": {
+    "n_rasters": 708,
+    "worst_spearman": 0.11411617460376411,
+    "worst_spearman_source": "5GEMSDOE:data/derived/context_detector_prob_u8.tif",
+    "worst_dot_overlap_3px": 0.7242,
+    "worst_dot_overlap_source": "60GEMSDOE:docs/downloads/submission.tif",
+    "drift_gate": "Spearman > 0.90 OR > 70 % of dots within 3 px",
+    "passed": true
+  },
+  "raster": {
+    "file": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+    "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+    "bytes": 137204,
+    "zip_file": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.zip",
+    "zip_sha256": "a4d6f67e56af4b53ac08a2cf73bc60382688c72538329661c181845963ecfebb",
+    "positive_pixels": 40000
+  },
+  "validator": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_template": true,
+      "nodata_unset_or_nan": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_no_nan": true,
+      "in_footprint_no_inf": true,
+      "in_footprint_no_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_on_catalogue": true,
+      "nonempty": true
+    },
+    "all_checks_passed": true,
+    "validator_version": "gems61-validate-v1",
+    "info": {
+      "path": "/home/user/61GEMSDOE/docs/submissions/.61gemsdoe-basement-step-ribbon-20261011T054408Z.ljczf55e.tif",
+      "bytes": 137204,
+      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+      "positive_pixels": 40000,
+      "positive_in_footprint": 40000,
+      "on_catalogue_positive": 0,
+      "unique_positive_values": [
+        1.0
+      ],
+      "in_footprint_min": 0.0,
+      "in_footprint_max": 1.0,
+      "bands": 1,
+      "dtype": "float32",
+      "height": 3730,
+      "width": 3292,
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "res": [
+        100.0,
+        100.0
+      ],
+      "nodata": null
+    },
+    "file": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+  },
+  "template_report": {
+    "ok": true,
+    "problems": [],
+    "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+    "bytes": 137204,
+    "shape": [
+      3730,
+      3292
+    ],
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "n_nonzero": 40000,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0,
+    "path": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+  },
+  "submission_name": "61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure",
+  "note": "Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.",
+  "note_chars": 124,
+  "verdict": "negative",
+  "headline_dti": 0.045562846832776734,
+  "headline_ci95": [
+    0.03564033574230126,
+    0.0568759968254678
+  ],
+  "verdict_reason": "The candidate does not beat a budget- and domain-matched random-line null at the pre-registered 95 % level (paired difference 0.00969562979613393, 95 % CI [-0.001902295456289475, 0.021709448195985196]), so the pre-registered promotion rule is not satisfied. The point estimate is positive inside the buried (basin-interior) domain and negative or tied over the full footprint. The single largest term is the irreducible one: the measured positional resolution is 900 m at the median against a 300 m scoring kernel.",
+  "okay_to_download": true,
+  "okay_to_submit": false,
+  "download_permission_status": {
+    "scope": "Locally validated: single-band float32 GeoTIFF, values in [0,1], no NaN inside the footprint, CRS/shape/transform identical to the organiser's sample submission, zero positive mass outside the scored footprint and on the mapped catalogue, and unique against all 708 family rasters. This is a local format and uniqueness clearance, NOT an organiser acceptance, NOT a leaderboard score and NOT approval to spend a weekly submission slot."
+  },
+  "submission_slots_used": 0,
+  "approved_for_weekly_slot": false,
+  "generated_utc": "2026-10-11T05:44:09Z",
+  "runtime_s": 1411.0
+}

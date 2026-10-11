@@ -1,0 +1,115 @@
+{
+  "file": "61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+  "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+  "bytes": 137204,
+  "submission_name": "61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure",
+  "note": "Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.",
+  "note_chars": 124,
+  "validator": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches_template": true,
+      "nodata_unset_or_nan": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_no_nan": true,
+      "in_footprint_no_inf": true,
+      "in_footprint_no_sentinel": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_on_catalogue": true,
+      "nonempty": true
+    },
+    "all_checks_passed": true,
+    "validator_version": "gems61-validate-v1",
+    "info": {
+      "path": "/home/user/61GEMSDOE/docs/submissions/.61gemsdoe-basement-step-ribbon-20261011T054408Z.ljczf55e.tif",
+      "bytes": 137204,
+      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+      "positive_pixels": 40000,
+      "positive_in_footprint": 40000,
+      "on_catalogue_positive": 0,
+      "unique_positive_values": [
+        1.0
+      ],
+      "in_footprint_min": 0.0,
+      "in_footprint_max": 1.0,
+      "bands": 1,
+      "dtype": "float32",
+      "height": 3730,
+      "width": 3292,
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "res": [
+        100.0,
+        100.0
+      ],
+      "nodata": null
+    },
+    "file": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+  },
+  "template_report": {
+    "ok": true,
+    "problems": [],
+    "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+    "bytes": 137204,
+    "shape": [
+      3730,
+      3292
+    ],
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "count": 1,
+    "dtype": "float32",
+    "n_nonzero": 40000,
+    "min": 0.0,
+    "max": 1.0,
+    "n_nan": 0,
+    "n_inf": 0,
+    "path": "/home/user/61GEMSDOE/docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif"
+  },
+  "zip_file": "61gemsdoe-basement-step-ribbon-20261011T054408Z.zip",
+  "zip_sha256": "a4d6f67e56af4b53ac08a2cf73bc60382688c72538329661c181845963ecfebb",
+  "approved_for_weekly_slot": false,
+  "promoted": false,
+  "submission_slots_used": 0,
+  "status": "locally validated within separately recorded inventory scope; not organizer acceptance or slot approval",
+  "metadata": {
+    "lane": "buried structure",
+    "method": "Parker 1973 forward / Oldenburg 1974 inversion of band 13 iso_grav_anom; non-maximum-suppressed horizontal-gradient maxima of basement depth; multi-line ribbons",
+    "drho_kg_m3": 400.0,
+    "z0_m": 3000.0,
+    "cutoff_wavelength_m": 5000.0,
+    "offsets_px": [
+      0.0,
+      6.0,
+      12.0
+    ],
+    "sigma_px": 1.0,
+    "thin_px": 1.0,
+    "budget": 40000,
+    "uniqueness": {
+      "n_registry_rasters": 708,
+      "worst_spearman": 0.11411617460376411,
+      "worst_spearman_source": "5GEMSDOE:data/derived/context_detector_prob_u8.tif",
+      "worst_dot_overlap_3px": 0.7242,
+      "worst_dot_overlap_source": "60GEMSDOE:docs/downloads/submission.tif"
+    }
+  }
+}

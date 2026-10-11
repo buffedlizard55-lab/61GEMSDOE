@@ -1,0 +1,23 @@
+{
+  "file": "61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+  "path": "docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+  "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+  "bytes": 137204,
+  "positive_pixels": 40000,
+  "submission_name": "61gemsdoe-basement-step-ribbon-20261011T054408Z-buried-structure",
+  "note": "Basement-depth steps from Parker-Oldenburg inversion of isostatic residual gravity; 5-line ribbons, magnetic mimics removed.",
+  "verdict": "negative",
+  "okay_to_submit": false,
+  "files": {
+    "tif": {
+      "name": "submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif",
+      "sha256": "875e919cb76a2b058b5631db6ddd9a6eb57bf6a53d1c60666fd4dfa2f107a64c",
+      "bytes": 137204,
+      "positive_pixels": 40000
+    },
+    "zip": {
+      "name": "submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.zip",
+      "sha256": "a4d6f67e56af4b53ac08a2cf73bc60382688c72538329661c181845963ecfebb"
+    }
+  }
+}
