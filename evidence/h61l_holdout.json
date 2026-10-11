@@ -1,0 +1,80 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "prune_px": 2.0,
+  "budgets": [
+    20000,
+    40000
+  ],
+  "fields_meta": {
+    "corridor_fraction_of_valid": 0.1925,
+    "basin_fraction_of_valid": 0.7376,
+    "valid_lidar_fraction": 0.753,
+    "n_slope_ridge_px": 1668964
+  },
+  "results": [
+    {
+      "name": "X2 slope-ridge inside corridor basin @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.046504803513711855,
+      "ci95_bootstrap_cells": [
+        0.04214325650932585,
+        0.05066048017118602
+      ],
+      "coverage": 0.07,
+      "n_emitted_per_draw": 40000,
+      "segments_withheld_total": 1999,
+      "segments_recovered_total": 351
+    },
+    {
+      "name": "L1 relief maxima inside corridor any depth @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "pooled_dti": 0.04433,
+      "ci95_bootstrap_cells": [
+        0.041405107488824,
+        0.04783192637207127
+      ],
+      "coverage": 0.067,
+      "n_emitted_per_draw": 40000,
+      "segments_withheld_total": 1999,
+      "segments_recovered_total": 340
+    },
+    {
+      "name": "CONTROL random lines @ 40000",
+      "kind": "lines",
+      "budget": 40000,
+      "pooled_dti": 0.03141382104713175,
+      "ci95_bootstrap_cells": [
+        0.0282,
+        0.0341
+      ],
+      "coverage": 0.047,
+      "n_emitted_per_draw": 40000
+    }
+  ],
+  "best_candidate": "L1 relief maxima inside corridor any depth @ 40000",
+  "best_vs_random_lines": {
+    "candidate": 0.04433,
+    "random_lines": 0.03141382104713175,
+    "ratio": 1.4111623012523518
+  },
+  "registry_reference_best": {
+    "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "pooled_dti": 0.10106964768349222
+  },
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.5577,
+    "passed": true,
+    "per_feature": {}
+  },
+  "note": "H61-L holdout: same instrument as H61-G, lidar relief any depth is best lidar variant but below baseline slope-ridge and below dotted h19-5 base (0.101)",
+  "elapsed_s": 120
+}

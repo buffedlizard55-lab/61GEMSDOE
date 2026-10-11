@@ -1,96 +1,94 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive Summary - 61GEMSDOE</title>
+<title>Executive summary · 61GEMSDOE</title>
 <link rel="stylesheet" href="assets/site.css">
 <style>
-  .download-box { background: #0d1117; border: 2px solid #36d399; border-radius: 10px; padding: 20px; margin: 20px 0; }
-  .download-box h2 { color: #36d399; margin-top: 0; }
-  .download-box p { color: #e6edf3; }
-  .btn { display: inline-block; background: #36d399; color: #0d1117; font-weight: 700; padding: 12px 20px; border-radius: 8px; text-decoration: none; margin: 6px 8px 6px 0; }
-  .btn:hover { background: #269f62; }
-  .warn { color: #f85149; }
-  .ok { color: #36d399; }
-  .code { background: #0d1117; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-</style>
-</head><body><div class="wrap">
+.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status.ok{border-color:var(--ok);background:#0f2a16}
+.status.bad{border-color:var(--bad);background:#2a0f0f}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
+.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
+nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+</style></head><body><div class="wrap">
+<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
 
-<h1>Executive Summary: 61GEMSDOE</h1>
+<h1>Executive summary &amp; exactly how to submit</h1>
 
-<div class="download-box">
-<h2>✅ READY TO SUBMIT</h2>
-<p><strong>File:</strong> <code class="code">gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></p>
-<p><strong>Status:</strong> <span class="ok">FORMAT-VALID</span> — All 19 validation checks pass</p>
-<p><strong>Values:</strong> float32, EPSG:32611, 3730 × 3292, 100 m, identical to sample_submission.tif</p>
-<p><strong>Range:</strong> min 0.0 / max 1.0, no NaN/Inf anywhere, 0.0 outside footprint, zero dots on mapped catalogue</p>
-<p><strong>Positive pixels:</strong> 55,301 (0.0107 of footprint)</p>
-<p><strong>SHA256:</strong> <code class="code">94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6</code></p>
+<div class="status ok">
+<h2 style="margin:.2em 0;border:0">Status of the newest file: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE — SAFE TO DOWNLOAD AND SUBMIT</span>
+ · <span style="color:var(--warn)">EXPECTED TO SCORE WELL BELOW 0.2778 — not recommended for a weekly slot (negative result)</span></h2>
+<p><b>What it is:</b> <code>gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; everything else 0.0), float32, EPSG:32611,
+3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, min 0 / max 1
+(<a href="verify.html">validator receipt</a>: 19 checks, all passed). Uniqueness against 25 earlier rasters:
+worst Spearman +0.293 vs H61-G (same lane, 69.8% dots within 3 px, just under 70% drift gate), worst vs external registry +0.011, verdict <b>UNIQUE</b>.</p>
+<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0443 (95% CI 0.0414–0.0478; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)).
+Random lines with the same budget: 0.0314. The best earlier group file on the same evaluator (the unpruned dotted h19-5 base, which is
+<span class="tag o">ORGANIZER-CONFIRMED</span> 0.2600 live): 0.1011. The new file is therefore <b>better than random but about half as good as the file family that already holds our 0.2778</b>. Verdict in the run card: <b>negative</b>.</p>
+<p><a class="btn" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif" download>⬇ Download gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif (131 kB) — ONE CLICK, READY TO SUBMIT</a>
+<a class="btn sec" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.zip" download>zip</a>
+<a class="btn sec" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.json">format receipt (JSON)</a>
+<a class="btn sec" href="executive-summary.html">How to submit — step by step</a></p>
+<p class="small">sha256 <code>685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9</code> · submission name <code>gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros</code> · note (84 chars): <code>H61-L: lidar relief maxima inside GP-1012 corridor (any depth); 40000 dots; UNSCORED</code><br>
+Previous primary <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> (HOLDOUT-DTI 0.0465, sha256 fdbc7b…) remains available below; both are FORMAT-VALID and UNIQUE.</p>
+</div>
 
-<h3>One-Click Download</h3>
-<a class="btn" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif" download>⬇ Download TIF (800 KB)</a>
-<a class="btn" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.json" download>⬇ Download Receipt (JSON)</a>
+<div class="status">
+<h2 style="margin:.2em 0;border:0">Second newest — also FORMAT-VALID and UNIQUE: H61-M (gravity × magnetic)</h2>
+<p><b>What it is:</b> <code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code> — 55,301 ribbon pixels from 7,942 dots, float32, EPSG:32611, 3730 × 3292, 100 m, no NaN/Inf, min 0 / max 1. All 19 validator checks pass. <b>UNIQUE</b> (Spearman 0.0018 vs external registry, overlap 18.35%). Method: gravity-inversion corridor (±1 km) × magnetic TMI edges.</p>
+<p><a class="btn" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif" download>⬇ Download H61-M TIF (800 KB)</a>
+<a class="btn sec" href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.json" download>receipt</a></p>
+<p class="small">sha256 <code>94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6</code> · note (86 chars): <code>H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED</code><br>
+H61-M was merged from main (PR #11) 6 minutes before H61-L (this branch). Both are diagnostic negatives for the buried lane; H61-M has not been scored on the same segment-holdout as H61-L/H61-G, so a direct HOLDOUT-DTI comparison is not available. Its magnetic screen shows 31.5 px mean distance to catalogue vs 19 px for H61-L, suggesting similar or weaker localisation.</p>
+</div>
 
-<h3>How to Submit to the Competition</h3>
+<h2>Decision in one line</h2>
+<p>Upload is <b>safe</b> for either file (format pinned to the organiser's sample, every value 0.0 or 1.0 — verified on disk, 19/19 checks pass), but both are <b>negative results</b>:
+H61-L HOLDOUT-DTI 0.0443 (CI 0.0414–0.0478) vs 0.1011 for the unpruned base of our 0.2778; H61-M is likewise expected to sit well below that bar (no holdout lift demonstrated). Spend a slot only to obtain an ORGANIZER-CONFIRMED number for the gravity+surrogate lane (useful to close the lane); do not expect either to move the leaderboard. H61-L and H61-G are statistically tied (0.0443 vs 0.0465).</p>
+
+<h2>Exactly how to submit — H61-L (newest)</h2>
 <ol>
-<li><strong>Download the TIF file</strong> using the button above, or click: <a href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif" download>direct link</a></li>
-<li><strong>Go to the submission page:</strong> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submit/">https://www.drivendata.org/competitions/306/competition-doe-gems/submit/</a></li>
-<li><strong>Upload the TIF file:</strong> Click "Choose File" and select the downloaded <code class="code">gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></li>
-<li><strong>Add a note (optional but recommended):</strong><br>
-   <code class="code">H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED</code>
-</li>
-<li><strong>Click "Submit"</strong></li>
+<li>Download <a href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif" download><code>gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif</code></a> (or the <a href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.zip">zip</a>). Check sha256 if you like: <code>685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9</code>.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> while logged in as the competition account.</li>
+<li>Upload the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the zip is only a convenience copy).</li>
+<li>Paste the submission note (≤ 140 characters, 84 here): <code>H61-L: lidar relief maxima inside GP-1012 corridor (any depth); 40000 dots; UNSCORED</code></li>
+<li>After scoring, copy the number into <code>evidence/h61l_run_card.json</code> → <code>organizer_confirmed_score</code> and rebuild the site.</li>
+</ol>
+<h3>Or submit H61-M (gravity × magnetic)</h3>
+<ol>
+<li>Download <a href="downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif" download><code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></a>.</li>
+<li>Upload at <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submit/">https://www.drivendata.org/competitions/306/competition-doe-gems/submit/</a>.</li>
+<li>Paste note: <code>H61-M: gravity inversion corridor x magnetic edges; 40000 dots as 3px ribbons; UNSCORED</code></li>
 </ol>
 
-<h3>⚠️ Important Notes</h3>
-<ul>
-<li><span class="warn">DO NOT</span> submit files from the <code class="code">docs/downloads/</code> directory that have <code class="code">h61a</code>, <code class="code">h61b</code>, or <code class="code">h61g</code> in their names — those are <strong>superceded</strong> diagnostic files.</li>
-<li>This file <span class="ok">IS SAFE TO SUBMIT</span> — it has been validated and passes all format checks.</li>
-<li>The file is <strong>UNIQUE</strong> — it combines gravity inversion with magnetic edge detection, a method not used in any previous submission from this repository.</li>
-<li>This is a <strong>buried-structure lane</strong> submission: it finds concealed faults by combining basement-step corridors from gravity inversion with magnetic edges.</li>
-</ul>
+<h2>What each file tests</h2>
+<p><b>H61-L</b> — corridor × lidar relief maxima (any depth). Same corridor as H61-G but 1 m 3DEP DEM (12 bands, 76% coverage) replaces 100 m slope ridge. Lidar screen 0.0815 mean kernel inside corridor vs 0.0428 random; holdout 0.0443 tied with H61-G 0.0465, both < 0.1011.</p>
+<p><b>H61-M</b> — corridor × magnetic edges (TMI band 3). Parker/Oldenburg inversion → HGM maxima → ±1 km corridor → magnetic HGM edges inside corridor → 3-px ribbons (7,942 dots → 55,301 px). Competing explanation: intrabasement density contrasts (gravity step without magnetic edge) are filtered by the conjunction.</p>
+<p><b>H61-G</b> — corridor × detrended slope ridge (band 19). The previous primary (0.0465, CI 0.0421–0.0507), 351/1999 basin segments vs 215 random.</p>
 
-<h3>What This Submission Does</h3>
-<p><strong>Method:</strong> Parker/Oldenburg gravity inversion → basement depth → horizontal gradient maxima (steps) → ±1 km corridor → find magnetic (TMI) edges within corridor → emit 3-pixel-wide ribbons</p>
-<p><strong>Why it works:</strong> Gravity identifies basement steps (potential buried faults) at ~1 km resolution. Magnetic data detects edges where faults offset magnetized basement or volcanic flows at higher resolution. The conjunction filters out density contrasts within basement (which have no magnetic expression).</p>
-<p><strong>Competing explanation:</strong> Density contrasts within basement create gravity steps without faults. These lack co-located magnetic edges, so the conjunction filters them out.</p>
-
-<h3>Validation Summary</h3>
-<table>
-<tr><th>Check</th><th>Status</th></tr>
-<tr><td>Single band</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Float32 dtype</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Dimensions 3730×3292</td><td><span class="ok">✓</span></td></tr>
-<tr><td>CRS EPSG:32611</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Transform matches</td><td><span class="ok">✓</span></td></tr>
-<tr><td>No NaN anywhere</td><td><span class="ok">✓</span></td></tr>
-<tr><td>No Inf anywhere</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Range [0, 1]</td><td><span class="ok">✓</span></td></tr>
-<tr><td>All finite in footprint</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Zero outside footprint</td><td><span class="ok">✓</span></td></tr>
-<tr><td>Zero dots on catalogue</td><td><span class="ok">✓</span></td></tr>
-<tr><td>No float32 sentinel</td><td><span class="ok">✓</span></td></tr>
+<h3>Validation summary — H61-L</h3>
+<table><tr><th>Check</th><th>Status</th></tr>
+<tr><td>Single band</td><td>✓</td></tr><tr><td>Float32</td><td>✓</td></tr><tr><td>3730×3292</td><td>✓</td></tr><tr><td>EPSG:32611</td><td>✓</td></tr><tr><td>Transform matches sample</td><td>✓</td></tr>
+<tr><td>No NaN / Inf</td><td>✓</td></tr><tr><td>Range [0,1]</td><td>✓</td></tr><tr><td>0.0 outside footprint</td><td>✓</td></tr><tr><td>Zero on catalogue</td><td>✓</td></tr><tr><td>No sentinel</td><td>✓</td></tr>
+</table>
+<h3>Validation summary — H61-M</h3>
+<table><tr><th>Check</th><th>Status</th></tr>
+<tr><td>Single band</td><td>✓</td></tr><tr><td>Float32</td><td>✓</td></tr><tr><td>3730×3292</td><td>✓</td></tr><tr><td>EPSG:32611</td><td>✓</td></tr><tr><td>Transform matches sample</td><td>✓</td></tr>
+<tr><td>No NaN / Inf</td><td>✓</td></tr><tr><td>Range [0,1]</td><td>✓</td></tr><tr><td>0.0 outside footprint</td><td>✓</td></tr><tr><td>Zero on catalogue</td><td>✓</td></tr><tr><td>No sentinel</td><td>✓</td></tr>
 </table>
 
-<h3>Technical Details</h3>
+<h3>Technical details — H61-M</h3>
 <ul>
-<li><strong>Gravity band:</strong> 13 (isostatic residual gravity)</li>
-<li><strong>Magnetic band:</strong> 3 (Total Magnetic Intensity - TMI)</li>
-<li><strong>Inversion:</strong> Parker/Oldenburg first iterate (slab solution) with GP-1012 calibration</li>
-<li><strong>Density contrast:</strong> -300 kg/m³</li>
-<li><strong>Reference level:</strong> 500 m</li>
-<li><strong>Filter:</strong> Butterworth order 4.0, kc = 2.500×10⁻⁴ rad/m</li>
-<li><strong>Corridor width:</strong> ±10 pixels (±1 km)</li>
-<li><strong>Ribbon width:</strong> 3 pixels (300 m)</li>
-<li><strong>Prune distance:</strong> 2 pixels (200 m) from mapped faults</li>
-<li><strong>Emission:</strong> 7,942 dots → 55,301 ribbon pixels (budget: 40,000 dots)</li>
+<li><strong>Gravity band:</strong> 13 (isostatic residual)</li>
+<li><strong>Magnetic band:</strong> 3 (TMI)</li>
+<li><strong>Inversion:</strong> Parker/Oldenburg first iterate, GP-1012 calibration, Δρ -300 kg/m³, z0 500 m, Butterworth order 4 kc 2.5e-4 rad/m</li>
+<li><strong>Corridor:</strong> ±10 px (±1 km), prune 2 px from catalogue</li>
+<li><strong>Ribbon:</strong> 3 px (300 m), 7,942 dots → 55,301 px</li>
 </ul>
 
-<h3>Files Generated</h3>
-<ul>
-<li><code class="code">docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code> — the submission file</li>
-<li><code class="code">docs/downloads/gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.json</code> — the validation receipt</li>
-<li><code class="code">evidence/h61m_submission.json</code> — the evidence file with method details</li>
-</ul>
-
-<p><a href="index.html">← Back to Status Page</a></p>
-
+<p><a href="index.html">← Back to Status Page</a> · <a href="verify.html">Verify both files</a></p>
 </div></body></html>
