@@ -15,7 +15,7 @@
 <div class="card">
 <ol>
 <li><strong>Download the GeoTIFF</strong> from the panel at the top of this page
-(or <code>docs/downloads/&lt;name&gt;.tif</code> in the repository). It is a
+(or <code>docs/submissions/&lt;name&gt;.tif</code> in the repository). It is a
 single-band float32 GeoTIFF, 3730 × 3292, EPSG:32611, 100 m cells, values 0/1
 with 0 outside the scored footprint.</li>
 <li><strong>Open</strong>
@@ -28,10 +28,32 @@ single GeoTIFF.</li>
 <li><strong>Paste the note</strong> below into the optional <em>Note</em> field
 so the row is identifiable later, then create the submission.</li>
 </ol>
+<p class="small">Three rules from the
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a>
+that constrain this step: (i) at most <strong>three submissions per week</strong>;
+(ii) <strong>one</strong> submission must be selected as the final one for both
+prize rounds, and it must be selected <em>without</em> knowledge of the private-test
+score; (iii) if generative AI was used to develop the submission, that use must be
+disclosed in the submission narrative. This lane's artifacts were produced by an
+autonomous agent, so the disclosure applies — see the note below.</p>
 </div>
 
 <h2>The note to paste (≤ 140 characters)</h2>
 <pre id="note"></pre>
+<h2>Generative-AI disclosure (required by the official rules)</h2>
+<p class="small">Section 3.2 of the official rules requires the extent of any
+generative-AI use to be indicated in the narrative. For this artifact: the
+hypothesis, the numerical method, the emission geometry and the statistical
+instrument were all specified by an autonomous coding agent working from the
+published literature cited on the sources page; no human geologist reviewed the
+result before it was written. The disclosure text to paste into the submission
+narrative is:</p>
+<pre>Developed autonomously by an AI coding agent: Parker-Oldenburg inversion of
+isostatic residual gravity, gradient-crest step detection and the hide-and-recover
+instrument were designed, implemented and evaluated by the agent; no human expert
+review preceded this submission.</pre>
+
+<h2>The note to paste, length</h2>
 <p class="small">Length: <strong>0
 </strong> / 140 characters.</p>
 

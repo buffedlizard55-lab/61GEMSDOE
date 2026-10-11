@@ -32,19 +32,52 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _rank(a: np.ndarray) -> np.ndarray:
-    """Average ranks (ties share the mean rank) of a 1-D float array."""
-    order = np.argsort(a, kind="mergesort")
-    ranks = np.empty(a.size, np.float64)
-    sorted_a = a[order]
-    i = 0
+    """Average ranks (ties share the mean rank) of a 1-D float array.
+
+    Vectorised: the tie groups are found with a single boolean comparison
+    against the shifted sorted array.  The original loop over tie groups cost
+    ~8 s per 12 M-pixel raster, which made the 708-raster gate take hours.
+    """
+    a = np.asarray(a, np.float64).ravel()
     n = a.size
-    while i < n:
-        j = i
-        while j + 1 < n and sorted_a[j + 1] == sorted_a[i]:
-            j += 1
-        ranks[order[i:j + 1]] = 0.5 * (i + j) + 1.0
-        i = j + 1
+    order = np.argsort(a, kind="mergesort")
+    s = a[order]
+    brk = np.empty(n, dtype=bool)
+    if n:
+        brk[0] = True
+        brk[1:] = s[1:] != s[:-1]
+    start = np.flatnonzero(brk)
+    end = np.append(start[1:], n) - 1
+    avg = 0.5 * (start + end) + 1.0
+    grp = np.cumsum(brk) - 1
+    ranks = np.empty(n, np.float64)
+    ranks[order] = avg[grp]
     return ranks
+
+
+MAX_SPEARMAN_SAMPLES = 2_000_000
+
+
+def stride_grid(shape: tuple[int, int], stride: int) -> np.ndarray:
+    """A fixed boolean lattice: every ``stride``-th row and column."""
+    g = np.zeros(shape, bool)
+    g[::stride, ::stride] = True
+    return g
+
+
+def spearman_stride(mask_pixels: int, limit: int = MAX_SPEARMAN_SAMPLES) -> int:
+    """Stride that reduces ``mask_pixels`` to at most ``limit`` samples.
+
+    The surface leg of the gate only has to separate rho ~ 0.9 from rho ~ 0.98,
+    and at 2 x 10^6 samples the sampling error of rho is about 7 x 10^-4, so a
+    lattice subsample cannot hide a duplicate.  It is used purely because the
+    full 12.3 M-pixel rank correlation costs ~8 s per raster, i.e. ~95 minutes
+    over the 708-raster registry, against ~12 minutes subsampled.
+    """
+    stride = 1
+    while mask_pixels / (stride * stride) > limit:
+        stride += 1
+    return stride
 
 
 def spearman(a: np.ndarray, b: np.ndarray, mask: np.ndarray) -> float:
@@ -99,7 +132,8 @@ def sha256(path: Path) -> str:
 
 def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | None,
           footprint: np.ndarray, root: Path | None = None,
-          limit: int | None = None, progress=None) -> dict:
+          limit: int | None = None, progress=None,
+          surface_stride: int | None = None) -> dict:
     """Run both gate legs against every registry raster."""
     import rasterio
 
@@ -107,6 +141,9 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
     rasters = load_registry(root)
     if limit:
         rasters = rasters[:limit]
+    if surface_stride is None:
+        surface_stride = (spearman_stride(int(np.asarray(footprint).sum()))
+                          if candidate_surface is not None else 1)
     worst_rho, worst_rho_id = -1.0, None
     worst_ov, worst_ov_id = -1.0, None
     rows = []
@@ -120,6 +157,8 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
         row = dict(sources=rec["sources"][:3], sha256=rec["sha256"])
         if candidate_surface is not None:
             m = footprint & finite
+            if surface_stride > 1:
+                m &= stride_grid(m.shape, surface_stride)
             rho = spearman(candidate_surface, np.where(finite, arr, 0.0), m)
             row["spearman"] = rho
             if np.isfinite(rho) and rho > worst_rho:
@@ -140,6 +179,11 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
         worst_spearman=worst_rho, worst_spearman_source=worst_rho_id,
         worst_dot_overlap_3px=worst_ov, worst_dot_overlap_source=worst_ov_id,
         thresholds=dict(spearman=SPEARMAN_LIMIT, dot_overlap=OVERLAP_LIMIT),
+        surface_leg_subsample=dict(stride_px=int(surface_stride),
+                                   approx_samples=int(np.asarray(footprint).sum()
+                                                      / max(surface_stride, 1) ** 2),
+                                   note=("lattice subsample of the surface leg; the dot leg "
+                                         "is computed on every candidate dot")),
         surface_gate_pass=bool(surface_pass),
         dot_gate_pass=bool(dot_pass),
         unique=bool(surface_pass and dot_pass),
