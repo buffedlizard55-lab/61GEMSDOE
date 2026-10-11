@@ -188,4 +188,3 @@ def ribbon_emit(ribbon: np.ndarray, belief: np.ndarray, eligible: np.ndarray,
                 budget: int, min_sep_px: int = 3, seed: int = 0) -> np.ndarray:
     """Emit along ribbon pixels only (multi-line ribbons, budgeted)."""
     return emit(belief, eligible & ribbon, budget, min_sep_px, seed=seed)
-

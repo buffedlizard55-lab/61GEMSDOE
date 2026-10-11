@@ -121,7 +121,7 @@
     "lane": "buried structures from gravity inversion",
     "density_contrast_kg_m3": -400.0,
     "z0_m": 500.0,
-    "inversion_stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "inversion_stage": "first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated by the recorded six-iteration test",
     "inversion_rms_residual_mgal": 3.0716175244847563,
     "n_dots": 20000,
     "budget": 20000,

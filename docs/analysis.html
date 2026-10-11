@@ -1,142 +1,42 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Why 0.2778 · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"><style>
-:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#c9d1d9;--dim:#8b949e;
---acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);
-font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:22px}
-nav{font-size:.92rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
-nav a{color:var(--dim);text-decoration:none;margin-right:6px}nav a:hover{color:var(--acc)}
-nav a.active{color:var(--acc);font-weight:700}
-h1{font-size:1.6rem;line-height:1.25;margin:.3em 0 .5em}h2{font-size:1.2rem;margin:1.6em 0 .4em;
-border-bottom:1px solid var(--line);padding-bottom:.25em}h3{font-size:1.02rem;margin:1.2em 0 .3em}
-code,.mono{font:0.88em/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
-code{background:var(--panel);padding:1px 5px;border-radius:4px}
-a{color:var(--acc)}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:12px 0}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.card{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 18px;margin:16px 0}
-.card.ok{border-color:var(--ok)}.card.warn{border-color:var(--warn)}.card.bad{border-color:var(--bad)}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:13px 20px;
-border-radius:8px;text-decoration:none;margin:6px 10px 6px 0;font-size:1rem}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line);font-weight:600}
-.btn.big{font-size:1.08rem;padding:15px 24px}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);
-border-radius:4px;padding:0 5px}.tag{display:inline-block;font:700 .72rem/1.5 ui-monospace,monospace;
-padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px;color:var(--acc)}
-.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}
-ul{margin:.4em 0 .8em 1.1em}li{margin:.22em 0}.big-verdict{font-size:1.12rem}
-</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>Why 0.2778 scored highest, and whether this lane can beat it</h1>
-<div class="card"><p><b>Everything here is measured from published bytes or copied from a receipt.</b> The 0.2778 and its neighbours are <i>owner-reported</i> scores from the group's own sites (IR-61-SCORE-01); the group's own audit file records the base ladder and the prune. The current competition leaderboard maximum (0.3195) is <i>user-reported</i> and is never treated as our own measurement. This session's own numbers are HOLDOUT-DTI on the shared instrument.</p></div>
-<h2>1 · What the metric pays for</h2>
-<p>The score is the distance-weighted Tversky index, α = 0.2 for false positives, β = 0.8 for false negatives, triangular kernel of 300 m (3 px at 100 m). With binary dots, a dot pays for itself only if its truth credit exceeds α·DTI ≈ 0.06 at DTI = 0.28. Two consequences drive everything: <b>(a)</b> graded probability maps are strictly dominated by their own thresholded support, and <b>(b)</b> a dot that lands on the mapped catalogue is a guaranteed false positive, because the scored truth is the set of faults the catalogue does <i>not</i> contain.</p>
-<h2>2 · What 0.2778 is actually made of</h2>
-<p>The group's own audit of that file (<code>data/registry/audit-h33-2-b2.json</code>) records: 37,654 emitted positives, 0 on the catalogue, footprint fraction 0.0073, float32, EPSG:32611, 3730 × 3292, the organiser transform, all checks passed, and the description “0.2708 base with every dot at d(catalogue) ≤ 2 px deleted”. The controlled ladder on the same underlying field is 44,090 dots → 0.2600, 40,199 → 0.2708, 38,854 → 0.2750, 37,654 → 0.2778. <b>The gain that made it the group's best file is the deletion of dots near the mapped catalogue, not a better locator.</b> That is the single most transferable fact in this project, and this session applies it (both prune radii are scored).</p>
-<h2>3 · Why the lane could not reach it before, measured</h2>
-<p>A gravity step fixes a basement offset to kilometres; the metric pays inside 300 m. Measured this session on the same grid: pixels of the inverted-depth horizontal-gradient maxima are within 3 px of a mapped trace 10.1 % of the time against 8.7 % for a random pixel — a lift of <b>1.20×</b>. The dip projection moves that to 10.3 %. The best conjunction available — the projected trace intersected with an independent lidar scarp detector — reaches <b>13.7 %</b>, a lift of 1.57×, which is the first construction in this repository that substantially improves on the bare step field. It is still far short of what the live top files imply.</p>
-<h2>4 · What would have to be true to beat 0.3195</h2>
-<ol><li><b>A locator that generalises across space.</b> Every 100 m locator this repository has tested sits at the random baseline under leave-one-quadrant-out with no training pixel inside the scored quadrant (blocked AUC 0.52–0.62).</li><li><b>Evidence the 100 m grid does not contain.</b> The one source that is free, official and explicitly named by the organisers — 1 m DEM via the competition's own <code>1m_DEM_links.csv</code> pointing at USGS 3DEP (<code>prd-tnm.s3.amazonaws.com</code>, project <code>NV_WestCentral_EarthMRI_2020_D20</code>) — resolves scarps of 0.5–5 m that are invisible at 100 m. Obtainability is verified, not assumed: this session fetched the group's public mirrors of the 3 m and 10 m derivatives and the 1 m source URLs and hashes from <code>data/pilot/dem3m/dem_pilot_receipt.json</code>. The 1 m tiles themselves are outside this sandbox's egress allow-list (IR-61-NET-01).</li><li><b>Recall, not precision.</b> With β = 0.8 the optimum sits at higher recall than intuition suggests; the measured budget sweep on this session's field is on the <a href="results.html">results page</a>.</li></ol>
-<h2>5 · The honest verdict</h2>
-<p><b>Not with the 19 supplied bands alone, and not from this lane's step field even with the dip projection.</b> The projected × scarp conjunction is the best construction this lane has produced and it is still an order of magnitude short. The route with real upside is metre-scale topography inside the gravity corridor (hypothesis #2 on the <a href="hypotheses.html">hypotheses page</a>), whose sources are named and verified above.</p>
-<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html><details style="margin-top:34px"><summary class="small">Earlier session's analysis of the same question, kept verbatim for the audit trail</summary> <div class="small"><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>Why 0.2778 scored highest, and whether this lane can beat it</h1>
-<div class="card"><p><b>Everything here is measured from published bytes or copied from a receipt.</b> The 0.2778 and its neighbours are <i>owner-reported</i> scores from the group's own sites (IR-61-SCORE-01); the group's own audit file records the base ladder and the prune. The current competition leaderboard maximum (0.3195) is <i>user-reported</i> and is never treated as our own measurement. This session's own numbers are HOLDOUT-DTI on the shared instrument.</p></div>
-<h2>1 · What the metric pays for</h2>
-<p>The score is the distance-weighted Tversky index, α = 0.2 for false positives, β = 0.8 for false negatives, triangular kernel of 300 m (3 px at 100 m). With binary dots, a dot pays for itself only if its truth credit exceeds α·DTI ≈ 0.06 at DTI = 0.28. Two consequences drive everything: <b>(a)</b> graded probability maps are strictly dominated by their own thresholded support, and <b>(b)</b> a dot that lands on the mapped catalogue is a guaranteed false positive, because the scored truth is the set of faults the catalogue does <i>not</i> contain.</p>
-<h2>2 · What 0.2778 is actually made of</h2>
-<p>The group's own audit of that file (<code>data/registry/audit-h33-2-b2.json</code>) records: 37,654 emitted positives, 0 on the catalogue, footprint fraction 0.0073, float32, EPSG:32611, 3730 × 3292, the organiser transform, all checks passed, and the description “0.2708 base with every dot at d(catalogue) ≤ 2 px deleted”. The controlled ladder on the same underlying field is 44,090 dots → 0.2600, 40,199 → 0.2708, 38,854 → 0.2750, 37,654 → 0.2778. <b>The gain that made it the group's best file is the deletion of dots near the mapped catalogue, not a better locator.</b> That is the single most transferable fact in this project, and this session applies it (both prune radii are scored).</p>
-<h2>3 · Why the lane could not reach it before, measured</h2>
-<p>A gravity step fixes a basement offset to kilometres; the metric pays inside 300 m. Measured this session on the same grid: pixels of the inverted-depth horizontal-gradient maxima are within 3 px of a mapped trace 10.1 % of the time against 8.7 % for a random pixel — a lift of <b>1.20×</b>. The dip projection moves that to 10.3 %. The best conjunction available — the projected trace intersected with an independent lidar scarp detector — reaches <b>13.7 %</b>, a lift of 1.57×, which is the first construction in this repository that substantially improves on the bare step field. It is still far short of what the live top files imply.</p>
-<h2>4 · What would have to be true to beat 0.3195</h2>
-<ol><li><b>A locator that generalises across space.</b> Every 100 m locator this repository has tested sits at the random baseline under leave-one-quadrant-out with no training pixel inside the scored quadrant (blocked AUC 0.52–0.62).</li><li><b>Evidence the 100 m grid does not contain.</b> The one source that is free, official and explicitly named by the organisers — 1 m DEM via the competition's own <code>1m_DEM_links.csv</code> pointing at USGS 3DEP (<code>prd-tnm.s3.amazonaws.com</code>, project <code>NV_WestCentral_EarthMRI_2020_D20</code>) — resolves scarps of 0.5–5 m that are invisible at 100 m. Obtainability is verified, not assumed: this session fetched the group's public mirrors of the 3 m and 10 m derivatives and the 1 m source URLs and hashes from <code>data/pilot/dem3m/dem_pilot_receipt.json</code>. The 1 m tiles themselves are outside this sandbox's egress allow-list (IR-61-NET-01).</li><li><b>Recall, not precision.</b> With β = 0.8 the optimum sits at higher recall than intuition suggests; the measured budget sweep on this session's field is on the <a href="results.html">results page</a>.</li></ol>
-<h2>5 · The honest verdict</h2>
-<p><b>Not with the 19 supplied bands alone, and not from this lane's step field even with the dip projection.</b> The projected × scarp conjunction is the best construction this lane has produced and it is still an order of magnitude short. The route with real upside is metre-scale topography inside the gravity corridor (hypothesis #2 on the <a href="hypotheses.html">hypotheses page</a>), whose sources are named and verified above.</p>
-<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html><details style="margin-top:34px"><summary class="small">Earlier session's analysis of the same question, kept verbatim for the audit trail</summary> <div class="small"><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>Why 0.2778 scored highest, and whether this lane can beat it</h1>
-<div class="card"><p><b>Everything here is measured from published bytes or copied from a receipt.</b> The 0.2778 and its neighbours are <i>owner-reported</i> scores from the group's own sites (IR-61-SCORE-01); the group's own audit file records the base ladder and the prune. The current competition leaderboard maximum (0.3195) is <i>user-reported</i> and is never treated as our own measurement. This session's own numbers are HOLDOUT-DTI on the shared instrument.</p></div>
-<h2>1 · What the metric pays for</h2>
-<p>The score is the distance-weighted Tversky index, α = 0.2 for false positives, β = 0.8 for false negatives, triangular kernel of 300 m (3 px at 100 m). With binary dots, a dot pays for itself only if its truth credit exceeds α·DTI ≈ 0.06 at DTI = 0.28. Two consequences drive everything: <b>(a)</b> graded probability maps are strictly dominated by their own thresholded support, and <b>(b)</b> a dot that lands on the mapped catalogue is a guaranteed false positive, because the scored truth is the set of faults the catalogue does <i>not</i> contain.</p>
-<h2>2 · What 0.2778 is actually made of</h2>
-<p>The group's own audit of that file (<code>data/registry/audit-h33-2-b2.json</code>) records: 37,654 emitted positives, 0 on the catalogue, footprint fraction 0.0073, float32, EPSG:32611, 3730 × 3292, the organiser transform, all checks passed, and the description “0.2708 base with every dot at d(catalogue) ≤ 2 px deleted”. The controlled ladder on the same underlying field is 44,090 dots → 0.2600, 40,199 → 0.2708, 38,854 → 0.2750, 37,654 → 0.2778. <b>The gain that made it the group's best file is the deletion of dots near the mapped catalogue, not a better locator.</b> That is the single most transferable fact in this project, and this session applies it (both prune radii are scored).</p>
-<h2>3 · Why the lane could not reach it before, measured</h2>
-<p>A gravity step fixes a basement offset to kilometres; the metric pays inside 300 m. Measured this session on the same grid: pixels of the inverted-depth horizontal-gradient maxima are within 3 px of a mapped trace 10.1 % of the time against 8.7 % for a random pixel — a lift of <b>1.20×</b>. The dip projection moves that to 10.3 %. The best conjunction available — the projected trace intersected with an independent lidar scarp detector — reaches <b>13.7 %</b>, a lift of 1.57×, which is the first construction in this repository that substantially improves on the bare step field. It is still far short of what the live top files imply.</p>
-<h2>4 · What would have to be true to beat 0.3195</h2>
-<ol><li><b>A locator that generalises across space.</b> Every 100 m locator this repository has tested sits at the random baseline under leave-one-quadrant-out with no training pixel inside the scored quadrant (blocked AUC 0.52–0.62).</li><li><b>Evidence the 100 m grid does not contain.</b> The one source that is free, official and explicitly named by the organisers — 1 m DEM via the competition's own <code>1m_DEM_links.csv</code> pointing at USGS 3DEP (<code>prd-tnm.s3.amazonaws.com</code>, project <code>NV_WestCentral_EarthMRI_2020_D20</code>) — resolves scarps of 0.5–5 m that are invisible at 100 m. Obtainability is verified, not assumed: this session fetched the group's public mirrors of the 3 m and 10 m derivatives and the 1 m source URLs and hashes from <code>data/pilot/dem3m/dem_pilot_receipt.json</code>. The 1 m tiles themselves are outside this sandbox's egress allow-list (IR-61-NET-01).</li><li><b>Recall, not precision.</b> With β = 0.8 the optimum sits at higher recall than intuition suggests; the measured budget sweep on this session's field is on the <a href="results.html">results page</a>.</li></ol>
-<h2>5 · The honest verdict</h2>
-<p><b>Not with the 19 supplied bands alone, and not from this lane's step field even with the dip projection.</b> The projected × scarp conjunction is the best construction this lane has produced and it is still an order of magnitude short. The route with real upside is metre-scale topography inside the gravity corridor (hypothesis #2 on the <a href="hypotheses.html">hypotheses page</a>), whose sources are named and verified above.</p>
-<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html><details style="margin-top:34px"><summary class="small">Earlier session's analysis of the same question, kept verbatim for the audit trail</summary> <div class="small"><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>Why 0.2778 scored highest, and whether this lane can beat it</h1>
-<div class="card"><p><b>Everything here is measured from published bytes or copied from a receipt.</b> The 0.2778 and its neighbours are <i>owner-reported</i> scores from the group's own sites (IR-61-SCORE-01); the group's own audit file records the base ladder and the prune. The current competition leaderboard maximum (0.3195) is <i>user-reported</i> and is never treated as our own measurement. This session's own numbers are HOLDOUT-DTI on the shared instrument.</p></div>
-<h2>1 · What the metric pays for</h2>
-<p>The score is the distance-weighted Tversky index, α = 0.2 for false positives, β = 0.8 for false negatives, triangular kernel of 300 m (3 px at 100 m). With binary dots, a dot pays for itself only if its truth credit exceeds α·DTI ≈ 0.06 at DTI = 0.28. Two consequences drive everything: <b>(a)</b> graded probability maps are strictly dominated by their own thresholded support, and <b>(b)</b> a dot that lands on the mapped catalogue is a guaranteed false positive, because the scored truth is the set of faults the catalogue does <i>not</i> contain.</p>
-<h2>2 · What 0.2778 is actually made of</h2>
-<p>The group's own audit of that file (<code>data/registry/audit-h33-2-b2.json</code>) records: 37,654 emitted positives, 0 on the catalogue, footprint fraction 0.0073, float32, EPSG:32611, 3730 × 3292, the organiser transform, all checks passed, and the description “0.2708 base with every dot at d(catalogue) ≤ 2 px deleted”. The controlled ladder on the same underlying field is 44,090 dots → 0.2600, 40,199 → 0.2708, 38,854 → 0.2750, 37,654 → 0.2778. <b>The gain that made it the group's best file is the deletion of dots near the mapped catalogue, not a better locator.</b> That is the single most transferable fact in this project, and this session applies it (both prune radii are scored).</p>
-<h2>3 · Why the lane could not reach it before, measured</h2>
-<p>A gravity step fixes a basement offset to kilometres; the metric pays inside 300 m. Measured this session on the same grid: pixels of the inverted-depth horizontal-gradient maxima are within 3 px of a mapped trace 10.1 % of the time against 8.7 % for a random pixel — a lift of <b>1.20×</b>. The dip projection moves that to 10.3 %. The best conjunction available — the projected trace intersected with an independent lidar scarp detector — reaches <b>13.7 %</b>, a lift of 1.57×, which is the first construction in this repository that substantially improves on the bare step field. It is still far short of what the live top files imply.</p>
-<h2>4 · What would have to be true to beat 0.3195</h2>
-<ol><li><b>A locator that generalises across space.</b> Every 100 m locator this repository has tested sits at the random baseline under leave-one-quadrant-out with no training pixel inside the scored quadrant (blocked AUC 0.52–0.62).</li><li><b>Evidence the 100 m grid does not contain.</b> The one source that is free, official and explicitly named by the organisers — 1 m DEM via the competition's own <code>1m_DEM_links.csv</code> pointing at USGS 3DEP (<code>prd-tnm.s3.amazonaws.com</code>, project <code>NV_WestCentral_EarthMRI_2020_D20</code>) — resolves scarps of 0.5–5 m that are invisible at 100 m. Obtainability is verified, not assumed: this session fetched the group's public mirrors of the 3 m and 10 m derivatives and the 1 m source URLs and hashes from <code>data/pilot/dem3m/dem_pilot_receipt.json</code>. The 1 m tiles themselves are outside this sandbox's egress allow-list (IR-61-NET-01).</li><li><b>Recall, not precision.</b> With β = 0.8 the optimum sits at higher recall than intuition suggests; the measured budget sweep on this session's field is on the <a href="results.html">results page</a>.</li></ol>
-<h2>5 · The honest verdict</h2>
-<p><b>Not with the 19 supplied bands alone, and not from this lane's step field even with the dip projection.</b> The projected × scarp conjunction is the best construction this lane has produced and it is still an order of magnitude short. The route with real upside is metre-scale topography inside the gravity corridor (hypothesis #2 on the <a href="hypotheses.html">hypotheses page</a>), whose sources are named and verified above.</p>
-<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html><details style="margin-top:34px"><summary class="small">Earlier session's analysis of the same question, kept verbatim for the audit trail</summary> <div class="small"><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html" class=active>Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Score provenance · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html" class=active>Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<h2>The PhD-level answer: why <code>h33-h33-2-b2</code> scored 0.2778 and whether we can beat it</h2>
-<p>Everything below is measured from the published bytes
-(<code>reports/forensics.json</code>, <code>evidence/registry_habitat.json</code>) or from the group's
-own reported scores. The group's scores are <b>owner reports, not platform receipts</b>
-(IR-61-SCORE-01); they are used to order the evidence, never as a promise.</p>
+<h1>Score provenance and the owner-reported 0.2778 artifact</h1>
+<p><b>Provenance correction:</b> <code>reports/forensics.json</code> says every score in the group's CLAIMED table is a group/owner report;
+no organizer receipt ties those exact bytes to a leaderboard row. Thus <b>0.2778 is not ORGANIZER-CONFIRMED here</b>.
+The official leaderboard is separate: as fetched on 2026-10-11, #1 was 0.4133 and #8 was 0.3195 (the latter is not the leaderboard high).
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Check the live official table</a>.</p>
+<h2>What is measured about the H33 bytes</h2>
+<p>The group-reported value is 0.2778, attached to <code>gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif</code> with SHA-256
+<code>c55bafc470054e8271dcb89347a17e07fefe50de6af6e6ba6c4b169ef7ab6fa9</code>. Byte-level forensics finds that raster is a strict subset of the 44,090-pixel h19-5 core:
+44,090 core pixels → 37,654; 6,436 removed pixels are all within 3 px of the mapped catalogue.
+This is a measured construction relationship, not proof of the claimed leaderboard score.</p>
+<p>The plausible metric mechanism, conditional on the report being accurate, is geometric: DTI uses a 300 m triangular kernel with α=.2 and β=.8;
+pruning positives beside already-mapped faults removes guaranteed/near-guaranteed false positives. The measured set difference supports that explanation,
+but without a submission receipt we cannot assert the artifact scored 0.2778.</p>
+<h2>Our lane result is separate</h2>
+<p>H61-G's old artifact has HOLDOUT-DTI 0.046505 (95% CI [0.042143, 0.050660]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)), versus
+HOLDOUT-DTI 0.101070 (95% CI [0.086503, 0.117340]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)) for the as-published H19-5 dotted reference raster and
+HOLDOUT-DTI 0.031414 (95% CI [0.028243, 0.034092]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)) for the equal-budget random-line control.
+These are all HOLDOUT-DTI proxy scores, not organizer scores. H61-G does not beat the strongest reference and fails uniqueness.
+The current-run H61-L top hypothesis was stopped before holdout because its surface failed the strict overlap rule. A separate archived main-branch H61-L variant has historical HOLDOUT-DTI 0.044330 (95% CI [0.041405, 0.047832]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2</code>), but its final TIFF fails strict overlap at 98.6375%. The later archived H61-MH inversion-feature variant recorded HOLDOUT-DTI 0.060633 (95% CI [0.049409, 0.072712]; 22,641 withheld positives; evaluator <code>gems61.holdout_segmented v2 (whole segments &lt;=12 px, four eroded quadrants, seeds 20+21, mode all)</code>), but its TIFF fails strict overlap at 99.6400%. Neither is eligible for submission.</p>
+<h2>Leaderboard discrepancy</h2>
+<p>The official page fetched 2026-10-11 listed the leader at 0.4133; 0.3195 was rank #8. A previously saved sibling-site snapshot gave a different ordering,
+so we report that dated official fetch, not an undated value. No owner-reported score is substituted for a public leaderboard row.</p>
 
-<h3>1. What the metric actually pays for</h3>
-<p>The score is the distance-weighted Tversky index with α = 0.2 (false positives), β = 0.8 (false
-negatives) and a 300 m triangular kernel, on a hidden truth of faults that are <i>not</i> in the
-supplied catalogue. Write the emission as a binary dot field. Then a dot that lands within the kernel
-of a truth pixel and is the best dot for at least one such pixel raises the numerator by
-k = 1 − d/3 and lowers the false-negative term; a dot that lands on nothing raises the denominator by
-0.2. The marginal rule that falls out of the algebra is exact: <b>add a dot iff its expected new truth
-credit exceeds α · DTI</b>, i.e. about 0.06 at DTI = 0.28. So the game is not "be precise", it is
-"cover as much hidden truth as possible with dots that mostly land inside 300 m of it".</p>
-
-<h3>2. What 0.2778 is made of</h3>
-<p>Measured on the published file: 37,654 binary dots, zero on the
-catalogue, median distance 19.6 px
-from it, 0.73 % of the footprint. It is the <i>exact set difference</i> of the 0.2600 file with every
-dot within 3 px of the catalogue deleted (verified in <code>reports/forensics.json</code>:
-<code>top_is_strict_subset = true</code>, 6,436
-dots removed). That single controlled deletion moved the score 0.2600 → 0.2778, so <b>dots adjacent to
-the mapped catalogue were net-negative on the live metric</b>. Two independent readings agree: the
-group's budget ladder (37,654 → 0.2778; 40,199 → 0.2708; 44,090 → 0.2600; 60,069 → 0.2477;
-61,328 → 0.2449) says ~38–40 k dots at ~3 px spacing is the live optimum, and the dotted versions beat
-their own multiline parents (0.1922 multiline → 0.2600 dotted) because the metric charges 0.2 per
-extra positive pixel.</p>
-
-<h3>3. Why the lane cannot reach it</h3>
-<p>Gravity fixes a basement step to kilometres; the metric pays within 300 m. Measured here and in the
-previous session: the horizontal-gradient maxima of the inverted basement surface are enriched only
-0.99–1.32× over random pixels inside the 300 m kernel of mapped faults, and the corridor indicator's
-leakage-canary AUC against withheld faults is
-0.510 — no better than a coin flip.
-So the lane can say where to look and never where to put the dot. That is a property of the data
-(regional isostatic residuals, 58 % of the rectangle unsurveyed), not of the implementation.</p>
-
-<h3>4. Can we beat 0.2778?</h3>
-<p>Three things would have to be true, in order of how much they are worth:</p>
-<ul>
-<li><b>A locator that generalises across space.</b> Every locator we have — logistic habitat, gradient
-boosting, the single strongest band, the lane's own corridor × slope — scores 0.02–0.05 on the
-leave-one-quadrant-out test, i.e. at the random baseline. The 0.26–0.28 files must be using a locator
-that does generalise; from the published bytes its strongest single-band separations are the
-detrended-elevation slope (AUC 0.66 at its dots vs random) and the magnetic horizontal gradient
-(0.57), and no single layer separates the top scorers from the rest by more than 0.02 AUC — the signal
-is in the conjunction, which is exactly what we cannot see.</li>
-<li><b>External 100 m evidence.</b> The highest-value untried source is metre-scale topography: USGS
-3DEP 1 m DEM over the high-prior tiles (free public domain from USGS The National Map; the
-competition data tab ships only the three rasters listed in the bridge manifest — IR-61-SRC-01). A 1 m scarp is invisible at 100 m but is the primary evidence a field mapper uses.
-This session's egress allow-list blocks <code>prd-tnm.s3.amazonaws.com</code>, so it is named as the
-specific obtainable source rather than claimed as done.</li>
-<li><b>Recall, not precision.</b> Because β = 0.8 ≫ α = 0.2, the optimum sits at higher recall than
-intuition suggests: the marginal bar is only ~0.06 of new truth credit per dot. Files that emit
-~120 k pixels score 0.19, files that emit ~38 k score 0.28 — but that comparison confounds budget with
-field quality, and the only controlled pair we have (the 0.2600 → 0.2778 set difference) changes the
-prune, not the budget.</li>
-</ul>
-<p><b>Verdict:</b> not with the supplied 19 bands alone. The honest route to &gt; 0.2778 is a
-metre-scale topographic locator inside a gravity corridor, which is hypothesis H61-N on the
-<a href="hypotheses.html">next-hypotheses page</a> and needs the 3DEP tiles named there.</p>
-
-</div></div></details></div></div></details></div></div></details></div></div></details></div></body></html>
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

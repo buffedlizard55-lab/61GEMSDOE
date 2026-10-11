@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""H61-M experiment 2 -- model class and prior shape.
+"""RETIRED H61-M2 experiment runner; direct execution fails closed.
+
+The legacy experiment description below is retained for historical context only.
+The archived candidate fails strict final-dot uniqueness and the lineage budget is exceeded.
 
 Experiment 1 (``scripts/run_h61mh.py holdout``) established, on the shared
 segmented holdout:
@@ -78,6 +81,11 @@ def train_gbm(stack, valid, positives, names, *, seed=0):
 
 
 def main() -> int:
+    print("RETIRED: H61-M2 would create another holdout trial after the lineage budget was exceeded; "
+          "the archived H61-MH TIFF fails strict final-dot uniqueness. No experiment may be run.",
+          file=sys.stderr)
+    return 2
+
     t0 = time.time()
     g = gridmod.load_grid()
     grav = np.asarray(B.load_band(13), np.float64)

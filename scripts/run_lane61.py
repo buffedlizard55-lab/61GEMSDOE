@@ -202,7 +202,7 @@ def stage_hypotheses(_a) -> None:
                     "rather than trusting the supplied slab product, and then filters candidates "
                     "by MEASURED THROW -- which is what makes a lineament a fault (DD-ABOUT)."),
                 cost="one calibrable inversion (seconds at 400 m) + one EDT at 100 m",
-                sources=["doi:10.1111/j.1365-246X.1973.tb02307.x", "doi:10.1190/1.1440444",
+                sources=["doi:10.1111/j.1365-246X.1973.tb06513.x", "doi:10.1190/1.1440444",
                          "doi:10.1190/1.1442197", "doi:10.3133/gp1012",
                          "doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2"]),
             dict(
@@ -586,4 +586,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(
+        "Retired: this legacy pipeline uses an incomplete local corpus and the removed "
+        "dense-reference/Jaccard uniqueness exception. Use the current strict-gate "
+        "runner; do not emit or score this candidate."
+    )

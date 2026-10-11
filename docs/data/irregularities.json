@@ -21,7 +21,7 @@
     "id": "IR-2b",
     "severity": "minor",
     "title": "The delivered inversion uses the runner-up density contrast, not the objective's argmin",
-    "detail": "At z0 = 3000 m and a 5000 m cutoff the calibration objective (|log slope| − Pearson r) is minimised by drho = 300 kg/m3: slope 1.0043, r 0.5481, RMSE 709.5 m. The delivered field uses drho = 400 kg/m3: slope 0.9578, r 0.5749, RMSE 631.1 m — the objective's runner-up (0.0043 against 0.0431 in |log slope|) but the better of the two on both correlation and RMSE.",
+    "detail": "At z0 = 3000 m and a 5000 m cutoff the calibration objective (|log slope| \u2212 Pearson r) is minimised by drho = 300 kg/m3: slope 1.0043, r 0.5481, RMSE 709.5 m. The delivered field uses drho = 400 kg/m3: slope 0.9578, r 0.5749, RMSE 631.1 m \u2014 the objective's runner-up (0.0043 against 0.0431 in |log slope|) but the better of the two on both correlation and RMSE.",
     "consequence": "The two criteria disagree and nothing in this repository resolves them. Both rows are published in evidence/depth_scale_calibration.json. Because a change in drho mainly rescales the depth field, the crest positions move only slightly, but the delivered numbers were never recomputed at drho = 300 and that gap is stated rather than hidden.",
     "status": "open - the drho = 300 run is the first thing a follow-up session should repeat"
   },
@@ -80,5 +80,40 @@
     "detail": "With plateau_fraction = 0 the taper attenuates from the lowest wavenumbers and an infinite slab loses most of its response. With plateau_fraction = 0.5 the same slab is reproduced to 0.1 %.",
     "consequence": "The plateau fraction is fixed at 0.5 everywhere and a test guards against zeroing it.",
     "status": "closed"
+  },
+  {
+    "id": "IR-61-UNIQ-01",
+    "severity": "blocker",
+    "title": "The strict one-sided dot gate is unsatisfiable against a near-blanket comparator",
+    "detail": "The final-dot stop comparator gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif has 311,617 positive cells whose 3 px dilation covers 95.8182% of the scored footprint, so any candidate that dots the basin interior exceeds the 70% one-sided overlap threshold by construction. Measured strict overlaps of all 12 local candidate TIFFs are 94.6836%-99.8108%.",
+    "substitution": "Fail closed: no TIFF is cleared for submission and every published artifact is labelled audit-only. The pathology is flagged for manual policy review (either exclude near-blanket comparators, or judge overlap by lift over the comparator's own footprint coverage)."
+  },
+  {
+    "id": "IR-61-DIP-01",
+    "severity": "limitation",
+    "title": "The dip projection needs a dip the supplied layers cannot constrain",
+    "detail": "z_b*cot(dip) moves each step trace 4.54 px at 45 deg to 1.22 px at 75 deg (median); the shipped 60 deg is the Basin-and-Range norm, not a measurement. Against the lane's ~9 px positional resolution this is a partial correction, not a relocation.",
+    "substitution": "Reported as the dominant caveat of the H61-W result; no fix available in-lane."
+  },
+  {
+    "id": "IR-61-DIP-02",
+    "severity": "method",
+    "title": "A 180-degree direction error was invisible to the label-aware screen",
+    "detail": "The first footwall estimator (argmin mean depth) agreed with the analytic -grad(depth) direction on only 43.8% of ridge pixels within 30 deg. The central-difference fix reached 95.5% (median 6.8 deg), yet the label-aware screen score was unchanged (0.103 both ways).",
+    "substitution": "Flagged so no later session uses that screen to promote a construction."
+  },
+  {
+    "id": "IR-61-CONTROL-01",
+    "severity": "interpretation",
+    "title": "Emission-matched control: no measurable per-dot locational gain",
+    "detail": "At the primary's own realised emission count the random-lines control scores 0.0112 (95% CI 0.0092-0.0130) at 7,417 px/draw versus the primary's own budget ladder 0.0074 at 4,999 and 0.0114 at 10,000 px/draw.",
+    "substitution": "The H61-W run-card verdict is negative; no slot used."
+  },
+  {
+    "id": "IR-61-SITE-01",
+    "severity": "fixed",
+    "title": "docs/submit.html had been offering the near-blanket raster as step 1 of how to submit",
+    "detail": "The page produced by the older builder pointed its download action at gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif (311,617 px, not cleared).",
+    "substitution": "The canonical builder now derives the status banner and download labels from the strict audit receipt; scripts/check_site.py fails if the page and the run card disagree."
   }
 ]

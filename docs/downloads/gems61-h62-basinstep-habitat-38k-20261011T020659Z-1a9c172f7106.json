@@ -15,7 +15,7 @@
   "z0_m": 400.0,
   "delta_rho": -600.0,
   "filter": "Butterworth order 4.0, kc = 3.125e-04 rad/m (kc_scale=0.25)",
-  "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+  "stage": "first iterate (low-passed Bouguer slab); nonlinear convergence not demonstrated by the recorded six-iteration test",
   "rms_residual_mgal": 4.28319214212109,
   "sign_guard_corr_depth_vs_band13": -0.9342,
   "source_doi": "doi:10.1190/1.1440444",

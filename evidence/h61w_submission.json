@@ -204,5 +204,24 @@
       "prune_px": 2.0,
       "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all) -- the shared instrument, unmodified"
     }
-  }
+  },
+  "strict_uniqueness": {
+    "status": "DUPLICATE_LANE_DRIFT - NOT CLEARED (literal one-sided gate)",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/submissions/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+    "candidate_sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "comparator_positive_pixels": 311617,
+    "comparator_footprint_coverage_within_3px": 0.9581822330224662,
+    "candidate_positive_pixels_within_3px": 16703,
+    "one_sided_overlap_fraction": 0.9886942109624719,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "note": "The earlier lift-exception uniqueness verdict recorded in evidence/h61w_uniqueness.json is retired for submission decisions. The strict literal rule stops this file because 95.8182% of the scored footprint already lies within 3 px of the comparator, so the threshold is not discriminating for any in-basin candidate; no clearance is claimed.",
+    "holdout_reached_after_strict_failure": true,
+    "weekly_slot_used": false
+  },
+  "okay_to_submit": false,
+  "okay_to_download": true,
+  "download_class": "AUDIT-ONLY - DO NOT SUBMIT"
 }

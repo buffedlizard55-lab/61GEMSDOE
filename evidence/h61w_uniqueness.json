@@ -282,5 +282,12 @@
     "next_coverage": 0.5310761217000118,
     "next_lift": 6.531899904065086,
     "explanation": "the largest raw coverage is against the same-lane near-blanket reference (IR-61-UNIQ-01): it already covers >=70% of the footprint, so the dot leg cannot discriminate and the surface/gated legs decide"
+  },
+  "verdict_superseded": {
+    "reason": "literal one-sided gate has no Jaccard/density/lift exception (IR-61-UNIQ-01)",
+    "strict_one_sided_overlap_fraction": 0.9886942109624719,
+    "strict_verdict": "DUPLICATE_LANE_DRIFT",
+    "control": "95.8182% of the scored footprint is within 3 px of the 311,617-px comparator; the gate cannot clear any candidate that dots the basin interior",
+    "controlling_receipt": "evidence/local_artifact_strict_dot_audit.json"
   }
 }

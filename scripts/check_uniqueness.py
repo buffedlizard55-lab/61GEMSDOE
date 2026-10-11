@@ -1,59 +1,94 @@
 #!/usr/bin/env python3
-"""Run both uniqueness gate legs against every earlier family raster.
+"""Run the shared, literal pre-placement and/or final-dot uniqueness gate.
 
-Surface leg: full-footprint Spearman rank correlation of the candidate's soft
-surface against every registry raster (limit 0.90).
-Dot leg: fraction of the candidate's dots within 3 px of one registry raster's
-positive cells (limit 0.70).
-
-The gate fails closed: a missing registry file or an incomplete scan is an
-error, never evidence of uniqueness.
+Requires the complete hash/grid-verified declared inventory. Partial registry
+subsets are not a clearance source; no density/Jaccard exception is applied.
 """
 from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from gems61 import grid as gd, uniqueness as uq  # noqa: E402
+from gems61 import gates, grid  # noqa: E402
+
+
+def json_safe(value):
+    if isinstance(value, dict):
+        return {str(k): json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(v) for v in value]
+    if isinstance(value, (np.floating, float)):
+        return float(value) if np.isfinite(value) else None
+    if isinstance(value, (np.integer,)):
+        return int(value)
+    if isinstance(value, (np.bool_,)):
+        return bool(value)
+    return value
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--surface", default=None, help="soft surface .npy (pre-placement leg)")
-    ap.add_argument("--dots", default=None, help="binary dot mask .npy (final-dot leg)")
-    ap.add_argument("--limit", type=int, default=None)
-    ap.add_argument("--out", default="evidence/uniqueness.json")
-    a = ap.parse_args()
-    if a.surface is None and a.dots is None:
-        raise SystemExit("provide --surface and/or --dots")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--surface", type=Path, help="continuous candidate surface .npy")
+    parser.add_argument("--dots", type=Path, help="final candidate raster/mask .npy")
+    parser.add_argument("--inventory", type=Path, default=Path("evidence/registry_accessible_index.json"))
+    parser.add_argument("--out", type=Path, default=Path("evidence/uniqueness.json"))
+    args = parser.parse_args()
+    if args.surface is None and args.dots is None:
+        parser.error("provide --surface and/or --dots")
 
-    g = gd.load_grid()
-    surface = np.load(ROOT / a.surface) if a.surface else None
-    dots = np.load(ROOT / a.dots).astype(bool) if a.dots else None
-    if surface is not None:
-        surface = np.where(g.footprint, surface, 0.0)
-
+    inventory_path = args.inventory if args.inventory.is_absolute() else ROOT / args.inventory
+    inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+    if not inventory.get("declared_scope_complete") or inventory.get("errors"):
+        raise SystemExit("incomplete registry inventory; uniqueness fails closed")
+    g = grid.load_grid()
+    sample = grid.DATA_DIR / "sample_submission.tif"
     started = time.time()
-    def progress(i, n):
-        print(f"[uniq] {i}/{n} ({time.time()-started:.0f}s)", flush=True)
 
-    out = uq.check(surface, dots, g.footprint, root=ROOT, limit=a.limit, progress=progress)
-    out["generated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    out["candidate"] = dict(surface=a.surface, dots=a.dots,
-                            positive_pixels=int(dots.sum()) if dots is not None else None)
-    (ROOT / a.out).write_text(json.dumps(out, indent=2, allow_nan=False) + "\n")
-    print(f"[uniq] n={out['n_registry_rasters']} worst_rho={out['worst_spearman']:.6f} "
-          f"({out['worst_spearman_source']}) worst_overlap={out['worst_dot_overlap_3px']:.6f} "
-          f"({out['worst_dot_overlap_source']}) unique={out['unique']}")
-    return 0 if out["unique"] else 1
+    def check(path: Path, phase: str) -> dict:
+        resolved = path if path.is_absolute() else ROOT / path
+        candidate = np.load(resolved, mmap_mode="r")
+        if candidate.ndim != 2:
+            raise ValueError(f"{resolved}: expected a 2-D array, got {candidate.shape}")
+        print(f"[uniq] {phase} against {len(inventory['rasters'])} indexed rasters", flush=True)
+        report = gates.lane_uniqueness_report(
+            np.asarray(candidate), g.footprint, sample=sample, phase=phase,
+            registry_index=inventory,
+            log=lambda message: print(f"[uniq] {message}", flush=True),
+        )
+        report["candidate_path"] = str(resolved.relative_to(ROOT) if resolved.is_relative_to(ROOT) else resolved)
+        report["inventory_path"] = inventory_path.relative_to(ROOT).as_posix()
+        report["elapsed_s"] = time.time() - started
+        return report
+
+    results = []
+    if args.surface is not None:
+        results.append(check(args.surface, "surface"))
+    if args.dots is not None:
+        results.append(check(args.dots, "dots"))
+    output = dict(
+        evidence_class="MEASURED shared strict uniqueness gate",
+        inventory_path=inventory_path.relative_to(ROOT).as_posix(),
+        declared_scope_complete=inventory["declared_scope_complete"],
+        organizer_registry_complete=inventory.get("organizer_registry_complete", False),
+        unique=all(row["unique"] for row in results),
+        results=results,
+    )
+    out_path = args.out if args.out.is_absolute() else ROOT / args.out
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(json_safe(output), indent=2, allow_nan=False) + "\n",
+                        encoding="utf-8")
+    for row in results:
+        print(f"[uniq] {row['phase']}: {row['verdict']} (unique={row['unique']})")
+    print(f"[uniq] receipt: {out_path}")
+    return 0 if output["unique"] else 1
 
 
 if __name__ == "__main__":

@@ -214,4 +214,3 @@ def link_legacy_layouts(root: Path) -> list:
         link.symlink_to(target)
         made.append(dict(path=rel, state="linked", target=target))
     return made
-

@@ -1,37 +1,62 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Submit a file · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"><style>
-:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#c9d1d9;--dim:#8b949e;
---acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);
-font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:22px}
-nav{font-size:.92rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
-nav a{color:var(--dim);text-decoration:none;margin-right:6px}nav a:hover{color:var(--acc)}
-nav a.active{color:var(--acc);font-weight:700}
-h1{font-size:1.6rem;line-height:1.25;margin:.3em 0 .5em}h2{font-size:1.2rem;margin:1.6em 0 .4em;
-border-bottom:1px solid var(--line);padding-bottom:.25em}h3{font-size:1.02rem;margin:1.2em 0 .3em}
-code,.mono{font:0.88em/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
-code{background:var(--panel);padding:1px 5px;border-radius:4px}
-a{color:var(--acc)}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:12px 0}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.card{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 18px;margin:16px 0}
-.card.ok{border-color:var(--ok)}.card.warn{border-color:var(--warn)}.card.bad{border-color:var(--bad)}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:13px 20px;
-border-radius:8px;text-decoration:none;margin:6px 10px 6px 0;font-size:1rem}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line);font-weight:600}
-.btn.big{font-size:1.08rem;padding:15px 24px}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);
-border-radius:4px;padding:0 5px}.tag{display:inline-block;font:700 .72rem/1.5 ui-monospace,monospace;
-padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px;color:var(--acc)}
-.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}
-ul{margin:.4em 0 .8em 1.1em}li{margin:.22em 0}.big-verdict{font-size:1.12rem}
-</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html">Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>How to make a submission — exactly, step by step</h1>
-<div class="card ok"><p><b>The file to upload is here:</b></p><p><a class="btn big" href="downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif">⬇ gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</a><a class="btn sec" href="downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.zip">or the .zip (contains the same single TIFF)</a></p><p class="small">sha256 <code>a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b</code> · 90,194 bytes · single band · float32 · EPSG:32611 · 3730 × 3292 · min 0.0 · max 1.0 · 0 NaN · 0 Inf.</p></div>
-<h2>Steps</h2>
-<ol><li><b>Open the submission page.</b> Go to <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the competition submission page</a> (DrivenData, competition 306) and choose <b>New submission</b>.</li><li><b>Click <b>File to submit</b> → <b>Choose file</b>.</b> Select <code>gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</code> — or the <code>.zip</code>, which contains that one TIFF and nothing else. Do <b>not</b> rename it; the filename is the submission name the leaderboard records.</li><li><b>Paste the note.</b> Into <b>Note (optional)</b> paste, verbatim:<br><code>H61-W buried-structure lane: Parker/Oldenburg basement steps from isostatic gravity, dip-projected to the surface trace; dots, catalogue-pru</code><br><span class="small">(140 of the 140 characters allowed.)</span></li><li><b>Submit.</b> The uploader validates the grid before scoring: same CRS, same shape, same geotransform as <code>sample_submission.tif</code>, single band, float32, values in [0, 1]. This file satisfies all of them.</li><li><b>Read the score honestly.</b> The number that comes back is ORGANIZER-CONFIRMED and is the only real score. Everything on this site is HOLDOUT-DTI — an index from this repository's own instrument — or a USER-REPORTED value from the group's sites. A projection is never a score.</li></ol>
-<h2>If the uploader says “Predicted values must be in range [0, 1]”</h2>
-<p>That message means the raster contains at least one value that is not a number in [0, 1] — almost always <code>NaN</code> outside the survey footprint, which is how the competition's own problem statement describes the outside-the-bounds area (“data outside the bounds is null or nan”), but which this uploader rejects. <b>Use a <code>-zeros</code> file</b>: 0.0 outside the footprint, 0.0 everywhere with no fault, 1.0 on a predicted fault. Two of the group's history files carry <code>-nan</code> in their names and can trip this check. This session's file is a zeros file; its validator receipt records <code>n_nan = 0</code> and <code>n_inf = 0</code> over the whole raster, not only inside the footprint.</p>
-<p class="small">IR-61-NAN-02 (this session): the upload error reported in this project's brief is evidence about the uploader, and it is recorded here as a user-reported receipt, not as an organiser statement.</p>
-<h2>What “safe to submit” means here, and what it does not</h2>
-<ul><li><b>Safe</b> = the bytes on disk pass the local validator against the organiser's own sample grid, and the dot field is not a copy of any earlier raster in the family registry. Locally validated is <i>not</i> organiser acceptance.</li><li><b>Recommended for a weekly slot?</b> No. Verdict from the run card: negative: the dip projection did not beat its own unprojected ablation and/or random lines on the shared holdout.</li><li><b>Uniqueness</b> is checked two ways — rank correlation of the soft surface (limit 0.90) and the fraction of dots within 3 px of one earlier raster (limit 0.70, with a lift over random of 3.0). This file: UNIQUE, worst coverage 0.9887.</li><li><b>Slots.</b> Promotion to a real weekly slot is a separate selector step, inside the weekly cap on the submission page. This repository never spends a slot automatically.</li></ul>
-<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Executive summary · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
+
+<h1>Executive summary &amp; how to submit</h1>
+
+<div class="status">
+<h2>NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION</h2>
+<p><b>Existing H61-G GeoTIFF:</b> its local format/range validator passes (19/19 checks),
+but strict uniqueness fails: <b>98.5925%</b> of its positive pixels fall within 3 px of
+<code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code>, above the literal 70% stop threshold. Jaccard is diagnostic only; it cannot waive the stop.</p>
+<p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
+<b>94.6692%</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
+A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
+<p><b>Post-merge local-artifact audit:</b> <b>12/12</b> local candidate TIFFs fail the same literal final-dot threshold, including H61-MH at 99.6400%.
+The audited main-branch H61-L/H61-M/H61-MH/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. H61-MH's HOLDOUT-DTI 0.060633 is proxy evidence only; its strict final-dot failure remains controlling. The accessible inventory is not organizer-complete.</p>
+<p><b>Newest session artifact (H61-W, `arena/d3e68dae`):</b> the dip-projected basement-step file
+<code>gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</code> is format-valid and re-derived independently, but the strict final-dot rule stops it at
+<b>98.8694%</b> one-sided overlap; its honest holdout result is
+<b>HOLDOUT-DTI 0.014912</b> (95% CI [0.012250, 0.017337]) against
+<b>0.022698</b> for equal-budget random lines — the projection loses to its own random control, so the run-card verdict is
+<b>negative</b> and no slot was used. It is published for audit/learning only.</p>
+<p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G and H61-W TIFFs are downloadable only for audit/learning, not as competition submissions.
+No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
+</div>
+<h2>Download status</h2>
+<p>The H61-G file below is a format-valid research artifact, <b>not cleared for submission</b>. It is linked so reviewers can reproduce the local format and uniqueness checks.</p>
+<p><a class="btn warn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>Download H61-G diagnostic TIFF — DO NOT SUBMIT</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>Diagnostic ZIP</a>
+<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">Format receipt</a></p>
+<p><b>Archived file under <code>docs/submissions/</code> — DO NOT SUBMIT:</b> its strict final-dot overlap is 99.1475%.
+<a href="submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif">View the historical TIFF only with this warning</a> ·
+<a href="../evidence/local_artifact_strict_dot_audit.json">full strict artifact audit</a>.</p>
+<p>SHA-256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission-form note attached to the historic artifact (133/140 chars):
+<code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code>. That note does not make the file cleared.</p>
+<h2>How to submit a future cleared file</h2>
+<ol>
+<li>Use only a candidate whose run card says pre-placement surface uniqueness passed, final-dot uniqueness passed, local validation passed, and holdout evidence supports promotion.</li>
+<li>Download the exact one-band GeoTIFF named by that run card and verify its SHA-256.</li>
+<li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">official submissions page</a> while logged into the competition account; upload the GeoTIFF and paste the note from the run card (at most 140 characters).</li>
+<li>Save the platform's submission receipt and score; only then label the value ORGANIZER-CONFIRMED for those exact bytes.</li>
+</ol>
+<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-MH/H61-X downloads.</b> H61-MH's historical HOLDOUT-DTI does not waive its 99.6400% strict final-dot failure. The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
+<h2>Why the old range error should not recur</h2>
+<p>The H61-G diagnostic file passes its local template/range validator: single-band float32, EPSG:32611, 3730×3292, sample transform, finite everywhere,
+values in [0,1], zero outside the footprint. These checks establish local formatting only—not uniqueness, upload acceptance, or score.</p>
+
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

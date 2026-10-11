@@ -144,7 +144,7 @@ def uniqueness_report(emitted, priors, top=None):
     raise RuntimeError("Legacy novelty/0.5-support gate is retired. Use "
                        "gems61.uniqueness.compare_array_to_registry with the "
                        "indexed public owner-repository inventory in "
-                       "evidence/registry_refreshed.json; not organizer-complete.")
+                       "evidence/registry_accessible_index.json; not organizer-complete.")
 
 
 def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
@@ -169,9 +169,11 @@ def lane_uniqueness_report(candidate, footprint, priors=None, *, sample, phase,
         raise ValueError('candidate shape differs from reference')
     report = compare_array_to_registry(candidate, registry_index, footprint,
         expected_grid=expected,
-        progress=(lambda i, n, row: log(f'{phase} registry gate {i}/{n}')) if log else None)
-    return dict(report, phase=phase, ok=report['unique'], duplicate=report['duplicate_count'] > 0,
-                policy_exemptions=[], rule='literal finite >0 support at BOTH phases; no alternate policy')
+        progress=(lambda i, n, row: log(f'{phase} registry gate {i}/{n} {row.get("file", "")}')) if log else None)
+    return dict(report, phase=phase, ok=report['unique'],
+                duplicate=report['duplicate_count'] > 0,
+                stop=not report['unique'], policy_exemptions=[],
+                rule='literal >0 support at BOTH surface and final-dot phases; no alternate policy')
 
 
 def lane_report(candidate, eligible, priors=None, *, sample, phase='dots',

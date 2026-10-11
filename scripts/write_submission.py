@@ -1,28 +1,10 @@
 #!/usr/bin/env python3
-"""Assemble, gate and write the 61GEMSDOE submission GeoTIFF.
+"""RETIRED legacy submission writer; CLI intentionally fails closed.
 
-Order of operations, and why it matters
----------------------------------------
-1. **Rebuild the candidate in full.**  The measured arm was pruned against the
-   holdout's *visible* 80 % of the catalogue, because the withheld 20 % must
-   stay invisible to the measurement.  The shipped product may legitimately use
-   the whole catalogue: the organiser removes mapped faults from every metric
-   term, so a dot on a mapped fault is pure waste.  Pruning against the full
-   catalogue can only *lower* the measured holdout score, so re-measuring the
-   shipped product is conservative.
-2. **Uniqueness gate, both legs, before anything is written.**  Surface leg on
-   the soft pre-placement field (Spearman, limit 0.90) and dot leg on the final
-   dots (fraction within 3 px of any registry raster, limit 0.70).  A missing
-   registry file fails closed.
-3. **Write, then validate the bytes on disk**, and only then publish.
-4. **Run card.**  One JSON object with the hypothesis, the mechanism, the named
-   mimic, the holdout DTI and CI, the correlation and overlap against the
-   registry, the raster sha256, the validator output, the submission name and
-   note, and the verdict.
-
-The verdict is decided by a rule fixed before the numbers were read: promote
-only if the candidate beats its budget-and-domain-matched random-line null with
-a 95 % paired block-bootstrap CI that excludes zero.  Otherwise ``negative``.
+This pipeline may reuse a stale ``evidence/uniqueness.json`` cache and depends
+on a retired uniqueness API. It is not an authorized candidate-generation
+path. Preserve implementation for provenance only; use the current run card
+and strict-gated runner for any future eligible candidate.
 """
 from __future__ import annotations
 
@@ -311,4 +293,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        "Retired: this legacy writer may reuse a stale uniqueness receipt and does "
+        "not use the current complete-inventory shared gate. Do not write or submit a TIFF."
+    )

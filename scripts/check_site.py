@@ -8,8 +8,9 @@ Checks, in order:
 3. every external link is https and points at a host this lane actually cited
    (an unexpected host is a hallucination risk and is reported as a failure);
 4. no page still contains an unresolved placeholder;
-5. the download banner and the run card agree: if the card says the artifact is
-   not authorised for download, the site must not publish a link to it.
+5. the current run card and status banner agree: a denied submission decision
+   must not be rendered as a cleared submission or an approved submission link.
+   Explicit audit-only links remain allowed when their warning is visible.
 
 Exit code 0 means the site is internally consistent.  It says nothing about
 whether the evidence it quotes is correct -- that is what ``evidence/`` is for.
@@ -28,9 +29,8 @@ ALLOWED_HOSTS = {
     "www.drivendata.org", "community.drivendata.org", "doi.org",
     "pubs.geoscienceworld.org", "geophysics.geoscienceworld.org",
     "api.crossref.org", "store.usgs.gov", "pubs.usgs.gov",
-    "www.energy.gov", "www.nlr.gov", "github.com", "raw.githubusercontent.com",
+    "www.energy.gov", "www.nlr.gov", "www.usgs.gov", "github.com", "raw.githubusercontent.com",
     "buffedlizard55-lab.github.io", "docs.nlr.gov", "www.crossref.org",
-    "apps.nationalmap.gov", "prd-tnm.s3.amazonaws.com", "www.usgs.gov",
 }
 
 HREF = re.compile(r'href="([^"]+)"')
@@ -39,22 +39,32 @@ PLACEHOLDER = re.compile(r"\{\{|TODO|undefined|nan%|>nan<|None%")
 
 def main() -> int:
     problems: list[str] = []
-    # Only the pages this session's builder emits are in scope; pages written by
-    # the parallel sessions that are merged on main are linked, not vetted here.
+    # The current status pages are generated from the run card. Other merged
+    # session pages remain available only as explicitly marked historical pages.
     from build_site import PAGES  # noqa: PLC0415
     pages = sorted(DOCS / name for name, _ in PAGES)
     if not pages:
         print("[site] FAIL: no html pages in docs/")
         return 1
-    print(f"[site] {len(pages)} pages")
+    current_names = {p.name for p in pages}
+    legacy_pages = sorted(p for p in DOCS.rglob("*.html")
+                          if p.name not in current_names and p.name != "404.html")
+    print(f"[site] {len(pages)} current pages, {len(legacy_pages)} legacy pages")
+    for legacy in legacy_pages:
+        text = legacy.read_text(encoding="utf-8")
+        if "HISTORICAL PAGE — SUPERSEDED." not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page lacks the superseded-status warning")
+        if 'href="index.html"' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to current status")
+        if '../evidence/local_artifact_strict_dot_audit.json' not in text:
+            problems.append(f"{legacy.relative_to(DOCS)}: legacy page does not link to the strict artifact audit")
 
-    for page in sorted(DOCS.glob("*.html")):
+    for page in pages:
         text = page.read_text(encoding="utf-8")
-        if page in pages:
-            if len(text) < 400:
-                problems.append(f"{page.name}: page is suspiciously short ({len(text)} bytes)")
-            for m in PLACEHOLDER.finditer(text):
-                problems.append(f"{page.name}: unresolved placeholder {m.group(0)!r}")
+        if len(text) < 400:
+            problems.append(f"{page.name}: page is suspiciously short ({len(text)} bytes)")
+        for m in PLACEHOLDER.finditer(text):
+            problems.append(f"{page.name}: unresolved placeholder {m.group(0)!r}")
         for href in HREF.findall(text):
             if href.startswith("#") or href.startswith("mailto:"):
                 continue
@@ -69,82 +79,27 @@ def main() -> int:
             if not target.exists():
                 problems.append(f"{page.name}: broken internal link -> {href}")
 
-    # ---- the download gate -------------------------------------------------
-    # A page may publish a link to <name>.tif only when a receipt for that exact
-    # file records a passing format validation, and no receipt refuses it.  The
-    # front page must publish at least one cleared file.
+    # the banner and the run card must agree
     import json
-
-    def receipt_file(d):
-        for k in ("file", "path", "tif"):
-            v = d.get(k)
-            if isinstance(v, str) and v.endswith(".tif"):
-                return Path(v).name
-        dl = d.get("download")
-        if isinstance(dl, dict) and isinstance(dl.get("tif"), str):
-            return Path(dl["tif"]).name
-        for k in ("submission_name", "name"):
-            v = d.get(k)
-            if isinstance(v, str) and v:
-                return v if v.endswith(".tif") else v + ".tif"
-        return None
-
-    def receipt_ok(d):
-        if d.get("okay_to_download") is True:
-            return True
-        for key in ("validator", "validation"):
-            v = d.get(key)
-            if isinstance(v, dict) and (v.get("all_checks_passed") is True or v.get("ok") is True):
-                return True
-        tr = d.get("template_report")
-        if isinstance(tr, dict) and tr.get("ok") is True:
-            return True
-        return False
-
-    allowed: dict[str, str] = {}
-    refused: dict[str, str] = {}
-    for base in (ROOT / "evidence", DOCS / "downloads", DOCS / "submissions"):
-        for p in sorted(base.glob("*.json")):
-            try:
-                d = json.loads(p.read_text())
-            except (json.JSONDecodeError, OSError):
-                problems.append(f"{p.name}: unreadable receipt")
-                continue
-            if not isinstance(d, dict):
-                continue
-            name = receipt_file(d)
-            if not name:
-                continue
-            key = f"{p.parent.name}/{p.name}"
-            if d.get("okay_to_download") is False:
-                refused[name] = key
-            elif receipt_ok(d):
-                allowed.setdefault(name, key)
-    for n in refused:
-        allowed.pop(n, None)
-    print(f"[site] download gate: {len(allowed)} cleared .tif receipts, {len(refused)} refused")
-
-    index_cleared = False
-    for page in sorted(DOCS.glob("*.html")):
-        if not page.exists():
-            continue
-        for href in HREF.findall(page.read_text(encoding="utf-8")):
-            if href.startswith(("http", "#", "mailto:")):
-                continue
-            tail = Path(href.split("#")[0].split("?")[0]).name
-            if not tail.endswith((".tif", ".zip")):
-                continue
-            stem = tail[:-4] + ".tif" if tail.endswith(".zip") else tail
-            if stem in refused:
-                problems.append(f"{page.name}: publishes {tail} although {refused[stem]} refuses it")
-            elif stem not in allowed:
-                problems.append(f"{page.name}: publishes {tail} but no receipt clears that file "
-                                "for download")
-            elif page.name == "index.html":
-                index_cleared = True
-    if not index_cleared:
-        problems.append("index.html publishes no cleared .tif download link (the submission file "
-                        "must be easy to download)")
+    card_path = ROOT / "evidence" / "h61l_run_card.json"
+    index = DOCS / "index.html"
+    if index.exists() and card_path.is_file():
+        card = json.loads(card_path.read_text())
+        decision = card.get("submission_decision", {})
+        authorised = bool(decision.get("okay_to_submit", False))
+        text = index.read_text()
+        publishes_submission_link = "Download the submission GeoTIFF" in text
+        claims_cleared = ("CLEARED —" in text or "YES — it is FORMAT-VALID and UNIQUE" in text)
+        states_no_clearance = "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in text
+        if authorised and not publishes_submission_link:
+            problems.append("current run card authorises submission but the page publishes no exact submission link")
+        if not authorised and (publishes_submission_link or claims_cleared):
+            problems.append("current run card does NOT authorise submission but the page claims a cleared file")
+        if not authorised and not states_no_clearance:
+            problems.append("current run card denies submission but the status page omits the no-clearance banner")
+        print(f"[site] current run card okay_to_submit={authorised}, page claims cleared={claims_cleared}")
+    elif index.exists():
+        problems.append("index.html exists but the current evidence/h61l_run_card.json was not found")
 
     if problems:
         print(f"[site] FAIL ({len(problems)} problems)")

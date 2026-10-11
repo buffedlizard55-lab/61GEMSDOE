@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-"""H61-M driver -- basement-step corridor x learned off-catalogue fault habitat.
+"""RETIRED H61-MH candidate/holdout runner.
 
-    PYTHONPATH=src .venv/bin/python scripts/run_h61m.py <stage>
-
-Stages (each writes one JSON into evidence/):
-  features  build the 200 m + 400 m inversions and the 28-channel habitat stack
-  holdout   per-cell out-of-fold habitat model; budget / prune / spacing sweeps;
-            random-line and random-dot controls; leakage canary
-  final     build + validate the GeoTIFF of the holdout's choice
-  unique    rank-correlation / 3 px overlap against every registry raster
-  card      the run card
+The archived H61-MH TIFF now fails the literal strict final-dot gate at 99.64%
+one-sided overlap, and the lineage experiment cap is exceeded. Existing outputs
+remain historical HOLDOUT-DTI evidence only; direct CLI execution fails closed.
 """
 from __future__ import annotations
 
@@ -505,7 +499,12 @@ STAGES = dict(features=stage_features, holdout=stage_holdout, final=stage_final,
               unique=stage_unique, card=stage_card)
 
 
-def main() -> None:
+def main() -> int:
+    print("RETIRED: H61-MH's archived TIFF fails strict final-dot uniqueness at 99.64%; "
+          "the lineage experiment budget is exhausted. No new features, holdout, or TIFF may be generated.",
+          file=sys.stderr)
+    return 2
+
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("stage", choices=list(STAGES) + ["all"])
@@ -521,4 +520,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

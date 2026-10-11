@@ -1,49 +1,44 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Next steps · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
+<title>Next steps · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
 <style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html" class=active>Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html" class=active>Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
 
-<h2>What is still blocking a top-of-leaderboard score</h2>
+<h1>Next steps and remaining limitations</h1>
+<h2>Decision</h2>
+<p><b>No candidate is cleared and no weekly slot should be spent.</b> The old H61-G TIFF fails the explicit strict final-dot gate;
+H61-L fails before placement. No organizer score exists for a repository artifact.</p>
+<h2>What would unblock a new candidate</h2>
 <ol>
-<li><b>No locator generalises across space.</b> All four locators tested sit at 0.02–0.05 LOQO-DTI and
-0.56–0.59 blocked canary AUC. Until that changes, no file from this lane can be expected to beat
-0.2778.</li>
-<li><b>Metre-scale topography is the named obtainable source.</b> USGS 3DEP 1 m DEM tiles over the
-high-prior zones (free public domain from USGS The National Map, <a
-href="https://apps.nationalmap.gov/downloader/">apps.nationalmap.gov/downloader</a>). The sandbox
-egress allow-list blocks <code>prd-tnm.s3.amazonaws.com</code> and <code>usgs.gov</code>, so the tiles
-must be fetched on an unrestricted machine and mirrored into a GitHub repository that
-<code>scripts/prepare_data.py</code> can pin by sha256 — exactly the pattern already used for the
-feature stack.</li>
-<li><b>The hidden truth is not observable.</b> The public <code>labels.tif</code> is byte-identical to
-<code>existing_faults.tif</code> (the mapped catalogue), so every number we produce is a
-hide-and-recover index on catalogue traces, not a score. The single highest-value action is to record
-one ORGANIZER-CONFIRMED score for a lane file so the proxy can be calibrated against the real metric.</li>
-<li><b>Weekly submission slots are capped</b> (see the submission page). Promotion of any file is a
-separate selector step; this session's card records a negative verdict and does not spend a slot.</li>
+<li>Start from a new in-lane hypothesis and build a pre-placement surface from permitted geological inputs.</li>
+<li>Compare that surface against every raster in the declared accessible inventory; stop if positive Spearman &gt;0.90 or if more than 70% of positive pixels are within 3 px of any single prior raster.</li>
+<li>Only after a passing surface, run the shared spatially blocked hide-and-recover evaluator, visible-only catalogue features, pixel-exact masking, the feature-alone leakage canary, and a matched random-line control.</li>
+<li>Write ribbons, check the final raster with the same strict gate, validate with the shared writer, and promote only if the holdout selector says it beats the holdout best. A weekly slot remains separate.</li>
 </ol>
-<h2>Limitations of this session's evidence</h2>
+<h2>Limitations</h2>
 <ul>
-<li>The group's own scores are owner reports (IR-61-SCORE-01); the public leaderboard belongs to other
-teams.</li>
-<li>The holdout withholds catalogue segments, which are adjacent to visible traces by construction; the
-leave-one-quadrant-out test is the correction, and it is harsher than the live problem in one respect
-(it removes all faults from a quadrant).</li>
-<li>The habitat model's negatives are random footprint pixels, so the model learns
-"fault-like habitat", not "fault absent from the catalogue".</li>
+<li>The current index covers 21 paths from <code>scripts/registry_sources.tsv</code> and 14 TIFFs across local roots (35 records); it is not the organizer-side registry. The original H61-G/H61-L run receipts retain their 21+7 pre-merge snapshot.</li>
+<li>All 12 locally published candidate TIFFs exceed the literal final-dot overlap stop against the hash-pinned HGM prior. The archived main-branch "UNIQUE" labels are retired; see <a href="../evidence/local_artifact_strict_dot_audit.json">the measured audit</a>. This short-circuit final-dot audit does not supply missing pre-placement receipts.</li>
+<li>The current-run H61-L 3DEP-derived descriptor source is a public repository derivative. Its surface was not holdout-scored. Archived H61-L and H61-MH variants have HOLDOUT-DTI proxy values, but their final TIFFs fail the strict final-dot gate; H61-MH is 99.6400% one-sided overlap.</li>
+<li>The production basement surface is a first low-pass slab iterate; a converged nonlinear Parker–Oldenburg inversion remains unverified.</li>
+<li>HOLDOUT-DTI uses mapped catalogue segments as proxy truth, while competition truth is undisclosed/unmapped. No HOLDOUT-DTI value is a live score.</li>
+<li>Score claims for H33/H19 are owner-reported in the available forensics; no receipt binding exact artifact bytes to a score was found.</li>
 </ul>
+<h2>Trusted manual-review links</h2>
+<ul><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Official metric/format page</a></li><li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a></li>
+<li><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">Official rules</a></li><li><a href="https://doi.org/10.3133/gp1012">USGS GP-1012</a></li>
+<li><a href="https://www.usgs.gov/3d-elevation-program">USGS 3DEP</a></li></ul>
 
-</div></body></html>
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

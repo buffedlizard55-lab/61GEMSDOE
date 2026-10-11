@@ -280,4 +280,3 @@ def pooled_summary(terms_by_arm, draws=1000, seed=520810, candidate='disagreemen
             clusters=nb, draws=draws, seed=seed, confidence=.95,
             caveat='Conditional on fitted folds, catalogue labels and fixed budgets; not a leaderboard interval.'),
         implementation_sha256=implementation_hashes())
-

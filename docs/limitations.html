@@ -1,59 +1,31 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Limitations - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><div style="border:2px solid #d29922;background:#2a2208;padding:10px 14px;border-radius:8px;margin:12px 0"><b>SUPERSEDED PAGE.</b> This page describes an earlier session of this repository. The current status, download and evidence are on <a href="index.html">index.html</a> (session arena/c57b45ae, H61-G).</div><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a> <a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a> <a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a> <a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a> <a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-<h1>Limitations and what is still blocking progress</h1>
-<div class="card">
-<h2>Honest limits of this lane as implemented</h2>
+<title>Limitations · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
+<style>
+.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
+.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
+.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
+.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
+.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
+.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
+nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
+.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
+code,pre{overflow-wrap:anywhere}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html" class=active>Limitations</a></nav>
+
+<h1>Limitations</h1>
 <ul>
-<li><strong>The inversion agrees only weakly with the provided depth band.</strong>
-Pearson r &asymp; &minus;0.18 over the full footprint against band 15, versus
-&minus;0.77 on a single well-covered 900 x 900 crop. The full-grid number is the honest
-one. Band 13 is an isostatic <em>residual</em>; the long wavelengths that carry most of
-the basin-depth signal have already been removed from it, and 57.93% of the grid is
-outside the survey, so the FFT operates on a filled hole. A bounded-domain inversion
-(e.g. only the largest valid connected region, with a taper) is the next thing to try.</li>
-<li><strong>No single band separates the catalogue.</strong> Every one of the seven
-candidate fields has AUC between 0.45 and 0.53 for catalogue membership. Whatever model
-wins this competition is not a per-pixel threshold on one geophysical band.</li>
-<li><strong>The withheld set is unknown, so every score here is a proxy.</strong> The
-holdout hides segments of the <em>visible</em> catalogue. The real Phase 1 set is a
-different, expert-compiled dataset. The two share the disjointness property, which is
-why the off-catalogue step transfers, but no holdout number in this repository is a
-leaderboard prediction and none is presented as one.</li>
-<li><strong>Gravity cannot see the target at full strength.</strong> A few hundred
-metres of resolution is the published limit; a fault with a small vertical throw is
-simply not in the band.</li>
+<li>No unique competition TIFF is currently cleared. H61-G fails the literal overlap rule; the current-run H61-L surface stopped before holdout; all 12 local candidate TIFFs fail the strict final-dot overlap audit.</li>
+<li>Registry coverage is a declared accessible scope (21 GitHub paths plus 14 local TIFFs across downloads/submissions/out; total 35 raster records), not an organizer-side inventory.</li>
+<li>The archived H61-MH result is HOLDOUT-DTI 0.060633 (95% CI [0.049409, 0.072712]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments &lt;=12 px, four eroded quadrants, seeds 20+21, mode all)), but its TIFF fails strict one-sided overlap at 99.6400%. It is not a competition score or submission candidate.</li>
+<li>The existing basement-depth surface is the first low-passed slab iterate. Nonlinear convergence is unverified.</li>
+<li>The USGS GP-1012 depth-scale calibration is regional and coarse; it is not target truth or a spatial training label.</li>
+<li>The lidar derivative is a 100 m, 12-band descriptor stack aggregated from 2 m source work cells and has incomplete tile coverage; roads, channels, terraces, landslides, and mines mimic scarps.</li>
+<li>The hide-and-recover instrument uses mapped catalogue faults as proxy truth; organizer truth is unmapped faults. Its values are not live scores.</li>
+<li>No artifact-bound organizer receipt was located for the owner-reported 0.2778 H33 value or other owner-claimed sibling scores.</li>
 </ul>
-</div>
-<div class="card">
-<h2>Blockers that are not technical</h2>
-<ul>
-<li><strong>DrivenData login.</strong> The official data tab and the submission page both
-require an account. This repository cannot download the data or submit a file
-unattended. Data arrives through a public hash-pinned mirror of the same bytes; the
-upload is a manual step by the account holder.</li>
-<li><strong>Egress.</strong> The development sandbox reaches github.com, pypi and
-nothing else: no Dropbox, no USGS, no drivendata.org. Every non-GitHub source in
-<a href="methodology.html">Method</a> is cited but was read through a mirror or a
-citation, and is labelled that way.</li>
-<li><strong>No organizer receipts.</strong> No score in this repository has been
-confirmed by the submission page for <em>our</em> bytes. Until one is, every claim of
-quality here is a holdout measurement.</li>
-</ul>
-</div>
-<div class="card">
-<h2>The competing explanation that must not be forgotten</h2>
-<p>Density contrasts <em>within</em> basement produce horizontal gravity gradients that
-look exactly like a fault step. A Jurassic intrusion margin, a basement lithologic
-contact, or a Tertiary volcanic centre all put a ridge in the horizontal gradient
-magnitude that no fault explains. This lane cannot separate them, and any ribbon it
-emits on such a contact is a false positive the metric will charge at alpha = 0.2. Any
-future scoring of this lane must report that contamination explicitly.</p>
-</div>
-<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
-</div></body></html>
+
+<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
+ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>

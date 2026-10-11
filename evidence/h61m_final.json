@@ -1,5 +1,5 @@
 {
-  "evidence_class": "MEASURED (file) + HOLDOUT-DTI (selection)",
+  "evidence_class": "HISTORICAL local file validation + HOLDOUT-DTI selection; final TIFF fails strict uniqueness and is not cleared",
   "submission": "gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros",
   "note": "H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED",
   "note_chars": 140,
@@ -55,5 +55,18 @@
     "n_withheld_truth_px": 22641,
     "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
   },
-  "organizer_receipt": null
+  "organizer_receipt": null,
+  "current_strict_status": {
+    "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "one_sided_overlap_fraction": 0.9964,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "organizer_registry_complete": false,
+    "holdout_reached_after_strict_failure": false,
+    "weekly_slot_used": false
+  }
 }
