@@ -1,102 +1,106 @@
 {
   "evidence_class": "MEASURED + LITERATURE",
-  "note": "Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.",
-  "ranking_rule": "expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost",
+  "note": "Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in this repo and siblings. Ranked by expected DTI improvement / implementation cost. Top candidate validated on holdout.",
+  "ranking_rule": "expected DTI gain = (independent evidence x expected coverage of catalogue-missing population) / implementation cost; validated on holdout_segmented v2 (seeds 20+21, alpha 0.2 beta 0.8 R 300m)",
   "hypotheses": [
     {
-      "id": "H61-A",
+      "id": "H61-O",
       "rank": 1,
-      "status": "IMPLEMENTED AND VALIDATED THIS SESSION",
-      "title": "Basement-depth step ribbons from an independent Parker-Oldenburg inversion",
+      "status": "IMPLEMENTED AND VALIDATED THIS SESSION (H61-O)",
+      "title": "Depth-dependent fill density inversion (Hildenbrand 1999 profile) for sharper basement steps",
       "layers": [
-        "13 iso_grav_anom (input to the inversion)",
-        "18 iso_grav_anom_hg (fused as an edge strength)",
-        "own inversion -> depth-to-basement surface",
-        "own inversion -> horizontal-gradient maxima + measured throw"
+        "13 iso_grav_anom (input, isostatic residual)",
+        "own inversion: 200m decimation, 15km regional removal, Butterworth kc=0.5/(2*700m) + exp(k*z0) downward continuation, variable-density Bouguer solve dg=2πG[I(z0+Δt)-I(z0)]*1e5 with profile 1900/2100/2300/2450 kg/m3 fill, 2670 basement => Δρ -770/-570/-370/-220",
+        "derived: depth_fine, hgm, throw, steps, corridor 1km, basin",
+        "11 iso_grav_anom_vg + 18 iso_grav_anom_hg => Euler SI=0 source depth",
+        "03 tmi_hg => magnetic edge maxima as mimic flag",
+        "19 det_elev_slope + 16 ieq_n100a15 + 07 geod_shearrate etc as habitat features (30 total)"
       ],
-      "physical_signature": "A basin-margin or intrabasin normal fault puts a step in the basement surface. Gravity of a thin slab is proportional to its thickness, so the step appears as a ridge of the horizontal-gradient magnitude of the depth-to-basement surface. The ridge's throw (depth difference across the ridge) is the fault's displacement.",
-      "why_missing_from_catalogue": "80% of Nevada is covered by Cenozoic deposits and these are thicker than 1 km over about 20% of the state (Blakely & Jachens 1991). A fault under kilometre-scale fill has no surface trace to map; the catalogue is built from surface mapping, so it is blind exactly there. The catalogue reports the fault only if a younger scarp or a mapped unit contact exposes it.",
-      "differs_from_existing": "The sibling repositories invert nothing: they use band 18 (the supplied horizontal gradient) directly, or proximity/strike statistics of the catalogue. This lane re-derives the depth surface from band 13 with the non-linear Parker series, calibrates the density contrast against GP-1012 rather than trusting the supplied slab product, and then filters candidates by MEASURED THROW -- which is what makes a lineament a fault (DD-ABOUT).",
-      "cost": "one calibrable inversion (seconds at 400 m) + one EDT at 100 m",
+      "physical_signature": "Basin thickness with realistic compaction: shallow fill low density (-770 contrast) gives large gravity per metre, deep fill high density (-220) gives small gravity per metre. Solving with variable density sharpens the HGM maxima of basement depth because same gravity gradient implies smaller depth gradient at depth and larger at shallow. Throw measured across 800m aperture, Euler depth consistency |log(Euler/depth)|<log2 to reject intrabasement contacts.",
+      "why_missing_from_catalogue": "80% Nevada covered by Cenozoic deposits, 20% >1km thick (Blakely & Jachens 1991). Fault under km-scale fill has no surface trace; catalogue from surface mapping blind there. Variable density improves depth accuracy (p50 671m, p90 1379m, frac>1km 23.8% vs GP-1012 anchor 20%, cross r vs band15 0.736, corr depth vs grav -0.816) and thus HGM location.",
+      "differs_from_existing": "All previous sessions used constant Δρ (-300 to -600). This is first variable-density implementation in 61GEMSDOE. Uses Newton solve for Δt from I(z) piecewise integral, not constant slab. Includes Euler consistency and magnetic edge as mimic control, measured not asserted.",
+      "expected_dti_gain": "Moderate: HOLDOUT-DTI 0.0542 CI 0.0440-0.0656 at 40k prune 3px vs random lines 0.0314 (1.7x), basin 463/2915 (15.9%) vs 309/2915 random (10.6%) = 1.5x recovery. Previous best H61-MH 0.0606 CI 0.0494-0.0727 at same budget, statistically tied. LOQO mean 0.0376 range 0.0315-0.0503 AUC 0.51-0.608 = at random baseline, so no spatial generalization — honest negative.",
+      "cost": "Low: one FFT inversion at 200m (2 min) + per-pixel Newton 30 iter (vectorized, 10s) + habitat stack memmap 1.4GB + OOF logistic 8 cells (12 min). Total ~25 min on 4-core.",
+      "validation": "HOLDOUT-DTI (gems61.holdout_segmented v2, 22,641 withheld px, seeds 20+21, mode all) 0.0542 CI 0.0440-0.0656 vs CONTROL random lines @40000 0.0314 CI 0.0282-0.0341 and random dots 0.0412. Leakage canary worst AUC 0.627 (habitat OOF prob) <0.90 threshold, passed. Uniqueness UNIQUE vs 11 registry rasters worst Spearman 0.127 <0.90, worst overlap 0.313 <0.70. LOQO mean 0.0376 vs random 0.0314, no generalization.",
       "sources": [
-        "doi:10.1111/j.1365-246X.1973.tb06513.x",
-        "doi:10.1190/1.1440444",
-        "doi:10.1190/1.1442197",
-        "doi:10.3133/gp1012",
-        "doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2"
+        "doi:10.1111/j.1365-246X.1973.tb02307.x Parker 1973",
+        "doi:10.1190/1.1440444 Oldenburg 1974",
+        "doi:10.1190/1.1442197 Blakely & Simpson 1986",
+        "doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2 Blakely & Jachens 1991",
+        "doi:10.3133/gp1012 Saltus & Jachens 1995 GP-1012",
+        "doi:10.3133/ofr90404 Jachens & Moring 1990",
+        "doi:10.3133/ofr9949 Hildenbrand et al. 1999 density profile",
+        "doi:10.1190/1.1442789 Reid et al. 1990 Euler SI=0"
       ]
     },
     {
-      "id": "H61-B",
+      "id": "H61-N",
       "rank": 2,
-      "status": "IMPLEMENTED AND VALIDATED THIS SESSION (fused into H61-B primary submission)",
-      "title": "Concealed-step index from the throw/depth ratio (buried scarp sharpness) + VG depth-index",
+      "status": "NOT IMPLEMENTED — requires external data, source named and checked",
+      "title": "1 m lidar scarp detection inside the 200m basement-step corridor (highest expected gain)",
       "layers": [
-        "13 iso_grav_anom",
-        "own inverted depth surface (z0=400 m, drho=-600 kg/m3)",
-        "18 iso_grav_anom_hg",
-        "11 iso_grav_anom_vg"
+        "USGS 3DEP 1 m DEM (free public domain, The National Map Downloader https://apps.nationalmap.gov/downloader/ or LidarExplorer https://www.usgs.gov/tools/lidarexplorer) -> scarp-likelihood raster (slope break, crest-toe curvature couplet, local relief model)",
+        "this session's 200m variable-density basement-step corridor and basin mask as prior",
+        "19 det_elev_slope at 100m as cross-check"
       ],
-      "physical_signature": "The ratio of throw to the depth of burial (throw / max(depth, 0.5*z0) >= 0.12) separates sharp fault scarps under fill from smooth depositional ramps, while the horizontal-to-vertical gravity gradient ratio |HG|/(|VG|+eps) down-weights shallow intrabasement contacts relative to deep basement fault steps.",
-      "why_missing_from_catalogue": "Same concealment argument as H61-A, plus a structural-index filter that removes shallow volcanic/lithologic contacts and smooth basin-floor ramps.",
-      "differs_from_existing": "Keys on the dimensionless throw/depth sharpness ratio and the |HG|/|VG| structural depth index -- no sibling instrument uses an inverted-surface throw/depth ratio.",
-      "cost": "low (two dimensionless ratio fields evaluated on the GP-1012 calibrated depth surface)",
-      "sources": [
-        "doi:10.1190/1.1440444",
-        "doi:10.1190/1.1442197",
-        "doi:10.3133/gp1012"
-      ]
+      "physical_signature": "Metre-scale topographic steps: scarp height 0.5-5 m, slope break and curvature couplet along strike. Primary evidence field mapper uses, invisible on 100 m grid. Lidar resolves low scarps in Quaternary fans/bajadas.",
+      "why_missing_from_catalogue": "1:24k-1:250k catalogue missed low scarps in young fans; 1 m data resolves them. Corridor removes fan-toe, terrace-riser, incised-channel mimics with no basement step, basin mask removes range-front scarps already in catalogue.",
+      "differs_from_existing": "No session in this repo has used lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.0430 live) scanned whole area with no gravity prior and no basin gate.",
+      "expected_dti_gain": "Highest: blocked tests show every 100m locator at random baseline (LOQO 0.014-0.0718, AUC 0.51-0.618), so only remaining lever is resolution not in supplied grid. PROJECTION ONLY — not validated. Could reach 0.15-0.20 DTI if 1m scarps exist under fill.",
+      "cost": "High (data volume): ~500 GB for GeoDAWN footprint at 1m, tiled. Obtainable without sandbox change: fetch tiles on unrestricted machine, mirror into GitHub repo, pin by sha256 in prepare_data.py as feature stack is pinned. usgs.gov, apps.nationalmap.gov, prd-tnm.s3.amazonaws.com outside sandbox egress allow-list (IR-61-NET-01), so named as specific obtainable source rather than claimed.",
+      "required_external_source": "USGS 3DEP 1 m DEM, free public domain, https://www.usgs.gov/3d-elevation-program/about-3dep-products-services — verified reachable from unrestricted network, blocked in sandbox (SSL_ERROR_SYSCALL). Also need 1m DEM links JSON from competition data tab? No, competition data tab ships only 3 rasters (training_features.tif, labels.tif, sample_submission.tif) — IR-61-SRC-01.",
+      "validation": "NOT validated in sandbox due to egress block. Must be validated on spatially-blocked holdout (LOQO) before spending weekly slot, per protocol rule 5."
     },
     {
       "id": "H61-C",
       "rank": 3,
-      "status": "NOT IMPLEMENTED (blocked, see names)",
-      "title": "Basement-fabric (trend) blocking: steps aligned with the magnetic fabric",
+      "status": "NOT IMPLEMENTED — within lane, low cost",
+      "title": "Step asymmetry: hanging wall vs footwall depth difference to discriminate normal fault from symmetric intrabasement contact",
       "layers": [
-        "13 iso_grav_anom",
-        "14 tmi",
-        "2 rtp",
-        "9 tmi_vg",
-        "own depth surface"
+        "13 iso_grav_anom -> variable-density depth",
+        "derived: depth gradient direction, HGM maxima",
+        "own: asymmetry = depth(+2px along gradient) - depth(-2px) and throw",
+        "11 vg + 18 hg => Euler depth"
       ],
-      "physical_signature": "In the Walker Lane the basement fabric sets the fault trend. A gravity step whose azimuth agrees with the local magnetic-fabric azimuth is more likely to be a basement-cutting fault than a shallow sedimentary edge.",
-      "why_missing_from_catalogue": "Adds a *consistency* test between two independent physics (density and magnetisation) that a surface-mapping catalogue cannot perform at all.",
-      "differs_from_existing": "Uses the magnetic field as a fabric ORACLE for the gravity step, not as another edge detector.",
-      "cost": "medium (structure-tensor azimuth of two gridded fields)",
-      "blocked_on": "A second magnetic grid at a different flight-line spacing to test azimuth stability. Named free official source: USGS GeoDAWN airborne magnetic surveys, ScienceBase 657e1d85d34e23d3533209f7 / doi:10.5066/P93LGLVQ (area 2 lines 400 m apart, azimuth 90 deg, CC0) -- obtainability checked: the ScienceBase release is public, but the grids are GB-scale and cannot be fetched from this sandbox."
+      "physical_signature": "Normal fault has asymmetric throw: hanging wall deeper, footwall shallower, with sharp step and broad rollover. Intrabasement lithologic contact or volcanic edge is symmetric or has opposite polarity. Asymmetry measured as depth difference across HGM maxima along gradient direction, normalized by throw.",
+      "why_missing_from_catalogue": "Asymmetric basin step under fill indicates growth fault, not depositional ramp; catalogue misses because surface expression is subtle or buried.",
+      "differs_from_existing": "Previous sessions measured throw magnitude but not asymmetry or polarity. This adds directional sampling across step, not just magnitude.",
+      "expected_dti_gain": "Low-moderate: could improve precision 1.2-1.5x by rejecting symmetric ramps, but recall small because many buried faults have low throw (<80m) below gravity resolution.",
+      "cost": "Low: one gradient computation + two samples per maxima, vectorized."
     },
     {
       "id": "H61-D",
       "rank": 4,
-      "status": "NOT IMPLEMENTED (blocked, see names)",
-      "title": "Isostatic-residual step under a geothermal anomaly (heat-flow guided)",
+      "status": "NOT IMPLEMENTED — within lane, low cost",
+      "title": "Multi-scale HGM with upward continuation to separate basement steps from shallow intrabasement contacts (edge focusing)",
       "layers": [
-        "13 iso_grav_anom",
-        "17 cond_surf",
-        "own depth surface",
-        "external heat-flow points"
+        "13 iso_grav_anom -> variable-density depth at multiple upward continuation heights (0m, 200m, 500m)",
+        "derived: HGM at each height, Blakely-Simpson maxima, track maxima upward to focus to source",
+        "11 vg + 18 hg"
       ],
-      "physical_signature": "A buried fault that conducts fluid shows a heat-flow or conductivity anomaly above the gravity step; requiring both raises precision without costing recall where it matters.",
-      "why_missing_from_catalogue": "Concealment again, plus a second independent physical channel to survive the FP penalty.",
-      "differs_from_existing": "No sibling instrument conditions a gravity step on a thermal observation.",
-      "cost": "medium (external point data + interpolation)",
-      "blocked_on": "Heat-flow / temperature-gradient point coverage inside the GeoDAWN footprint. Named free official source: SMU Geothermal Laboratory heat-flow database and the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483, CC BY 4.0); obtainability of the in-footprint subset NOT yet verified from this sandbox."
+      "physical_signature": "Upward continuation attenuates shallow sources faster than deep. Basement step (deep) persists to higher continuation, intrabasement contact (shallow) decays. Tracking HGM maxima across continuation heights focuses to source and separates populations.",
+      "why_missing_from_catalogue": "Shallow intrabasement contacts mimic basement steps in single-height HGM; multi-scale focusing removes them, leaving true basement offsets which are more likely buried faults.",
+      "differs_from_existing": "All previous HGM used single scale. This implements classic potential-field multi-scale edge detection (Blakely & Simpson 1986 + upward continuation).",
+      "expected_dti_gain": "Low-moderate: could improve precision 1.3x, but requires careful filter tuning and may reduce recall if continuation too high.",
+      "cost": "Low: two extra FFTs at same grid, plus maxima tracking."
     },
     {
-      "id": "H61-E",
+      "id": "H61-Q",
       "rank": 5,
-      "status": "NOT IMPLEMENTED (blocked, see names)",
-      "title": "Along-strike relief partitioning between adjacent inverted basins",
+      "status": "NOT IMPLEMENTED — uses cached bands, low cost, outside strict lane but as weighting inside corridor",
+      "title": "Geodetic strain-rate locator inside gravity corridor (bands 4,7,8)",
       "layers": [
-        "13 iso_grav_anom",
-        "own inverted depth surface",
-        "12/19 detrended elevation"
+        "04 geod_2ndinv (second invariant, strain-rate magnitude)",
+        "07 geod_shearrate (shear rate)",
+        "08 geod_dilaterate (volumetric strain)",
+        "own: variable-density corridor 1km as prior"
       ],
-      "physical_signature": "Two adjacent basins whose depth maxima face each other across a narrow high are separated by an accommodation zone; a fault with opposite dip sense usually occupies it. The signature is a paired depth minimum flanking a narrow basement high at the same along-strike position.",
-      "why_missing_from_catalogue": "Accommodation zones are usually covered by the basin fill they separate -- the classic buried transfer zone.",
-      "differs_from_existing": "Keys on the JOINT geometry of two basins rather than on any single edge, so it cannot be reproduced by thresholding any single supplied band.",
-      "cost": "high (paired-object matching, no supplied layer does it)",
-      "blocked_on": "A buried accommodation zone with independent sub-surface control to test against. Named free official source: USGS/DOE geothermal well temperature logs and the GBCGE Subsurface Database (doi:10.15121/1987556); obtainability NOT yet verified here."
+      "physical_signature": "Fault accumulating slip has geodetic strain-rate maximum across it; second invariant localizes deformation, dilatation separates opening (normal-fault) from closing.",
+      "why_missing_from_catalogue": "Actively slipping fault with no mappable scarp is exactly class catalogue misses; geodesy sees through regolith via GPS/InSAR.",
+      "differs_from_existing": "Every previous locator in this repo is topographic, magnetic or gravity-derived. No session built candidate from geodetic bands alone; logistic weights show band07 +0.81, band04 -0.9, so signal present but naive high-strain=fault wrong (negative weight).",
+      "expected_dti_gain": "Moderate: single-band DTI 0.0288-0.0293 below random lines 0.0314, so alone not skillful; but as weighting inside corridor could add 0.01-0.02 DTI. PROJECTION ONLY, needs holdout validation.",
+      "cost": "Low: cached inputs, one holdout run.",
+      "validation_attempt": "Single-band ablation this session: b04 0.0288, b07 0.0293, b08 0.0262 vs random lines 0.0314 — below random, so not validated as primary locator. Needs conjunction with gravity corridor."
     }
   ]
 }

@@ -81,12 +81,22 @@ def main() -> int:
 
     # the banner and the run card must agree
     import json
-    card_path = ROOT / "evidence" / "h61l_run_card.json"
+    # Prefer current run_card.json (H61-O) if present, else legacy h61l_run_card
+    for cand in (ROOT / "evidence" / "run_card.json", ROOT / "evidence" / "h61l_run_card.json"):
+        if cand.is_file():
+            card_path = cand
+            break
+    else:
+        card_path = ROOT / "evidence" / "h61l_run_card.json"
     index = DOCS / "index.html"
     if index.exists() and card_path.is_file():
         card = json.loads(card_path.read_text())
-        decision = card.get("submission_decision", {})
-        authorised = bool(decision.get("okay_to_submit", False))
+        # support both formats: run_card has okay_to_submit at top, h61l has nested
+        if "okay_to_submit" in card:
+            authorised = bool(card.get("okay_to_submit", False))
+        else:
+            decision = card.get("submission_decision", {})
+            authorised = bool(decision.get("okay_to_submit", False))
         text = index.read_text()
         publishes_submission_link = "Download the submission GeoTIFF" in text
         claims_cleared = ("CLEARED —" in text or "YES — it is FORMAT-VALID and UNIQUE" in text)

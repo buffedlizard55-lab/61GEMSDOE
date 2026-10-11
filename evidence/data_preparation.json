@@ -105,7 +105,7 @@
     ]
   },
   "all_pins_verified": true,
-  "note_union": "union of this session's verification pass with the previously recorded files, so no pinned-file record is lost",
+  "note_union": "Union of both sessions' pinned-file records after the PR #25 merge: local prior TIFF records (this branch) plus the main-branch preparation record.",
   "layout_links": [
     {
       "path": "data/bridge/existing_faults.tif",
