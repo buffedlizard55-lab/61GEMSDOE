@@ -115,5 +115,15 @@
     "title": "docs/submit.html had been offering the near-blanket raster as step 1 of how to submit",
     "detail": "The page produced by the older builder pointed its download action at gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif (311,617 px, not cleared).",
     "substitution": "The canonical builder now derives the status banner and download labels from the strict audit receipt; scripts/check_site.py fails if the page and the run card disagree."
+  },
+  {
+    "id": "IR-9",
+    "severity": "major",
+    "title": "Two GitHub Pages deployments raced and the winner broke every ../evidence link",
+    "detail": "The repository carried both a branch-root Pages build (legacy, .nojekyll) and a GitHub Actions artifact deploy of docs/ (.github/workflows/pages.yml). Both ran on every push to main and the last one to land decided the URL scheme. When the artifact deploy won, pages were served at /61GEMSDOE/*.html, so the documented /61GEMSDOE/docs/*.html URLs and every ../evidence/* link on every page returned 404. Measured live on 2026-10-11 after the PR #24/#26 merges: /61GEMSDOE/irregularities.html 200, /61GEMSDOE/evidence/run_card.json 404, /61GEMSDOE/docs/index.html 404; the same URLs resolve at /docs/ when the branch-root deploy is the live one.",
+    "substitution": "Removed .github/workflows/pages.yml so only the branch-root deployment serves the site, and moved the site build plus scripts/check_site.py into .github/workflows/verify.yml so the fail-closed gate still runs on every push and pull request.",
+    "consequence": "One URL scheme survives (repo root): /61GEMSDOE/docs/*.html and ../evidence/* resolve, matching every published link, the README, the root redirect index.html and the .nojekyll comment in _config.yml. The H61-O download link stays at docs/downloads/gems61-h61o-vardepth-none-40000dots-20261011T160711Z-28d4fac611ea-zeros-zeros.tif.",
+    "source": "GitHub Pages API (build_type=legacy, source=main:/) plus live fetches of the served URLs, 2026-10-11.",
+    "status": "resolved"
   }
 ]

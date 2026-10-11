@@ -23,3 +23,10 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Run the lane test suite
         run: python -m pytest tests -q
+      - name: Render the published site from evidence and run the fail-closed gate
+        # Moved here when the racing artifact deploy (.github/workflows/pages.yml)
+        # was removed: the branch-root Pages build serves the repo verbatim, and
+        # this keeps check_site.py running on every push and pull request.
+        run: |
+          python3 scripts/build_site.py
+          python3 scripts/check_site.py
