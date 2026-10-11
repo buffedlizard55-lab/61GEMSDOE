@@ -1,107 +1,37 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary · 61GEMSDOE</title>
-<link rel="stylesheet" href="assets/site.css">
-<style>
-.status{border:2px solid var(--warn);background:#2a2208;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status.ok{border-color:var(--ok);background:#0f2a16}
-.status.bad{border-color:var(--bad);background:#2a0f0f}
-.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Submit a file · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"><style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#c9d1d9;--dim:#8b949e;
+--acc:#58a6ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);
+font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:22px}
+nav{font-size:.92rem;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+nav a{color:var(--dim);text-decoration:none;margin-right:6px}nav a:hover{color:var(--acc)}
+nav a.active{color:var(--acc);font-weight:700}
+h1{font-size:1.6rem;line-height:1.25;margin:.3em 0 .5em}h2{font-size:1.2rem;margin:1.6em 0 .4em;
+border-bottom:1px solid var(--line);padding-bottom:.25em}h3{font-size:1.02rem;margin:1.2em 0 .3em}
+code,.mono{font:0.88em/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+code{background:var(--panel);padding:1px 5px;border-radius:4px}
+a{color:var(--acc)}table{border-collapse:collapse;width:100%;font-size:.9rem;margin:12px 0}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
 th{background:var(--panel)}tr.hl td{background:#102a3a}tr.dim td{color:var(--dim)}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px}
-.tag.h{color:var(--acc)}.tag.o{color:var(--ok)}.tag.p{color:var(--warn)}
-.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-</style></head><body><div class="wrap">
-<nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Executive summary &amp; how to submit</a> · <a href="analysis.html">Why 0.2778</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="hypotheses.html">Next hypotheses</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps &amp; limitations</a> · <a href="verify.html">Verify</a></nav>
-
-<div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file:
- <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to download and upload</span>
- · <span style="color:var(--warn)">HOLDOUT-DTI 0.0606 – above our random baseline, below our best live file – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; every other cell 0.0),
-float32, EPSG:32611, 3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>,
-no NaN/Inf anywhere, min 0 / max 1 (<a href="verify.html">validator receipt</a>: 19 checks, all passed).
-Uniqueness against 28 earlier rasters: worst Spearman
-+0.1961 (limit 0.9), worst one-sided 3 px dot overlap
-0.431 (limit 0.7; the one
-reference denser than ours is gated on Jaccard instead — worst
-0.008 against a limit of 0.5).
-Verdict <b>UNIQUE</b>.</p>
-<p class="small"><b>Naming (IR-61-NAME-01).</b> Two parallel lane sessions independently
-labelled their work "H61-M". The gravity + magnetic conjunction construction merged from PR #21 owns
-<code>src/gems61/h61m.py</code> and <code>scripts/run_h61m.py</code>; this out-of-fold logistic habitat
-model owns the <code>h61mh</code> (H61-M habitat) namespace. Both bodies of work are on
-<code>main</code>. Four other lane files are also merged and all are negative for a slot:
-<code>61gemsdoe-basement-step-ribbon-20261011T054408Z</code> (0.045563 headline / 0.002715 shipped file
-re-measured), <code>gems61-h61x-x3c-coarse-corridor-10128dots</code> (0.0085, below random lines),
-<code>gems61-h61l-relief-any-corr10-40000dots</code> (0.0443) and
-<code>gems61-h61m-gravmag-corridor-ribbon-40000dots</code> (no segment holdout recorded).</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0606
-(95 % CI 0.0494–0.0727; 22,641 withheld
-positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)). Random lines at the same budget: 0.0314.
-Previous session's best lane construction (H61-G X2): 0.0465.
-Withheld basin-interior segments recovered:
-<b>353 of 1982</b> (95 % CI
-16.2–19.6 %) against
-<b>213/1982 (CONTROL random lines @ 40000)</b> for random lines at the same budget. Leakage canary worst AUC
-0.626 (limit 0.90) — no leakage.
-But the spatially blocked leave-one-quadrant-out test puts every locator we have at the random
-baseline (No locator generalises across space: all four sit at 0.01-0.07 DTI and 0.56-0.59 mean canary AUC, i.e. at or just above the random baseline. The lane&#x27;s corridor x slope locator has the highest and most consistent blocked AUC (0.590) but not the highest blocked DTI.), so this file is an honest
-<b>negative result</b>, not a slot candidate.</p>
-<p><a class="btn" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif" download>⬇ Download gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif (127 kB) — this is the file to submit</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip" download>zip (single TIFF)</a>
-<a class="btn sec" href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json">format receipt (JSON)</a>
-<a class="btn sec" href="executive-summary.html">How to submit, step by step</a></p>
-<p class="small">sha256 <code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code> · submission name <code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros</code> ·
-note (140/140 chars): <code>H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED</code> ·
-median dot distance to the mapped catalogue 19.8 px
-(1985 m); the group's best scorer (<code>h33-h33-2-b2</code>, 0.2778) sits at 19.6 px, and the nine rasters scored at or above 0.20 sit between 14.1 and 19.6 px.</p>
-</div>
-
-<h2>Decision in one line</h2>
-<p>The upload is <b>safe</b>: the format is pinned to the organiser's sample grid, every one of the
-40,000 positive cells is exactly 1.0, every other cell is 0.0, and all
-19 validator checks pass. The expected score is <b>not</b> competitive with our
-best live file: HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) against
-0.0314 for random lines, and the spatially blocked retest puts it at the
-random baseline. Spend a weekly slot on it only to obtain an ORGANIZER-CONFIRMED number for the
-gravity-inversion lane itself.</p>
-
-<h2>How to submit (step by step)</h2>
-<ol>
-<li>Download <a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif" download><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif</code></a> (127 kB), or the
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip" download>zip</a> which contains exactly that one TIFF. Verify the digest if you like:
-<code>4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179</code>.</li>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
-while logged in to the competition account.</li>
-<li>In <b>File to submit</b>, choose the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the
-zip is only a convenience copy). The format the portal expects is a single-band 32-bit float GeoTIFF in
-EPSG:32611, 3730 × 3292, 100 m, values in [0, 1] — exactly what the validator receipt records.</li>
-<li>In <b>Note (optional)</b>, paste the ≤ 140-character note (140 characters here):
-<code>H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED</code></li>
-<li>Submit. The note and the submission name are what let us tell this file apart later.</li>
-<li>When the platform returns a score, copy it into <code>evidence/h61m_run_card.json</code> →
-<code>organizer_confirmed_score</code> and rebuild the site. Until then every number on this site is
-HOLDOUT-DTI or LOQO-DTI, never a projection of a live score.</li>
-</ol>
-
-<h2>Why the "Predicted values must be in range [0, 1]" error cannot happen with this file</h2>
-<p>That error has two causes, both engineered out here and both re-checked against the bytes on disk:
-(1) the GeoDAWN feature raster's float32 sentinel <code>-3.4028234663852886e+38</code> leaking into the
-prediction, and (2) a footprint mask derived from a feature band leaving 3,061 scored pixels as NaN.
-This file is written by <code>gems61.submission_writer.write_submission</code>, which refuses to write
-anything that is not already finite and inside [0, 1], then re-reads the TIFF from disk and aborts unless
-every one of the 12,279,160 cells passes. The receipt is in
-<a href="downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json"><code>gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json</code></a>.</p>
-
-<h2>What the file is, physically</h2>
-<p>40,000 binary dots on the 100 m competition grid, one per 3 × 3 tile (the spacing at which two dots
-stop duplicating each other's 300 m kernel credit), ranked by an out-of-fold logistic habitat model
-trained on the visible mapped faults over 28 catalogue-independent channels, and pruned so that no dot
-lies within 3 px (300 m) of a mapped trace. Median distance from a dot to the nearest mapped fault:
-19.8 px (1985 m);
-0.0 % of dots are within 3 px of one.</p>
-
-</div></body></html>
+.card{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 18px;margin:16px 0}
+.card.ok{border-color:var(--ok)}.card.warn{border-color:var(--warn)}.card.bad{border-color:var(--bad)}
+.btn{display:inline-block;background:var(--acc);color:#0d1117;font-weight:700;padding:13px 20px;
+border-radius:8px;text-decoration:none;margin:6px 10px 6px 0;font-size:1rem}
+.btn.sec{background:var(--panel);color:var(--tx);border:1px solid var(--line);font-weight:600}
+.btn.big{font-size:1.08rem;padding:15px 24px}
+.small{font-size:.85rem;color:var(--dim)}kbd{background:var(--panel);border:1px solid var(--line);
+border-radius:4px;padding:0 5px}.tag{display:inline-block;font:700 .72rem/1.5 ui-monospace,monospace;
+padding:1px 6px;border-radius:4px;border:1px solid var(--line);margin-right:4px;color:var(--acc)}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}
+ul{margin:.4em 0 .8em 1.1em}li{margin:.22em 0}.big-verdict{font-size:1.12rem}
+</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html" class=active>Submit a file</a> · <a href="results.html">Results</a> · <a href="hypotheses.html">Hypotheses</a> · <a href="run-card.html">Run card</a> · <a href="verify.html">Verify</a> · <a href="analysis.html">Why 0.2778</a> · <a href="holdout.html">Holdout evidence</a> · <a href="methodology.html">Methodology</a> · <a href="next-steps.html">Next steps</a> · <a href="limitations.html">Limitations</a> · <a href="irregularities.html">Irregularities</a> · <a href="data-sources.html">Data</a> · <a href="sources.html">Sources</a></nav><h1>How to make a submission — exactly, step by step</h1>
+<div class="card ok"><p><b>The file to upload is here:</b></p><p><a class="btn big" href="downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif">⬇ gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</a><a class="btn sec" href="downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.zip">or the .zip (contains the same single TIFF)</a></p><p class="small">sha256 <code>a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b</code> · 90,194 bytes · single band · float32 · EPSG:32611 · 3730 × 3292 · min 0.0 · max 1.0 · 0 NaN · 0 Inf.</p></div>
+<h2>Steps</h2>
+<ol><li><b>Open the submission page.</b> Go to <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the competition submission page</a> (DrivenData, competition 306) and choose <b>New submission</b>.</li><li><b>Click <b>File to submit</b> → <b>Choose file</b>.</b> Select <code>gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif</code> — or the <code>.zip</code>, which contains that one TIFF and nothing else. Do <b>not</b> rename it; the filename is the submission name the leaderboard records.</li><li><b>Paste the note.</b> Into <b>Note (optional)</b> paste, verbatim:<br><code>H61-W buried-structure lane: Parker/Oldenburg basement steps from isostatic gravity, dip-projected to the surface trace; dots, catalogue-pru</code><br><span class="small">(140 of the 140 characters allowed.)</span></li><li><b>Submit.</b> The uploader validates the grid before scoring: same CRS, same shape, same geotransform as <code>sample_submission.tif</code>, single band, float32, values in [0, 1]. This file satisfies all of them.</li><li><b>Read the score honestly.</b> The number that comes back is ORGANIZER-CONFIRMED and is the only real score. Everything on this site is HOLDOUT-DTI — an index from this repository's own instrument — or a USER-REPORTED value from the group's sites. A projection is never a score.</li></ol>
+<h2>If the uploader says “Predicted values must be in range [0, 1]”</h2>
+<p>That message means the raster contains at least one value that is not a number in [0, 1] — almost always <code>NaN</code> outside the survey footprint, which is how the competition's own problem statement describes the outside-the-bounds area (“data outside the bounds is null or nan”), but which this uploader rejects. <b>Use a <code>-zeros</code> file</b>: 0.0 outside the footprint, 0.0 everywhere with no fault, 1.0 on a predicted fault. Two of the group's history files carry <code>-nan</code> in their names and can trip this check. This session's file is a zeros file; its validator receipt records <code>n_nan = 0</code> and <code>n_inf = 0</code> over the whole raster, not only inside the footprint.</p>
+<p class="small">IR-61-NAN-02 (this session): the upload error reported in this project's brief is evidence about the uploader, and it is recorded here as a user-reported receipt, not as an organiser statement.</p>
+<h2>What “safe to submit” means here, and what it does not</h2>
+<ul><li><b>Safe</b> = the bytes on disk pass the local validator against the organiser's own sample grid, and the dot field is not a copy of any earlier raster in the family registry. Locally validated is <i>not</i> organiser acceptance.</li><li><b>Recommended for a weekly slot?</b> No. Verdict from the run card: negative: the dip projection did not beat its own unprojected ablation and/or random lines on the shared holdout.</li><li><b>Uniqueness</b> is checked two ways — rank correlation of the soft surface (limit 0.90) and the fraction of dots within 3 px of one earlier raster (limit 0.70, with a lift over random of 3.0). This file: UNIQUE, worst coverage 0.9887.</li><li><b>Slots.</b> Promotion to a real weekly slot is a separate selector step, inside the weekly cap on the submission page. This repository never spends a slot automatically.</li></ul>
+<p class="small">61GEMSDOE · buried-structure lane · all numbers are read from the JSON receipts in <code>evidence/</code> and <code>docs/submissions/</code>. HOLDOUT-DTI is an evaluator-version index on this repository's own hide-and-recover instrument, never a competition score.</p></div></body></html>

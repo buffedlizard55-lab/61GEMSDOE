@@ -1,0 +1,30 @@
+[
+  {
+    "id": "IR-61-DIP-01",
+    "title": "The dip projection needs a dip the data cannot constrain",
+    "detail": "z_b*cot(dip) is a one-parameter correction and nothing in the supplied stack measures dip at the step. The session swept 45/55/60/65/75 deg and shipped 60 deg (the Basin-and-Range norm for range-front normal faults). The resulting trace moves 4.54 px at 45 deg to 1.22 px at 75 deg (median); against the lane's measured positional resolution of ~9 px this is a partial correction, not a relocation. Recorded so no later session reads the projection as a fix for the resolution problem.",
+    "status": "flagged, quantified; no fix available from the supplied layers",
+    "receipt": "evidence/h61w_invert.json"
+  },
+  {
+    "id": "IR-61-DIP-02",
+    "title": "The first footwall estimator was invalid, and the label-aware screen could not see it",
+    "detail": "The first `footwall_directions` implementation took the direction of minimum mean depth. On a long ridge every along-strike azimuth ties with the true dip direction, so the argmin picked arbitrary directions; agreement with the analytic -grad(depth) direction was 43.8 % within 30 deg. It was replaced by a central-difference score s(u) = mean_r[D(p+ru') - D(p+ru)], u' = u+pi (95.5 % within 30 deg, median 6.8 deg). The label-aware screen was unchanged by the fix (0.103 both ways), which is itself the finding: a 180-degree direction error is invisible to that screen, so the screen must never be used to promote a construction.",
+    "status": "fixed in src/gems61/dip_projection.py; the screen's blindness is recorded",
+    "receipt": "src/gems61/dip_projection.py, evidence/h61w_invert.json"
+  },
+  {
+    "id": "IR-61-CONTROL-01",
+    "title": "The random-lines control is budget-sensitive, and the driver realises half the nominal budget for it; the line-shaped step field saturates below the nominal budget",
+    "detail": "Three runs of the control on the shared instrument gave 0.0112 at 7,417 emitted dots (nominal 14,835), 0.0227 at 20,000 (nominal 40,000) and 0.0314 at 80,000 (H61-X, 40,000 x 2 seeds). The control's score grows with realised dot count, so any candidate-versus-control comparison at the same nominal budget is confounded when the candidate is coverage-limited: the step field is a line field and realises only 14,836 dots at a 40,000-dot budget. An emission-matched control arm was therefore added to the holdout receipt as a diagnostic; it shows the primary and the control indistinguishable (0.0112 vs 0.0114) at comparable realised counts, i.e. no per-dot locational gain.",
+    "status": "quantified; emission-matched diagnostic added to evidence/h61w_holdout.json",
+    "receipt": "evidence/h61w_holdout.json"
+  },
+  {
+    "id": "IR-61-SITE-01",
+    "title": "The site's 'How to submit' page offered the never-upload reference file",
+    "detail": "docs/submit.html (a legacy page written by an earlier session) published a download of gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif as Step 1 - the 311,617-px near-blanket that this repository's own IR-61-UNIQ-01 lists as 'never upload'. Fixed this session: the page now links the lane's best-validated file (H61-MH habitat, 0.0606) with a red warning card, and scripts/check_site.py now derives download permission per file from the validator receipts, refusing any page that publishes a .tif/.zip without one.",
+    "status": "fixed; check_site.py gate generalised to every docs/*.html page",
+    "receipt": "scripts/check_site.py, docs/submit.html"
+  }
+]

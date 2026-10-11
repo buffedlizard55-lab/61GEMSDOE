@@ -1,0 +1,428 @@
+{
+  "evidence_class": "MEASURED",
+  "inversion_grid": {
+    "decimation": 4,
+    "pixel_m": 400.0,
+    "shape": [
+      932,
+      823
+    ],
+    "valid_fraction": 0.4188643036311203
+  },
+  "calibration": {
+    "best": {
+      "z0_m": 500.0,
+      "delta_rho": -300.0,
+      "kc_scale": 0.5,
+      "stats": {
+        "n": 321284,
+        "p50": 462.2573547363281,
+        "p90": 1343.3979248046876,
+        "p99": 2125.57255859375,
+        "mean": 508.8574333212868,
+        "vmax": 2589.3759765625,
+        "fraction_gt_1km": 0.20323763399360067,
+        "fraction_gt_2km": 0.016664384158563764
+      },
+      "median_penalty": 0.0,
+      "deep_fraction_penalty": 0.01605853866907435,
+      "penalty": 0.01605853866907435,
+      "rms_residual_mgal": 2.425341944786814
+    },
+    "anchors": {
+      "deep_fraction_gt_1km": 0.2,
+      "median_depth_m_range": [
+        250.0,
+        700.0
+      ],
+      "p90_depth_m_range": [
+        900.0,
+        2000.0
+      ]
+    },
+    "source": "USGS GP-1012 (Saltus & Jachens 1995, doi:10.3133/gp1012); Blakely & Jachens 1991 doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "n_combinations": 72
+  },
+  "inversion": {
+    "stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "filter": "Butterworth order 4.0, kc = 5.000e-04 rad/m (kc_scale=0.5)",
+    "rms_residual_mgal": 2.425341944786814,
+    "delta_rho": -300.0,
+    "z0_m": 500.0,
+    "regional_sigma_km": 15.0,
+    "source_doi": "doi:10.1190/1.1440444"
+  },
+  "depth_stats": {
+    "n": 321284,
+    "p50": 462.2573547363281,
+    "p90": 1343.3979248046876,
+    "p99": 2125.57255859375,
+    "mean": 569.2534968347006,
+    "vmax": 2589.3759765625,
+    "fraction_gt_1km": 0.20323763399360067,
+    "fraction_gt_2km": 0.016664384158563764
+  },
+  "cross_check_vs_supplied_band15": {
+    "n": 5164312,
+    "pearson_r": 0.7382397545865853,
+    "slope_published_on_inverted": 0.9463551776663338,
+    "published_p50": 316.3645324707031,
+    "inverted_p50": 464.37564321052014,
+    "published_p90": 1279.3229614257814,
+    "inverted_p90": 1340.8730887848847,
+    "note": "a high r with a slope near 1 says the inversion reproduces the supplied product; it is a check, not an input",
+    "corr_depth_vs_gravity": -0.8411415382159257
+  },
+  "steps": {
+    "n_hgm_maxima": 8999,
+    "n_throw_filtered": 7527,
+    "min_throw_m": 80.0,
+    "step_px_100m_grid": 120432,
+    "throw_p50_m": 180.69647216796875
+  },
+  "dip_projection": {
+    "equations": "x(z) = z*cot(dip); offset = (depth_at_step - throw/2)*cot(dip)",
+    "footwall_direction": "central-difference maximum of the depth drop over 48 azimuths and radii 400/800/1200 m",
+    "n_angles": 48,
+    "radii_px": [
+      4.0,
+      8.0,
+      12.0
+    ],
+    "cap_px": 20.0,
+    "default_dip_deg": 60.0,
+    "sweep_deg": [
+      45.0,
+      55.0,
+      60.0,
+      65.0,
+      75.0
+    ],
+    "per_dip": {
+      "45": {
+        "dip_deg": 45.0,
+        "cot": 1.0000000000000002,
+        "n_step_px": 117320,
+        "n_projected": 117320,
+        "n_zero_offset": 23068,
+        "n_undefined_direction": 0,
+        "cap_hits": 1,
+        "offset_px_p50": 4.535561952083599,
+        "offset_px_p90": 10.46567629658697,
+        "offset_px_max": 20.0,
+        "offset_m_p50": 453.5561952083599,
+        "offset_m_p90": 1046.5676296586971,
+        "z_b_p50_m": 453.5561952083597,
+        "z_b_p90_m": 1046.5676296586967,
+        "throw_p50_m": 109.61617631471336
+      },
+      "55": {
+        "dip_deg": 55.0,
+        "cot": 0.7002075382097098,
+        "n_step_px": 117320,
+        "n_projected": 117320,
+        "n_zero_offset": 27376,
+        "n_undefined_direction": 0,
+        "cap_hits": 0,
+        "offset_px_p50": 3.1758346688660817,
+        "offset_px_p90": 7.328145435332873,
+        "offset_px_max": 14.106889061375652,
+        "offset_m_p50": 317.58346688660816,
+        "offset_m_p90": 732.8145435332873,
+        "z_b_p50_m": 453.5561952083597,
+        "z_b_p90_m": 1046.5676296586967,
+        "throw_p50_m": 109.61617631471336
+      },
+      "60": {
+        "dip_deg": 60.0,
+        "cot": 0.577350269189626,
+        "n_step_px": 117320,
+        "n_projected": 117320,
+        "n_zero_offset": 29654,
+        "n_undefined_direction": 0,
+        "cap_hits": 0,
+        "offset_px_p50": 2.6186079139616902,
+        "offset_px_p90": 6.042361027085973,
+        "offset_px_max": 11.63171738744426,
+        "offset_m_p50": 261.860791396169,
+        "offset_m_p90": 604.2361027085973,
+        "z_b_p50_m": 453.5561952083597,
+        "z_b_p90_m": 1046.5676296586967,
+        "throw_p50_m": 109.61617631471336
+      },
+      "65": {
+        "dip_deg": 65.0,
+        "cot": 0.4663076581549986,
+        "n_step_px": 117320,
+        "n_projected": 117320,
+        "n_zero_offset": 32018,
+        "n_undefined_direction": 0,
+        "cap_hits": 0,
+        "offset_px_p50": 2.114967272293016,
+        "offset_px_p90": 4.880225004869747,
+        "offset_px_max": 9.394572384755321,
+        "offset_m_p50": 211.49672722930163,
+        "offset_m_p90": 488.02250048697465,
+        "z_b_p50_m": 453.5561952083597,
+        "z_b_p90_m": 1046.5676296586967,
+        "throw_p50_m": 109.61617631471336
+      },
+      "75": {
+        "dip_deg": 75.0,
+        "cot": 0.2679491924311227,
+        "n_step_px": 117320,
+        "n_projected": 117320,
+        "n_zero_offset": 38938,
+        "n_undefined_direction": 0,
+        "cap_hits": 0,
+        "offset_px_p50": 1.2153001622821262,
+        "offset_px_p90": 2.804269511916021,
+        "offset_px_max": 5.398298826338781,
+        "offset_m_p50": 121.53001622821262,
+        "offset_m_p90": 280.4269511916021,
+        "z_b_p50_m": 453.5561952083597,
+        "z_b_p90_m": 1046.5676296586967,
+        "throw_p50_m": 109.61617631471336
+      }
+    },
+    "direction_defined_fraction": 1.0,
+    "z_b_p50_m": 453.5561952083597,
+    "throw_p50_m": 109.61617631471336
+  },
+  "competing_explanation": {
+    "named_process": "density contrasts inside the basement (igneous contacts, pluton margins, buried volcanic centres) give the same horizontal-gradient maximum as a fault step, with no scarp at the surface",
+    "test": "conjunction of the projected step trace with an independent lidar-derived scarp detector; the scarp-only arm is scored in the same holdout pass so the value of the gravity prior is measured, not assumed",
+    "scarp_raster": {
+      "path": "/home/user/61GEMSDOE/.cache/external/lidar_scarp_features_u8.tif",
+      "band": 3,
+      "band_name": "step_max",
+      "n_bands": 12,
+      "descriptions": [
+        "ex_max",
+        "ex_mean",
+        "step_max",
+        "lapneg_max",
+        "lappos_max",
+        "downface_max",
+        "upface_max",
+        "cross_max",
+        "relief",
+        "coh100",
+        "strike",
+        "valid"
+      ],
+      "dtype": "uint8",
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+      "top_quantile": 0.95
+    },
+    "threshold": 146.0,
+    "strong_scarp_px": 259427,
+    "strong_scarp_fraction_of_valid": 0.050234571420162064,
+    "strong_scarp_mean_detrended_elevation_slope": 19.11831715224336,
+    "steps_within_3px_of_strong_scarp": 0.18502557459811345,
+    "projected_within_3px_of_strong_scarp": 0.20374520308156926,
+    "scarp_band_sweep": {
+      "ex_max": {
+        "band": 1,
+        "threshold": 157.0,
+        "n": 263538,
+        "within_3px": 0.09451767866493636,
+        "within_10px": 0.28288899513542637,
+        "median_dist_cat_px": 19.313207915827967
+      },
+      "ex_mean": {
+        "band": 2,
+        "threshold": 171.0,
+        "n": 260009,
+        "within_3px": 0.09982346764919676,
+        "within_10px": 0.31045079208796617,
+        "median_dist_cat_px": 17.88854381999832
+      },
+      "step_max": {
+        "band": 3,
+        "threshold": 146.0,
+        "n": 259427,
+        "within_3px": 0.09392237508046579,
+        "within_10px": 0.2911107941733127,
+        "median_dist_cat_px": 18.973665961010276
+      },
+      "lapneg_max": {
+        "band": 4,
+        "threshold": 181.0,
+        "n": 260237,
+        "within_3px": 0.09905201796823665,
+        "within_10px": 0.3004223073582926,
+        "median_dist_cat_px": 18.384776310850235
+      },
+      "lappos_max": {
+        "band": 5,
+        "threshold": 183.0,
+        "n": 265579,
+        "within_3px": 0.09620866107636522,
+        "within_10px": 0.29646169313085746,
+        "median_dist_cat_px": 18.681541692269406
+      },
+      "downface_max": {
+        "band": 6,
+        "threshold": 127.0,
+        "n": 266487,
+        "within_3px": 0.0913703107468657,
+        "within_10px": 0.2855186181689914,
+        "median_dist_cat_px": 19.1049731745428
+      },
+      "upface_max": {
+        "band": 7,
+        "threshold": 122.0,
+        "n": 264928,
+        "within_3px": 0.099755405242179,
+        "within_10px": 0.30532824012561904,
+        "median_dist_cat_px": 18.24828759089466
+      },
+      "cross_max": {
+        "band": 8,
+        "threshold": 158.0,
+        "n": 260887,
+        "within_3px": 0.09500665038886567,
+        "within_10px": 0.29577939874351733,
+        "median_dist_cat_px": 18.439088914585774
+      },
+      "relief": {
+        "band": 9,
+        "threshold": 110.0,
+        "n": 264093,
+        "within_3px": 0.06722253145672169,
+        "within_10px": 0.24179739712904166,
+        "median_dist_cat_px": 21.02379604162864
+      },
+      "coh100": {
+        "band": 10,
+        "threshold": 234.0,
+        "n": 262057,
+        "within_3px": 0.08983923344921144,
+        "within_10px": 0.28529289429398946,
+        "median_dist_cat_px": 20.615528128088304
+      },
+      "strike": {
+        "band": 11,
+        "threshold": 237.0,
+        "n": 268753,
+        "within_3px": 0.07555636588242735,
+        "within_10px": 0.2312420698559644,
+        "median_dist_cat_px": 24.186773244895647
+      },
+      "_valid_band_coverage_of_footprint": 0.7537943098712858
+    }
+  },
+  "label_aware_screen": {
+    "evidence_class": "LABEL-AWARE-SCREEN (uses the mapped catalogue; a diagnostic, never a score)",
+    "random_pixels": {
+      "n": 200000,
+      "within_3px": 0.087105,
+      "within_10px": 0.254535,
+      "median_dist_cat_px": 23.08679276123039
+    },
+    "step_pixels": {
+      "label": "unprojected step pixels",
+      "n": 120432,
+      "within_3px": 0.1007622558788362,
+      "within_10px": 0.2894164341703202,
+      "median_dist_cat_px": 20.12461179749811
+    },
+    "projected_60": {
+      "label": "dip-projected trace at 60 deg",
+      "n": 103622,
+      "within_3px": 0.10326957595877323,
+      "within_10px": 0.30281214413927543,
+      "median_dist_cat_px": 19.313207915827967
+    },
+    "strong_scarp": {
+      "label": "lidar scarp, top 5 %",
+      "n": 259427,
+      "within_3px": 0.09392237508046579,
+      "within_10px": 0.2911107941733127,
+      "median_dist_cat_px": 18.973665961010276
+    },
+    "projected_x_scarp": {
+      "label": "projected trace x strong scarp (+/-1 px)",
+      "n": 12896,
+      "within_3px": 0.1367090570719603,
+      "within_10px": 0.3962468982630273,
+      "median_dist_cat_px": 15.297058540778355
+    },
+    "projected_45": {
+      "label": "dip-projected trace at 45 deg",
+      "n": 92964,
+      "within_3px": 0.1073748978099049,
+      "within_10px": 0.30636590508153694,
+      "median_dist_cat_px": 19.235384061671343
+    },
+    "projected_55": {
+      "label": "dip-projected trace at 55 deg",
+      "n": 100396,
+      "within_3px": 0.10380891668990797,
+      "within_10px": 0.30467349296784735,
+      "median_dist_cat_px": 19.313207915827967
+    },
+    "projected_65": {
+      "label": "dip-projected trace at 65 deg",
+      "n": 106434,
+      "within_3px": 0.10354773850461318,
+      "within_10px": 0.3009658567750907,
+      "median_dist_cat_px": 19.4164878389476
+    },
+    "projected_75": {
+      "label": "dip-projected trace at 75 deg",
+      "n": 110835,
+      "within_3px": 0.10395633148373709,
+      "within_10px": 0.2976406369829025,
+      "median_dist_cat_px": 19.697715603592208
+    }
+  },
+  "aux_manifest": {
+    "lidar_scarp_features_u8.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/59GEMSDOE",
+      "path": "data/external/lidar_scarp_features_u8.tif",
+      "bytes": 36943606,
+      "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+    },
+    "h52_scarp3m_100m.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/GEMSDOE48",
+      "path": "data/external/h52_scarp3m_100m.tif",
+      "bytes": 43839078,
+      "sha256": "b5e53d67c3a7d3d1ca44ae04ae1e84d8574857da3fcd5e34ba47276d6c04b923"
+    },
+    "topo_10m_derived_100m_u8.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/60GEMSDOE",
+      "path": "data/external/topo_10m_derived_100m_u8.tif",
+      "bytes": 32523329,
+      "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4"
+    },
+    "geodawn_dem_a2_100m.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/60GEMSDOE",
+      "path": "data/geodawn_dem_a2_100m.tif",
+      "bytes": 49531304,
+      "sha256": "d32762a38222764389e948da423ebc6cadd00ac617ad3938d3dd79c6cfe14431"
+    }
+  },
+  "sources": {
+    "parker": "Parker (1973) GJI 31:447-455, doi:10.1111/j.1365-246X.1973.tb02307.x",
+    "oldenburg": "Oldenburg (1974) Geophysics 39(4):526-536, doi:10.1190/1.1440444",
+    "blakely_simpson": "Blakely & Simpson (1986) Geophysics 51(7):1494-1498, doi:10.1190/1.1442197",
+    "blakely_jachens": "Blakely & Jachens (1991) GSA Bulletin 103:795-803, doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2",
+    "gp1012": "Saltus & Jachens (1995) USGS GP-1012, doi:10.3133/gp1012"
+  },
+  "elapsed_s": 68.5
+}

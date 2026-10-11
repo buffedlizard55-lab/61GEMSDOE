@@ -7,8 +7,54 @@
 
 ## Status of the newest file (read this first)
 
-**Newest file: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`**
-(this session, `arena/2a87ed28-61gemsdoe`, H61-MH).
+**Newest file: `gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif`**
+(this session, `arena/d3e68dae-61gemsdoe`, H61-W).
+
+| question | answer |
+|---|---|
+| Is the file safe to download? | **YES — FORMAT-VALID and UNIQUE.** All 19 validator checks pass on the exact bytes (single-band float32, EPSG:32611, 3730 × 3292, the organiser's transform, no NaN and no Inf inside the footprint, values in [0, 1], 0.0 outside, zero dots on the mapped catalogue, non-empty). Uniqueness verdict **UNIQUE** against 33 comparators: the largest raw 3 px coverage, 0.9887, is against the lane's own near-blanket reference whose own baseline coverage is 0.9582 (lift 1.03 — coverage, not duplication; IR-61-UNIQ-01); the nearest *discriminating* comparator is H61-MH at 0.5311 coverage / 6.53 lift, and the gate needs both legs (> 0.70 coverage AND ≥ 3.0 lift). |
+| Should it be given a weekly slot? | **NO — RECOMMENDED AGAINST.** HOLDOUT-DTI **0.0149** (95 % CI 0.0122–0.0173; 22,641 withheld positive px; `gems61.holdout_segmented v2`, seeds 20+21, α 0.2 / β 0.8 / R 300 m). It **beats its own unprojected ablation** P0 = 0.0093 (so the dip projection is worth +60 % on the step field) but it **loses to the random dotted-lines control** 0.0227 (0.0191–0.0260), which is the pre-registered promotion rule. Run-card verdict: **negative**. |
+| Has an organiser scored it? | **No.** `organizer_confirmed_score` is null. Every number for this file is HOLDOUT-DTI or a labelled screen. |
+| If a slot has to be spent on this lane, on what? | On the **previous session's H61-MH habitat file** — it is still the lane's best HOLDOUT-DTI (0.0606, CI 0.0494–0.0727 vs 0.0314 random lines). This session's file does not beat it. The run card names it explicitly for that reason. |
+
+**[↓ Download the submission GeoTIFF](docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif)** ·
+[zip](docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.zip) ·
+[format receipt](docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.json) ·
+[run card](evidence/h61w_run_card.json) ·
+[the file worth submitting instead](docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif)
+
+- Submission name: `gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros`
+- Note (140/140 chars): `H61-W buried-structure lane: Parker/Oldenburg basement steps from isostatic gravity, dip-projected to the surface trace; dots, catalogue-pru`
+- sha256 `a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b` (90,194 bytes); 16,894 single-pixel dots, median distance to the mapped catalogue 19.9 px (1990 m), zero dots on it.
+
+### What this session tested, and the numbers it closes with
+
+The H61-W hypothesis: a normal fault's surface trace lies `z_b·cot(dip)` toward the footwall from the horizontal-gradient maximum of the *inverted basement depth*, so projecting each step by that distance should move the dots onto the trace the metric scores. Everything below is HOLDOUT-DTI on the shared segment-withholding instrument unless labelled otherwise.
+
+1. **The dip projection is real but small.** P60 (projected trace, 60°) 0.0149 vs P0 (same steps, unprojected) 0.0093 — the projection is worth +60 % over its own ablation, and the throw-only weighting variant (P60t, 0.0151) shows the value is in *placement*, not in weighting. Both are still well below the pre-registered random dotted-lines control (0.0227). That control is budget-sensitive because the driver realises only half of the nominal budget for random lines, so an **emission-matched** control was added as a diagnostic (nominal 14,835 → 7,417 dots → 0.0112, CI 0.0092–0.0130); against the primary's own ladder (0.0074 at 4,999 dots, 0.0114 at 10,000 dots) the two are indistinguishable to within 2 × 10⁻⁴ at comparable counts. **Per dot, the projected step field adds no measurable locational information at 100 m sampling** (IR-61-CONTROL-01).
+2. **The conjunction is a trap, measured.** The projected trace intersected with the independent lidar scarp detector (S60) collapses to 1,045 px and 0.0026 — the lane's best label-aware construction (1.57× enrichment within 300 m of a mapped trace, the best this repository has produced) is also the weakest on the honest instrument, because the scarp layer is only 75.4 % complete and the intersection removes most of the field.
+3. **The failure is the field, not the geometry.** SCARP-ONLY (0.0274) and the instrument-reproduction arm X2 (0.0267, reproduced bit-for-bit from the previous session's receipt, per cell) both beat P60. A lane-drawn control that has nothing to do with basement steps outscores the step field; the step field simply does not carry 300 m-scale positional information at 100 m sampling.
+4. **The negative is now closed with a number** instead of a projection, and the receipt records it: `evidence/h61w_holdout.json` (20 arms + budget sweep + prune sweep + 6 leakage canaries, worst canary AUC 0.558 against the 0.90 limit), `evidence/h61w_invert.json` (calibration, steps, dip sweep, scarp-band sweep, label-aware screen), `evidence/h61w_uniqueness.json`, `evidence/h61w_run_card.json`.
+
+### The route with real upside (ranked hypotheses, `evidence/h61w_hypotheses.json`)
+
+| # | id | what it tests | status |
+|---|---|---|---|
+| 1 | **H61-W** | dip-projected basement-step trace (+ lidar scarp conjunction) | **measured this session: negative** (above) |
+| 2 | **H61-3DEP** | metre-scale 3DEP lidar scarps at native resolution *inside* this lane's basement-step corridor | source verified, not yet run: the corridor supplies the prior that the group's standalone lidar files lack (they plateau at 0.13–0.15 live); the 100 m aggregation of the same source is only 1.10× enriched, so the untested variable is resolution |
+| 3 | **H61-DISCORD** | the organiser's own depth-to-basement layer (band 15) minus this lane's gravity inversion | cheap, uses supplied layers only, never used by any session except as a correlation check |
+| 4 | **H61-RELAY** | relay/step-over closure on the basement-step network itself (tip pairing, matched throw, opposed polarity) | corroborated by the family's own live scores: every top file is a tip/step-over construction |
+| 5 | **H61-SEIS-DEEP** | seismicity bands 10/16 conditioned on a basement step | conditional version of the parked H61-R; the intrabasement-contact mimic is seismically silent, so the conjunction discriminates |
+| 6 | **H61-GEOD-STEP** | geodetic strain bands 4/7/8 gated on the projected step trace | conditional version of the parked H61-Q |
+
+### Why 0.2778 is the group's best, and why this lane cannot beat it with the supplied 19 bands
+
+`h33-h33-2-b2` (0.2778) is **37,654 binary dots, none on the mapped catalogue, median 19.6 px away from it, 0.73 % of the footprint** — and it is the exact set difference of the 0.2600 file with every dot within 3 px of a catalogue pixel deleted (6,436 dots). The controlled ladder on the same field is 44,090 → 0.2600, 40,199 → 0.2708, 38,854 → 0.2750, 37,654 → 0.2778: **the gain is a prune, not a discovery**, because the scored truth is the set of faults the catalogue does *not* contain. This lane's best label-aware enrichment is 1.57× (measured, above); the live top files imply 6×+. The gap is information, not method: USGS 3DEP 1 m lidar over the high-prior corridor (project `NV_WestCentral_EarthMRI_2020_D20`) is the named, free, official source, and two 3 m derivatives of it were downloaded and opened this session from the group's public mirror; the 1 m tiles themselves are outside this sandbox's egress allow-list (IR-61-NET-01). Full reasoning: [docs/analysis.html](docs/analysis.html).
+
+### Previous session's file (H61-MH) — still the lane's best holdout number
+
+**Newest file of that session: `gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`**
+(`arena/2a87ed28-61gemsdoe`, H61-MH).
 
 | question | answer |
 |---|---|
@@ -50,6 +96,61 @@ raster keeps the name it was validated under (`gems61-h61m-invfeat-habitat-…`)
 All of them remain in `docs/downloads/` as uniqueness references and as the
 evidence a selector should read. **None is a slot candidate.**
 
+
+## Session `arena/d3e68dae-61gemsdoe` — H61-W: the dip projection, with a lidar conjunction and a lidar-informed control (newest)
+
+This session ran the **buried-structure lane** end to end on the one hypothesis the previous
+sessions had named but never tested: that the *position* of a gravity-derived basement step is
+systematically offset from the fault's surface trace by `z_b·cot(dip)`, so inverting that
+projection should move the emitted dots onto the trace the metric scores.
+
+- **What was built.** `src/gems61/dip_projection.py` — footwall detection from the central
+  difference of the inverted depth (`s(u) = mean_r[D(p+ru′) − D(p+ru)]`; the earlier
+  minimum-mean-depth version was invalid on long ridges, IR-61-DIP-02), per-step projection by
+  dip, ribbon sampling, and an emission that prunes each cell's visible catalogue; and
+  `scripts/run_h61w.py` — stages `aux / invert / holdout / final / unique / card / all`, with the
+  same instrument contract as H61-X (22,641 withheld truth px, `SystemExit("INSTRUMENT DRIFT")`
+  if the registry file re-scores away from the H61-G record or if the X2 arm fails to reproduce
+  the previous session's row per cell).
+- **What was measured.** Inversion on band 13, z0 500 m / Δρ −300 kg/m³ / kc 0.5 (calibrated
+  against the GP-1012 depth scale, `frac > 1 km` = 0.203 vs ≈0.20 target, corr(depth, gravity)
+  −0.841): 8,999 horizontal-gradient maxima → 7,527 steps with throw ≥ 80 m; footwall field
+  117,320 px, throw p50 179 m. Dip sweep 45→75° gives offsets p50 4.54→1.22 px. Label-aware
+  screen (diagnostic only): step pixels are within 3 px of a mapped trace 10.1 % of the time vs
+  8.7 % for random (lift 1.20×); the projected trace 10.3 %; the projected trace × independent
+  lidar scarp detector **13.7 %** (lift 1.57×) — the strongest enrichment this repository has
+  produced, and it does **not** survive onto the honest instrument (S60 0.0026, 1,045 px).
+- **The result.** HOLDOUT-DTI 0.0149 (CI 0.0122–0.0173) vs P0 ablation 0.0093, random dotted lines
+  0.0227 (and 0.0314 in the H61-X run of the same control — the control itself drifts by ~0.009),
+  scarp-only 0.0274, X2 instrument reproduction 0.0267 (bit-for-bit). Budget sweep flat at 14,836
+  dots; prune sweep monotone (0 px 0.0161 > 2 px 0.0149 > 3 px 0.0134 > 5 px 0.0093); canaries
+  0.478–0.558. **Verdict negative**: the dip projection improves its own base but the step field
+  is below a lane-agnostic random control at 100 m sampling.
+- **What ships anyway, because the standing brief requires a unique TIF and an honest label on
+  it.** `docs/downloads/gems61-h61w-…-zeros.{tif,zip,json}` (+ `docs/submissions/` copies), the
+  run card naming the H61-MH file as the better slot candidate, and 6 ranked hypotheses with
+  sources (the top untried one, H61-3DEP, names USGS 3DEP project `NV_WestCentral_EarthMRI_2020_D20`;
+  its 3 m derivatives were fetched and opened, its 1 m tiles are egress-blocked here).
+- **Reproduce.** `python3 scripts/prepare_data.py --fetch --cache-bands` →
+  `bash scripts/fetch_registry.sh /tmp/refs/registry` → `PYTHONPATH=src python3
+  scripts/run_h61w.py all` → `PYTHONPATH=src python3 scripts/h61w_hypotheses.py` →
+  `PYTHONPATH=src python3 scripts/build_site_h61w.py` → `PYTHONPATH=src python3
+  scripts/check_site.py` → `pytest -q tests` (64 passed).
+- **Next session, in priority order.** (1) **H61-3DEP** — metre-scale 3DEP scarps gated by this
+  lane's step corridor; the source is named and its 3 m derivatives are already proven obtainable
+  (fetch the 1 m tiles on an unrestricted host, mirror them hash-pinned, then re-run the same
+  holdout). (2) Re-test the per-dot question with a control that realises the *same* dot count, or
+  make the step field denser (multi-dot ribbons along the projected trace) so the emission-matched
+  comparison is exact rather than bracketed (IR-61-CONTROL-01). (3) **H61-DISCORD** and
+  **H61-RELAY** — both cheap, both use only supplied layers, neither has ever been emitted on.
+- **Limitations that must not be forgotten.** The dip is assumed, not measured (IR-61-DIP-01); the
+  lidar scarp layer covers only 75.4 % of the footprint, so every scarp-gated number is a lower
+  bound; the holdout instrument's absolute values are not live scores and must never be quoted as
+  such; and the shipped file has no organiser score (its `organizer_confirmed_score` is null).
+- **Site change worth noting.** `scripts/check_site.py` now derives download permission from the
+  per-file validation receipts and refuses any page that publishes a `.tif`/`.zip` without one;
+  `docs/submit.html` no longer links the 311,617-px near-blanket reference (it was the
+  IR-61-UNIQ-01 "never upload" file) and links the H61-MH file instead, with a red warning card.
 
 ## Session `arena/241cb85c-61gemsdoe` — buried-structure lane (merged from PR #21, kept for the audit trail)
 
@@ -93,6 +194,7 @@ The lane's pages were correct locally but the **published** site was not, in fiv
 
 | file | session / PR | positive px | its own session's verdict | shipped file on the segment-withholding evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
+| **`gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif`** | this session (arena/d3e68dae, H61-W) | 16,894 | FORMAT-VALID (19/19) + UNIQUE vs 33 comparators; HOLDOUT-DTI 0.0149 (CI 0.0122–0.0173) beats its own unprojected ablation (0.0093) but loses to random dotted lines (0.0227) → **negative for a slot** | 0.0149 |
 | **`gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif`** | this session (arena/2a87ed28, H61-MH) | 40,000 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0606 (CI 0.0494–0.0727) vs random lines 0.0314 within protocol; LOQO-DTI at the random baseline → **negative for a slot** | 0.0606 |
 | `docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif` | this session (arena/241cb85c, PR #10) | 40,000 | FORMAT-VALID (14/14) + UNIQUE vs 708 rasters (worst rho 0.1141; worst lift 1.60 vs gate 3.0); HOLDOUT-DTI 0.045563 (CI 0.035640-0.056876) vs random lines 0.035959, P(delta>=0)=0.939 -> negative | 0.045563 (headline, unpruned) / 0.002715 (shipped file re-measured) |
 | **`gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros`** | this session (H61-X) | 10,128 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050–0.0117) **below** random lines 0.0352 → negative, diagnostic | 0.0085 |
@@ -181,7 +283,11 @@ IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a si
 **IR-61-BUDGET-01** the holdout prefers more dots monotonically, the live ladder prefers ~38–40 k — shipped at 40 k ·
 **IR-61-MEM-01** ~3.9 GB RAM: the 28-channel stack is streamed into a memmap and predictions are chunked ·
 **IR-61-NAME-01** two parallel sessions both labelled their lane work "H61-M"; this session's habitat model was renamed into the `h61mh` namespace so both bodies of work survive on `main` ·
-**IR-61-SRC-01** an earlier session claimed the competition ships `1m_DEM_links.csv`; the hash-pinned bridge manifest lists exactly three rasters, so the claim is false and is corrected.
+**IR-61-SRC-01** an earlier session claimed the competition ships `1m_DEM_links.csv`; the hash-pinned bridge manifest lists exactly three rasters, so the claim is false and is corrected. ·
+**IR-61-DIP-01** the dip projection needs a dip the supplied layers cannot constrain (swept 45-75 deg, shipped 60; the trace moves 1.2-4.5 px median against a ~9 px resolution) ·
+**IR-61-DIP-02** the first footwall estimator was invalid on long ridges (43.8 % agreement with -grad z); replaced by a central-difference score, and the label-aware screen was unchanged by the fix - a 180-degree error is invisible to that screen ·
+**IR-61-CONTROL-01** the random-lines control is budget-sensitive and the driver realises half the nominal budget for it (0.0112 at 7,417 emitted dots, 0.0227 at 20,000, 0.0314 at 80,000 in the H61-X run), while the line-shaped step field saturates at 14,836 dots - so the pre-registered comparison mixes placement with dot count; an emission-matched control is recorded as a diagnostic and shows the two indistinguishable at comparable counts ·
+**IR-61-SITE-01** `docs/submit.html` had been offering the IR-61-UNIQ-01 near-blanket file as the recommended submission; repointed to the H61-MH file and `scripts/check_site.py` now refuses any page that publishes a raster without a passing validation receipt.
 ## Core values
 
 **Maximize P(Win)** and **Own the Outcome**: the slot is not spent on a file the holdout says is weak; the two-scale sub-hypothesis is

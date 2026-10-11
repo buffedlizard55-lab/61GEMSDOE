@@ -1,0 +1,139 @@
+{
+  "evidence_class": "DATA-MEASUREMENT",
+  "provenance": "third-party public GitHub mirrors of USGS 3DEP/GeoDAWN elevation products; the organisers' data tab ships no elevation raster (the competition supplies 1m_DEM_links.csv only), so these mirrors are the obtainable route from this sandbox.  Verified grid match against sample_submission.tif, not an organiser receipt.",
+  "files": {
+    "lidar_scarp_features_u8.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/59GEMSDOE",
+      "path": "data/external/lidar_scarp_features_u8.tif",
+      "bytes": 36943606,
+      "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+    },
+    "h52_scarp3m_100m.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/GEMSDOE48",
+      "path": "data/external/h52_scarp3m_100m.tif",
+      "bytes": 43839078,
+      "sha256": "b5e53d67c3a7d3d1ca44ae04ae1e84d8574857da3fcd5e34ba47276d6c04b923"
+    },
+    "topo_10m_derived_100m_u8.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/60GEMSDOE",
+      "path": "data/external/topo_10m_derived_100m_u8.tif",
+      "bytes": 32523329,
+      "sha256": "a6398d9950965dec6aae6ccecdaa6ced48645d133eab222cbdd11def9bdabfa4"
+    },
+    "geodawn_dem_a2_100m.tif": {
+      "repo": "https://github.com/buffedlizard55-lab/60GEMSDOE",
+      "path": "data/geodawn_dem_a2_100m.tif",
+      "bytes": 49531304,
+      "sha256": "d32762a38222764389e948da423ebc6cadd00ac617ad3938d3dd79c6cfe14431"
+    }
+  },
+  "grids": {
+    "lidar_scarp_features_u8.tif": {
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 12,
+      "dtype": "uint8",
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "descriptions": [
+        "ex_max",
+        "ex_mean",
+        "step_max",
+        "lapneg_max",
+        "lappos_max",
+        "downface_max",
+        "upface_max",
+        "cross_max",
+        "relief",
+        "coh100",
+        "strike",
+        "valid"
+      ]
+    },
+    "h52_scarp3m_100m.tif": {
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 7,
+      "dtype": "int16",
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "descriptions": [
+        "h_gate07",
+        "h_gate12",
+        "h_all",
+        "sigma_mean",
+        "facing_at",
+        "strike_at",
+        "cover"
+      ]
+    },
+    "topo_10m_derived_100m_u8.tif": {
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 9,
+      "dtype": "uint8",
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "descriptions": [
+        "slope_p90",
+        "slope_max",
+        "steep_frac",
+        "slope_std",
+        "relief_local",
+        "curv_prof_absmax",
+        "aspect_coherence",
+        "hs_lineament",
+        "dem_mean"
+      ]
+    },
+    "geodawn_dem_a2_100m.tif": {
+      "shape": [
+        3730,
+        3292
+      ],
+      "count": 1,
+      "dtype": "float32",
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243349.965575182,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "descriptions": [
+        null
+      ]
+    }
+  },
+  "grid_agreement_with_template": true,
+  "note": "lidar_scarp_features_u8.tif is 1 m lidar aggregated to the 100 m competition grid; topo_10m_derived_100m_u8.tif is 10 m DEM; geodawn_dem_a2_100m.tif is the bare DEM"
+}

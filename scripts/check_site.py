@@ -30,6 +30,7 @@ ALLOWED_HOSTS = {
     "api.crossref.org", "store.usgs.gov", "pubs.usgs.gov",
     "www.energy.gov", "www.nlr.gov", "github.com", "raw.githubusercontent.com",
     "buffedlizard55-lab.github.io", "docs.nlr.gov", "www.crossref.org",
+    "apps.nationalmap.gov", "prd-tnm.s3.amazonaws.com", "www.usgs.gov",
 }
 
 HREF = re.compile(r'href="([^"]+)"')
@@ -47,12 +48,13 @@ def main() -> int:
         return 1
     print(f"[site] {len(pages)} pages")
 
-    for page in pages:
+    for page in sorted(DOCS.glob("*.html")):
         text = page.read_text(encoding="utf-8")
-        if len(text) < 400:
-            problems.append(f"{page.name}: page is suspiciously short ({len(text)} bytes)")
-        for m in PLACEHOLDER.finditer(text):
-            problems.append(f"{page.name}: unresolved placeholder {m.group(0)!r}")
+        if page in pages:
+            if len(text) < 400:
+                problems.append(f"{page.name}: page is suspiciously short ({len(text)} bytes)")
+            for m in PLACEHOLDER.finditer(text):
+                problems.append(f"{page.name}: unresolved placeholder {m.group(0)!r}")
         for href in HREF.findall(text):
             if href.startswith("#") or href.startswith("mailto:"):
                 continue
@@ -67,26 +69,82 @@ def main() -> int:
             if not target.exists():
                 problems.append(f"{page.name}: broken internal link -> {href}")
 
-    # the banner and the run card must agree
+    # ---- the download gate -------------------------------------------------
+    # A page may publish a link to <name>.tif only when a receipt for that exact
+    # file records a passing format validation, and no receipt refuses it.  The
+    # front page must publish at least one cleared file.
     import json
-    card = None
-    for base in (ROOT / "evidence", DOCS / "data"):
-        p = base / "run_card.json"
-        if p.exists():
-            card = json.loads(p.read_text())
-            break
-    index = DOCS / "index.html"
-    if index.exists() and card is not None:
-        text = index.read_text()
-        authorised = bool(card.get("okay_to_download", False))
-        publishes_link = "Download the submission GeoTIFF" in text
-        if authorised and not publishes_link:
-            problems.append("run card authorises the download but the page publishes no link")
-        if not authorised and publishes_link:
-            problems.append("run card does NOT authorise the download but the page publishes a link")
-        print(f"[site] run card okay_to_download={authorised}, page publishes link={publishes_link}")
-    elif index.exists():
-        problems.append("index.html exists but no run_card.json was found")
+
+    def receipt_file(d):
+        for k in ("file", "path", "tif"):
+            v = d.get(k)
+            if isinstance(v, str) and v.endswith(".tif"):
+                return Path(v).name
+        dl = d.get("download")
+        if isinstance(dl, dict) and isinstance(dl.get("tif"), str):
+            return Path(dl["tif"]).name
+        for k in ("submission_name", "name"):
+            v = d.get(k)
+            if isinstance(v, str) and v:
+                return v if v.endswith(".tif") else v + ".tif"
+        return None
+
+    def receipt_ok(d):
+        if d.get("okay_to_download") is True:
+            return True
+        for key in ("validator", "validation"):
+            v = d.get(key)
+            if isinstance(v, dict) and (v.get("all_checks_passed") is True or v.get("ok") is True):
+                return True
+        tr = d.get("template_report")
+        if isinstance(tr, dict) and tr.get("ok") is True:
+            return True
+        return False
+
+    allowed: dict[str, str] = {}
+    refused: dict[str, str] = {}
+    for base in (ROOT / "evidence", DOCS / "downloads", DOCS / "submissions"):
+        for p in sorted(base.glob("*.json")):
+            try:
+                d = json.loads(p.read_text())
+            except (json.JSONDecodeError, OSError):
+                problems.append(f"{p.name}: unreadable receipt")
+                continue
+            if not isinstance(d, dict):
+                continue
+            name = receipt_file(d)
+            if not name:
+                continue
+            key = f"{p.parent.name}/{p.name}"
+            if d.get("okay_to_download") is False:
+                refused[name] = key
+            elif receipt_ok(d):
+                allowed.setdefault(name, key)
+    for n in refused:
+        allowed.pop(n, None)
+    print(f"[site] download gate: {len(allowed)} cleared .tif receipts, {len(refused)} refused")
+
+    index_cleared = False
+    for page in sorted(DOCS.glob("*.html")):
+        if not page.exists():
+            continue
+        for href in HREF.findall(page.read_text(encoding="utf-8")):
+            if href.startswith(("http", "#", "mailto:")):
+                continue
+            tail = Path(href.split("#")[0].split("?")[0]).name
+            if not tail.endswith((".tif", ".zip")):
+                continue
+            stem = tail[:-4] + ".tif" if tail.endswith(".zip") else tail
+            if stem in refused:
+                problems.append(f"{page.name}: publishes {tail} although {refused[stem]} refuses it")
+            elif stem not in allowed:
+                problems.append(f"{page.name}: publishes {tail} but no receipt clears that file "
+                                "for download")
+            elif page.name == "index.html":
+                index_cleared = True
+    if not index_cleared:
+        problems.append("index.html publishes no cleared .tif download link (the submission file "
+                        "must be easy to download)")
 
     if problems:
         print(f"[site] FAIL ({len(problems)} problems)")

@@ -1,0 +1,51 @@
+{
+  "evidence_class": "INDEPENDENT-CHECK",
+  "method": "re-derived from the published bytes with plain hashlib + rasterio + numpy, NOT with src/gems61/validate.py, so a bug in the shipped validator cannot hide here",
+  "file": "docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif",
+  "bytes": 90194,
+  "sha256": "a8eab7e89576c51e89c5052cc07fbc9e14c4e22a7d48fb8f054c1d6b9d17843b",
+  "profile": {
+    "dtype": "float32",
+    "height": 3730,
+    "width": 3292,
+    "crs": "EPSG:32611",
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ]
+  },
+  "sample_submission": {
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "shape": [
+      3730,
+      3292
+    ]
+  },
+  "transform_matches_sample": true,
+  "shape_matches_sample": true,
+  "distinct_values": [
+    0.0,
+    1.0
+  ],
+  "all_finite": true,
+  "min": 0.0,
+  "max": 1.0,
+  "positive_pixels": 16894,
+  "zip_file": "docs/downloads/gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.zip",
+  "zip_entries": [
+    "gems61-h61w-p60-dip-projected-basement-step-16894dots-20261011T155602Z-zeros.tif"
+  ],
+  "zip_sha256": "755b1a71abd712871b27b5ed4786febb16b66bcd18ae2ed7825737ec294b2071",
+  "zip_payload_identical": true
+}

@@ -2,21 +2,14 @@
   "evidence_class": "DATA-MEASUREMENT",
   "files": [
     {
-      "path": "data/official/labels.tif",
+      "path": "data/bridge/existing_faults.tif",
       "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
       "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
       "verified": true,
       "bytes": 425830
     },
     {
-      "path": "data/official/existing_faults.tif",
-      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
-      "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
-      "verified": true,
-      "bytes": 425830
-    },
-    {
-      "path": "data/official/sample_submission.tif",
+      "path": "data/bridge/sample_submission.tif",
       "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
       "expected_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
       "verified": true,
@@ -42,6 +35,27 @@
       "expected_sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
       "verified": true,
       "bytes": 198602
+    },
+    {
+      "path": "data/official/labels.tif",
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "verified": true,
+      "bytes": 425830
+    },
+    {
+      "path": "data/official/existing_faults.tif",
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "verified": true,
+      "bytes": 425830
+    },
+    {
+      "path": "data/official/sample_submission.tif",
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "expected_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "verified": true,
+      "bytes": 1599597
     },
     {
       "path": "data/external/trace_segments_utm11.csv",
@@ -91,6 +105,7 @@
     ]
   },
   "all_pins_verified": true,
+  "note_union": "union of this session's verification pass with the previously recorded files, so no pinned-file record is lost",
   "layout_links": [
     {
       "path": "data/bridge/existing_faults.tif",
