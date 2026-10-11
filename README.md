@@ -57,6 +57,18 @@ This session ran the **buried-structure lane** end to end and shipped one file.
 2. `src/gems61/validate.py` now also answers to the check names the parallel lanes read back (`zero_dots_on_mapped_catalogue`, `no_nan_anywhere`, `transform_matches`, ...) so every lane's receipt is readable by every lane's reader. The aliases are the same facts under the other lane's key, not new claims.
 3. `src/gems61/uniqueness.py` gained the parallel lane's `dot_overlap` / `surface_rho` / `compare` API alongside this lane's `dot_overlap_stats`, so both sets of tests run against one module.
 
+### Site defects found and fixed after the first deploy (PRs #16–#20)
+
+The lane's pages were correct locally but the **published** site was not, in five separate ways. All five are fixed and re-verified against the live URL.
+
+1. **`docs/submissions/*.zip` was ignored, so both zip links 404'd.** `.gitignore` carries that pattern on both sides of the merge; the file is now force-added (96,094 B). Every local `href`/`src` in `docs/` was then re-checked against both disk *and* git.
+2. **The live Pages build was failing, so the public URL was serving a stale site.** Pages is on the *legacy* source (branch `main`, path `/`), i.e. Jekyll builds the repository root — the custom `Pages` workflow that uploads `docs/` is **not** what gets served. Jekyll aborted with `No such file or directory @ rb_check_realpath_internal - /github/workspace/data/official/training_features.tif`.
+3. **`data/official/training_features.tif` is a committed symlink into `.cache/`** (git-ignored, populated by `scripts/prepare_data.py`), i.e. a dangling link in every fresh checkout. Fixed with `.nojekyll` (Pages copies the tree verbatim) + a `_config.yml` exclude list for local Jekyll, and then by un-tracking the symlink and gitignoring it — because the upload step failed on it too.
+4. **The "Local checks that were run on this exact file" table rendered an empty body.** `evidence/submission.json` stored only summary fields; the full validator receipt is now written there (and re-derived from the shipped bytes on disk) and the page reads it, falling back to the run card for older receipts and printing the 14 canonical checks rather than the 27 keys that include the parallel-lane aliases.
+5. **The hypotheses table printed `None` in five cells per row.** The page read `signature` / `why_off_catalogue` / `differs_from` / `expected_dti_gain`; `evidence/hypotheses.json` stores `physical_signature` / `why_missing_from_catalogue` / `differs_from_existing` / `rank`. Each field now resolves through the first present key. Every page the builder emits has zero `None`/em-dash cells and zero empty `<tbody>`s.
+
+`pages-build-deployment` last built clean at 2026-10-11T06:29Z (`status: built`, `error: null`).
+
 ### Known open irregularity in the shared package
 
 `src/gems61/offcatalogue.py` (added on `origin/main`) imports `DOMAIN_ERODE` from `gems61.holdout`, which does not define it on either side of this merge — the module fails to import on `origin/main` as well. Not fixed here because it belongs to another lane's module; recorded for the consolidation pass. `src/gems61/fitting.py` needs `scikit-learn`, which is not in `requirements.txt`.
