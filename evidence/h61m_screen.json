@@ -1,0 +1,17 @@
+{
+  "stage": "screen",
+  "timestamp": "20261011T050559Z",
+  "n_magnetic_edges": 691269,
+  "n_catalogue_px": 1483448,
+  "enrichment_vs_random": {
+    "r0px": NaN,
+    "r1px": 1188853.5648388183,
+    "r2px": 306515.97528442665,
+    "r3px": 141239.57800014995,
+    "r5px": 54350.04707681664,
+    "r10px": 15742.895479451272
+  },
+  "mean_distance_to_catalogue_px": 31.471108672021124,
+  "median_distance_to_catalogue_px": 19.026297590440446,
+  "elapsed_s": 62.265488386154175
+}

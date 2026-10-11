@@ -28,11 +28,13 @@
 4. **Answer to the lane's explicit question** (withheld basin-interior segments recovered vs random lines): the coarse new steps recover **51/1999** vs **255/1999** by random lines — below random; the base-scale X2 corridor recovered 351/1999.
 5. **The shipped file is the unique coarse-corridor construction (X3c)** with a negative verdict — a diagnostic deliverable closing the sub-hypothesis, per the selection rule recorded in the run card.
 
-## Candidate board — all gems61 files in `docs/downloads/` (five parallel sessions merged on `main`)
+## Candidate board — all gems61 files in `docs/downloads/` (seven parallel sessions merged on `main`, newest first)
 
 | file | session / PR | positive px | its own session's verdict | shipped file on the segment-withholding evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
 | **`gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros`** | this session (H61-X) | 10,128 | FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050–0.0117) **below** random lines 0.0352 → negative, diagnostic | 0.0085 |
+| `gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif` | H61-L, session arena/a7790b7f, PR #13 (2026-10-11) | 40,000 | FORMAT-VALID + UNIQUE (worst Spearman 0.293 vs H61-G; 69.8% of its dots within 3 px of H61-G's - under both gates); HOLDOUT-DTI 0.0443 (CI 0.0414-0.0478) vs random lines 0.0314, 340/1999 basin segments vs 215/1999 random; statistically tied with H61-G 0.0465; negative for a slot | 0.0443 (visible-only) / ≈0 shipped pruned (IR-61-INSTR-02) |
+| `gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif` | H61-M, session arena/a7790b7f, PR #11 (2026-10-11) | 55,301 | FORMAT-VALID + UNIQUE (55,301 px, rho 0.0018 vs external registry, 18.35% overlap); gravity-inversion corridor x magnetic edges as 3 px ribbons; no segment-holdout on this evaluator recorded | — |
 | `gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif` | e3, PR #3 | 40,000 | kept; superseded | 0.0000 |
 | `gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif` | H61-A, PR #5 | 25,285 | catalogue-frame holdout 0.0000 vs random 0.0089 -> SUPERSEDED | 0.0000 |
 | `gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif` | H61-B, PR #6 | 88,796 | format-valid + unique; no holdout number above random recorded in its run card | 0.0000 |
@@ -52,6 +54,8 @@ PYTHONPATH=src .venv/bin/python scripts/prepare_data.py --fetch --cache-bands   
 bash scripts/fetch_registry.sh                                                  # 21 earlier group rasters -> /tmp/refs/registry
 PYTHONPATH=src .venv/bin/python scripts/run_h61g.py all                         # H61-G: invert -> screen -> holdout -> final -> unique -> card (~25 min)
 PYTHONPATH=src .venv/bin/python scripts/run_h61x.py all                         # H61-X (this session): invert -> holdout -> final -> unique -> card (~20 min)
+PYTHONPATH=src .venv/bin/python scripts/run_h61l.py                            # H61-L (parallel session a7790b7f): lidar relief in corridor
+PYTHONPATH=src .venv/bin/python scripts/run_h61m.py                            # H61-M (parallel session a7790b7f): gravity x magnetic ribbons
 PYTHONPATH=src .venv/bin/python -m pytest -q tests                              # 22 passed
 PYTHONPATH=src .venv/bin/python scripts/build_site_h61x.py                      # regenerates docs/*.html + README top from evidence/*.json
 ```
@@ -65,10 +69,12 @@ holdout instrument check 0.1011 = 0.1011; the site builder reads every number fr
 - `scripts/run_h61x.py` — H61-X driver: invert | holdout | final | unique | card | all.
 - `evidence/h61x_invert.json`, `h61x_holdout.json`, `h61x_final.json`, `h61x_uniqueness.json`, `h61x_run_card.json`.
 - New irregularity: **IR-61X-01** the random-line control draws differ between sessions (H61-G: single seed 100 for every cell → 0.0314; H61-X: per-cell seeds 100+ci → 0.0352). Both are recorded; CIs overlap; no conclusion depends on the 0.004 gap. The H61-X card reports the in-run draw as primary and the H61-G draw as secondary.
+- New irregularity: **IR-61X-02** the parallel session (arena/a7790b7f) rewrote the `elapsed_s` field of the earlier `evidence/h61g_invert.json` (344.6 → 59.0) when it re-ran the inversion; scientific content unchanged. Evidence receipts are immutable records — restored to 344.6 in this merge.
+- Parallel session `arena/a7790b7f` (PRs #11-#13, merged to main before this PR): H61-L lidar relief in the GP-1012 corridor (0.0443 HOLDOUT-DTI, unique) and H61-M gravity×magnetic corridor ribbons (format-valid, unique, no segment holdout). Both files and their evidence (`evidence/h61l_*.json`, `evidence/h61m_*.json`, `scripts/run_h61l.py`, `scripts/run_h61m.py`, `src/gems61/h61m.py`) are merged into this branch and shown on the board above.
 
 ## Irregularities (full list on [docs/irregularities.html](docs/irregularities.html))
 
-IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before H61-G (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt · **IR-61X-01 random-line control seed handling differs between H61-G (0.0314) and H61-X (0.0352) draws (both recorded, CIs overlap, no conclusion affected)**.
+IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before H61-G (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt · **IR-61X-01 random-line control seed handling differs between H61-G (0.0314) and H61-X (0.0352) draws (both recorded, CIs overlap, no conclusion affected)** · **IR-61X-02 parallel session rewrote `elapsed_s` in the earlier `evidence/h61g_invert.json` (344.6 → 59.0); evidence receipts are immutable — restored in this merge**.
 
 ## Core values
 

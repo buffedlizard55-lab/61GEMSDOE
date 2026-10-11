@@ -44,6 +44,22 @@ it closes the “coarse two-scale corridor” sub-hypothesis of the buried-struc
 <p class="small">sha256 <code>f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c</code> · submission name <code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros</code> · note (134 chars): <code>H61-X: coarse (800 m) basement-step corridor from GP-1012-calibrated gravity inversion x in-corridor slope ridge; 10128 dots; UNSCORED</code></p>
 </div>
 
+<div class="status" style="margin-top:16px">
+<h3 style="margin-top:0;border:0">Strongest recent file (for the selector): H61-L — gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros
+</h3>
+<p>Lidar relief maxima inside the GP-1012-corridor, 40,000 dots (session arena/a7790b7f, PR #13).
+<span class="tag h">HOLDOUT-DTI</span> 0.0443 (95% CI 0.0414–0.0478) vs random lines
+0.0314; 340/1999 vs 215/1999 by random lines. Statistically tied with H61-G's X2 (0.0465, the lane's best
+in-protocol file) and below the 0.1011 bar. FORMAT-VALID and UNIQUE (worst Spearman +0.293 vs the
+H61-G file; 69.8 % of its dots within 3 px of H61-G's — under the 0.90 and 0.70 gates). Verdict: <b>negative</b> (below the bar;
+the selector may still prefer it over the other negatives for an ORGANIZER-CONFIRMED gravity-lane number).</p>
+<p><a class="btn sec" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif" download>⬇ Download H61-L</a>
+<a class="btn sec" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.zip" download>zip</a>
+<a class="btn sec" href="downloads/gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.json">receipt</a></p>
+<p class="small">Second recent file: H61-M <code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code> (gravity-inversion corridor × magnetic edges, 3 px ribbons,
+55,301 px) — FORMAT-VALID and UNIQUE, no segment-holdout on this evaluator recorded (screen mean distance 31.5 px to the catalogue).
+Both files' evidence: <code>evidence/h61l_*.json</code>, <code>evidence/h61m_*.json</code>.</p>
+</div>
 <h2>One-paragraph result</h2>
 <p>This session tested the lane's <b>two-scale sub-hypothesis</b>: that <i>broad</i> basement steps (horizontal-gradient maxima of the
 GP-1012-calibrated inverted basement surface at 800 m smoothing, disjoint from the sharp base-scale step lines) mark the deep,
@@ -83,9 +99,11 @@ every number here for our files is HOLDOUT-DTI.</p>
 plus the X2 instrument reproduction and the random-line control). Wall-clock within the 2-hour cap.</p>
 
 <h2>Candidate board - every gems61 file in <code>docs/downloads/</code> (parallel sessions merged on main)</h2>
-<p class="small">Five sessions worked this lane in parallel (PRs #5-#9 and this one). Each row carries the verdict its own session recorded; the last column scores the <i>shipped file</i> on the segment-withholding evaluator, where files pruned against the full catalogue sit ~0 by construction (IR-61-INSTR-02) - the only within-protocol numbers exist for H61-G (X2 = 0.0465) and this session (X3c = 0.0085, construction re-emitted with visible-only pruning). Nothing here is a slot decision; the selector step is separate.</p>
-<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session's verdict</th><th>shipped file on the segment-withholding evaluator (HOLDOUT-DTI)</th></tr>
-<tr class="hl"><td><code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros</code></td><td>this session (H61-X), arena/6339e2fc-61gemsdoe (H61-X)</td><td>10,128</td><td>FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050-0.0117) BELOW random lines 0.0352 (and H61-G draw 0.0314); two-scale sub-hypothesis refuted; negative</td><td>0.0085 (see row)</td></tr>
+<p class="small">Seven sessions worked this lane in parallel (PRs #3-#13, newest first). Each row carries the verdict its own session recorded; the last column scores the <i>shipped file</i> on the segment-withholding evaluator, where files pruned against the full catalogue sit ~0 by construction (IR-61-INSTR-02) - the within-protocol numbers (construction re-emitted with visible-only pruning) exist for H61-G (X2 = 0.0465), H61-L (0.0443) and this session (X3c = 0.0085). Nothing here is a slot decision; the selector step is separate.</p>
+<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session's verdict</th><th>segment-withholding evaluator (HOLDOUT-DTI)</th></tr>
+<tr class="hl"><td><code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros</code></td><td>this session (H61-X), arena/6339e2fc-61gemsdoe (H61-X)</td><td>10,128</td><td>FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0085 (CI 0.0050-0.0117) BELOW random lines 0.0352 (and H61-G draw 0.0314); two-scale sub-hypothesis refuted; negative</td><td>0.0085</td></tr>
+<tr class=""><td><code>gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros.tif</code></td><td>H61-L, session arena/a7790b7f, PR #13 (2026-10-11)</td><td>40,000</td><td>FORMAT-VALID + UNIQUE (worst Spearman 0.293 vs H61-G; 69.8% of its dots within 3 px of H61-G&#x27;s - under both gates); HOLDOUT-DTI 0.0443 (CI 0.0414-0.0478) vs random lines 0.0314, 340/1999 basin segments vs 215/1999 random; statistically tied with H61-G 0.0465; negative for a slot</td><td>0.0443 (visible-only)</td></tr>
+<tr class=""><td><code>gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros.tif</code></td><td>H61-M, session arena/a7790b7f, PR #11 (2026-10-11)</td><td>55,301</td><td>FORMAT-VALID + UNIQUE (55,301 px, rho 0.0018 vs external registry, 18.35% overlap); gravity-inversion corridor x magnetic edges as 3 px ribbons; no segment-holdout on this evaluator recorded</td><td>—</td></tr>
 <tr class=""><td><code>gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code></td><td>e3, PR #3</td><td>40,000</td><td>kept; superseded</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code></td><td>H61-A, PR #5</td><td>25,285</td><td>catalogue-frame holdout 0.0000 vs random 0.0089 -&gt; SUPERSEDED</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td><td>H61-B, PR #6</td><td>88,796</td><td>format-valid + unique; no holdout number above random recorded in its run card</td><td>0.0000</td></tr>
@@ -94,10 +112,11 @@ plus the X2 instrument reproduction and the random-line control). Wall-clock wit
 <tr class=""><td><code>gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif</code></td><td>e3, PR #3</td><td>311,617</td><td>311,617-px near-blanket; the IR-61-UNIQ-01 reference; never upload</td><td>0.0000</td></tr>
 <tr class=""><td><code>gems61c-gravstep-liveband-40k-20261011.tif</code></td><td>session C, PR #8</td><td>40,000</td><td>its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 &lt; random lines 0.0092 (gems61-pooled-hide-v2); &#x27;value unproven&#x27;</td><td>0.0007</td></tr>
 </table>
-<h2>Older files in <code>docs/downloads/</code></h2>
-<p>Eight earlier rasters from previous sessions are <b>SUPERSEDED</b> or uniqueness references: the H61-G file
-(<code>gems61-h61g-x2-…</code>) remains the lane's best in-protocol file (0.0465) and is NOT recommended for a slot either;
-<code>gems61-lane-buried-step-…-k400k</code> is a 311,617-px near-blanket (the IR-61-UNIQ-01 reference). Do not upload any of the superseded files.</p>
+<h2>Other files in <code>docs/downloads/</code></h2>
+<p>Ten other rasters from previous sessions are diagnostic references or uniqueness registry entries. The H61-G file
+(<code>gems61-h61g-x2-…</code>, 0.0465) remains the lane's best in-protocol file and is NOT recommended for a slot either;
+<code>gems61-lane-buried-step-…-k400k</code> is a 311,617-px near-blanket (the IR-61-UNIQ-01 reference). Do not upload the early
+superseded files (holdouts 0.0000–0.0089); the H61-L, H61-M and H61-X files above are the current candidates a selector would consider.</p>
 
 <hr><p class="small">61GEMSDOE · session arena/6339e2fc-61gemsdoe (H61-X) · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61x.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator

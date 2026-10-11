@@ -144,6 +144,8 @@ it closes the “coarse two-scale corridor” sub-hypothesis of the buried-struc
 
 
 SIB_META = {
+    "gems61-h61l": ("H61-L, session arena/a7790b7f, PR #13 (2026-10-11)", "FORMAT-VALID + UNIQUE (worst Spearman 0.293 vs H61-G; 69.8% of its dots within 3 px of H61-G's - under both gates); HOLDOUT-DTI 0.0443 (CI 0.0414-0.0478) vs random lines 0.0314, 340/1999 basin segments vs 215/1999 random; statistically tied with H61-G 0.0465; negative for a slot"),
+    "gems61-h61m": ("H61-M, session arena/a7790b7f, PR #11 (2026-10-11)", "FORMAT-VALID + UNIQUE (55,301 px, rho 0.0018 vs external registry, 18.35% overlap); gravity-inversion corridor x magnetic edges as 3 px ribbons; no segment-holdout on this evaluator recorded"),
     "gems61-h61g": ("H61-G, PR #9", "FORMAT-VALID + UNIQUE; HOLDOUT-DTI 0.0465 (CI 0.0421-0.0507) vs random lines 0.0314 within protocol; the lane's best in-protocol file; negative for a slot"),
     "gems61c-gravstep": ("session C, PR #8", "its card: shipped construction 0.0417 but its own uniform-flank control 0.0649, and pure lane field 0.0078 < random lines 0.0092 (gems61-pooled-hide-v2); 'value unproven'"),
     "gems61-h62": ("H62, PR #7", "its card: surrogate-truth DTI 0.0395 below every one of seven registry rasters -> 'Submit NOT RECOMMENDED'"),
@@ -165,23 +167,77 @@ def sib_meta(fn):
     return ("?", "")
 
 
+H61M_FILE = "gems61-h61m-gravmag-corridor-ribbon-40000dots-20261011T051415Z-zeros"
+
+
+def parallel_rows():
+    """The parallel session's two files (merged from main as PRs #11/#13), newest first."""
+    out = []
+    h61l = None
+    p = EV / "h61l_run_card.json"
+    if p.exists():
+        h61l = json.loads(p.read_text())
+    if h61l and (DOCS / "downloads" / (h61l["submission_name"] + ".tif")).exists():
+        out.append(dict(file=h61l["submission_name"] + ".tif", n_positive_px=40000,
+                        pooled_dti=h61l["holdout_dti"]["value"], note="visible-only protocol"))
+    if (DOCS / "downloads" / (H61M_FILE + ".tif")).exists():
+        px = 55301
+        p = EV / "h61m_submission.json"
+        if p.exists():
+            try:
+                px = int(json.loads(p.read_text()).get("n_ribbon_px", px))
+            except Exception:  # noqa: BLE001
+                pass
+        out.append(dict(file=H61M_FILE + ".tif", n_positive_px=px, pooled_dti=None, note="not on this evaluator"))
+    return out
+
+
 def board_html():
     out = ['<h2>Candidate board - every gems61 file in <code>docs/downloads/</code> (parallel sessions merged on main)</h2>',
-           '<p class="small">Five sessions worked this lane in parallel (PRs #5-#9 and this one). Each row carries the verdict its own '
-           'session recorded; the last column scores the <i>shipped file</i> on the segment-withholding evaluator, where files pruned '
-           'against the full catalogue sit ~0 by construction (IR-61-INSTR-02) - the only within-protocol numbers exist for '
-           'H61-G (X2 = 0.0465) and this session (X3c = 0.0085, construction re-emitted with visible-only pruning). Nothing here is a '
+           '<p class="small">Seven sessions worked this lane in parallel (PRs #3-#13, newest first). Each row carries the verdict its '
+           'own session recorded; the last column scores the <i>shipped file</i> on the segment-withholding evaluator, where files pruned '
+           'against the full catalogue sit ~0 by construction (IR-61-INSTR-02) - the within-protocol numbers (construction re-emitted '
+           'with visible-only pruning) exist for H61-G (X2 = 0.0465), H61-L (0.0443) and this session (X3c = 0.0085). Nothing here is a '
            'slot decision; the selector step is separate.</p>',
-           '<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session\'s verdict</th><th>shipped file on the segment-withholding evaluator (HOLDOUT-DTI)</th></tr>']
-    new_row = dict(file=NAME, n_positive_px=NDOTS, pooled_dti=None)
-    all_rows = [new_row] + sib["rows"]
+           '<table><tr><th>file</th><th>session / PR</th><th>positive px</th><th>its own session\'s verdict</th><th>segment-withholding evaluator (HOLDOUT-DTI)</th></tr>']
+    my_row = dict(file=NAME, n_positive_px=NDOTS, pooled_dti=None)
+    all_rows = [my_row] + parallel_rows() + sib["rows"]
     for r in all_rows:
         who, verdict = sib_meta(r["file"])
         cls = "hl" if "h61x" in r["file"] else ""
-        dti = f4(r["pooled_dti"]) if r["pooled_dti"] is not None else f"{f4(DTI)} (see row)"
+        if r["pooled_dti"] is None:
+            dti = f"{f4(DTI)}" if "h61x" in r["file"] else "—"
+        else:
+            dti = f"{f4(r['pooled_dti'])} (visible-only)" if r.get("note") == "visible-only protocol" else f4(r["pooled_dti"])
         out.append(f'<tr class="{cls}"><td><code>{esc(r["file"])}</code></td><td>{esc(who)}</td><td>{r["n_positive_px"]:,}</td><td>{esc(verdict)}</td><td>{dti}</td></tr>')
     out.append('</table>')
     return "\n".join(out)
+
+
+def h61l_callout():
+    p = EV / "h61l_run_card.json"
+    if not p.exists():
+        return ""
+    l = json.loads(p.read_text())
+    name = l["submission_name"]
+    h = l["holdout_dti"]
+    return f"""
+<div class="status" style="margin-top:16px">
+<h3 style="margin-top:0;border:0">Strongest recent file (for the selector): H61-L — {esc(name)}
+</h3>
+<p>Lidar relief maxima inside the GP-1012-corridor, 40,000 dots (session arena/a7790b7f, PR #13).
+<span class="tag h">HOLDOUT-DTI</span> {f4(h["value"])} (95% CI {f4(h["ci95"][0])}–{f4(h["ci95"][1])}) vs random lines
+{f4(h["random_lines_same_budget"])}; {esc(h["basin_interior_segments"])}. Statistically tied with H61-G's X2 ({f4(X2G)}, the lane's best
+in-protocol file) and below the 0.1011 bar. FORMAT-VALID and UNIQUE (worst Spearman {l["correlation_overlap_vs_registry"]["worst_spearman"]["value"]:+.3f} vs the
+H61-G file; 69.8 % of its dots within 3 px of H61-G's — under the 0.90 and 0.70 gates). Verdict: <b>negative</b> (below the bar;
+the selector may still prefer it over the other negatives for an ORGANIZER-CONFIRMED gravity-lane number).</p>
+<p><a class="btn sec" href="downloads/{esc(name)}.tif" download>⬇ Download H61-L</a>
+<a class="btn sec" href="downloads/{esc(name)}.zip" download>zip</a>
+<a class="btn sec" href="downloads/{esc(name)}.json">receipt</a></p>
+<p class="small">Second recent file: H61-M <code>{esc(H61M_FILE)}.tif</code> (gravity-inversion corridor × magnetic edges, 3 px ribbons,
+55,301 px) — FORMAT-VALID and UNIQUE, no segment-holdout on this evaluator recorded (screen mean distance 31.5 px to the catalogue).
+Both files' evidence: <code>evidence/h61l_*.json</code>, <code>evidence/h61m_*.json</code>.</p>
+</div>"""
 
 
 # ----------------------------------------------------------------------------- index
@@ -189,7 +245,7 @@ index_body = f"""
 <h1>61GEMSDOE — buried-structure lane: basement-depth steps from gravity inversion</h1>
 <p>DOE GEMS (DrivenData competition 306). This page answers one question first: <b>is the newest GeoTIFF OK to download and submit?</b></p>
 {status_box()}
-
+{h61l_callout()}
 <h2>One-paragraph result</h2>
 <p>This session tested the lane's <b>two-scale sub-hypothesis</b>: that <i>broad</i> basement steps (horizontal-gradient maxima of the
 GP-1012-calibrated inverted basement surface at 800 m smoothing, disjoint from the sharp base-scale step lines) mark the deep,
@@ -237,16 +293,18 @@ every number here for our files is HOLDOUT-DTI.</p>
 plus the X2 instrument reproduction and the random-line control). Wall-clock within the 2-hour cap.</p>
 
 {board_html()}
-<h2>Older files in <code>docs/downloads/</code></h2>
-<p>Eight earlier rasters from previous sessions are <b>SUPERSEDED</b> or uniqueness references: the H61-G file
-(<code>gems61-h61g-x2-…</code>) remains the lane's best in-protocol file (0.0465) and is NOT recommended for a slot either;
-<code>gems61-lane-buried-step-…-k400k</code> is a 311,617-px near-blanket (the IR-61-UNIQ-01 reference). Do not upload any of the superseded files.</p>
+<h2>Other files in <code>docs/downloads/</code></h2>
+<p>Ten other rasters from previous sessions are diagnostic references or uniqueness registry entries. The H61-G file
+(<code>gems61-h61g-x2-…</code>, 0.0465) remains the lane's best in-protocol file and is NOT recommended for a slot either;
+<code>gems61-lane-buried-step-…-k400k</code> is a 311,617-px near-blanket (the IR-61-UNIQ-01 reference). Do not upload the early
+superseded files (holdouts 0.0000–0.0089); the H61-L, H61-M and H61-X files above are the current candidates a selector would consider.</p>
 """
 
 # ----------------------------------------------------------------------------- executive summary
 exec_body = f"""
 <h1>Executive summary &amp; exactly how to submit</h1>
 {status_box()}
+{h61l_callout()}
 <h2>Decision in one line</h2>
 <p>Upload is <b>safe and the file is a genuine new raster</b> (format pinned to the organiser's sample, all values 0.0 or 1.0,
 UNIQUE against {uni['n_registry_rasters_compared']} earlier rasters), but it is a <b>negative result</b>:
@@ -503,16 +561,21 @@ readme_top = f"""# 61GEMSDOE — buried-structure lane: basement-depth steps fro
 4. **Answer to the lane's explicit question** (withheld basin-interior segments recovered vs random lines): the coarse new steps recover **{X3C['segments_recovered_basin_interior']}/{X3C['segments_withheld_basin_interior']}** vs **{ctrl[0]['segments_recovered_basin_interior']}/{ctrl[0]['segments_withheld_basin_interior']}** by random lines — below random; the base-scale X2 corridor recovered {X2['segments_recovered_basin_interior']}/{X2['segments_withheld_basin_interior']}.
 5. **The shipped file is the unique coarse-corridor construction (X3c)** with a negative verdict — a diagnostic deliverable closing the sub-hypothesis, per the selection rule recorded in the run card.
 
-## Candidate board — all gems61 files in `docs/downloads/` (five parallel sessions merged on `main`)
+## Candidate board — all gems61 files in `docs/downloads/` (seven parallel sessions merged on `main`, newest first)
 
 | file | session / PR | positive px | its own session's verdict | shipped file on the segment-withholding evaluator (HOLDOUT-DTI) |
 |---|---|---|---|---|
 | **`{NAME}`** | this session (H61-X) | {NDOTS:,} | FORMAT-VALID + UNIQUE; HOLDOUT-DTI {DTI:.4f} (CI {CI[0]:.4f}–{CI[1]:.4f}) **below** random lines {RND:.4f} → negative, diagnostic | {DTI:.4f} |
 """
 board_rows = []
-for r in sib["rows"]:
+for r in parallel_rows() + sib["rows"]:
     who, verdict = sib_meta(r["file"])
-    dti = f4(r["pooled_dti"])
+    if r["pooled_dti"] is None:
+        dti = "—"
+    elif r.get("note") == "visible-only protocol":
+        dti = f"{f4(r['pooled_dti'])} (visible-only) / ≈0 shipped pruned (IR-61-INSTR-02)"
+    else:
+        dti = f4(r["pooled_dti"])
     board_rows.append(f"| `{r['file']}` | {who} | {r['n_positive_px']:,} | {verdict} | {dti} |")
 readme_top += "\n".join(board_rows) + f"""
 
@@ -527,6 +590,8 @@ PYTHONPATH=src .venv/bin/python scripts/prepare_data.py --fetch --cache-bands   
 bash scripts/fetch_registry.sh                                                  # 21 earlier group rasters -> /tmp/refs/registry
 PYTHONPATH=src .venv/bin/python scripts/run_h61g.py all                         # H61-G: invert -> screen -> holdout -> final -> unique -> card (~25 min)
 PYTHONPATH=src .venv/bin/python scripts/run_h61x.py all                         # H61-X (this session): invert -> holdout -> final -> unique -> card (~20 min)
+PYTHONPATH=src .venv/bin/python scripts/run_h61l.py                            # H61-L (parallel session a7790b7f): lidar relief in corridor
+PYTHONPATH=src .venv/bin/python scripts/run_h61m.py                            # H61-M (parallel session a7790b7f): gravity x magnetic ribbons
 PYTHONPATH=src .venv/bin/python -m pytest -q tests                              # 22 passed
 PYTHONPATH=src .venv/bin/python scripts/build_site_h61x.py                      # regenerates docs/*.html + README top from evidence/*.json
 ```
@@ -540,10 +605,12 @@ holdout instrument check 0.1011 = 0.1011; the site builder reads every number fr
 - `scripts/run_h61x.py` — H61-X driver: invert | holdout | final | unique | card | all.
 - `evidence/h61x_invert.json`, `h61x_holdout.json`, `h61x_final.json`, `h61x_uniqueness.json`, `h61x_run_card.json`.
 - New irregularity: **IR-61X-01** the random-line control draws differ between sessions (H61-G: single seed 100 for every cell → 0.0314; H61-X: per-cell seeds 100+ci → 0.0352). Both are recorded; CIs overlap; no conclusion depends on the 0.004 gap. The H61-X card reports the in-run draw as primary and the H61-G draw as secondary.
+- New irregularity: **IR-61X-02** the parallel session (arena/a7790b7f) rewrote the `elapsed_s` field of the earlier `evidence/h61g_invert.json` (344.6 → 59.0) when it re-ran the inversion; scientific content unchanged. Evidence receipts are immutable records — restored to 344.6 in this merge.
+- Parallel session `arena/a7790b7f` (PRs #11-#13, merged to main before this PR): H61-L lidar relief in the GP-1012 corridor (0.0443 HOLDOUT-DTI, unique) and H61-M gravity×magnetic corridor ribbons (format-valid, unique, no segment holdout). Both files and their evidence (`evidence/h61l_*.json`, `evidence/h61m_*.json`, `scripts/run_h61l.py`, `scripts/run_h61m.py`, `src/gems61/h61m.py`) are merged into this branch and shown on the board above.
 
 ## Irregularities (full list on [docs/irregularities.html](docs/irregularities.html))
 
-IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before H61-G (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt · **IR-61X-01 random-line control seed handling differs between H61-G (0.0314) and H61-X (0.0352) draws (both recorded, CIs overlap, no conclusion affected)**.
+IR-61-MERGE-01 broken merge on main (fixed) · IR-61-TEST-01 tests imported a sibling package (fixed) · IR-61-DATA-01 three data layouts (fixed) · IR-61-INSTR-02 the "anti-correlated holdout" was a full-catalogue-prune artefact (protocol corrected) · IR-61-UNIQ-01 near-blanket reference raster breaks the one-sided overlap rule (Jaccard rule when reference is dense) · IR-61-ARTIFACT-01 three competing "primary" files advertised before H61-G (all superseded) · IR-61-CONV-01 undamped Oldenburg diverges (damped) · IR-61-RIBBON-01 3 × 3 ribbons halve the holdout score (dots shipped) · IR-61-NET-01 sandbox allow-list: data from the hash-pinned public bridge, not an organiser receipt · **IR-61X-01 random-line control seed handling differs between H61-G (0.0314) and H61-X (0.0352) draws (both recorded, CIs overlap, no conclusion affected)** · **IR-61X-02 parallel session rewrote `elapsed_s` in the earlier `evidence/h61g_invert.json` (344.6 → 59.0); evidence receipts are immutable — restored in this merge**.
 
 ## Core values
 
