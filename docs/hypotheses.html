@@ -47,6 +47,13 @@ nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:
 <tr><th>Difference from this repo / siblings</th><td>Sibling learned models trained on the whole area scored 0.029–0.042 live (sup01-hgb21, gems6_hgb88); restricting to basins and a dotted target is new.</td></tr>
 <tr><th>Expected DTI gain</th><td>Uncertain; the registry evidence is against learned 100 m models. PROJECTION.</td></tr>
 <tr><th>Cost / data</th><td>Medium–high.</td></tr></table><h2>Hypotheses already closed by this session's evidence</h2>
+<p><b>Two-scale corridor (session arena/6339e2fc, H61-X):</b> broad (800 m-smoothed) basement steps disjoint from the sharp
+base-scale step lines mark the deep buried intrabasin faults. <b>Closed negative.</b> Only 489 of 7,766 coarse-scale maxima were new
+lines; the union corridor scored 0.0463 (statistically tied with the base-only X2, 0.0465), the coarse corridor alone 0.0085 vs
+0.0352 random lines, and the literal multi-line-ribbon variant 0.0019 — all HOLDOUT-DTI on the same evaluator. The coarse steps are
+not fault-enriched at the 300 m kernel; the magnetic-edge diagnostic (0.129 on strong mag edges) shows the intrusive mimic is not
+the explanation either. The better-scoring union construction was additionally caught by the uniqueness gate as a near-duplicate of
+the H61-G file (91.7 % of its dots within 3 px) and was logged as a duplicate, not shipped.</p>
 <p>X1a pure basement-step ribbons and X1b persistent (multi-scale) steps: both at or below random lines on the segment holdout (table on <a href="holdout.html">holdout evidence</a>). Earlier sessions' H61-B…H61-E (throw/depth ratio, magnetic fabric, heat-flow conditioning, accommodation zones) remain unimplemented and are dominated by the ranking above.</p>
 <hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
 <code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
