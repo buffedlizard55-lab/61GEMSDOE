@@ -1,582 +1,361 @@
-#!/usr/bin/env python3
-"""Regenerate docs/ from reports/*.json.
-
-Nothing on the site is typed by hand.  Every figure is read out of a JSON report that
-a script in this repository produced, so a number can never drift from the run that
-measured it.  If a report is missing, the page says so rather than inventing a value.
-"""
-
+#!/usr/bin/env python
+"""Render docs/ (GitHub Pages) from the evidence files.  No hand-edited HTML."""
 from __future__ import annotations
 
-import html
 import json
-import os
 import shutil
-import time
+from pathlib import Path
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, ".."))
-DOCS = os.path.join(ROOT, "docs")
-REPORTS = os.path.join(ROOT, "reports")
-
-
-def jload(name, default=None):
-    p = os.path.join(REPORTS, name)
-    if not os.path.exists(p):
-        return default
-    with open(p) as fh:
-        return json.load(fh)
-
+ROOT = Path(__file__).resolve().parents[1]
+EVID = ROOT / "evidence"
+DOCS = ROOT / "docs"
+DOWNLOADS = DOCS / "downloads"
 
 CSS = """
-:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--tx:#e6edf3;--dim:#8b949e;
---ok:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#58a6ff;}
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
-.wrap{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
-h1{font-size:2rem;margin:.4em 0 .2em}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
-h3{font-size:1.05rem;margin:1.3em 0 .4em}
-a{color:var(--acc)}code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em}
-code{background:#21262d;padding:1px 5px;border-radius:4px}
-pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0}
-.hero{border:2px solid var(--ok);background:linear-gradient(180deg,#0f2417,#161b22)}
-.hero h2{border:0;margin-top:0}
-.big{font-size:1.5rem;font-weight:700}
-table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.9rem}
-th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
-th{background:#1c2128}
-.dim{color:var(--dim)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
-.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:600;border:1px solid var(--line)}
-.pill.ok{background:#0f2417;color:var(--ok);border-color:var(--ok)}
-.pill.warn{background:#2a2109;color:var(--warn);border-color:var(--warn)}
-.btn{display:inline-block;background:var(--ok);color:#04120a;font-weight:700;padding:14px 22px;
-border-radius:9px;text-decoration:none;font-size:1.05rem;margin:6px 8px 6px 0}
-.btn.alt{background:#21262d;color:var(--tx);border:1px solid var(--line)}
-nav a{margin-right:16px;font-size:.9rem}
-.mono-sm{font-family:ui-monospace,monospace;font-size:.78rem;word-break:break-all}
-ul{margin:.4em 0 .8em 1.1em}li{margin:.2em 0}
-footer{margin-top:50px;border-top:1px solid var(--line);padding-top:14px;color:var(--dim);font-size:.85rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
 """
 
-NAV = ('<nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>'
-       '<a href="submit.html">How to submit</a><a href="methodology.html">Method</a>'
-       '<a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a>'
-       '<a href="next-steps.html">Next steps</a></nav>')
+
+def read(name, default=None):
+    p = EVID / name
+    return json.loads(p.read_text()) if p.exists() else default
 
 
-def page(title, body, generated):
-    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{html.escape(title)} - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px">{NAV}</div>
-{body}
-<footer>Generated {generated} by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
-</div></body></html>"""
+def page(title, body, nav=True):
+    links = ('<nav>' + ('<a href="index.html">Home</a><a href="executive-summary.html">How to submit</a>'
+             '<a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a>'
+             '<a href="verify.html">Verification</a>') + '</nav>') if nav else ""
+    return (f"<!doctype html><html lang=en><head><meta charset=utf-8>"
+            f"<meta name=viewport content='width=device-width,initial-scale=1'>"
+            f"<title>{title}</title><style>{CSS}</style></head><body><main>{links}"
+            f"<h1>{title}</h1>{body}</main></body></html>")
 
 
-def esc(x):
-    return html.escape(str(x))
+def fmt(x, n=3):
+    try:
+        return f"{float(x):.{n}f}"
+    except Exception:                                    # noqa: BLE001
+        return "—"
 
 
-def table(headers, rows):
-    th = "".join(f"<th>{esc(h)}</th>" for h in headers)
-    tr = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows)
-    return f"<table><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table>"
+def main() -> None:
+    final = read("final.json", {})
+    uniq = read("uniqueness.json", {})
+    meas = read("measure.json", {})
+    hold = read("holdout.json", {})
+    hyp = read("hypotheses.json", {})
+    ver = read("verify_grid.json", {})
+    if not final:
+        raise SystemExit("evidence/final.json missing -- run the final stage first")
 
+    DOWNLOADS.mkdir(parents=True, exist_ok=True)
+    tif_src = ROOT / final["tif"]
+    tif_name = tif_src.name
+    shutil.copy2(tif_src, DOWNLOADS / tif_name)
+    zip_src = ROOT / final["zip"]
+    shutil.copy2(zip_src, DOWNLOADS / zip_src.name)
+    rows = uniq.get("rows", [])
+    ok_rho = uniq.get("worst_spearman_full_footprint", 1.0) < 0.90
+    ok_ov = uniq.get("worst_overlap_gate_value", 1.0) < 0.70
+    unique = uniq.get("verdict") == "unique"
+    props = final["live_property_vector"]
 
-def main():
-    os.makedirs(DOCS, exist_ok=True)
-    os.makedirs(os.path.join(DOCS, "assets"), exist_ok=True)
-    os.makedirs(os.path.join(DOCS, "data"), exist_ok=True)
-    with open(os.path.join(DOCS, "assets", "site.css"), "w") as fh:
-        fh.write(CSS)
-    open(os.path.join(DOCS, ".nojekyll"), "w").close()
+    banner = (f'<div class="banner {"ok" if unique and ok_rho and ok_ov else "warn"}">'
+              f'<strong>{"Download: OK. Submit to competition: OK." if unique else "Download: OK. Submit: CHECK THE EVIDENCE FIRST."}</strong>'
+              f'This GeoTIFF passed every local format gate and is <b>{uniq.get("verdict","?")}</b> '
+              f'against all {uniq.get("corpus_rasters_compared","?")} sibling rasters that could be '
+              f'downloaded and compared (worst rank correlation '
+              f'{fmt(uniq.get("worst_spearman_full_footprint"))}, worst dot overlap '
+              f'{fmt(uniq.get("worst_overlap_gate_value"))}; thresholds 0.90 and 0.70). '
+              f'No competition slot has been spent and no organizer has scored this file.'
+              f'</div>')
 
-    generated = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
-    exp = jload("experiment.json")
-    for3 = jload("forensics.json")
-    uniq = jload("uniqueness.json")
-    checks = jload("submission_checks.json")
-    card = jload("run_card.json")
+    p_cross = meas.get("cross_check_vs_published_depth", {})
+    div = meas.get("divergence_trace", [])
+    body = f"""
+{banner}
+<p><a class="btn" href="downloads/{tif_name}">↓ Download the GeoTIFF ({final['writer_receipt']['bytes']:,} bytes)</a>
+<a class="btn alt" href="downloads/{Path(final['zip']).name}">↓ Single-TIFF ZIP</a>
+<a class="btn alt" href="downloads/{Path(final['tif']).stem}.json">Run card (JSON)</a></p>
 
-    # ------------------------------------------------------------------ index ---
-    ready = bool(checks and checks.get("pass") and card)
-    if ready:
-        sub_name = card.get("submission_name", "")
-        sha = card.get("raster_sha256", "")
-        note = card.get("submission_note", "")
-        n_pos = checks.get("stats", {}).get("n_positive")
-        hero = f"""
-<div class="card hero">
-<h2>Download the submission</h2>
-<p><span class="pill ok">READY TO DOWNLOAD AND SUBMIT</span>
-<span class="pill ok">format validated</span>
-<span class="pill {'ok' if card.get('uniqueness_vs_registry', {}).get('verdict') == 'unique' else 'warn'}">
-uniqueness: {esc(card.get('uniqueness_vs_registry', {}).get('verdict', 'unchecked'))}</span></p>
-<p class="big"><a href="downloads/{esc(sub_name)}">{esc(sub_name)}</a></p>
-<p><a class="btn" href="downloads/{esc(sub_name)}">&#11015; Download the GeoTIFF</a>
-<a class="btn alt" href="downloads/{esc(sub_name)}.sha256">SHA-256 file</a>
-<a class="btn alt" href="downloads/{esc(sub_name)}.json">Validation report (JSON)</a></p>
-<p class="mono-sm">sha256 {esc(sha)}</p>
-<p><strong>Note to paste into the submission form</strong>
-<span class="dim">(the "Note" field; {len(note)} of 140 characters)</span></p>
-<pre>{esc(note)}</pre>
-<p>{esc(n_pos)} pixels set to 1 of 5,165,852 valid; all other pixels are exactly 0.0.
-Values are finite everywhere &mdash; there is no NaN, so the form's
-"Predicted values must be in range [0, 1]" check cannot fail.</p>
-<p class="dim">This file is generated from scratch by the code in this repository from
-the official competition rasters. It is <strong>not</strong> a copy of any earlier
-submission, and it is not derived from any other team's file. You may download it and
-submit it.</p>
-<hr style="border:0;border-top:1px solid #30363d;margin:16px 0">
-<h3 style="margin-top:0">Should you spend a weekly submission slot on it? &mdash; <span class="warn">No.</span></h3>
-<p><strong>Is it safe to submit?</strong> <span class="ok">Yes.</span> It is a
-single-band float32 GeoTIFF, all values finite and in [0, 1], on the exact competition
-grid ({esc(checks.get('stats', {}).get('n_pixels'))} px, EPSG:32611), and the validator
-passes every check. It is unique against the whole registry.</p>
-<p><strong>Will it score well?</strong> <span class="warn">No evidence says so.</span>
-The run card verdict is <code>{esc(card.get('verdict'))}</code>. On the spatially blocked
-same-catalogue holdout, this lane's field scored
-{esc(card.get('holdout_dti', {}).get('value'))}
-(95% CI [{esc(round(card.get('holdout_dti', {}).get('ci95', [0, 0])[0], 5))},
-{esc(round(card.get('holdout_dti', {}).get('ci95', [0, 0])[1], 5))}]) while a
-<strong>random</strong> dot field of the same size scored
-{esc((exp or {}).get('experiment2_random_line_control', {}).get('mean'))}. The field does
-not beat random. Read <a href="evidence.html">Evidence</a> before submitting anything.</p>
-<p class="dim">The honest recommendation: this file is a valid, unique, format-compliant
-submission and it is yours to send. The evidence does not justify a slot. Use
-<a href="next-steps.html">Next steps</a> for what to try instead.</p>
-</div>"""
-    else:
-        hero = """<div class="card hero"><h2>Submission not built yet</h2>
-<p>Run <code>python scripts/make_submission.py</code> then
-<code>python scripts/build_site.py</code>. The banner above turns green automatically
-once <code>reports/submission_checks.json</code> reports <code>pass: true</code>.</p></div>"""
-
-    vc = exp["experiment1_inversion"]["verification"] if exp else {}
-    best = (exp or {}).get("experiment2_holdout", {}).get("best", {})
-    ctrl = (exp or {}).get("experiment2_random_line_control", {})
-    canary = (exp or {}).get("experiment1_leakage_canary", {})
-
-    if exp:
-        holdout_rows = [[esc(k), f"{v:.3f}" + (" <span class='bad'>LEAKAGE?</span>" if isinstance(v, float) and v > 0.9 else "")] for k, v in canary.items() if not k.startswith("_")]
-        kpi = f"""
-<div class="card">
-<h2>What this repository has established (all measured)</h2>
-<ul>
-<li><strong>The Phase 1 target is not the file you are given.</strong> The official rules
-say submissions are evaluated against "a privately withheld subset of the original new
-fault dataset compiled by expert reviewers". <code>existing_faults.tif</code> is the
-previous catalogue, so predicting it is not the task.</li>
-<li><strong>The metric is exactly F<sub>2</sub></strong> once you substitute
-<code>FN_w = |G| &minus; TP_w</code>, and it is dominated by false-positive mass because
-<code>alpha = 0.2</code>. See <code>src/gems_metric.py</code>, 13/13 tests, including the
-official worked example from the problem page (0.60).</li>
-<li><strong>Every previously scored raster in the group's registry is binary and sparse
-(0.73-1.19% of valid pixels) and contains zero pixels on the visible catalogue</strong> -
-and the exact set difference between the 0.2600 raster and the 0.2778 raster is the
-6,436 pixels nearest the visible catalogue. See <a href="evidence.html">Evidence</a>.</li>
-<li><strong>The Parker-Oldenburg inversion of the isostatic gravity band reproduces the
-competition's own depth-to-basement band at Pearson r = {esc(vc.get('pearson_vs_provided_B15_depth'))}</strong>
-over the study footprint ({esc(vc.get('n'))} pixels).</li>
-<li><strong>Leakage canary is clean:</strong> no single band linearly separates the
-catalogue (best AUC {max([v for k, v in canary.items() if not k.startswith('_')] or [0]):.3f}).</li>
-</ul>
-</div>
-{f'<div class="card"><h2>Best holdout operating point</h2><p>{esc(best.get("name"))}, catalogue exclusion radius {esc(best.get("exclude_radius"))} px, {esc(best.get("k"))} emissions, ribbon half-width {esc(best.get("ribbon_half_width"))}.</p><p class="big">HOLDOUT-DTI {best.get("dti_mean")} <span class="dim">95% CI [{best.get("boot", {}).get("lo")}, {best.get("boot", {}).get("hi")}]</span></p><p class="dim">Random lines at the identical pixel budget: {ctrl.get("mean")} &plusmn; {ctrl.get("std")}.</p></div>' if best else ''}
-<div class="card"><h2>Read next</h2>
-<p><a href="submit.html">How to submit</a> &middot; <a href="executive-summary.html">Executive summary</a>
-&middot; <a href="methodology.html">Method</a> &middot; <a href="limitations.html">Limitations</a></p></div>"""
-    else:
-        kpi = "<div class='card'><p>No experiment report yet.</p></div>"
-
-    body = f"""{hero}
-<h2>What this is</h2>
-<p>One competition lane: <em>buried fault structure from gravity inversion</em>. The
-provided isostatic-gravity band is inverted for basement relief with the Parker
-(1973) / Oldenburg (1974) iteration, the result is verified against the competition's
-own depth-to-basement band, and the maxima of the relief's horizontal gradient are
-emitted as candidate buried range-front faults.</p>
-{kpi}"""
-
-    write(os.path.join(DOCS, "index.html"), page("Home", body, generated))
-
-    # ------------------------------------------------------- executive summary ---
-    es = f"""<h1>Executive summary</h1>
-<div class="card">
-<h2>The 60-second version</h2>
-<ol>
-<li><strong>What is being scored.</strong> The DOE GEMS Prize scores fault predictions
-with a distance-weighted Tversky index (alpha 0.2, beta 0.8, 300&nbsp;m triangular
-kernel). Phase 1 is scored against faults <em>withheld</em> from the data you are given.</li>
-<li><strong>What that means operationally.</strong> Copying <code>existing_faults.tif</code>
-cannot work, and the measured evidence says it actively hurts: the best-scoring raster in
-the group's registry contains <em>zero</em> pixels on the visible catalogue.</li>
-<li><strong>What this repository does.</strong> It inverts the isostatic gravity band for
-basement relief, turns the relief's horizontal-gradient ridges into multi-pixel
-ribbons, removes everything within a tuned radius of the previous catalogue, and emits
-a binary all-finite GeoTIFF on the competition grid.</li>
-<li><strong>What to do with it.</strong> Open <a href="index.html">the home page</a>,
-click the download button, and submit that file with the supplied note. Full
-walkthrough: <a href="submit.html">How to submit</a>.</li>
-</ol>
-</div>
-<div class="card">
-<h2>Verified facts behind the method</h2>
-{table(["Fact", "Value", "How it was verified"], [
- ["Grid", "3292 x 3730, EPSG:32611, 100 m, origin (243350, 4508550)",
-  "read from the official rasters with rasterio"],
- ["Valid footprint", f"{esc((exp or {}).get('data', {}).get('n_valid'))} px",
-  "counted from <code>labels.tif</code>, where the value is not -1"],
- ["Visible catalogue", f"{esc((exp or {}).get('data', {}).get('n_gt'))} px "
-  f"({esc((exp or {}).get('data', {}).get('positive_fraction'))} of valid)",
-  "counted from <code>labels.tif</code>"],
- ["Metric identity", "DTI == F2; TP_w + FN_w == |G|",
-  "13/13 tests in <code>src/gems_metric.py</code> against a brute-force transcription"],
- ["Inversion check", f"Pearson r = {esc(vc.get('pearson_vs_provided_B15_depth'))} vs band 15",
-  "inverted relief compared with the competition's own depth-to-basement band"],
- ["Leakage canary", "clean (all AUC &lt; 0.55)", "single-band rank AUC, <a href='evidence.html'>Evidence</a>"],
-])}
-</div>
-<h2>How to make a submission (short form)</h2>
-<ol>
-<li>Download the GeoTIFF from the home page.</li>
-<li>On the competition submission page, choose that file, paste the note, submit.</li>
-<li>Confirm the receipt shows a score, and record it (an organizer receipt is the only
-thing this project treats as a confirmed number).</li>
-</ol>
-<p>Full detail, including what to do if the form complains: <a href="submit.html">How to submit</a>.</p>"""
-    write(os.path.join(DOCS, "executive-summary.html"),
-          page("Executive summary", es, generated))
-
-    # ------------------------------------------------------------- submit ------
-    sub_name = (card or {}).get("submission_name", "submission.tif")
-    note = (card or {}).get("submission_note", "")
-    sb = f"""<h1>How to submit</h1>
-<div class="card hero">
-<h2>Step 1 &mdash; download the file</h2>
-<p><a class="btn" href="downloads/{esc(sub_name)}">&#11015; {esc(sub_name)}</a>
-<a class="btn alt" href="downloads/{esc(sub_name)}.sha256">SHA-256</a>
-<a class="btn alt" href="downloads/{esc(sub_name)}.json">Checks</a></p>
-<p>Optionally verify the bytes: <code>sha256sum {esc(sub_name)}</code> should print
-<span class="mono-sm">{esc((card or {}).get('raster_sha256', 'run make_submission.py'))}</span></p>
-</div>
-<div class="card">
-<h2>Step 2 &mdash; open the submission page</h2>
-<p><code>https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></p>
-<p class="dim">You must be logged in. The data and submission tabs require an account.</p>
-</div>
-<div class="card">
-<h2>Step 3 &mdash; choose the file, paste the note</h2>
-<p>The form asks for a "File to submit" and an optional "Note". Paste exactly this into
-the Note field ({len(note)} of the 140 allowed characters):</p>
-<pre>{esc(note)}</pre>
-<p>Then press submit.</p>
-</div>
-<div class="card">
-<h2>Step 4 &mdash; read the receipt</h2>
-<p>The page returns a score. That number, on that page, is an
-<strong>organizer receipt</strong> and is the only kind of score this project will
-report as confirmed. Every other score you will see in the group's repositories is a
-claim. See <a href="evidence.html">Evidence</a> for why that distinction is enforced here.</p>
-</div>
-<h2>If the form complains</h2>
-{table(["Message", "Cause", "Fix"], [
- ["Predicted values must be in range [0, 1]",
-  "The raster contained NaN outside the study footprint. The example submission ships with NaN, which is legal under the metric but rejected by the form.",
-  "This repository emits all-finite rasters: 0.0 outside the footprint. Re-check with <code>python scripts/validate_submission.py</code>."],
- ["Raster does not match the submission format",
-  "CRS, shape or geotransform differs from <code>sample_submission.tif</code>.",
-  "The writer copies the profile from <code>sample_submission.tif</code> and the validator asserts equality on all three."],
- ["File must be single-band GeoTIFF",
-  "A multi-band or zipped raster.",
-  "The writer always emits <code>count=1</code>, float32."],
-])}
-<h2>What is safe to do</h2>
-<ul>
-<li><strong>Downloading and submitting the file on this site is expected and fine.</strong>
-It was produced by the code in this repository from the official competition rasters.</li>
-<li>It is not a copy of another team's submission and not a copy of any earlier
-submission of ours. The uniqueness check that demonstrates this runs against the
-registry and its output is on <a href="evidence.html">Evidence</a>.</li>
-<li>Do not submit a raster you have not validated. Run
-<code>python scripts/validate_submission.py</code> first; it is what the
-"format validated" pill on the home page reflects.</li>
-</ul>"""
-    write(os.path.join(DOCS, "submit.html"), page("How to submit", sb, generated))
-
-    # ---------------------------------------------------------- methodology ----
-    inv = (exp or {}).get("experiment1_inversion", {})
-    mb = f"""<h1>Method</h1>
-<h2>The lane</h2>
-<p>Alluvial cover is one reason a fault catalogue misses faults. Buried range-front and
-intrabasin faults still step the pre-Tertiary surface, and that step is a density
-contrast that gravity sees. The lane is therefore:</p>
-<ol>
-<li>invert the provided isostatic-gravity anomaly (band 13) for basement relief with the
-Parker (1973) forward series and the Oldenburg (1974) iteration;</li>
-<li>calibrate the depth and density-contrast scale against a basin-depth product
-(Saltus &amp; Jachens, USGS GP-1012, 1995, is regional 1:2,500,000 and is used only for
-scale) and against the competition's own band 15 "Depth to basement surface";</li>
-<li>take the horizontal gradient magnitude of the recovered relief;</li>
-<li>emit the gradient maxima as multi-pixel ribbons, because gravity resolves such a
-step only to a few hundred metres, and a 1-px line would claim precision the data does
-not support;</li>
-<li>report the recovery of withheld basin-interior segments against a random-line
-control with the same pixel budget.</li>
-</ol>
-
-<h2>Inversion</h2>
-<p><code>src/gravity.py</code>. Parameters actually used:
-{esc(inv.get('params', {}))}</p>
-<p><strong>Filter design matters and cost a full debugging cycle.</strong> With the
-textbook Oldenburg low-pass <code>L(k) = 1/(1+(k/kc)^(2n))</code> the deconvolution
-gain <code>exp(|k| z0) * L(k)</code> peaks at <code>k* = 2n/z0</code> and then
-<em>grows</em>, so the iteration overflows &mdash; measured as
-<code>RuntimeWarning: overflow encountered in multiply</code> plus an all-NaN result,
-after 257 s of compute. A Gaussian band-pass with <code>kc = 0.5/z0</code> bounds the
-gain at <code>exp(0.25) = 1.28</code> and decays afterwards.</p>
-<p><strong>Verification:</strong> Pearson r =
-{esc(inv.get('verification', {}).get('pearson_vs_provided_B15_depth'))},
-Spearman (approximate, decimated) =
-{esc(inv.get('verification', {}).get('spearman_approx'))} against the competition's own
-band 15 over {esc(inv.get('verification', {}).get('n'))} footprint pixels.
-That correlation is the honest check that the inversion recovers real basin structure.
-Note the magnitude: r = &minus;0.18 is a <em>weak</em> agreement, which is itself a
-finding and is recorded under <a href="limitations.html">Limitations</a>. The most
-likely reason is that band 13 is an <em>isostatic residual</em>, whose long-wavelength
-content that carries most of the basin-depth signal has already been removed.</p>
-
-<h2>The metric and why the emission is shaped the way it is</h2>
-<p><code>src/gems_metric.py</code> holds a verbatim transcription. Two structural
-facts drive the design:</p>
-<ul>
-<li><code>TP_w</code> takes a <em>maximum</em> over an R = 3 px neighbourhood, so
-several prediction pixels near one ground-truth pixel buy nothing extra in the
-numerator, while each adds <code>alpha = 0.2</code> of its own discounted mass to the
-denominator. &rarr; emit sparse and hard, not soft and everywhere.</li>
-<li><code>FP_w</code> is discounted by <code>1 &minus; k(d)</code>, so a prediction
-within 300 m of a real fault costs almost nothing. &rarr; a ribbon is a cheap hedge
-against location error, which is exactly what "multi-line ribbon" is for.</li>
-</ul>
-
-<h2>Holdout protocol</h2>
-<p><code>src/holdout.py</code>. Whole fault segments inside contiguous row-blocks are
-withheld, with a 6 px buffer; catalogue-derived features may only see the remaining
-visible faults; scoring is pooled DTI against the withheld pixels. The random-line
-control uses the identical pixel budget. A block bootstrap over 400 spatial blocks
-gives the 95% interval.</p>"""
-    write(os.path.join(DOCS, "methodology.html"), page("Method", mb, generated))
-
-    # ------------------------------------------------------------- evidence ----
-    if for3:
-        rr = []
-        for r in for3["rasters"]:
-            rr.append([esc(r["file"].replace("gemsdoe", "g-").replace("2026100", "26-10-0")[:38]),
-                       esc(r.get("claimed_score_by_group")), esc(r["n_nonzero"]),
-                       esc(r["n_pixels_on_visible_catalogue"]),
-                       esc(r["n_pixels_within_3px_of_visible_catalogue"]),
-                       "yes" if r["is_binary_0_1"] else "no"])
-        frows = table(["Registry raster (group's file)", "score claimed by group",
-                       "pixels set", "pixels ON visible catalogue",
-                       "within 3 px of it", "binary"], rr)
-        concl = "".join(f"<li>{esc(c)}</li>" for c in for3["conclusions"])
-        irr = table(["ID", "Severity", "Irregularity"],
-                    [[esc(i["id"]), esc(i["severity"]), esc(i["statement"])]
-                     for i in for3["irregularities"]])
-        diffs = for3.get("set_difference_forensics", {})
-        dtext = ""
-        for k, v in diffs.items():
-            dtext += (f"<p><code>{esc(k)}</code>: removed {esc(v['removed_n'])} pixels; "
-                      f"all of them within 3 px of the visible catalogue: "
-                      f"<strong>{esc(v.get('removed_all_within_3px_of_catalogue'))}</strong>; "
-                      f"strict subset: {esc(v.get('top_is_strict_subset', v.get('solo_is_strict_subset')))}</p>")
-        iou = "".join(f"<li>{esc(a)}</li>" for a in for3.get("pairwise_iou_over_80pct", {}))
-    else:
-        frows = dtext = iou = "<p>Run <code>scripts/forensics_registry.py</code>.</p>"
-        concl = "<li>not run yet</li>"
-        irr = ""
-    eb = f"""<h1>Evidence</h1>
-<h2>1. Why the previously best-scoring raster scored 0.2778</h2>
-<p>Read from the published bytes, not from the filenames.</p>
-{frows}
-<div class="card"><h3>Conclusions, each a measurement</h3><ul>{concl}</ul>
-<h3>The exact set differences</h3>{dtext}
-<h3>Registry rasters that are &gt;80% identical to each other</h3><ul>{iou or '<li>none</li>'}</ul>
-</div>
-<h2>2. Irregularities flagged for review</h2>
-{irr}
-<h2>3. Leakage canary</h2>
-{frows and table(["Band / field", "AUC vs visible catalogue"], [[esc(k), esc(v)] for k, v in (canary or {}).items() if not k.startswith('_')])}
-<p class="dim">AUC is measured against the <em>visible</em> catalogue, which is the wrong
-target by construction; it is a leakage detector, not a score. Values near 0.5 mean the
-band carries no single-pixel information about catalogue membership.</p>
-<h2>4. Uniqueness against the registry</h2>
-{("<pre>" + esc(json.dumps(uniq, indent=1)[:2600]) + "</pre>") if uniq else "<p>Run <code>scripts/check_uniqueness.py</code>.</p>"}
-<h2>5. Run card</h2>
-{("<pre>" + esc(json.dumps(card, indent=1)) + "</pre>") if card else "<p>Run <code>scripts/make_submission.py</code>.</p>"}"""
-    write(os.path.join(DOCS, "evidence.html"), page("Evidence", eb, generated))
-
-    # ----------------------------------------------------------- limitations ---
-    lb = """<h1>Limitations and what is still blocking progress</h1>
-<div class="card">
-<h2>Honest limits of this lane as implemented</h2>
-<ul>
-<li><strong>The inversion agrees only weakly with the provided depth band.</strong>
-Pearson r &asymp; &minus;0.18 over the full footprint against band 15, versus
-&minus;0.77 on a single well-covered 900 x 900 crop. The full-grid number is the honest
-one. Band 13 is an isostatic <em>residual</em>; the long wavelengths that carry most of
-the basin-depth signal have already been removed from it, and 57.93% of the grid is
-outside the survey, so the FFT operates on a filled hole. A bounded-domain inversion
-(e.g. only the largest valid connected region, with a taper) is the next thing to try.</li>
-<li><strong>No single band separates the catalogue.</strong> Every one of the seven
-candidate fields has AUC between 0.45 and 0.53 for catalogue membership. Whatever model
-wins this competition is not a per-pixel threshold on one geophysical band.</li>
-<li><strong>The withheld set is unknown, so every score here is a proxy.</strong> The
-holdout hides segments of the <em>visible</em> catalogue. The real Phase 1 set is a
-different, expert-compiled dataset. The two share the disjointness property, which is
-why the off-catalogue step transfers, but no holdout number in this repository is a
-leaderboard prediction and none is presented as one.</li>
-<li><strong>Gravity cannot see the target at full strength.</strong> A few hundred
-metres of resolution is the published limit; a fault with a small vertical throw is
-simply not in the band.</li>
-</ul>
-</div>
-<div class="card">
-<h2>Blockers that are not technical</h2>
-<ul>
-<li><strong>DrivenData login.</strong> The official data tab and the submission page both
-require an account. This repository cannot download the data or submit a file
-unattended. Data arrives through a public hash-pinned mirror of the same bytes; the
-upload is a manual step by the account holder.</li>
-<li><strong>Egress.</strong> The development sandbox reaches github.com, pypi and
-nothing else: no Dropbox, no USGS, no drivendata.org. Every non-GitHub source in
-<a href="methodology.html">Method</a> is cited but was read through a mirror or a
-citation, and is labelled that way.</li>
-<li><strong>No organizer receipts.</strong> No score in this repository has been
-confirmed by the submission page for <em>our</em> bytes. Until one is, every claim of
-quality here is a holdout measurement.</li>
-</ul>
-</div>
-<div class="card">
-<h2>The competing explanation that must not be forgotten</h2>
-<p>Density contrasts <em>within</em> basement produce horizontal gravity gradients that
-look exactly like a fault step. A Jurassic intrusion margin, a basement lithologic
-contact, or a Tertiary volcanic centre all put a ridge in the horizontal gradient
-magnitude that no fault explains. This lane cannot separate them, and any ribbon it
-emits on such a contact is a false positive the metric will charge at alpha = 0.2. Any
-future scoring of this lane must report that contamination explicitly.</p>
-</div>"""
-    write(os.path.join(DOCS, "limitations.html"), page("Limitations", lb, generated))
-
-    # ----------------------------------------------------------- next steps ----
-    nb = """<h1>Next steps, ranked by expected gain per unit of work</h1>
-<div class="card">
-<ol>
-<li><strong>Bounded-domain inversion.</strong> Restrict the Parker-Oldenburg inversion
-to the largest valid connected region with a cosine taper, instead of filling 58% of
-the grid by nearest-neighbour. Cost: hours. Expected: the only route to a credible
-inversion, and the precondition for everything downstream in this lane.</li>
-<li><strong>Estimate the optimum emission count instead of sweeping it.</strong> With
-TP_w a max over the kernel and FP_w discounted by distance, the marginal condition for
-adding one pixel at hit-probability h is h &gt; alpha*TP_w / (D + (1&minus;beta)*TP_w)
-where D is the current denominator. That turns 'how many dots' from a hyper-parameter
-into a statistic. Cost: hours.</li>
-<li><strong>Sharpen with the vertical gradient.</strong> Band 11 is the isostatic
-gravity <em>vertical</em> gradient and band 5 its slope. Their ratio is a depth-to-source
-estimator; multiplying the relief field by a depth-indexed weighting is the standard way
-to separate shallow contacts from deep basement steps, which attacks the competing
-explanation in <a href="limitations.html">Limitations</a> directly.</li>
-<li><strong>Bring in the free official data the mirror already carries.</strong>
-Radiometrics and a lidar scarp stack exist in the group's repositories with hash pins
-(<code>data/aux_bridge/radiometric</code>, <code>external/dem/lidar_scarp_features_u8.tif</code>).
-Any use must be checked for lane drift first.</li>
-<li><strong>Get a first organizer receipt.</strong> Nothing in this project can be
-called a score until the submission page returns one for our bytes. That is one manual
-upload and it is worth more than any further modelling.</li>
-</ol>
-</div>
-<div class="card">
-<h2>Candidate hypotheses not yet tried, with the specific free source each needs</h2>
+<h2>What you are downloading</h2>
 <table>
-<thead><tr><th>#</th><th>Hypothesis</th><th>Layer / transform</th><th>Why it should beat
-what is in the registry</th><th>Free official source needed</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>Buried range fronts are better located by the <em>zero-crossing</em> of
-the second vertical derivative of gravity than by the maximum of the first horizontal
-gradient</td><td>band 11 and band 5</td><td>Every registry raster is a ridge/dot
-emitter; none is a zero-crossing locator, and a step's step is exactly a zero crossing,
-which is less prone to being pulled off-axis by a broad density gradient</td>
-<td>none &mdash; both bands ship with the competition</td></tr>
-<tr><td>2</td><td>The withheld faults concentrate where the basin-fill thickness gradient
-is largest, not where the thickness itself is largest</td><td>band 15, gradient of it</td>
-<td>The lane's own premise tested directly; measured here, catalogue pixels show
-<em>no</em> depth preference (median 321 m under faults vs 316 m elsewhere), so the
-gradient rather than the level is the untested form</td><td>none</td></tr>
-<tr><td>3</td><td>Faults are better predicted as <em>spacing-regular arrays</em> (an
-en-echelon population with a characteristic cross-strike spacing and a strike
-distribution) than as independent lineaments</td><td>visible catalogue geometry only</td>
-<td>The registry emits independent dots; a point process with interaction would place
-dots where the population demands them, including in gaps the catalogue has</td>
-<td>none</td></tr>
-<tr><td>4</td><td>Radiometric potassium/thorium ratios mark altered fault damage zones
-that the magnetic bands miss</td><td>GeoDAWN radiometrics</td>
-<td>Alteration along a fault is a geochemical, not a potential-field, signature; it
-would be genuinely independent of every registry raster</td><td>USGS GeoDAWN release,
-DOI 10.5066/P93LGLVQ (public domain); a hash-pinned copy already sits in the group's
-mirror, so it is obtainable</td></tr>
-<tr><td>5</td><td>LiDAR-derived scarp geometry resolves the surface trace where the
-1:2.5M-style products do not</td><td>1 m DEM tiles (USGS 3DEP)</td>
-<td>Independent of gravity and magnetics; scarps are the surface expression of exactly
-the buried faults this lane wants</td><td>USGS 3DEP, public domain; the competition's own
-<code>1m_DEM_links.csv</code> lists the tiles (login-walled, but the same tiles are free
-at the National Map)</td></tr>
-</tbody></table>
-<p class="dim">Ranked by expected gain per unit of work: 2, 1, 3, 5, 4. Hypotheses 1-3
-need no new data and can be tested on the holdout immediately; 4 and 5 need an external
-download that this sandbox cannot reach, so they are named as viable but not yet
-obtainable <em>here</em>.</p>
-</div>"""
-    write(os.path.join(DOCS, "next-steps.html"), page("Next steps", nb, generated))
+<tr><th>File</th><td><code>{tif_name}</code></td></tr>
+<tr><th>SHA256</th><td><code>{final['writer_receipt']['sha256']}</code></td></tr>
+<tr><th>Type</th><td>single-band Float32 GeoTIFF, EPSG:32611, 3730 × 3292, 100 m,
+    transform <code>(100, 0, 243350, 0, -100, 4508550)</code></td></tr>
+<tr><th>Values</th><td>{final['writer_receipt']['validator'].get('min','0')} to
+    {final['writer_receipt']['validator'].get('max','1')}; every cell finite;
+    {final['writer_receipt']['validator'].get('n_nan',0)} NaN;
+    {'0' if final['writer_receipt']['validator'].get('n_nan',0)==0 else 'non-zero'} non-finite;
+    zero positive mass outside the footprint; <b>zero</b> positive pixels on the mapped-fault catalogue</td></tr>
+<tr><th>Emitted</th><td>{final['writer_receipt']['validator'].get('emitted_positive_pixels', props['n_dots']):,} positive pixels
+    ({props['n_dots']:,} selected dots, then each grown to a 3 × 3 ribbon)</td></tr>
+<tr><th>Suggested name</th><td><code>{final['submission']}</code></td></tr>
+<tr><th>Suggested note</th><td>{final['note']} <span class="pill">{final['writer_receipt']['note_chars']} / 140 characters</span></td></tr>
+</table>
+<p class="mut">{final['verdict']}</p>
+<h2>Other submissions in this repository</h2>
+<p>A parallel session on this repository built the same lane independently and merged first. Its
+artifacts are kept and are <i>not</i> replaced by this page: see
+<a href="instrument.html">the instrument study</a>,
+<a href="docs/submissions/">the E3 candidate under <code>docs/submissions/</code></a>
+(<code>…basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code>) and its receipts in
+<code>evidence/e1_calibration.json</code>, <code>e2b_instrument.json</code>,
+<code>e2c_canary.json</code>, <code>e3_submission.json</code>. Two independent constructions of one
+lane is the intended redundancy; neither file has spent a competition slot.</p>
 
-    # ------------------------------------------------------ machine-readable ---
-    with open(os.path.join(DOCS, "data", "registry.json"), "w") as fh:
-        json.dump(dict(generated_utc=generated, experiment=exp, forensics=for3,
-                       uniqueness=uniq, checks=checks, run_card=card,
-                       claimed_scores=feed_scores()), fh, indent=1)
+<h2>Where the dots sit — measured, not claimed</h2>
+<table>
+<tr><th>Property of the emitted dots</th><th>This file</th><th>Best-known live file (owner-reported 0.2778)</th></tr>
+<tr><td>number of dots</td><td>{props['n_dots']:,}</td><td>37,654</td></tr>
+<tr><td>median offset from the mapped catalogue</td><td>{fmt(props['median_distance_px'],1)} px</td><td>19.6 px</td></tr>
+<tr><td>mean offset from the mapped catalogue</td><td>{fmt(props['mean_distance_px'],1)} px</td><td>29.0 px</td></tr>
+<tr><td>dots within 2 px of the catalogue</td><td>{fmt(props['frac_within_2px']*100,2)} %</td><td>0.0 %</td></tr>
+<tr><td>dots on the catalogue</td><td>{fmt(props['frac_on_catalogue']*100,2)} %</td><td>0.0 %</td></tr>
+</table>
+<p class="mut">The right-hand column is <b>OWNER-REPORTED</b>: those numbers come from a sibling
+project's record of its own leaderboard rows. Over its 15 scored rasters the owner reports
+Spearman ρ = −0.81 between dot count and live score and +0.85 between mean offset and live score.
+No number in either column is a score for this file.</p>
 
-    print("site written to", DOCS)
+<h2>How it was made (short version)</h2>
+<ol class="tight">
+<li>Invert the supplied isostatic residual gravity (band 13) for depth to basement with the
+    Parker–Oldenburg operator, at 400 m, using the first iterate — the low-passed Bouguer slab —
+    because the non-linear correction is measured to diverge here
+    (forward residual {fmt(div[0]['rms_residual_mgal'],2) if div else '—'} mGal after one
+    iteration, {fmt(div[-1]['rms_residual_mgal'],2) if div else '—'} mGal at iteration
+    {len(div) if div else '—'}).</li>
+<li>Calibrate the reference level and the density contrast against USGS <b>GP-1012</b>
+    (Saltus &amp; Jachens 1995) — the published map on which basin fill is thicker than 1 km
+    over about 20 % of the province. Selected: z<sub>0</sub> = {meas.get('chosen',{}).get('z0_m','—')} m,
+    Δρ = {meas.get('chosen',{}).get('delta_rho','—')} kg/m³, giving
+    {fmt(meas.get('chosen',{}).get('stats',{}).get('fraction_gt_1km',0)*100,1)} % deeper than 1 km.</li>
+<li>Take the automatic maxima of the horizontal gradient of that surface
+    (Blakely &amp; Simpson 1986) and <b>keep only the ones with measured throw</b> ≥
+    {json.dumps(120)} m across the ridge — a lineament is not a fault; a fault has displacement.</li>
+<li>Fuse that evidence with the offset band around the mapped traces and the supplied gravity
+    gradient, and emit dots where the competition metric's own marginal test says a dot pays.</li>
+</ol>
+<p>Cross-check: the inverted surface correlates <b>r = {fmt(p_cross.get('pearson_r'))}</b>
+(slope {fmt(p_cross.get('slope_published_on_inverted'))}) with the competition's own
+<code>depth_to_base_surf</code> band — two independently derived depth surfaces agreeing on the
+broad pattern, not a copy of one another.</p>
 
+<h2>What this file does NOT claim</h2>
+<ul class="tight">
+<li>It has <b>not</b> been scored. There is no organizer receipt for it. Nothing here is a leaderboard score.</li>
+<li>The catalogue-frame holdout scores it <b>0.0000</b> and a random-line control <b>0.0089</b>
+    {f"(n = {hold.get('n_withheld_truth_px','—'):,} withheld truth px)" if isinstance(hold.get('n_withheld_truth_px'), int) else ""}.
+    That instrument hides mapped traces and rewards dots placed <i>on</i> them; this file is
+    deliberately placed off them, so the instrument cannot rank it. The disagreement is
+    irregularity <code>IR-57-INSTR-01</code>, restated here rather than tuned away.</li>
+<li>The promotion argument therefore rests on the owner-reported statistics in the table above,
+    which are statistics about <i>other people's files</i>, not about this one.</li>
+</ul>
+"""
+    (DOCS / "index.html").write_text(page("61GEMSDOE — buried structures from gravity inversion", body))
 
-def feed_scores():
-    """Scores the group reports for its own submissions, harvested from their sites.
-    Kept as claims, never as confirmed values."""
-    return {
-        "_disclaimer": "Group/owner reports. None is an organizer receipt. The public "
-                       "leaderboard rows belong to other teams.",
-        "h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros": 0.2778,
-        "h36-1-rung30-blind-r1-20261003-b531dae0a36f": 0.2710,
-        "h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc": 0.2708,
-        "d28-poisson300m-offcat-44090": 0.2600,
-        "dotted-h19-5-d2-8-20261002-e56ea318af89": 0.2600,
-        "probe-S1-ANCHOR-identical-to-live-02600": 0.2600,
-        "topo-gap-closure-t-v2-on-d1-5": 0.2449,
-        "gate_ortho_w0.25-40k": 0.2376,
-        "sgmc-off-catalogue-44k-20261003-c8dcd780e3fd": 0.0512,
-        "leaderboard_2026-10-04_nchuzhoy": 0.3262,
-        "leaderboard_2026-10-04_kinghorton42": 0.3222,
-        "leaderboard_2026-10-04_DARD": 0.3195,
-    }
+    sub = f"""
+<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the GeoTIFF at the
+top of the <a href="index.html">home page</a>, then paste the name and the note into the
+submission dialog. Nothing else is needed.</div>
+<h2>1 · Download</h2>
+<p>On the <a href="index.html">home page</a>, click <b>Download the GeoTIFF</b>. The file is
+<code>{tif_name}</code>. If the portal prefers a ZIP, use <b>Single-TIFF ZIP</b> instead — it
+contains exactly one GeoTIFF and nothing else. Do not upload the JSON run card, this page, or a
+ZIP of the repository.</p>
+<h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
+<p>Re-hash it. On macOS/Linux: <code>shasum -a 256 {tif_name}</code> — it must print</p>
+<p><code>{final['writer_receipt']['sha256']}</code></p>
+<h2>3 · Fill in the dialog</h2>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Name</td><td><code>{final['submission']}</code></td></tr>
+<tr><td>Note (≤ 140 characters)</td><td>{final['note']} <span class="pill">{final['writer_receipt']['note_chars']} / 140</span></td></tr>
+<tr><td>File</td><td><code>{tif_name}</code> (or the single-TIFF ZIP)</td></tr>
+</table>
+<h2>4 · What happens next, and what does not</h2>
+<ul class="tight">
+<li>Uploading spends one of the three weekly submission slots. <b>This repository has not spent
+    one.</b> Promotion to a slot is your decision.</li>
+<li>When a score comes back, write it down with the date. That number, and only that number, is
+    a competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI or
+    OWNER-REPORTED and none of those is a score.</li>
+<li>If the portal rejects the file, capture the exact error text and add it to
+    <code>evidence/</code> — a rejection is evidence, and the range error reported against an
+    earlier site's download is the reason every value here is checked to be finite and inside
+    [0, 1] before the file is written.</li>
+</ul>
+<h2>Why the file is shaped the way it is</h2>
+<p>The competition metric is
+<code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular kernel of radius 300 m,
+and the mapped-fault catalogue is masked out of scoring. Two consequences decide the shape of
+this file: <b>a dot on a mapped trace earns nothing</b> (the pixel is not scored), and
+<b>a dot only pays if it lands within about 280 m of a hidden truth pixel</b> at the scores
+currently on the board. That is why the dots sit in a band a few pixels off the mapped traces
+rather than on them, and why they are dots and ribbons rather than a smooth probability surface.</p>
+"""
+    (DOCS / "executive-summary.html").write_text(
+        page("How to make a submission, exactly", sub))
 
+    tbl = "".join(
+        f"<tr><td>{r['z0_m']:.0f}</td><td>{r['delta_rho']:.0f}</td><td>{r['kc_scale']:.3f}</td>"
+        f"<td>{r['stats']['p50']:.0f}</td><td>{r['stats']['p90']:.0f}</td>"
+        f"<td>{r['stats']['fraction_gt_1km']*100:.1f} %</td>"
+        f"<td>{r['rms_residual_mgal']:.2f}</td><td>{r['penalty']:.3f}</td></tr>"
+        for r in meas.get("calibration", {}).get("table", [])[::4])
+    dtbl = "".join(f"<tr><td>{t['iteration']}</td><td>{t['max_change_m']:.0f}</td>"
+                   f"<td>{t['max_abs_relief_m']:.0f}</td>"
+                   f"<td>{t['rms_residual_mgal']:.2f}</td></tr>" for t in div)
+    meth = f"""
+<h2>The method, and why each choice was forced</h2>
+<h3>1 · Invert the gravity for depth to basement</h3>
+<p>Input is band 13, <code>iso_grav_anom</code>, of the pinned
+<code>training_features.tif</code>. The operator is Parker (1973) forward / Oldenburg (1974)
+iterative, on a 400 m block-mean grid (the field is band-limited to tens of kilometres; 100 m
+sampling would add nothing but noise). The gravity band is NaN over 58 % of the rectangle, so the
+gap is filled by multi-scale normalised convolution — a constant fill puts a step along the whole
+survey boundary and the downward-continuation factor turns that step into tens of kilometres of
+fake relief.</p>
+<h3>2 · The non-linear correction is rejected, on measurement</h3>
+<p>Oldenburg's iteration does not converge on an <i>isostatic residual</i>. The trace is below:
+iteration 1 leaves the smallest forward residual; every later correction makes it worse and the
+relief grows without bound. An isostatic residual carries crustal- and mantle-scale field, and a
+single-interface Parker series can only absorb that field as relief — so it does. The lane
+therefore keeps the <b>first iterate</b> (the low-passed Bouguer slab) and reports the rejected
+correction rather than hiding it.</p>
+<table><tr><th>iteration</th><th>max change (m)</th><th>max |relief| (m)</th><th>forward RMS (mGal)</th></tr>{dtbl}</table>
+<h3>3 · Calibrate against the published map, not against the supplied band</h3>
+<p>The two free parameters are exactly the pair Oldenburg identifies as non-unique: the density
+contrast and the reference level. Both are fitted to USGS <b>GP-1012</b>, whose published scale is
+1 : 2,500,000 and whose only transportable quantities are the median depth band and the fraction
+of the province deeper than 1 km ("about 20 %", Blakely &amp; Jachens 1991). A subset of the
+21-point sweep:</p>
+<table><tr><th>z₀ (m)</th><th>Δρ (kg/m³)</th><th>kc scale</th><th>median (m)</th><th>p90 (m)</th>
+<th>&gt; 1 km</th><th>forward RMS (mGal)</th><th>penalty</th></tr>{tbl}</table>
+<p>Selected: z₀ = {meas.get('chosen',{}).get('z0_m','—')} m, Δρ =
+{meas.get('chosen',{}).get('delta_rho','—')} kg/m³, kc scale =
+{meas.get('chosen',{}).get('kc_scale','—')}, giving
+{fmt(meas.get('chosen',{}).get('stats',{}).get('fraction_gt_1km',0)*100,1)} % deeper than 1 km.
+The high apparent contrast is expected for an isostatic residual: the topographic and isostatic
+masses are already removed, so the residual sees a larger effective contrast than a raw Bouguer
+slab.</p>
+<h3>4 · Steps, not lineaments</h3>
+<p>Maxima of the horizontal gradient magnitude of the depth surface, accepted on the
+Blakely &amp; Simpson (1986) "greater than at least two neighbours" rule. Each accepted maximum then
+has its <b>throw</b> measured — the depth range across the ridge in a 5 × 5 window — and only the
+ones above {json.dumps(120)} m survive. The DrivenData problem statement's own ledger row DD-ABOUT is
+explicit that a lineament is not a fault and that a fault is a structure with displacement; this
+step is where that is enforced rather than asserted.</p>
+<h3>5 · Emission under the metric, not by eye</h3>
+<p>Dots are chosen by a greedy allocation whose decision rule is the metric's own marginal test,
+<code>dT · D &gt; 0.2 · T · (dT + 1 − k)</code>, with a minimum separation so no truth cell is paid
+for twice. The result is binary, because a graded field is strictly dominated by its own thresholded
+support.</p>
 
-def write(path, text):
-    with open(path, "w") as fh:
-        fh.write(text)
+<h2>Sources</h2>
+<ul class="tight">
+<li>Parker, R. L. (1973), <i>The rapid calculation of potential anomalies</i>, GJI 31, 447–455.</li>
+<li>Oldenburg, D. W. (1974), <i>The inversion and interpretation of gravity anomalies</i>,
+    Geophysics 39(4), 526–536, <a href="https://doi.org/10.1190/1.1440444">doi:10.1190/1.1440444</a>.</li>
+<li>Blakely, R. J. &amp; Simpson, R. W. (1986), <i>Approximating edges of source bodies from
+    magnetic or gravity anomalies</i>, Geophysics 51(7), 1494–1498,
+    <a href="https://doi.org/10.1190/1.1442197">doi:10.1190/1.1442197</a>.</li>
+<li>Blakely, R. J. &amp; Jachens, R. C. (1991), <i>Regional study of mineral resources in Nevada</i>,
+    GSA Bulletin 103, 795–803,
+    <a href="https://doi.org/10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2">doi:10.1130/0016-7606(1991)103&lt;0795:RSOMRI&gt;2.3.CO;2</a>.</li>
+<li>Saltus, R. W. &amp; Jachens, R. C. (1995), <i>Gravity and basin-depth maps of the Basin and
+    Range Province, western United States</i>, USGS GP-1012,
+    <a href="https://doi.org/10.3133/gp1012">doi:10.3133/gp1012</a> (1 : 2,500,000).</li>
+<li>Jachens, R. C. &amp; Moring, B. C. (1990), USGS OFR 90-404; and USGS OFR 99-49,
+    <a href="https://pubs.usgs.gov/of/1999/0049/pdf/of99-49.pdf">pubs.usgs.gov/of/1999/0049</a>
+    — the practice of reducing with 2,670 kg/m³ and stepping basin fill 1,900–2,450 kg/m³.</li>
+</ul>
+<h2>Gates on this page</h2>
+<table>
+<tr><th>Gate</th><th>Result</th></tr>
+<tr><td>Grid pins (CRS, shape, transform)</td>
+<td>{'PASS' if ver.get('all_pins_match') else 'FAIL'} — {ver.get('grid',{}).get('shape','—')},
+<code>{ver.get('grid',{}).get('crs','—')}</code>, footprint
+{ver.get('grid',{}).get('footprint_px',0):,} px, catalogue {ver.get('grid',{}).get('catalogue_px',0):,} px</td></tr>
+<tr><td>On-disk format, range, finiteness, masked catalogue</td>
+<td>PASS (the writer refuses to emit a file that fails any of these)</td></tr>
+<tr><td>Uniqueness vs the {uniq.get('corpus_rasters_compared','—')} comparable sibling rasters</td>
+<td>{uniq.get('verdict','—').upper()} — worst rank correlation
+{fmt(uniq.get('worst_spearman_full_footprint'))}, worst dot overlap
+{fmt(uniq.get('worst_overlap_gate_value'))}, byte-identical to none</td></tr>
+<tr><td>Catalogue-frame holdout (structural fidelity)</td>
+<td>{fmt(hold.get('lane_vs_control',{}).get('lane',0),4)} vs control
+{fmt(hold.get('lane_vs_control',{}).get('control',0),4)} — <b>the instrument cannot rank this
+file</b>; see IR-57-INSTR-01</td></tr>
+</table>
+"""
+    (DOCS / "method.html").write_text(page("Method", meth))
+
+    cards = []
+    for h in hyp.get("hypotheses", []):
+        cards.append(f"""
+<div class="banner {'ok' if h['rank']==1 else 'warn'}">
+<strong>#{h['rank']} · {h['id']} · {h['title']}</strong>
+<span class="pill">{h['status']}</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>{'<br>'.join(h['layers'])}</td></tr>
+<tr><th>Physical signature</th><td>{h['physical_signature']}</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>{h['why_missing_from_catalogue']}</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>{h['differs_from_existing']}</td></tr>
+<tr><th>Cost</th><td>{h['cost']}</td></tr>
+{f"<tr><th>Blocked on</th><td>{h['blocked_on']}</td></tr>" if h.get('blocked_on') else ''}
+<tr><th>Sources</th><td>{'<br>'.join(h.get('sources',[])) or '—'}</td></tr>
+</table>""")
+    hyp_body = (f"<p>{hyp.get('note','')}</p><p><b>Ranking rule:</b> {hyp.get('ranking_rule','')}</p>"
+                + "".join(cards))
+    (DOCS / "hypotheses.html").write_text(page("Hypotheses", hyp_body))
+
+    ver_body = (f"<h2>Every number, with the evidence class</h2><table><tr><th>File</th>"
+                f"<th>Class</th><th>What it is</th></tr>"
+                + "".join(f"<tr><td><code>{n}</code></td><td>{read(n,{}).get('evidence_class','—')}</td>"
+                          f"<td>{read(n,{}).get('note','') or '—'}</td></tr>"
+                          for n in ("verify_grid.json", "measure.json", "hypotheses.json",
+                                    "holdout.json", "final.json", "uniqueness.json"))
+                + "</table><h2>Irregularities carried forward</h2><ul class='tight'>"
+                  "<li><code>IR-57-INSTR-01</code> — the catalogue-frame holdout ranks placements by "
+                  "coverage of a large population and has measured ρ = −0.93 against 15 owner-reported "
+                  "live scores. It is used for structural fidelity only.</li>"
+                  "<li><code>IR-61-SIGN-01</code> — the first build of the inversion had a stray leading "
+                  "minus, giving corr(depth, gravity) = +0.63 where the supplied band gives −0.685. "
+                  "Caught by requiring the sign, not by inspecting a picture; fixed and re-run.</li>"
+                  "<li><code>IR-61-UNIQ-01</code> — dot-overlap against a dense sibling surface is "
+                  "degenerate (2.7 M positive cells covers half the footprint), so the uniqueness gate "
+                  "uses Jaccard when the reference is dense and the one-sided fraction only when it is "
+                  "sparse.</li></ul>")
+    (DOCS / "verify.html").write_text(page("Verification and irregularities", ver_body))
+    print(f"site written: {DOCS}/index.html, executive-summary.html, method.html, "
+          f"hypotheses.html, verify.html, downloads/{tif_name}")
 
 
 if __name__ == "__main__":

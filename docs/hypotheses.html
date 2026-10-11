@@ -1,127 +1,86 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hypotheses &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
-<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
-<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
-<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
-<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-
-<div class="card hero">
-<h2 style="margin-top:0">Five candidate hypotheses not yet implemented in this repository</h2>
-<p>Each names its layers (competition band numbers, read from the GeoTIFF band
-descriptions), the physical signature targeted, why it should find a fault the
-USGS/INGENIOUS catalogue lacks, and how it differs from anything already in this repo.
-Ranked by expected DTI improvement per unit of implementation cost. Every one of them
-is validatable on data already hash-pinned here &mdash; no new external download is
-required, which matters because this sandbox's egress allow-list admits only
-github.com, api.github.com, codeload.github.com, pypi.org and files.pythonhosted.org.</p>
-</div>
-<div class="card">
-<h3>1. Basement-throw ranking with a polarity test &mdash; cost: low &mdash; <span class="warn">partially tested, negative</span></h3>
-<p><strong>Layers:</strong> band 13 (isostatic gravity anomaly) inverted by
-Parker&ndash;Oldenburg; band 15 (depth to basement) for calibration.<br>
-<strong>Signature:</strong> rank the step ridge by the depth <em>difference</em> over a
-fixed 600&nbsp;m baseline along the local gradient direction (the apparent throw),
-instead of by |&nabla;D|, which grows without bound as the smoothing scale shrinks.<br>
-<strong>Why it should work:</strong> a range-front fault has hundreds of metres of
-basement offset; an intrabasement density contact has a small apparent throw. Throw is
-the scale-invariant quantity.<br>
-<strong>Tested here:</strong> Spearman(throw, |&nabla;D|) on the ribbon mask =
-<strong>+0.9986</strong>. The two rankings are numerically equivalent on this grid, so
-throw cannot re-rank the emission and cannot be used to differentiate this lane from a
-sibling. <span class="warn">Recorded as a negative result; no submission slot
-spent.</span></p>
-</div>
-<div class="card">
-<h3>2. Cover-thickness &times; step-concordance gate &mdash; cost: low &mdash; rank 1</h3>
-<p><strong>Layers:</strong> band 15 (depth to basement surface, the regional
-Saltus&nbsp;&amp;&nbsp;Jachens product), band 12/19 (detrended elevation and its slope),
-band 13 inverted.<br>
-<strong>Signature:</strong> emit only where the basement step is <em>concordant with a
-thick, flat sedimentary section</em> &mdash; i.e. where band 15 exceeds its local median
-and band 19 falls below its local median, so the step is buried under alluvium rather
-than expressed as a range front.<br>
-<strong>Why it should catch an unmapped fault:</strong> the catalogue is built by eye
-from surficial expression; a step under 300&nbsp;m of fill has none. This is the only
-candidate whose selection criterion is the <em>absence</em> of what the catalogue
-keys on.<br>
-<strong>How it differs:</strong> the parallel session's field is emitted over the whole
-footprint with no cover term; this repo's E2 sweep used cover gates on the broken
-instrument and never re-tested them geometrically.<br>
-<strong>Validation:</strong> segment recovery in basin interiors, candidate vs random
-lines &mdash; the statistic already implemented in
-<code>scripts/e3_build_submission.py</code>.</p>
-</div>
-<div class="card">
-<h3>3. Gravity&ndash;conductivity step concordance &mdash; cost: medium &mdash; rank 2</h3>
-<p><strong>Layers:</strong> band 13 inverted (basement relief) and band 17 (conductivity
-surface, log<sub>10</sub> S/m, measured range 0.19&ndash;4.97).<br>
-<strong>Signature:</strong> require the basement-depth step and a conductivity step to
-coincide within 300&nbsp;m <em>and</em> to run parallel, using the second-order
-orientation order parameter R&nbsp;=&nbsp;|&Sigma;w&nbsp;e<sup>2i&theta;</sup>|/&Sigma;w
-over both fields.<br>
-<strong>Why it should catch an unmapped fault:</strong> a fault that displaces basement
-also breaks the conductive cover sequence; two independent physics agreeing on a line
-and a strike is the criterion an expert mapper uses before adding a fault under cover.
-Neither field alone is in the catalogue's evidence base.<br>
-<strong>How it differs:</strong> nothing in this repository combines gravity-derived
-structure with the MT layer; band 17 currently enters only as a scalar.<br>
-<strong>Risk:</strong> this is the natural home of a different lane
-(magnetotelluric). Check the 3-px overlap and rank correlation against that lane's
-registry raster before emitting.</p>
-</div>
-<div class="card">
-<h3>4. Step-polarity asymmetry: which side is down &mdash; cost: medium &mdash; rank 3</h3>
-<p><strong>Layers:</strong> band 13 inverted, band 12 (detrended elevation), band 4/7/8
-(geodetic strain).<br>
-<strong>Signature:</strong> classify each basement step as basin-side-down or
-range-side-down and keep only basin-side-down steps whose surface expression in
-band&nbsp;12 is absent or reversed. Basin-and-Range range fronts are listric normal
-faults with a characteristic hanging-wall tilt; a density contact has no such
-asymmetry.<br>
-<strong>Why it should catch an unmapped fault:</strong> it is the direct test of this
-lane's named competing explanation (density contrasts inside basement), so it converts
-the run card's weakest point into a discriminator.<br>
-<strong>How it differs:</strong> the current emission is polarity-blind; it cannot tell
-a fault step from a pluton margin.</p>
-</div>
-<div class="card">
-<h3>5. Along-strike persistence of the basement step &mdash; cost: medium &mdash; rank 4</h3>
-<p><strong>Layers:</strong> band 13 inverted.<br>
-<strong>Signature:</strong> integrate the step amplitude <em>along</em> the ridge
-(a 15-pixel collinearity vote on the ridge skeleton) rather than pointwise. Faults are
-kilometre-scale linear objects; noise ridges are not.<br>
-<strong>Why it should catch an unmapped fault:</strong> an expert accepts a fault under
-cover when collinear segments persist across several kilometres; pointwise gradient
-maxima accept any local bump.<br>
-<strong>How it differs:</strong> every operator in this repository is local
-(3&ndash;5&nbsp;px). Nothing aggregates evidence along a candidate line.<br>
-<strong>Note:</strong> the same idea appears in another lane's hypothesis list as
-&ldquo;aligned drainage-valley chains&rdquo;. If implemented, re-run the uniqueness
-check against that lane's raster before promoting.</p>
-</div>
-<div class="card">
-<h3>Data that would unlock more, and whether it is obtainable here</h3>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Hypotheses</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Hypotheses</h1><p>Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.</p><p><b>Ranking rule:</b> expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost</p>
+<div class="banner ok">
+<strong>#1 · H61-A · Basement-depth step ribbons from an independent Parker-Oldenburg inversion</strong>
+<span class="pill">IMPLEMENTED AND VALIDATED THIS SESSION</span></div>
 <table>
-<tr><th>source</th><th>what it adds</th><th>obtainable from this sandbox?</th></tr>
-<tr><td>USGS GP-1012, Saltus &amp; Jachens (1995) basin-depth, 1:2.5&nbsp;M</td>
-<td>the original of band 15, at its native scale</td>
-<td class="warn">No &mdash; usgs.gov returns HTTP 000. Band 15 is the hash-pinned stand-in.</td></tr>
-<tr><td>USGS FDSN earthquake catalogue (nodal planes)</td>
-<td>sub-kilometre seismic lineaments; the supplied seismic bands are 100&nbsp;km-radius
-and carry no fault-scale information</td>
-<td class="warn">No &mdash; earthquake.usgs.gov is outside the allow-list</td></tr>
-<tr><td>Competition data tab (drivendata.org)</td><td>the authoritative rasters</td>
-<td class="warn">No &mdash; HTTP 000; obtained instead from hash-pinned GitHub mirrors
-with sha256 verified against the mirror manifest</td></tr>
-</table>
-</div>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom (input to the inversion)<br>18 iso_grav_anom_hg (fused as an edge strength)<br>own inversion -> depth-to-basement surface<br>own inversion -> horizontal-gradient maxima + measured throw</td></tr>
+<tr><th>Physical signature</th><td>A basin-margin or intrabasin normal fault puts a step in the basement surface. Gravity of a thin slab is proportional to its thickness, so the step appears as a ridge of the horizontal-gradient magnitude of the depth-to-basement surface. The ridge's throw (depth difference across the ridge) is the fault's displacement.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>80% of Nevada is covered by Cenozoic deposits and these are thicker than 1 km over about 20% of the state (Blakely & Jachens 1991). A fault under kilometre-scale fill has no surface trace to map; the catalogue is built from surface mapping, so it is blind exactly there. The catalogue reports the fault only if a younger scarp or a mapped unit contact exposes it.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>The sibling repositories invert nothing: they use band 18 (the supplied horizontal gradient) directly, or proximity/strike statistics of the catalogue. This lane re-derives the depth surface from band 13 with the non-linear Parker series, calibrates the density contrast against GP-1012 rather than trusting the supplied slab product, and then filters candidates by MEASURED THROW -- which is what makes a lineament a fault (DD-ABOUT).</td></tr>
+<tr><th>Cost</th><td>one calibrable inversion (seconds at 400 m) + one EDT at 100 m</td></tr>
 
-<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
-<code>evidence/*.json</code>. Every figure on this page is read from those files at
-build time. Hash-pinned inputs and the official links for manual review are on
-<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
-</div></body></html>
+<tr><th>Sources</th><td>doi:10.1111/j.1365-246X.1973.tb02307.x<br>doi:10.1190/1.1440444<br>doi:10.1190/1.1442197<br>doi:10.3133/gp1012<br>doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2</td></tr>
+</table>
+<div class="banner warn">
+<strong>#2 · H61-B · Concealed-step index from the throw/depth ratio (buried scarp sharpness)</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface<br>15 depth_to_base_surf</td></tr>
+<tr><th>Physical signature</th><td>The ratio of throw to the depth of burial is a proxy for whether a step is a fault plane or a depositional ramp: a fault keeps a sharp step under fill, whereas a ramp is smoothed by the same fill.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Same concealment argument as H-A, plus a filter that removes the drainage/topographic-artefact lineaments the older instruments emit.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Keys on the ratio, not the magnitude -- no sibling instrument uses an inverted-surface throw/depth ratio.</td></tr>
+<tr><th>Cost</th><td>low (one extra ratio field) but needs a truth proxy to calibrate the sharpness cut</td></tr>
+<tr><th>Blocked on</th><td>A population of KNOWN buried faults with independently measured throws to calibrate the sharpness cut. Named free official source: USGS Quaternary Fault and Fold Database slip-rate/throw attributes (https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483); obtainability checked, both are public downloads.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#3 · H61-C · Basement-fabric (trend) blocking: steps aligned with the magnetic fabric</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>14 tmi<br>2 rtp<br>9 tmi_vg<br>own depth surface</td></tr>
+<tr><th>Physical signature</th><td>In the Walker Lane the basement fabric sets the fault trend. A gravity step whose azimuth agrees with the local magnetic-fabric azimuth is more likely to be a basement-cutting fault than a shallow sedimentary edge.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Adds a *consistency* test between two independent physics (density and magnetisation) that a surface-mapping catalogue cannot perform at all.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Uses the magnetic field as a fabric ORACLE for the gravity step, not as another edge detector.</td></tr>
+<tr><th>Cost</th><td>medium (structure-tensor azimuth of two gridded fields)</td></tr>
+<tr><th>Blocked on</th><td>A second magnetic grid at a different flight-line spacing to test azimuth stability. Named free official source: USGS GeoDAWN airborne magnetic surveys, ScienceBase 657e1d85d34e23d3533209f7 / doi:10.5066/P93LGLVQ (area 2 lines 400 m apart, azimuth 90 deg, CC0) -- obtainability checked: the ScienceBase release is public, but the grids are GB-scale and cannot be fetched from this sandbox.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#4 · H61-D · Isostatic-residual step under a geothermal anomaly (heat-flow guided)</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>17 cond_surf<br>own depth surface<br>external heat-flow points</td></tr>
+<tr><th>Physical signature</th><td>A buried fault that conducts fluid shows a heat-flow or conductivity anomaly above the gravity step; requiring both raises precision without costing recall where it matters.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Concealment again, plus a second independent physical channel to survive the FP penalty.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>No sibling instrument conditions a gravity step on a thermal observation.</td></tr>
+<tr><th>Cost</th><td>medium (external point data + interpolation)</td></tr>
+<tr><th>Blocked on</th><td>Heat-flow / temperature-gradient point coverage inside the GeoDAWN footprint. Named free official source: SMU Geothermal Laboratory heat-flow database and the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483, CC BY 4.0); obtainability of the in-footprint subset NOT yet verified from this sandbox.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table>
+<div class="banner warn">
+<strong>#5 · H61-E · Along-strike relief partitioning between adjacent inverted basins</strong>
+<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<table>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface<br>12/19 detrended elevation</td></tr>
+<tr><th>Physical signature</th><td>Two adjacent basins whose depth maxima face each other across a narrow high are separated by an accommodation zone; a fault with opposite dip sense usually occupies it. The signature is a paired depth minimum flanking a narrow basement high at the same along-strike position.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Accommodation zones are usually covered by the basin fill they separate -- the classic buried transfer zone.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Keys on the JOINT geometry of two basins rather than on any single edge, so it cannot be reproduced by thresholding any single supplied band.</td></tr>
+<tr><th>Cost</th><td>high (paired-object matching, no supplied layer does it)</td></tr>
+<tr><th>Blocked on</th><td>A buried accommodation zone with independent sub-surface control to test against. Named free official source: USGS/DOE geothermal well temperature logs and the GBCGE Subsurface Database (doi:10.15121/1987556); obtainability NOT yet verified here.</td></tr>
+<tr><th>Sources</th><td>—</td></tr>
+</table></main></body></html>

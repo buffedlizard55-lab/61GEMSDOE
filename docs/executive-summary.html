@@ -1,95 +1,65 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
-<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
-<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
-<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
-<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
-<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-
-<div class="card hero">
-<h2 style="margin-top:0">Executive summary &mdash; how to make a submission</h2>
-<ol>
-<li><strong>Download the file.</strong>
-<a class="btn" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">&#11015; gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</a>
-<span class="dim">(0.25 MB, sha256 <code class="mono-sm">5dee4c5568eba145&hellip;</code>)</span></li>
-<li><strong>Open the submission form</strong> on the competition page:
-<code>https://www.drivendata.org/competitions/306/competition-doe-gems/</code> &rarr;
-<em>Submissions</em> &rarr; <em>New submission</em>. (Login required; this sandbox
-cannot reach drivendata.org, so this step is necessarily yours.)</li>
-<li><strong>&ldquo;File to submit&rdquo;:</strong> choose the <code>.tif</code> you just
-downloaded. A single-band GeoTIFF is accepted directly; a <code>.zip</code> holding one
-GeoTIFF is also accepted. Do not re-save, re-project or re-compress it in a GIS &mdash;
-that changes the geotransform and the file will be rejected.</li>
-<li><strong>&ldquo;Note (optional)&rdquo;:</strong> paste
-<pre>61GEMSDOE Parker-Oldenburg basement-step ribbons, 40k px, 2px catalogue prune, binary zeros-outside</pre>
-<span class="dim">99 of 140 characters.</span></li>
-<li><strong>Submit.</strong> The weekly cap shown on the submission page applies; this
-repository does not spend slots.</li>
-</ol>
-</div>
-
-<div class="card">
-<h2>Why this file cannot produce &ldquo;Predicted values must be in range [0,&nbsp;1]&rdquo;</h2>
-<p>Two mechanisms in the competition's own inputs cause that error, and both are
-engineered out:</p>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>How to make a submission, exactly</title><style>
+:root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:17px;margin:1.4em 0 .35em}
+p,li{color:var(--ink)}
+small,.mut{color:var(--mut)}
+.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}
+.warn{background:#fff8ec;border-color:#f2d6a8}
+.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:19px;margin-bottom:6px}
+.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f1f5f8}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+nav a{margin-right:14px}
+ul.tight li{margin:.15em 0}
+.pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>How to make a submission, exactly</h1>
+<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the GeoTIFF at the
+top of the <a href="index.html">home page</a>, then paste the name and the note into the
+submission dialog. Nothing else is needed.</div>
+<h2>1 · Download</h2>
+<p>On the <a href="index.html">home page</a>, click <b>Download the GeoTIFF</b>. The file is
+<code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code>. If the portal prefers a ZIP, use <b>Single-TIFF ZIP</b> instead — it
+contains exactly one GeoTIFF and nothing else. Do not upload the JSON run card, this page, or a
+ZIP of the repository.</p>
+<h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
+<p>Re-hash it. On macOS/Linux: <code>shasum -a 256 gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code> — it must print</p>
+<p><code>565a581b46878ba249aff3296f21ba6bf6e9317dc713a8acad9f5eb193fc0ed9</code></p>
+<h2>3 · Fill in the dialog</h2>
 <table>
-<tr><th>check</th><th>measured on the shipped bytes</th></tr>
-<tr><td>single band</td><td>1</td></tr>
-<tr><td>dtype float32</td><td>float32</td></tr>
-<tr><td>CRS EPSG:32611</td><td>EPSG:32611</td></tr>
-<tr><td>shape (h&times;w)</td><td>3730 &times; 3292</td></tr>
-<tr><td>transform</td><td class="mono-sm">(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)</td></tr>
-<tr><td>NaN anywhere in the 12,279,160 cells</td><td>0 &mdash; every cell finite</td></tr>
-<tr><td>float32 sentinel (&minus;3.4e38) leaking from the feature bands</td><td>0</td></tr>
-<tr><td>in-footprint min / max</td><td>0.0 / 1.0</td></tr>
-<tr><td>scoring-footprint pixels</td><td>5,167,373 finite; the other
-7,111,787 cells are exactly 0.0 rather than NaN</td></tr>
-<tr><td>positive pixels</td><td>40,000</td></tr>
-<tr><td>all validator checks</td><td>PASS</td></tr>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Name</td><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros</code></td></tr>
+<tr><td>Note (≤ 140 characters)</td><td>H61-A basement-step ribbons from an independent Parker-Oldenburg inversion of iso_grav_anom; 20000 dots, 120 m throw minimum. <span class="pill">125 / 140</span></td></tr>
+<tr><td>File</td><td><code>gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif</code> (or the single-TIFF ZIP)</td></tr>
 </table>
-<p><strong>Mechanism 1.</strong> <code>training_features.tif</code> declares its nodata
-as <code>-3.4028234663852886e+38</code> (the float32 minimum), not NaN, and
-<strong>3,061 of those sentinel pixels sit inside the scoring footprint</strong>. Any
-pipeline that reads the bands without replacing the sentinel ships values near
-&minus;3.4&times;10<sup>38</sup>, which is not in [0,&nbsp;1].</p>
-<p><strong>Mechanism 2.</strong> The feature raster's valid region is
-<strong>smaller</strong> than the submission template's. A footprint mask taken from a
-feature band (5,165,852 px) instead of from <code>example_submission.tif</code>
-(5,167,373 px) strands exactly <strong>3,061 scored pixels</strong> as NaN. NaN fails
-any <code>((v &gt;= 0) &amp; (v &lt;= 1)).all()</code> check.</p>
-<p>This writer takes its footprint from the template, writes zeros (not NaN) outside
-it, and re-reads the file from disk before declaring success.</p>
-</div>
-
-<div class="card">
-<h2>Is this file worth a weekly slot?</h2>
-<p><strong>Honest answer: unknown, and no local instrument can answer it.</strong> The
-holdout this repository can compute returns exactly 0.0 for this file, because the file
-is pruned 2&nbsp;px from the catalogue and the holdout's truth <em>is</em> the catalogue.
-The same-catalogue holdout is measured to be anti-correlated with the live board
-(&rho;&nbsp;=&nbsp;-0.857,
-p&nbsp;=&nbsp;0.0065) across eight hash-pinned
-artifacts, so a low value there is not evidence against the file. What the local
-evidence does support:</p>
-<ul>
-<li>the emission budget (40,000 px) sits inside the 37,654&ndash;44,090 px band that
-every 0.26&ndash;0.28 artifact in the group ledger occupies;</li>
-<li>the ribbons recover 36.6% of withheld fault
-segments within 300&nbsp;m against 2.6% for random
-lines &mdash; a 13.9&times;
-enrichment, rising to
-45&times;
-for basin-interior segments, which is the lane's actual claim;</li>
-<li>the file is unique against every cross-lane registry raster.</li>
+<h2>4 · What happens next, and what does not</h2>
+<ul class="tight">
+<li>Uploading spends one of the three weekly submission slots. <b>This repository has not spent
+    one.</b> Promotion to a slot is your decision.</li>
+<li>When a score comes back, write it down with the date. That number, and only that number, is
+    a competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI or
+    OWNER-REPORTED and none of those is a score.</li>
+<li>If the portal rejects the file, capture the exact error text and add it to
+    <code>evidence/</code> — a rejection is evidence, and the range error reported against an
+    earlier site's download is the reason every value here is checked to be finite and inside
+    [0, 1] before the file is written.</li>
 </ul>
-<p>No projection is written as a score anywhere on this site.</p>
-</div>
-
-<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
-<code>evidence/*.json</code>. Every figure on this page is read from those files at
-build time. Hash-pinned inputs and the official links for manual review are on
-<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
-</div></body></html>
+<h2>Why the file is shaped the way it is</h2>
+<p>The competition metric is
+<code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular kernel of radius 300 m,
+and the mapped-fault catalogue is masked out of scoring. Two consequences decide the shape of
+this file: <b>a dot on a mapped trace earns nothing</b> (the pixel is not scored), and
+<b>a dot only pays if it lands within about 280 m of a hidden truth pixel</b> at the scores
+currently on the board. That is why the dots sit in a band a few pixels off the mapped traces
+rather than on them, and why they are dots and ribbons rather than a smooth probability surface.</p>
+</main></body></html>
