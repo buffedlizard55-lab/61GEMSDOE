@@ -180,15 +180,22 @@ def check(candidate_surface: np.ndarray | None, candidate_dots: np.ndarray | Non
             # continuous probability maps (density ~1) and uniform lattices
             # (e.g. a 5 px lattice is only 4 % dense but covers ~100 % of the
             # footprint within 3 px).
-            baseline = float("nan")
-            if pos.any():
+            if not pos.any():
+                row["dot_overlap_3px"] = None
+                row["dot_leg"] = "not_applicable_no_positives"
+                n_dense += 1
+                continue_row = True
+            else:
+                continue_row = False
+            baseline = 0.0
+            if not continue_row:
                 dpos = distance_transform_edt(~pos)
                 baseline = float((dpos[np.asarray(footprint, bool)] <= OVERLAP_RADIUS_PX).mean())
             row["positive_fraction_of_footprint"] = density
             row["footprint_coverage_within_3px"] = baseline
-            if not (baseline < DOT_LEG_MAX_BASELINE):
-                row["dot_overlap_3px"] = None
-                row["dot_leg"] = "not_applicable_vacuous_comparator"
+            if continue_row or not (baseline < DOT_LEG_MAX_BASELINE):
+                row.setdefault("dot_overlap_3px", None)
+                row.setdefault("dot_leg", "not_applicable_vacuous_comparator")
                 n_dense += 1
             else:
                 ov = dot_overlap(candidate_dots, pos)

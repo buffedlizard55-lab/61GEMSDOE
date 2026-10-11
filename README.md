@@ -183,12 +183,15 @@ Both legs of the drift gate, against every raster in the family registry
 * **dot leg** — fraction of the candidate's dots within 3 px of a registry
   raster's positives, limit 0.70.
 
-The dot leg only applies to **sparse** rasters (positives covering at most 5 %
-of the scored footprint). Eight of the 708 registry rasters are continuous
-probability maps that are positive almost everywhere, and against those the 3 px
-overlap test is vacuous — any candidate scores 1.0. They are compared on the
-surface leg alone (correlation 0.05–0.11, plainly not copies) and the exclusion
-is recorded per raster.
+The dot leg only applies to comparators that **can discriminate**. The criterion
+is the fraction of the scored footprint that already lies within 3 px of the
+comparator's positives — the score a *random* candidate would get. At or above
+the 70 % limit the test cannot discriminate, so the surface leg decides for that
+raster. Two real cases forced this: a continuous probability map (positive
+almost everywhere, excluded by density, correlation 0.05–0.11 against our
+surface) and a uniform 5 px lattice (only 4 % dense, so density lets it through,
+but within 3 px of ~100 % of the footprint — it scored 0.9993 against us). Both
+are recorded per raster in `evidence/uniqueness.json`.
 
 The gate fails closed twice over: a missing registry file or an incomplete scan
 is an error, never evidence of uniqueness, and if *no* raster is sparse enough
