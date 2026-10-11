@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Next steps - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a><a href="submit.html">How to submit</a><a href="methodology.html">Method</a><a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+<h1>Next steps, ranked by expected gain per unit of work</h1>
+<div class="card">
+<ol>
+<li><strong>Bounded-domain inversion.</strong> Restrict the Parker-Oldenburg inversion
+to the largest valid connected region with a cosine taper, instead of filling 58% of
+the grid by nearest-neighbour. Cost: hours. Expected: the only route to a credible
+inversion, and the precondition for everything downstream in this lane.</li>
+<li><strong>Estimate the optimum emission count instead of sweeping it.</strong> With
+TP_w a max over the kernel and FP_w discounted by distance, the marginal condition for
+adding one pixel at hit-probability h is h &gt; alpha*TP_w / (D + (1&minus;beta)*TP_w)
+where D is the current denominator. That turns 'how many dots' from a hyper-parameter
+into a statistic. Cost: hours.</li>
+<li><strong>Sharpen with the vertical gradient.</strong> Band 11 is the isostatic
+gravity <em>vertical</em> gradient and band 5 its slope. Their ratio is a depth-to-source
+estimator; multiplying the relief field by a depth-indexed weighting is the standard way
+to separate shallow contacts from deep basement steps, which attacks the competing
+explanation in <a href="limitations.html">Limitations</a> directly.</li>
+<li><strong>Bring in the free official data the mirror already carries.</strong>
+Radiometrics and a lidar scarp stack exist in the group's repositories with hash pins
+(<code>data/aux_bridge/radiometric</code>, <code>external/dem/lidar_scarp_features_u8.tif</code>).
+Any use must be checked for lane drift first.</li>
+<li><strong>Get a first organizer receipt.</strong> Nothing in this project can be
+called a score until the submission page returns one for our bytes. That is one manual
+upload and it is worth more than any further modelling.</li>
+</ol>
+</div>
+<div class="card">
+<h2>Candidate hypotheses not yet tried, with the specific free source each needs</h2>
+<table>
+<thead><tr><th>#</th><th>Hypothesis</th><th>Layer / transform</th><th>Why it should beat
+what is in the registry</th><th>Free official source needed</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Buried range fronts are better located by the <em>zero-crossing</em> of
+the second vertical derivative of gravity than by the maximum of the first horizontal
+gradient</td><td>band 11 and band 5</td><td>Every registry raster is a ridge/dot
+emitter; none is a zero-crossing locator, and a step's step is exactly a zero crossing,
+which is less prone to being pulled off-axis by a broad density gradient</td>
+<td>none &mdash; both bands ship with the competition</td></tr>
+<tr><td>2</td><td>The withheld faults concentrate where the basin-fill thickness gradient
+is largest, not where the thickness itself is largest</td><td>band 15, gradient of it</td>
+<td>The lane's own premise tested directly; measured here, catalogue pixels show
+<em>no</em> depth preference (median 321 m under faults vs 316 m elsewhere), so the
+gradient rather than the level is the untested form</td><td>none</td></tr>
+<tr><td>3</td><td>Faults are better predicted as <em>spacing-regular arrays</em> (an
+en-echelon population with a characteristic cross-strike spacing and a strike
+distribution) than as independent lineaments</td><td>visible catalogue geometry only</td>
+<td>The registry emits independent dots; a point process with interaction would place
+dots where the population demands them, including in gaps the catalogue has</td>
+<td>none</td></tr>
+<tr><td>4</td><td>Radiometric potassium/thorium ratios mark altered fault damage zones
+that the magnetic bands miss</td><td>GeoDAWN radiometrics</td>
+<td>Alteration along a fault is a geochemical, not a potential-field, signature; it
+would be genuinely independent of every registry raster</td><td>USGS GeoDAWN release,
+DOI 10.5066/P93LGLVQ (public domain); a hash-pinned copy already sits in the group's
+mirror, so it is obtainable</td></tr>
+<tr><td>5</td><td>LiDAR-derived scarp geometry resolves the surface trace where the
+1:2.5M-style products do not</td><td>1 m DEM tiles (USGS 3DEP)</td>
+<td>Independent of gravity and magnetics; scarps are the surface expression of exactly
+the buried faults this lane wants</td><td>USGS 3DEP, public domain; the competition's own
+<code>1m_DEM_links.csv</code> lists the tiles (login-walled, but the same tiles are free
+at the National Map)</td></tr>
+</tbody></table>
+<p class="dim">Ranked by expected gain per unit of work: 2, 1, 3, 5, 4. Hypotheses 1-3
+need no new data and can be tested on the holdout immediately; 4 and 5 need an external
+download that this sandbox cannot reach, so they are named as viable but not yet
+obtainable <em>here</em>.</p>
+</div>
+<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
+<code>reports/*.json</code>. Every number on this site is machine-written from a run
+that is in this repository. Nothing is estimated.</footer>
+</div></body></html>

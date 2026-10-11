@@ -1,0 +1,192 @@
+{
+ "validation": {
+  "path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "checks": {
+   "single_band": [
+    true,
+    1
+   ],
+   "dtype_float": [
+    true,
+    "float32"
+   ],
+   "crs_matches_template": [
+    true,
+    "EPSG:32611"
+   ],
+   "crs_is_epsg32611": [
+    true,
+    "EPSG:32611"
+   ],
+   "shape_matches_template": [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   "shape_is_expected": [
+    true,
+    [
+     3730,
+     3292
+    ]
+   ],
+   "transform_matches_template": [
+    true,
+    [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ]
+   ],
+   "no_nan_anywhere": [
+    true,
+    0
+   ],
+   "min_ge_0": [
+    true,
+    0.0
+   ],
+   "max_le_1": [
+    true,
+    1.0
+   ],
+   "all_values_in_0_1": [
+    true,
+    null
+   ]
+  },
+  "pass": true,
+  "stats": {
+   "n_positive": 311617,
+   "n_pixels": 12279160,
+   "positive_fraction": 0.025378,
+   "unique_values_leq_8": [
+    0.0,
+    1.0
+   ],
+   "min": 0.0,
+   "max": 1.0,
+   "n_unique": 2
+  },
+  "sha256": "a70dee1a390c08e98ac91034e92d07a26b0845ec65f726b943a3598d0d5f8cf2"
+ },
+ "uniqueness": {
+  "submission": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+  "n_pixels_emitted": 311617,
+  "registry_dir": "/tmp/refs/registry",
+  "thresholds": {
+   "rank_correlation": 0.9,
+   "overlap_within_3px": 0.7
+  },
+  "per_raster": [
+   {
+    "file": "gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+    "iou_pct": 0.6764,
+    "n_their_pixels": 44090,
+    "shared_pixels": 2390,
+    "my_pixels_within_3px_of_theirs": 45213,
+    "my_pixels_within_3px_fraction": 0.145092,
+    "rank_correlation_including_zeros": 0.010882
+   },
+   {
+    "file": "gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-allfinite.tif",
+    "iou_pct": 0.8947,
+    "n_their_pixels": 61328,
+    "shared_pixels": 3307,
+    "my_pixels_within_3px_of_theirs": 50266,
+    "my_pixels_within_3px_fraction": 0.161307,
+    "rank_correlation_including_zeros": 0.012604
+   },
+   {
+    "file": "gems28-h27-4-r1-solo-d2-8-20261003-8acb75e1f2cc-allfinite.tif",
+    "iou_pct": 0.684,
+    "n_their_pixels": 40199,
+    "shared_pixels": 2390,
+    "my_pixels_within_3px_of_theirs": 44689,
+    "my_pixels_within_3px_fraction": 0.14341,
+    "rank_correlation_including_zeros": 0.012315
+   },
+   {
+    "file": "gems28-h36-1-rung30-blind-r1-20261003-b531dae0a36f-allfinite.tif",
+    "iou_pct": 0.646,
+    "n_their_pixels": 37660,
+    "shared_pixels": 2242,
+    "my_pixels_within_3px_of_theirs": 44266,
+    "my_pixels_within_3px_fraction": 0.142053,
+    "rank_correlation_including_zeros": 0.011955
+   },
+   {
+    "file": "gems32-probe-S1-ANCHOR-identical-to-live-02600.tif",
+    "iou_pct": 0.6764,
+    "n_their_pixels": 44090,
+    "shared_pixels": 2390,
+    "my_pixels_within_3px_of_theirs": 45213,
+    "my_pixels_within_3px_fraction": 0.145092,
+    "rank_correlation_including_zeros": 0.010882
+   },
+   {
+    "file": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+    "iou_pct": 0.9578,
+    "n_their_pixels": 40000,
+    "shared_pixels": 3336,
+    "my_pixels_within_3px_of_theirs": 45393,
+    "my_pixels_within_3px_fraction": 0.145669,
+    "rank_correlation_including_zeros": 0.020495
+   },
+   {
+    "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+    "iou_pct": 0.7443,
+    "n_their_pixels": 44090,
+    "shared_pixels": 2628,
+    "my_pixels_within_3px_of_theirs": 35557,
+    "my_pixels_within_3px_fraction": 0.114105,
+    "rank_correlation_including_zeros": 0.012805
+   },
+   {
+    "file": "gemsdoe30-d28-poisson300m-offcat-44090-20261003T233156Z-91eae1ca.tif",
+    "iou_pct": 0.6764,
+    "n_their_pixels": 44090,
+    "shared_pixels": 2390,
+    "my_pixels_within_3px_of_theirs": 45213,
+    "my_pixels_within_3px_fraction": 0.145092,
+    "rank_correlation_including_zeros": 0.010882
+   },
+   {
+    "file": "gemsdoe32-h33-h33-2-b2-20261004T220000Z-e5eb6e7e-zeros.tif",
+    "iou_pct": 0.689,
+    "n_their_pixels": 37654,
+    "shared_pixels": 2390,
+    "my_pixels_within_3px_of_theirs": 43751,
+    "my_pixels_within_3px_fraction": 0.1404,
+    "rank_correlation_including_zeros": 0.013331
+   }
+  ],
+  "verdict": "unique",
+  "summary": "highest rank correlation 0.020 (< 0.9); highest 3-px overlap fraction 0.1613 (< 0.7)",
+  "worst_rank_correlation": 0.020495,
+  "worst_rank_correlation_against": "gems49-gate_ortho_w0.25-40k-20261006T213721Z-zeros.tif",
+  "worst_pixels_within_3px_fraction": 0.161307,
+  "caveat": "The rank correlation includes the ~99 % of pixels that are zero in both rasters, so it is bounded away from 0 by construction; the 3-px overlap fraction is the discriminating statistic and is the one to read."
+ },
+ "holdout": {
+  "name": "LANE_grav_inversion_hgm",
+  "exclude_radius": 3,
+  "k": 400000,
+  "ribbon_half_width": 0,
+  "dti_mean": 0.08875,
+  "dti_per_fold": [
+   0.08342,
+   0.09688,
+   0.08341,
+   0.09129
+  ],
+  "boot": {},
+  "selected_by": "reports/k_study.json (emission-budget study)"
+ },
+ "emission_source": "cache /tmp/gems_fields.npz"
+}
