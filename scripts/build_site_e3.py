@@ -170,8 +170,10 @@ lane's evidence is <em>geometric</em> (segment recovery) rather than per-pixel.<
 <div class="card">
 <h2>Run card (JSON)</h2>
 <p><a class="btn alt" href="downloads/{NAME}.json">full run card</a>
-<a class="btn alt" href="../evidence/e2b_instrument.json">instrument calibration</a>
-<a class="btn alt" href="../evidence/e1_calibration.json">inversion calibration</a></p>
+<a class="btn alt" href="data/e2b_instrument.json">instrument calibration</a>
+<a class="btn alt" href="data/e1_calibration.json">inversion calibration</a>
+<a class="btn alt" href="data/e2c_canary.json">leakage canary</a>
+<a class="btn alt" href="data/e3_submission.json">this candidate's evidence</a></p>
 <pre class="mono-sm">{json.dumps({k: CARD[k] for k in ('hypothesis','mechanism','competing_non_fault_process','raster_sha256','submission_name','submission_note','note_length','emitted_pixels','on_catalogue_pixels','verdict','verdict_reason')}, indent=1)}</pre>
 </div>
 """
@@ -566,6 +568,14 @@ for name, title, body in [
 ]:
     (DOCS / name).write_text(page(title, body))
     print("wrote docs/" + name)
+
+# --- mirror the evidence JSONs into docs/data so Pages can serve them -------
+(ROOT / "docs" / "data").mkdir(parents=True, exist_ok=True)
+for f in ("e1_calibration.json", "e2b_instrument.json", "e2c_canary.json",
+          "e3_submission.json"):
+    src = ROOT / "evidence" / f
+    (ROOT / "docs" / "data" / f).write_text(src.read_text())
+    print("mirrored evidence/" + f + " -> docs/data/" + f)
 
 # --- patch the nav on the pages this session did not author -----------------
 import re
