@@ -20,53 +20,67 @@ nav{font-size:.9rem;color:var(--dim);margin-bottom:8px}nav a.active{font-weight:
 <h1>Executive summary &amp; exactly how to submit</h1>
 
 <div class="status">
-<h2 style="margin:.2em 0;border:0">Status of the newest file: <span style="color:var(--ok)">FORMAT-VALID and UNIQUE – safe to upload</span>
- · <span style="color:var(--warn)">EXPECTED TO SCORE WELL BELOW 0.2778 – not recommended for a weekly slot</span></h2>
-<p><b>What it is:</b> <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code> — 40,000 single-pixel dots (value 1.0; everything else 0.0), float32, EPSG:32611,
-3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere, min 0 / max 1
-(<a href="verify.html">validator receipt</a>: 19 checks, all passed). Uniqueness against 24 earlier rasters:
-worst Spearman +0.0153, verdict <b>UNIQUE</b>.</p>
-<p><b>What we measured:</b> <span class="tag h">HOLDOUT-DTI</span> 0.0465 (95% CI 0.0421–0.0507; 22,641 withheld positive px; gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)).
-Random lines with the same budget: 0.0314. The best earlier group file on the same evaluator (the unpruned dotted h19-5 base, which is
-<span class="tag o">ORGANIZER-CONFIRMED</span> 0.2600 live): 0.1011. The new file is therefore <b>better than random but about
-half as good as the file family that already holds our 0.2778</b>. Verdict in the run card: <b>negative</b>.</p>
-<p><a class="btn" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download>⬇ Download gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif (135 kB)</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip" download>zip</a>
-<a class="btn sec" href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.json">format receipt (JSON)</a>
+<h2 style="margin:.2em 0;border:0">Is the newest file OK to download and submit?
+<span style="color:var(--ok)">YES — it is FORMAT-VALID and UNIQUE.</span>
+<span style="color:var(--warn)">It is a NEGATIVE result — do not spend a weekly slot on it.</span></h2>
+<p><b>Format (can I upload it?):</b> <code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif</code> — 10,128 single-pixel dots (value 1.0; everything else 0.0),
+float32, EPSG:32611, 3730 × 3292, 100 m, identical grid to <code>sample_submission.tif</code>, no NaN/Inf anywhere,
+min 0 / max 1 (<a href="verify.html">validator</a>: 19 checks, all passed — the earlier
+<i>“Predicted values must be in range [0, 1]”</i> rejection cannot recur). The upload itself is safe.</p>
+<p><b>Uniqueness (is it a new raster?):</b> <b>UNIQUE</b> against 28 earlier
+rasters (worst Spearman +0.0445 ≤ 0.90; worst overlap gate
+0.002 vs limit 0.50). It is a new submission, not a copy.</p>
+<p><b>Should it take a slot?</b> <b>NOT RECOMMENDED.</b> <span class="tag h">HOLDOUT-DTI</span> 0.0085
+(95% CI 0.0050–0.0117; 22,641 withheld positive px) — <i>below</i> random lines at the same budget
+(0.0352 this run; 0.0314 in the H61-G draw) and far below the group's best-known file
+(0.1011 on the same evaluator; 0.2600–0.2778 <span class="tag o">ORGANIZER-CONFIRMED</span> live).
+Run-card verdict: <b>negative</b>. It is shipped as a valid, unique <b>negative/diagnostic</b> result:
+it closes the “coarse two-scale corridor” sub-hypothesis of the buried-structure lane.</p>
+<p><a class="btn" href="downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif" download>⬇ Download gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif (77 kB)</a>
+<a class="btn sec" href="downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.zip" download>zip</a>
+<a class="btn sec" href="downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.json">format receipt (JSON)</a>
 <a class="btn sec" href="executive-summary.html">How to submit</a></p>
-<p class="small">sha256 <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code> · submission name <code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros</code> · note (133 chars): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></p>
+<p class="small">sha256 <code>f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c</code> · submission name <code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros</code> · note (134 chars): <code>H61-X: coarse (800 m) basement-step corridor from GP-1012-calibrated gravity inversion x in-corridor slope ridge; 10128 dots; UNSCORED</code></p>
 </div>
 <h2>Decision in one line</h2>
-<p>Upload is <b>safe</b> (the format is pinned to the organiser's sample and every value is 0.0 or 1.0), but the file is a <b>negative result</b>:
-HOLDOUT-DTI 0.0465 (95% CI 0.0421–0.0507), 22,641 withheld positive px against 0.1011 for the unpruned base of our current 0.2778 on the same evaluator. Spend a slot on it only if the goal
-is to obtain an ORGANIZER-CONFIRMED number for the gravity lane itself (useful to close the lane for good); do not expect it to move the leaderboard position.</p>
+<p>Upload is <b>safe and the file is a genuine new raster</b> (format pinned to the organiser's sample, all values 0.0 or 1.0,
+UNIQUE against 28 earlier rasters), but it is a <b>negative result</b>:
+HOLDOUT-DTI 0.0085 (95% CI 0.0050–0.0117), 22,641 withheld positive px versus 0.0352 for random lines at the same budget and 0.1011 for the unpruned base of our
+current 0.2778 on the same evaluator. Spend a slot on it only if the goal is to obtain an ORGANIZER-CONFIRMED number for the
+coarse-step construction itself (it would close the two-scale sub-hypothesis of the gravity lane); do not expect it to move the leaderboard.</p>
 
 <h2>How to submit (step by step)</h2>
 <ol>
-<li>Download <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif" download><code>gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif</code></a> (or the <a href="downloads/gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.zip">zip</a>). Check the sha256 if you like: <code>fdbc7b45443c392cba48413a1122eda00f5394664d68acc9799d7d7e888e4077</code>.</li>
+<li>Download <a href="downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif" download><code>gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.tif</code></a> (or the <a href="downloads/gems61-h61x-x3c-coarse-corridor-10128dots-20261011T052850Z-b3b1aacf13ce-zeros.zip">zip</a>). Check the sha256 if you like: <code>f8fb3f74b40eecf6407cc3e00a03121e00c8220c0777a14c9bd6be43a1ede65c</code>.</li>
 <li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> while logged in as the competition account.</li>
 <li>Upload the <code>.tif</code> (DrivenData accepts the GeoTIFF directly; the zip is only a convenience copy).</li>
-<li>Paste the submission note (≤ 140 characters, 133 here): <code>H61-G: GP-1012-calibrated gravity inversion -&gt; basement-step corridor x in-corridor slope ridge; 40000 dots at 3 px spacing; UNSCORED</code></li>
-<li>After the platform scores it, copy the number into <code>evidence/h61g_run_card.json</code> → <code>organizer_confirmed_score</code> and rebuild the site; until then every number on this site stays HOLDOUT-DTI.</li>
+<li>Paste the submission note (≤ 140 characters, 134 here): <code>H61-X: coarse (800 m) basement-step corridor from GP-1012-calibrated gravity inversion x in-corridor slope ridge; 10128 dots; UNSCORED</code></li>
+<li>After the platform scores it, copy the number into <code>evidence/h61x_run_card.json</code> → <code>organizer_confirmed_score</code> and rebuild the site; until then every number on this site stays HOLDOUT-DTI.</li>
 </ol>
 <h3>Why the earlier upload error cannot recur</h3>
-<p>The earlier rejection <i>“Predicted values must be in range [0, 1]”</i> came from a file with NaN / sentinel values outside the footprint. The writer used here
-(<code>src/gems61/submission_writer.py</code>) writes 0.0 outside the footprint, float32, no nodata tag, and the validator (<code>src/gems61/validate.py</code>) refuses to emit a file
-unless <code>no_nan_anywhere</code>, <code>no_inf_anywhere</code>, <code>min_ge_0</code>, <code>max_le_1</code>, <code>dtype_float32</code>, <code>crs_epsg_32611</code>,
-<code>transform_matches_sample_submission</code> and <code>dimensions_3730x3292</code> all pass. The receipt for this file lists 19 checks, all true
-(<a href="verify.html">verify</a>). The filename ends in <code>-zeros</code> to record that convention.</p>
+<p>The earlier rejection <i>“Predicted values must be in range [0, 1]”</i> came from a file with NaN / sentinel values outside the footprint.
+The writer used here (<code>src/gems61/submission_writer.py</code>) writes 0.0 outside the footprint, float32, no nodata tag, and the
+validator (<code>src/gems61/validate.py</code>) refuses to emit a file unless <code>no_nan_anywhere</code>, <code>no_inf_anywhere</code>,
+<code>min_ge_0</code>, <code>max_le_1</code>, <code>dtype_float32</code>, <code>crs_epsg_32611</code>,
+<code>transform_matches_sample_submission</code> and <code>dimensions_3730x3292</code> all pass. The receipt for this file lists
+19 checks, all true (<a href="verify.html">verify</a>). The filename ends in <code>-zeros</code> to record that convention.</p>
 
 <h2>What the file contains, in plain words</h2>
-<p>40,000 dots, each one pixel (100 m), placed where (a) the inverted basement surface has a step with ≥ 80 m throw within ±1 km, (b) the basin fill is ≥ 300 m deep,
-(c) the detrended-elevation slope field has a local ridge, and (d) the spot is more than 2 px from any mapped fault. Dots are packed at ≥ 3 px spacing so they never pay twice for one truth pixel.
-Median distance of a dot from the nearest mapped fault: 17.5 px; 7.1% within 3 px.</p>
+<p>10,128 dots, each one pixel (100 m), placed where (a) the GP-1012-calibrated inverted basement surface has a <i>broad</i> step
+(800 m-smoothed horizontal-gradient maximum with ≥ 80 m measured throw, at least 1.2 km from any sharp base-scale step line) within
+±1 km, (b) the inverted basin fill is deeper than 100 m, (c) the detrended-elevation slope field has a local ridge, and (d) the spot is
+more than 2 px from any mapped fault. Dots are packed at ≥ 3 px spacing so they never pay twice for one truth pixel.
+Median distance of a dot from the nearest mapped fault: 23.7 px;
+4.3 % within 3 px.</p>
 
 <h2>Expected outcome <span class="tag p">PROJECTION</span></h2>
-<p>We do not translate HOLDOUT-DTI into a live score. The only calibration we have is ordinal: on this evaluator the h19-5 lines (live 0.1922) score 0.0712
-and their dotted version (live 0.2600) scores 0.1011 — the evaluator orders them like the leaderboard. Our file sits at 0.0465, below both. Expect a live number well below 0.26.</p>
+<p>We do not translate HOLDOUT-DTI into a live score. The only calibration we have is ordinal: on this evaluator the h19-5 lines
+(live 0.1922) score 0.0712 and their dotted version (live 0.2600) scores
+0.1011 — the evaluator orders them like the leaderboard. Our file sits at 0.0085, <i>below random lines</i>, so expect a
+live number well below 0.1. Its value is diagnostic: it tells the selector the two-scale gravity sub-hypothesis is closed.</p>
 
-<hr><p class="small">61GEMSDOE · session arena/c57b45ae · built from <code>evidence/*.json</code> by
-<code>scripts/build_site_h61g.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
+<hr><p class="small">61GEMSDOE · session arena/6339e2fc-61gemsdoe (H61-X) · built from <code>evidence/*.json</code> by
+<code>scripts/build_site_h61x.py</code>. Labels: <span class="tag h">HOLDOUT-DTI</span> our hide-and-recover evaluator
 (gems61.holdout_segmented v2 (whole segments &lt;=12 px, 4 eroded quadrants, seeds 20+21, mode all)); <span class="tag o">ORGANIZER-CONFIRMED</span> DrivenData leaderboard;
 <span class="tag p">PROJECTION</span> an expectation, never a score. Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">https://github.com/buffedlizard55-lab/61GEMSDOE</a>.</p>
 </div></body></html>
