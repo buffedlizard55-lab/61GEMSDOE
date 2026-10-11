@@ -1,0 +1,194 @@
+{
+  "evidence_class": "MEASURED (spatially blocked generalisation test)",
+  "question": "Which locator generalises to a quadrant with no training fault in it?",
+  "method": "Leave-one-quadrant-out: train on the visible catalogue of the other three quadrants, score the fourth. 40 000 dots at 3 px spacing, 3 px catalogue prune, pooled DTI alpha 0.2 beta 0.8 R = 300 m.",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "n_withheld_truth_px": 22641,
+  "per_quadrant": {
+    "NW": {
+      "logistic": {
+        "locator": "logistic",
+        "quadrant": "NW",
+        "loqo_canary_auc": 0.556533054760666,
+        "loqo_pooled_dti": 0.03254512769841792,
+        "coverage": 0.05666843412110661,
+        "n_emitted_per_draw": 9009.0,
+        "basin_interior": "27/298"
+      },
+      "gbm": {
+        "locator": "gbm",
+        "quadrant": "NW",
+        "loqo_canary_auc": 0.5754153225806452,
+        "loqo_pooled_dti": 0.030684658952181688,
+        "coverage": 0.053431165266125964,
+        "n_emitted_per_draw": 9009.0,
+        "basin_interior": "19/298"
+      },
+      "slope19": {
+        "locator": "slope19",
+        "quadrant": "NW",
+        "loqo_canary_auc": 0.5927244374349636,
+        "loqo_pooled_dti": 0.02163932849020897,
+        "coverage": 0.03766843064541423,
+        "n_emitted_per_draw": 9009.0,
+        "basin_interior": "24/298"
+      },
+      "corridor": {
+        "locator": "corridor",
+        "quadrant": "NW",
+        "loqo_canary_auc": 0.6179717676899064,
+        "loqo_pooled_dti": 0.030244933529711106,
+        "coverage": 0.052662971866157975,
+        "n_emitted_per_draw": 9009.0,
+        "basin_interior": "34/298"
+      }
+    },
+    "NE": {
+      "logistic": {
+        "locator": "logistic",
+        "quadrant": "NE",
+        "loqo_canary_auc": 0.557661156084656,
+        "loqo_pooled_dti": 0.03376247137265004,
+        "coverage": 0.05906149439083373,
+        "n_emitted_per_draw": 11170.0,
+        "basin_interior": "35/338"
+      },
+      "gbm": {
+        "locator": "gbm",
+        "quadrant": "NE",
+        "loqo_canary_auc": 0.5248801243386243,
+        "loqo_pooled_dti": 0.014036993785554857,
+        "coverage": 0.02452641160401135,
+        "n_emitted_per_draw": 11170.0,
+        "basin_interior": "4/338"
+      },
+      "slope19": {
+        "locator": "slope19",
+        "quadrant": "NE",
+        "loqo_canary_auc": 0.548035798941799,
+        "loqo_pooled_dti": 0.016885980145961595,
+        "coverage": 0.029527148724098742,
+        "n_emitted_per_draw": 11170.0,
+        "basin_interior": "14/338"
+      },
+      "corridor": {
+        "locator": "corridor",
+        "quadrant": "NE",
+        "loqo_canary_auc": 0.5882550158730159,
+        "loqo_pooled_dti": 0.03424966902074625,
+        "coverage": 0.055037944785294654,
+        "n_emitted_per_draw": 9495.5,
+        "basin_interior": "46/338"
+      }
+    },
+    "SW": {
+      "logistic": {
+        "locator": "logistic",
+        "quadrant": "SW",
+        "loqo_canary_auc": 0.5176108396114195,
+        "loqo_pooled_dti": 0.03670876620419646,
+        "coverage": 0.05080544429914809,
+        "n_emitted_per_draw": 10980.0,
+        "basin_interior": "80/692"
+      },
+      "gbm": {
+        "locator": "gbm",
+        "quadrant": "SW",
+        "loqo_canary_auc": 0.5306064432989691,
+        "loqo_pooled_dti": 0.03398622280837084,
+        "coverage": 0.047016027473411805,
+        "n_emitted_per_draw": 10980.0,
+        "basin_interior": "58/692"
+      },
+      "slope19": {
+        "locator": "slope19",
+        "quadrant": "SW",
+        "loqo_canary_auc": 0.5398468824345757,
+        "loqo_pooled_dti": 0.02297043913301093,
+        "coverage": 0.03178322135409068,
+        "n_emitted_per_draw": 10980.0,
+        "basin_interior": "41/692"
+      },
+      "corridor": {
+        "locator": "corridor",
+        "quadrant": "SW",
+        "loqo_canary_auc": 0.5403001999074808,
+        "loqo_pooled_dti": 0.027392781051027323,
+        "coverage": 0.034593210106179766,
+        "n_emitted_per_draw": 8719.0,
+        "basin_interior": "39/692"
+      }
+    },
+    "SE": {
+      "logistic": {
+        "locator": "logistic",
+        "quadrant": "SE",
+        "loqo_canary_auc": 0.6055605921457117,
+        "loqo_pooled_dti": 0.05493919792423567,
+        "coverage": 0.07409167426169443,
+        "n_emitted_per_draw": 8841.0,
+        "basin_interior": "89/654"
+      },
+      "gbm": {
+        "locator": "gbm",
+        "quadrant": "SE",
+        "loqo_canary_auc": 0.6076764371349523,
+        "loqo_pooled_dti": 0.07184858446381835,
+        "coverage": 0.09696149772905227,
+        "n_emitted_per_draw": 8841.0,
+        "basin_interior": "75/654"
+      },
+      "slope19": {
+        "locator": "slope19",
+        "quadrant": "SE",
+        "loqo_canary_auc": 0.5756783814940055,
+        "loqo_pooled_dti": 0.02095933382764039,
+        "coverage": 0.02821895072560481,
+        "n_emitted_per_draw": 8841.0,
+        "basin_interior": "31/654"
+      },
+      "corridor": {
+        "locator": "corridor",
+        "quadrant": "SE",
+        "loqo_canary_auc": 0.6133333691976637,
+        "loqo_pooled_dti": 0.03396613641729963,
+        "coverage": 0.04573201408203492,
+        "n_emitted_per_draw": 8841.0,
+        "basin_interior": "84/654"
+      }
+    }
+  },
+  "summary": {
+    "logistic": {
+      "mean_loqo_dti": 0.039488890799875026,
+      "min_loqo_dti": 0.03254512769841792,
+      "max_loqo_dti": 0.05493919792423567,
+      "mean_loqo_canary_auc": 0.5593414106506133,
+      "mean_coverage": 0.06015676176819572
+    },
+    "gbm": {
+      "mean_loqo_dti": 0.03763911500248143,
+      "min_loqo_dti": 0.014036993785554857,
+      "max_loqo_dti": 0.07184858446381835,
+      "mean_loqo_canary_auc": 0.5596445818382978,
+      "mean_coverage": 0.05548377551815035
+    },
+    "slope19": {
+      "mean_loqo_dti": 0.02061377039920547,
+      "min_loqo_dti": 0.016885980145961595,
+      "max_loqo_dti": 0.02297043913301093,
+      "mean_loqo_canary_auc": 0.564071375076336,
+      "mean_coverage": 0.03179943786230212
+    },
+    "corridor": {
+      "mean_loqo_dti": 0.031463380004696076,
+      "min_loqo_dti": 0.027392781051027323,
+      "max_loqo_dti": 0.03424966902074625,
+      "mean_loqo_canary_auc": 0.5899650881670166,
+      "mean_coverage": 0.04700653520991683
+    }
+  },
+  "note": "The non-spatially-blocked holdout (evidence/h61m_holdout.json, h61m2_holdout.json) over-rewards locators that sit next to visible traces, because the withheld segments are themselves adjacent to visible traces. The group's own organizer-scored pair (0.2600 -> 0.2778 by deleting every dot within 3 px of the catalogue) shows that adjacency does not pay on the live metric either, so the LOQO number is the one to trust for a slot decision.",
+  "ci95": null,
+  "ci_status": "No 95% CI was generated/reported for the mean or quadrant range; mean/min/max summarize four quadrant results only."
+}

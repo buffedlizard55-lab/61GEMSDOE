@@ -16,13 +16,22 @@ import numpy as np
 import rasterio
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-TEMPLATE = ROOT / "data" / "raw" / "example_submission.tif"
-LABELS = ROOT / "data" / "raw" / "existing_faults.tif"
+sys.path.insert(0, str(ROOT / "src"))
+
+from gems61.io import TEMPLATE_TIF as TEMPLATE  # noqa: E402  (shared path resolution)
+from gems61.io import RAW  # noqa: E402
+
+# data/bridge/ symlinks the catalogue under both historical names; accept either.
+LABELS = RAW / "existing_faults.tif"
+if not LABELS.exists():
+    LABELS = RAW / "labels.tif"
 
 
 def _load_card(card_path: str | None) -> dict:
-    """Newest run card by default (H61-G); the e3 card remains selectable."""
-    candidates = [card_path] if card_path else ["evidence/h61g_run_card.json", "evidence/e3_submission.json"]
+    """Newest run card by default (H61-M, then H61-G); the e3 card remains selectable."""
+    candidates = ([card_path] if card_path else
+                  ["evidence/h61m_run_card.json", "evidence/h61g_run_card.json",
+                   "evidence/e3_submission.json"])
     for c in candidates:
         cp = ROOT / c
         if cp.exists():

@@ -1,6 +1,6 @@
 # Historical implementation report — superseded; do not submit
 
-> **The old “unique,” “ready,” and predicted-score statements below are retracted. No repository TIFF is currently cleared for competition submission.** The archived H61-M output uses a retired dense-reference/Jaccard uniqueness decision; the strict final-dot audit measured **94.6836%** one-sided overlap within 3 pixels, above the 70% stop. All 10 local candidate TIFFs fail. Do not upload any repository TIFF.
+> **The old “unique,” “ready,” and predicted-score statements below are retracted. No repository TIFF is currently cleared for competition submission.** The archived H61-M output uses a retired dense-reference/Jaccard uniqueness decision; the strict final-dot audit measured **94.6836%** one-sided overlap within 3 pixels, above the 70% stop. All 11 local candidate TIFFs fail. Do not upload any repository TIFF.
 
 The historical H61-M work combined an inverted-gravity basement-step corridor with magnetic-edge evidence. Its former command-line runner and TIFF writer are now fail-closed, and this document is not a regeneration or submission guide. The previously reported local format checks do not establish uniqueness, organizer acceptance, or a leaderboard score.
 

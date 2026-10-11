@@ -1,6 +1,6 @@
 # Historical H61-M report — superseded; do not submit
 
-> **NO TIFF IN THIS REPOSITORY IS CLEARED FOR COMPETITION SUBMISSION.** This report replaces an older submission-ready/unique claim produced under a retired dense-reference/Jaccard policy. The strict final-dot audit measured **94.6836%** one-sided 3-pixel overlap for the archived H61-M TIFF, above the 70% stop threshold. All 10 local candidate TIFFs fail the strict audit. **Do not upload any repository TIFF or reuse the old note.**
+> **NO TIFF IN THIS REPOSITORY IS CLEARED FOR COMPETITION SUBMISSION.** This report replaces an older submission-ready/unique claim produced under a retired dense-reference/Jaccard policy. The strict final-dot audit measured **94.6836%** one-sided 3-pixel overlap for the archived H61-M TIFF, above the 70% stop threshold. All 11 local candidate TIFFs fail the strict audit. **Do not upload any repository TIFF or reuse the old note.**
 
 ## What this report refers to
 

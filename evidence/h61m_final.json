@@ -1,0 +1,72 @@
+{
+  "evidence_class": "HISTORICAL local file validation + HOLDOUT-DTI selection; final TIFF fails strict uniqueness and is not cleared",
+  "submission": "gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros",
+  "note": "H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED",
+  "note_chars": 140,
+  "candidate": "M2 habitat no corridor gate @ 40000",
+  "budget": 40000,
+  "prune_px": 3.0,
+  "tile_px": 3,
+  "n_dots": 40000,
+  "dots_distance_to_catalogue_px": {
+    "min": 3.1622776601683795,
+    "median": 19.849433241279208,
+    "mean": 28.554769091640384,
+    "frac_within_3px": 0.0
+  },
+  "tif": "out/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+  "zip": "out/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip",
+  "receipt": "out/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json",
+  "download_tif": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+  "download_zip": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip",
+  "sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+  "bytes": 130225,
+  "zip_sha256": "9b45a8d45d11232a5254cb8529b8ccf67ffe6426f886b9ffaac4ccceba24e160",
+  "validator": {
+    "single_band": true,
+    "dtype_float32": true,
+    "dimensions_3730x3292": true,
+    "crs_epsg_32611": true,
+    "transform_matches": true,
+    "transform_matches_sample_submission": true,
+    "no_nan_anywhere": true,
+    "no_inf_anywhere": true,
+    "no_sentinel_values": true,
+    "range_0_1_guaranteed": true,
+    "min_ge_0": true,
+    "max_le_1": true,
+    "in_footprint_all_finite": true,
+    "in_footprint_range_0_1": true,
+    "outside_footprint_zero": true,
+    "zero_dots_on_mapped_catalogue": true,
+    "whole_raster_all_finite": true,
+    "whole_raster_range_0_1": true,
+    "no_float32_sentinel": true
+  },
+  "validator_all_passed": true,
+  "holdout": {
+    "dti": 0.06063316101428559,
+    "ci95": [
+      0.04940904516967584,
+      0.07271191816446657
+    ],
+    "random_lines": 0.03141382104713175,
+    "beats_random_lines": true,
+    "n_withheld_truth_px": 22641,
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)"
+  },
+  "organizer_receipt": null,
+  "current_strict_status": {
+    "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "one_sided_overlap_fraction": 0.9964,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "organizer_registry_complete": false,
+    "holdout_reached_after_strict_failure": false,
+    "weekly_slot_used": false
+  }
+}

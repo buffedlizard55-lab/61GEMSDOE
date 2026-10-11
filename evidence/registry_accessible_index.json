@@ -1,6 +1,6 @@
 {
   "schema": "gems61-accessible-raster-index-v1",
-  "generated_utc": "2026-10-11T14:53:09Z",
+  "generated_utc": "2026-10-11T15:34:51Z",
   "declared_scope_complete": true,
   "organizer_registry_complete": false,
   "completeness_note": "All paths explicitly declared in scripts/registry_sources.tsv and every TIFF in the configured local artifact roots were opened and matched to the pinned competition grid; this is not the organizer-side registry and cannot include unlisted, private, or inaccessible files.",
@@ -13,8 +13,8 @@
       "docs/submissions",
       "out"
     ],
-    "repository_prior_file_count": 11,
-    "total_raster_records": 32
+    "repository_prior_file_count": 12,
+    "total_raster_records": 33
   },
   "grid": {
     "shape": [
@@ -787,6 +787,33 @@
       ],
       "bytes": 818188,
       "sha256": "94cbefd18d05080e8f3673573b76be0bba43ead528effda23974405d718b7ce6",
+      "count": 1,
+      "shape": [
+        3730,
+        3292
+      ],
+      "crs": "EPSG:32611",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "dtype": "float32",
+      "grid_ok": true
+    },
+    {
+      "file": "gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+      "cache_file": "/home/user/61GEMSDOE/docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+      "repo_relative_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+      "scope": "repository-prior-artifacts",
+      "sources": [
+        "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif"
+      ],
+      "bytes": 130225,
+      "sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
       "count": 1,
       "shape": [
         3730,

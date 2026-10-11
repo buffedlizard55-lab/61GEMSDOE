@@ -24,8 +24,8 @@ but strict uniqueness fails: <b>98.5925%</b> of its positive pixels fall within 
 <p><b>Top new hypothesis H61-L in the current run:</b> its pre-placement scarp-ribbon surface fails, at
 <b>94.6692%</b> one-sided overlap. That run stopped before placement and produced no holdout or TIFF.
 A separate archived H61-L TIFF from the merged main branch exists, but it is not cleared.</p>
-<p><b>Post-merge local-artifact audit:</b> <b>10/10</b> local candidate TIFFs fail the same literal final-dot threshold.
-The audited main-branch H61-L/H61-M/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. The accessible inventory is not organizer-complete.</p>
+<p><b>Post-merge local-artifact audit:</b> <b>11/11</b> local candidate TIFFs fail the same literal final-dot threshold, including H61-MH at 99.6400%.
+The audited main-branch H61-L/H61-M/H61-MH/H61-X files and the TIFF under <code>docs/submissions/</code> are historical, not approved. H61-MH's HOLDOUT-DTI 0.060633 is proxy evidence only; its strict final-dot failure remains controlling. The accessible inventory is not organizer-complete.</p>
 <p><b>Decision:</b> do not submit any file from this repository at this time. The linked H61-G TIFF is downloadable only for audit/learning, not as a competition submission.
 No weekly slot has been used and no organizer receipt/score exists for a project artifact.</p>
 </div>
@@ -46,7 +46,7 @@ No weekly slot has been used and no organizer receipt/score exists for a project
 <li>Open the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">official submissions page</a> while logged into the competition account; upload the GeoTIFF and paste the note from the run card (at most 140 characters).</li>
 <li>Save the platform's submission receipt and score; only then label the value ORGANIZER-CONFIRMED for those exact bytes.</li>
 </ol>
-<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-X downloads.</b> The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
+<p><b>Do not upload any repository TIFF, including the archived file under <code>docs/submissions/</code> and the main-branch H61-L/H61-M/H61-MH/H61-X downloads.</b> H61-MH's historical HOLDOUT-DTI does not waive its 99.6400% strict final-dot failure. The old "UNIQUE" labels are not accepted under the literal strict gate. No automatic portal submission was attempted; no competition credential was used.</p>
 <h2>Why the old range error should not recur</h2>
 <p>The H61-G diagnostic file passes its local template/range validator: single-band float32, EPSG:32611, 3730×3292, sample transform, finite everywhere,
 values in [0,1], zero outside the footprint. These checks establish local formatting only—not uniqueness, upload acceptance, or score.</p>

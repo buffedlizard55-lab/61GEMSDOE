@@ -1,6 +1,6 @@
 # H61-M technical note — historical and not cleared
 
-> **NO TIFF IN THIS REPOSITORY IS CLEARED FOR COMPETITION SUBMISSION.** This note supersedes the old H61-M “UNIQUE” and “ready” claims. The strict audit measured **94.6836%** one-sided positive-pixel overlap within 3 pixels for the archived H61-M TIFF, above the 70% stop. All 10 local candidate TIFFs fail. **Do not submit the H61-M file or spend a weekly slot on it.**
+> **NO TIFF IN THIS REPOSITORY IS CLEARED FOR COMPETITION SUBMISSION.** This note supersedes the old H61-M “UNIQUE” and “ready” claims. The strict audit measured **94.6836%** one-sided positive-pixel overlap within 3 pixels for the archived H61-M TIFF, above the 70% stop. All 11 local candidate TIFFs fail. **Do not submit the H61-M file or spend a weekly slot on it.**
 
 ## Historical method
 

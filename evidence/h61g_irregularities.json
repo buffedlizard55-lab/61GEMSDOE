@@ -2,12 +2,12 @@
   {
     "id": "IR-61-MERGE-01",
     "finding": "A prior integration attempted to import assert_submittable from validate.py before that shared API existed, so tests could not import the submission writer.",
-    "action": "The shared validator/writer API is present in the current checkout. At the final merge review, the full pytest suite passed 70/70 tests with no warnings reported."
+    "action": "The shared validator/writer API is present in the current checkout. At the final merge review, the latest full pytest suite passed 71/71 tests with no warnings reported after PR #23 reconciliation."
   },
   {
     "id": "IR-61-TEST-01",
     "finding": "Older tests used the sibling gems57 package name and an earlier uniqueness API; earlier uniqueness reporting also treated Jaccard as a clearance threshold.",
-    "action": "The current gate uses signed full-footprint Spearman >0.90 OR one-sided positive support >70% within 3 pixels. Jaccard is diagnostic only. Regression tests cover the public wrapper's expected-grid/progress-log path and fail-closed incomplete inventory, missing SHA-256 pins, and malformed rows; all 70 current tests pass, including empty-prior edge handling, local-link validation, and fail-closed status-page regression tests."
+    "action": "The current gate uses signed full-footprint Spearman >0.90 OR one-sided positive support >70% within 3 pixels. Jaccard is diagnostic only. Regression tests cover the public wrapper's expected-grid/progress-log path and fail-closed incomplete inventory, missing SHA-256 pins, and malformed rows; all 71 current tests pass, including empty-prior edge handling, local-link validation, and fail-closed status-page regression tests."
   },
   {
     "id": "IR-61-DATA-01",
@@ -27,7 +27,7 @@
   {
     "id": "IR-61-ARTIFACT-01",
     "finding": "Older root and site pages advertised conflicting primary downloads and status; one historic page called H61-G ready despite the strict uniqueness failure, and main carried a file under docs/submissions/.",
-    "action": "The current README, root redirect, and evidence-driven docs builder say no TIFF is cleared. The linked H61-G GeoTIFF is diagnostic-only. The current H61-L screen stopped pre-placement; separate archived H61-L/H61-M/H61-X and docs/submissions TIFFs fail the literal final-dot gate and are marked historical/not approved. Every non-current HTML page is visibly marked HISTORICAL PAGE — SUPERSEDED, states that legacy READY/UNIQUE labels are not clearance, and links to the current status and strict artifact audit."
+    "action": "The current README, root redirect, and evidence-driven docs builder say no TIFF is cleared. The linked H61-G GeoTIFF is diagnostic-only. The current H61-L screen stopped pre-placement; separate archived H61-L/H61-M/H61-MH/H61-X and docs/submissions TIFFs fail the literal final-dot gate and are marked historical/not approved. Every non-current HTML page is visibly marked HISTORICAL PAGE — SUPERSEDED, states that legacy READY/UNIQUE labels are not clearance, and links to the current status and strict artifact audit."
   },
   {
     "id": "IR-61-CONV-01",
@@ -42,7 +42,7 @@
   {
     "id": "IR-61-MERGE-02",
     "finding": "Earlier parallel work left duplicate uniqueness helper definitions and multiple pages claiming a primary candidate.",
-    "action": "The current status renderer derives one submission verdict from evidence and marks older generated pages HISTORICAL PAGE — SUPERSEDED and links them to current status plus the strict audit. After adding fail-closed SHA-256 validation and malformed-row handling, all 70 tests pass; generated current pages are rebuilt from the corrected irregularities record."
+    "action": "The current status renderer derives one submission verdict from evidence and marks older generated pages HISTORICAL PAGE — SUPERSEDED and links them to current status plus the strict audit. After adding fail-closed SHA-256 validation and malformed-row handling, all 71 tests pass; generated current pages are rebuilt from the corrected irregularities record."
   },
   {
     "id": "IR-61-NET-01",
@@ -57,7 +57,7 @@
   {
     "id": "IR-61-INV-01",
     "finding": "An earlier registry fetch list used a wrong suffix for one GEMSDOE57 raster and left a declared public comparison path unavailable. The original H61-G/H61-L run-time inventory also predated the later main-branch TIFFs.",
-    "action": "Centralized 21 public paths in scripts/registry_sources.tsv and added hash/grid-checked indexing over docs/downloads, docs/submissions, and out. The current inventory contains 21 declared public paths plus 11 local TIFFs (32 records), not the organizer's complete registry. The original 28-record H61-G/H61-L run-time manifest is preserved separately; any inventory error must fail closed."
+    "action": "Centralized 21 public paths in scripts/registry_sources.tsv and added hash/grid-checked indexing over docs/downloads, docs/submissions, and out. The refreshed inventory contains 21 declared public paths plus 12 local TIFFs (33 raster records), not the organizer's complete registry. The original 28-record H61-G/H61-L run-time manifest is preserved separately; any inventory error must fail closed."
   },
   {
     "id": "IR-61-LIDAR-01",
@@ -66,12 +66,22 @@
   },
   {
     "id": "IR-61-BUDGET-01",
-    "finding": "The historical H61-G run card records 3 candidate/budget experiments; the H61-L pre-placement surface screen adds 1 if the cap is counted across the entire workflow. A strict aggregate count is therefore 4, beyond a 3-experiment ceiling.",
-    "action": "Flag the aggregate count explicitly. No additional model or holdout experiment was run during this review; stop further candidate experiments and do not spend a weekly slot. The elapsed-time cap was not independently measured. Legacy model/holdout CLI entrypoints without the current pre-placement check are retired; the H61-G direct holdout stage now applies the shared strict surface gate to every arm first. No new model or holdout result was run to make this safeguard."
+    "finding": "The historical H61-G run card records 3 candidate/budget experiments; the H61-L pre-placement surface screen adds 1 if the cap is counted across the workflow; the merged H61-MH run card records 3 budget experiments (4 experiment stages). Counting all lineages gives at least 7 budgeted activities, beyond the 3-experiment ceiling.",
+    "action": "Flag the aggregate count explicitly and do not run further candidate trials or a weekly slot. No additional model or holdout experiment was run during this review; elapsed time was not independently measured. Legacy model/holdout CLI entrypoints without the current pre-placement check are retired; this includes run_h61mh.py, run_h61m2.py, run_h61m3.py, and run_h61m4.py. The H61-G direct holdout stage applies the shared strict surface gate to every arm first. No new model or holdout result was run to make this safeguard."
   },
   {
     "id": "IR-61-MAIN-01",
-    "finding": "After merging main, four archived TIFFs had status/evidence produced under an alternative dense-reference/Jaccard or legacy overlap policy. A strict literal final-dot audit measured H61-L 98.6375%, H61-M 94.6836%, H61-X 98.7658%, and docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif 99.1475% within 3 px of the prior basement-HGM raster. The same comparator stops all 10 local candidate TIFFs in downloads/submissions.",
+    "finding": "After merging main, five archived TIFFs had status/evidence produced under an alternative dense-reference/Jaccard or legacy overlap policy. A strict literal final-dot audit measured H61-L 98.6375%, H61-M 94.6836%, H61-MH 99.6400%, H61-X 98.7658%, and docs/submissions/61gemsdoe-basement-step-ribbon-20261011T054408Z.tif 99.1475% within 3 px of the prior basement-HGM raster. The same comparator stops all 11 local candidate TIFFs in downloads/submissions.",
     "action": "Retire the old UNIQUE labels for submission decisions. Keep all artifacts as historical/unapproved, retain the exact TIFFs for provenance, make no upload link appear as cleared, and use evidence/local_artifact_strict_dot_audit.json as the reproducible short-circuit dot-gate receipt. No rank test or new holdout was run after the measured strict overlap stop; no organizer registry completeness is claimed."
+  },
+  {
+    "id": "IR-61-MH-01",
+    "finding": "The PR #23 H61-MH run card reports historical HOLDOUT-DTI 0.060633 (95% CI 0.049409–0.072712; evaluator gems61.holdout_segmented v2; 22,641 withheld positive pixels) and basin-interior recovery 353/1,982 (recovery-rate 95% CI 0.161887–0.195565), versus equal-budget random lines 213/1,982 (recovery-rate 95% CI 0.094584–0.121869). Its separate spatially blocked LOQO-DTI logistic mean is 0.039489 (range 0.032545–0.054939 across four quadrants; same evaluator and withheld count; no 95% CI reported). The old Jaccard policy called the TIFF UNIQUE, but the strict final-dot audit measures 99.6400% one-sided overlap with the pinned basement-HGM comparator, so it is DUPLICATE_LANE_DRIFT and not eligible. The LOQO feature-model canary AUC is 0.559341.",
+    "action": "Keep the score labeled HOLDOUT-DTI proxy evidence and separate from organizer scores; do not use it to waive the final-dot stop or justify a weekly slot. The current strict local audit is the controlling status. Retire the legacy H61-MH runners and card generator, and keep the raw historical reports visibly superseded. No new rank test or holdout was run after detecting the final-dot stop."
+  },
+  {
+    "id": "IR-61-SYNTAX-01",
+    "finding": "The PR #23 merge added an un-commented naming note after the module docstring in src/gems61/h61mh.py. Python therefore raised SyntaxError on import, so the new H61-M2/M3/M4 CLIs could not execute as written.",
+    "action": "Converted the note to comments, compiled the module and runner entrypoints, and smoke-tested the H61-MH/M2/M3/M4 commands. All candidate/holdout CLIs now exit nonzero before doing work because the archived H61-MH TIFF fails strict uniqueness and the experiment cap is exceeded. No model, holdout, or TIFF generation was run."
   }
 ]

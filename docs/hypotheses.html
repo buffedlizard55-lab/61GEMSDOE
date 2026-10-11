@@ -24,7 +24,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <tr><th>Layers</th><td>USGS 3DEP 1 m DEM (organiser&#x27;s 1m_DEM_links.csv; public domain) → scarp-likelihood raster; this session&#x27;s ±1 km basement-step corridor and basin mask as prior.</td></tr>
 <tr><th>Physical signature</th><td>Metre-scale topographic steps (scarp height 0.5–5 m, slope break, curvature couplet) — the primary evidence the test-set mappers used.</td></tr>
 <tr><th>Why it may catch catalogue-missing faults</th><td>The 1:24k–1:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.</td></tr>
-<tr><th>Difference from implemented work</th><td>Repo has no lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.043 live) used the whole area and no gravity prior.</td></tr>
+<tr><th>Difference from implemented work</th><td>Unlike archived H61-G, which used band-19 slope-ridge dots, this tests 3DEP-derived scarp morphology as multi-line ribbons inside an inverted basement-step corridor. The merged main branch also tested H61-MH, a gravity/inversion-feature out-of-fold habitat model; it did not test this 3DEP scarp-ribbon surface. The terrain raster is a public sibling derivative, not raw DEM/lidar tiles.</td></tr>
 <tr><th>Expected DTI gain (projection, not score)</th><td>Highest expected value by expert prior (PROJECTION, not a score); PRE-PLACEMENT UNIQUENESS STOP: 94.6692% of positive scarp-ribbon surface pixels are within 3 px of the prior near-blanket raster, above the literal 70% threshold. HOLDOUT NOT RUN.</td></tr>
 <tr><th>Cost / data</th><td>High data volume; public sibling-derived 12-band descriptor file already fetched and SHA-256 verified. One candidate surface built; no holdout or submission slot used.</td></tr></table></section>
 
@@ -33,7 +33,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <tr><th>Layers</th><td>Inverted depth = 0 contour (bedrock outcrop boundary) buffered 0–2 km basinward; band 12 detrended elevation curvature; band 19 slope ridges.</td></tr>
 <tr><th>Physical signature</th><td>Range-front normal faults step basinward through time; young splays and antithetic strands sit 0–2 km in front of the mapped range-front trace as low scarps across fans.</td></tr>
 <tr><th>Why it may catch catalogue-missing faults</th><td>The catalogue holds the main range-front trace; piedmont splays are the commonest unmapped class in Basin-and-Range compilations.</td></tr>
-<tr><th>Difference from implemented work</th><td>Targets the basin edge instead of the basin interior; no sibling defines the piedmont from an independent inversion.</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH included a basin indicator and step/corridor features in a learned model, but did not isolate an explicit 0–2 km basinward piedmont belt as its own spatial hypothesis or emit ribbons there.</td></tr>
 <tr><th>Expected DTI gain (projection, not score)</th><td>Moderate. The screen&#x27;s highest prior-only enrichment (1.7× random for pixels inside the gravity corridor, all depths) sits at the range fronts. PROJECTION.</td></tr>
 <tr><th>Cost / data</th><td>Low (all inputs cached). One holdout run.</td></tr></table></section>
 
@@ -42,7 +42,7 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <tr><th>Layers</th><td>Corridor from the inversion; band 3 TMI horizontal-gradient maxima; band 6 tilt zero-crossings; band 9 vertical gradient.</td></tr>
 <tr><th>Physical signature</th><td>A normal fault that offsets magnetised basement or volcanic flows gives a sharp magnetic edge co-located with the gravity step; GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.</td></tr>
 <tr><th>Why it may catch catalogue-missing faults</th><td>Concealed under alluvium; surface mapping cannot see them. Co-location rejects intrabasement density contacts that have no magnetic expression (the lane&#x27;s named mimic).</td></tr>
-<tr><th>Difference from implemented work</th><td>H61-C in this repo only proposed mags as a fabric oracle (never implemented); sibling magnetic-edge files were standalone (0.03–0.10 live).</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH used the 19 supplied bands in a learned habitat model, but did not implement this explicit gravity-step × magnetic-edge conjunction as a test of the intrabasement-contact mimic; H61-C only proposed magnetic fabric as an oracle.</td></tr>
 <tr><th>Expected DTI gain (projection, not score)</th><td>Low–moderate: precision ×1.5 plausible, recall small (few magnetic basins). PROJECTION.</td></tr>
 <tr><th>Cost / data</th><td>Low.</td></tr></table></section>
 
@@ -51,18 +51,18 @@ All gain language is a PROJECTION, never a score. The top candidate is screened 
 <tr><th>Layers</th><td>Band 13 gravity, band 5 horizontal gradient, band 11 vertical gradient → contact-depth estimate; compare with inverted basin depth.</td></tr>
 <tr><th>Physical signature</th><td>A basement step has source depth ≈ fill thickness; an intrabasement density contrast has source depth ≫ fill thickness.</td></tr>
 <tr><th>Why it may catch catalogue-missing faults</th><td>Directly tests the lane&#x27;s competing explanation; improves the purity of X1-type candidates.</td></tr>
-<tr><th>Difference from implemented work</th><td>Not attempted by any sibling or earlier session.</td></tr>
+<tr><th>Difference from implemented work</th><td>H61-MH included Euler SI=0 source depth as a weak model feature, but did not implement a hard source-depth-versus-inverted-fill-thickness consistency filter; this decision rule remains untested.</td></tr>
 <tr><th>Expected DTI gain (projection, not score)</th><td>Low: raises precision of a candidate family whose recall is already tiny (X1a 0.023). PROJECTION.</td></tr>
 <tr><th>Cost / data</th><td>Medium.</td></tr></table></section>
 
-<section><h2>#5 H61-K — Learned fusion inside basins with segment-withholding target</h2>
+<section><h2>#5 H61-K — Scale-persistent paired-flank basement-step ribbons with magnetic corroboration</h2>
 <table>
-<tr><th>Layers</th><td>All 19 bands + inverted depth + corridor indicator; gradient-boosted trees trained on visible-catalogue proximity; spatial blocks.</td></tr>
-<tr><th>Physical signature</th><td>Multi-band conjunctions too subtle for hand rules.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>Could learn the piedmont/scarp patterns automatically.</td></tr>
-<tr><th>Difference from implemented work</th><td>Sibling learned models trained on the whole area scored 0.029–0.042 live (sup01-hgb21, gems6_hgb88); restricting to basins and a dotted target is new.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Uncertain; the registry evidence is against learned 100 m models. PROJECTION.</td></tr>
-<tr><th>Cost / data</th><td>Medium–high.</td></tr></table></section>
+<tr><th>Layers</th><td>Supplied isostatic gravity → provisional inverted basement depth and its horizontal gradients at 200/400/800 m; supplied TMI/tilt/vertical-gradient magnetic bands as corroboration only. GP-1012 calibrates the regional depth scale.</td></tr>
+<tr><th>Physical signature</th><td>A candidate step has paired cross-profile gradient flanks of opposite sign, coherent strike, and a persistent location across scales; a co-located magnetic edge supports but is not required for the ribbon.</td></tr>
+<tr><th>Why it may catch catalogue-missing faults</th><td>Buried basin-interior faults can be omitted or fragmented in the mapped catalogue. Pairing, strike continuity, and scale persistence may suppress isolated density contacts/noise while allowing multi-line fault ribbons under alluvium; magnetics provide an independent but imperfect corroborating signature.</td></tr>
+<tr><th>Difference from implemented work</th><td>Distinct from H61-MH, which used supplied bands and inversion-derived variables in a learned habitat model, and from H61-H, which proposed simple gravity/magnetic edge conjunction. This untested rule matches paired flank geometry and scale persistence before ribbon emission; it uses no catalogue-derived candidate features.</td></tr>
+<tr><th>Expected DTI gain (projection, not score)</th><td>Low-to-moderate expected gain, PROJECTION ONLY: paired-flank geometry may improve precision, while requiring magnetic corroboration can lose faults without magnetised offsets. No measured DTI.</td></tr>
+<tr><th>Cost / data</th><td>Medium-high: compute multi-scale derivatives, orientation-aware cross-profile pairs, and pre-placement registry gates; run one holdout only if the surface first clears.</td></tr></table></section>
 
 <h2>Selection rule</h2>
 <p>A hypothesis may proceed to holdout only after its pre-placement surface clears both literal thresholds against every raster in the declared inventory.

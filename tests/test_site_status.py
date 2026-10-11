@@ -56,6 +56,7 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
         assert "HISTORICAL PAGE — SUPERSEDED." in text, page.name
         assert 'href="index.html"' in text, page.name
         assert "../evidence/local_artifact_strict_dot_audit.json" in text, page.name
+        assert "strict audit blocks 11/11 local artifacts" in text, page.name
 
     index = (DOCS / "index.html").read_text(encoding="utf-8")
     executive = (DOCS / "executive-summary.html").read_text(encoding="utf-8")
@@ -66,8 +67,10 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
     assert "pre-placement surface-uniqueness receipt was found" in verify
     assert "current-run H61-L surface stopped before holdout" in holdout
     assert "HOLDOUT-DTI 0.044330" in holdout  # separate archived main-branch variant, not current run
+    assert "HOLDOUT-DTI 0.060633" in holdout  # archived H61-MH, still proxy-only and not cleared
+    assert "99.64000%" in holdout or "99.6400%" in holdout
     assert "351" in holdout and "215" in holdout
-    assert "10/10" in verify and "strict final-dot" in verify
+    assert "11/11" in verify and "strict final-dot" in verify
     assert "99.1475%" in executive and "DO NOT SUBMIT" in executive
     assert "../evidence/h61l_run_card.json" in index
 
@@ -82,7 +85,8 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
     assert inventory["declared_scope_complete"] is True
     assert inventory["organizer_registry_complete"] is False
     assert inventory["scope"]["declared_public_source_count"] == 21
-    assert inventory["scope"]["repository_prior_file_count"] == 11
+    assert inventory["scope"]["repository_prior_file_count"] == 12
+    assert inventory["scope"]["total_raster_records"] == 33
     assert set(inventory["scope"]["repository_prior_roots"]) == {
         "docs/downloads", "docs/submissions", "out"
     }
@@ -90,9 +94,21 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
                for row in inventory["rasters"])
 
     audit = json.loads((ROOT / "evidence/local_artifact_strict_dot_audit.json").read_text())
-    assert audit["summary"]["candidate_artifacts"] == 10
-    assert audit["summary"]["strict_overlap_stops"] == 10
+    assert audit["summary"]["candidate_artifacts"] == 11
+    assert audit["summary"]["strict_overlap_stops"] == 11
     assert audit["summary"]["cleared_for_submission"] == 0
+    mh = next(row for row in audit["candidates"]
+              if any("gems61-h61m-invfeat-habitat" in path for path in row["paths"]))
+    assert mh["one_sided_overlap_fraction"] == 0.9964
+    assert mh["overlap_stop"] is True
+
+    mh_card = json.loads((ROOT / "evidence/h61m_run_card.json").read_text())
+    assert mh_card["current_submission_status"]["status"] == "DUPLICATE_LANE_DRIFT — NOT CLEARED"
+    assert mh_card["correlation_overlap_vs_registry"]["legacy_policy_verdict"] == "UNIQUE"
+    assert mh_card["correlation_overlap_vs_registry"]["verdict"].startswith("DUPLICATE_LANE_DRIFT")
+    mh_receipt = json.loads((ROOT / "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json").read_text())
+    assert mh_receipt["submission_allowed"] is False
+    assert mh_receipt["strict_uniqueness"]["one_sided_overlap_fraction"] == 0.9964
 
     for report in ("FINAL_REPORT.md", "H61M_SUMMARY.md",
                    "IMPLEMENTATION_COMPLETE.md", "SESSION_SUMMARY.md"):
@@ -130,6 +146,13 @@ def test_legacy_candidate_cli_entrypoints_fail_closed():
         "e2b_instrument.py": "historical instrument calibration compares HOLDOUT-DTI",
         "compare_top_arms.py": "do not score legacy candidate arms on another holdout",
         "run_experiment.py": "historical experiment suite bypasses the current strict",
+        "run_h61mh.py": "archived TIFF fails strict final-dot uniqueness",
+        "run_h61m.py": "runner retired: archived TIFF fails strict one-sided overlap",
+        "make_h61m_submission.py": "writer retired: it must not write a new or submission-ready TIFF",
+        "run_h61m2.py": "lineage budget was exceeded",
+        "run_h61m3.py": "lineage budget was exceeded",
+        "run_h61m4.py": "lineage budget was exceeded",
+        "h61m_card.py": "legacy H61-MH UNIQUE claim",
     }
     for script, message in retired.items():
         result = subprocess.run(
@@ -138,3 +161,16 @@ def test_legacy_candidate_cli_entrypoints_fail_closed():
         )
         assert result.returncode != 0
         assert message in result.stdout + result.stderr
+
+
+def test_h61m_legacy_site_builder_delegates_to_strict_status_builder():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "build_site_h61m.py")],
+        cwd=ROOT, capture_output=True, text=True, check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "delegating to scripts/build_site_status.py" in result.stderr
+    index = (DOCS / "index.html").read_text(encoding="utf-8")
+    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in index
+    assert "H61-MH" in index and "NOT CLEARED" in index
+    assert "UNIQUE (safe to upload)" not in index

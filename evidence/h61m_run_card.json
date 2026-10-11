@@ -1,0 +1,337 @@
+{
+  "session": "H61-M (arena/2a87ed28-61gemsdoe, 2026-10-11)",
+  "hypothesis": "A buried normal fault is a step in the GP-1012-calibrated inverted basement surface; the step fixes where to look, and an out-of-fold habitat model over 28 catalogue-independent features (the 19 supplied bands plus the lane's own inverted depth, depth gradient, step throw, step indicator, corridor indicator, basin indicator and Euler SI=0 source depth) fixes where to put the dot.",
+  "mechanism": "Basement throw under alluvium -> isostatic-residual gradient maximum (200 m Parker/Oldenburg slab inversion, GP-1012-calibrated, Blakely-Simpson maxima, measured throw >= 80 m) -> the same gravity products enter a logistic habitat model trained on the visible mapped faults -> 40,000 binary dots at 3 px spacing, every dot more than 3 px from a mapped trace.",
+  "named_non_fault_mimic": "Density contrasts inside the basement (intrabasement lithologic contacts) produce the same isostatic-residual gradient maximum. The lane's discriminator is implemented, not asserted: the inverted depth (a basin step sits on thick low-density fill) and the Euler SI=0 source depth (a basement edge is shallow, an intrabasement contact is deep). Measured logistic weights: inv_depth -0.172, inv_depth_hgm -0.204, euler_depth -0.053, step_throw -0.046, step_indicator -0.006, corridor_indicator +0.194 -- i.e. the lane's instruments are in the model and carry almost no marginal information, which is the honest negative result for the lane's premise.",
+  "holdout_dti": {
+    "value": 0.06063316101428559,
+    "ci95": [
+      0.04940904516967584,
+      0.07271191816446657
+    ],
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "n_withheld_positive_px": 22641,
+    "n_dots_per_draw": 40000.0,
+    "label": "HOLDOUT-DTI (gems61.holdout_segmented v2, 22,641 withheld positive px, seeds 20+21, mode all, pooled alpha 0.2 beta 0.8 R 300 m)",
+    "random_lines_same_budget": 0.03141382104713175,
+    "random_lines_same_budget_source": "evidence/h61m_holdout.json row 'CONTROL random lines @ 40000'",
+    "random_dots_same_budget": 0.04120343198713449,
+    "previous_session_best_X2": 0.046504803513711855,
+    "previous_session_best_X2_source": "evidence/h61g_run_card.json holdout_dti.value (corridor x slope-ridge locator @ 40000)",
+    "segments_recovered": 353,
+    "segments_withheld": 1982,
+    "segments_recovery_rate": 0.1781029263370333,
+    "segments_recovered_ci": [
+      0.16188657725752698,
+      0.195564646086051
+    ],
+    "segments_recovered_random_lines": "213/1982 (CONTROL random lines @ 40000)",
+    "basin_interior_segments": "353/1982 recovered (CI [0.16188657725752698, 0.195564646086051])",
+    "basin_interior_random_lines": "213/1982 (CONTROL random lines @ 40000)",
+    "random_lines_same_budget_ci95": [
+      0.02824302937445006,
+      0.034091835908101865
+    ],
+    "random_lines_same_budget_label": "HOLDOUT-DTI (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all), 22,641 withheld positives; 95% CI [0.028243, 0.034092])",
+    "random_dots_same_budget_ci95": [
+      0.03664661945326507,
+      0.045304727028413753
+    ],
+    "random_dots_same_budget_label": "HOLDOUT-DTI (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all), 22,641 withheld positives; 95% CI [0.036647, 0.045305])",
+    "basin_interior_random_lines_recovery_ci95": [
+      0.09458385252434774,
+      0.12186920666264857
+    ],
+    "previous_session_best_X2_ci95": [
+      0.04214325650932585,
+      0.05066048017118602
+    ],
+    "previous_session_best_X2_label": "HOLDOUT-DTI (gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all), 22,641 withheld positives; 95% CI [0.042143, 0.050660])"
+  },
+  "spatially_blocked_dti": {
+    "label": "LOQO-DTI (leave-one-quadrant-out: retrain with no training pixel inside the scored quadrant; the honest instrument for a slot decision)",
+    "logistic": {
+      "mean_loqo_dti": 0.039488890799875026,
+      "min_loqo_dti": 0.03254512769841792,
+      "max_loqo_dti": 0.05493919792423567,
+      "mean_loqo_canary_auc": 0.5593414106506133,
+      "mean_coverage": 0.06015676176819572
+    },
+    "gbm": {
+      "mean_loqo_dti": 0.03763911500248143,
+      "min_loqo_dti": 0.014036993785554857,
+      "max_loqo_dti": 0.07184858446381835,
+      "mean_loqo_canary_auc": 0.5596445818382978,
+      "mean_coverage": 0.05548377551815035
+    },
+    "slope19_only": {
+      "mean_loqo_dti": 0.02061377039920547,
+      "min_loqo_dti": 0.016885980145961595,
+      "max_loqo_dti": 0.02297043913301093,
+      "mean_loqo_canary_auc": 0.564071375076336,
+      "mean_coverage": 0.03179943786230212
+    },
+    "lane_corridor_locator": {
+      "mean_loqo_dti": 0.031463380004696076,
+      "min_loqo_dti": 0.027392781051027323,
+      "max_loqo_dti": 0.03424966902074625,
+      "mean_loqo_canary_auc": 0.5899650881670166,
+      "mean_coverage": 0.04700653520991683
+    },
+    "verdict": "No locator generalises across space: all four sit at 0.01-0.07 DTI and 0.56-0.59 mean canary AUC, i.e. at or just above the random baseline. The lane's corridor x slope locator has the highest and most consistent blocked AUC (0.590) but not the highest blocked DTI.",
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "withheld_positive_count": 22641,
+    "ci95": null,
+    "ci_status": "No 95% CI reported in the historical LOQO receipt; listed min/max are across four quadrants, not a confidence interval."
+  },
+  "configuration_sweep": {
+    "label": "HOLDOUT-DTI configuration sweep (non-spatially-blocked instrument)",
+    "best": "S gbm prune2 tile4 @ 60000",
+    "rows": [
+      {
+        "name": "S gbm prune2 tile3 @ 40000",
+        "dti": 0.1599,
+        "ci95": [
+          0.1517,
+          0.1681
+        ],
+        "coverage": 0.243,
+        "basin": "1040/1982"
+      },
+      {
+        "name": "S gbm prune2 tile3 @ 60000",
+        "dti": 0.1651,
+        "ci95": [
+          0.1575,
+          0.1731
+        ],
+        "coverage": 0.31,
+        "basin": "1250/1982"
+      },
+      {
+        "name": "S gbm prune2 tile4 @ 40000",
+        "dti": 0.167,
+        "ci95": [
+          0.1579,
+          0.1753
+        ],
+        "coverage": 0.255,
+        "basin": "1200/1982"
+      },
+      {
+        "name": "S gbm prune2 tile4 @ 60000",
+        "dti": 0.1693,
+        "ci95": [
+          0.1601,
+          0.1793
+        ],
+        "coverage": 0.319,
+        "basin": "1438/1982"
+      },
+      {
+        "name": "S gbm prune2 tile5 @ 40000",
+        "dti": 0.1617,
+        "ci95": [
+          0.1539,
+          0.1709
+        ],
+        "coverage": 0.247,
+        "basin": "1278/1982"
+      },
+      {
+        "name": "S gbm prune2 tile5 @ 60000",
+        "dti": 0.1578,
+        "ci95": [
+          0.1473,
+          0.1687
+        ],
+        "coverage": 0.298,
+        "basin": "1472/1982"
+      },
+      {
+        "name": "S gbm prune3 tile3 @ 40000",
+        "dti": 0.1458,
+        "ci95": [
+          0.1368,
+          0.1542
+        ],
+        "coverage": 0.222,
+        "basin": "952/1982"
+      },
+      {
+        "name": "S gbm prune3 tile3 @ 60000",
+        "dti": 0.1498,
+        "ci95": [
+          0.1433,
+          0.1562
+        ],
+        "coverage": 0.281,
+        "basin": "1134/1982"
+      },
+      {
+        "name": "S gbm prune3 tile4 @ 40000",
+        "dti": 0.152,
+        "ci95": [
+          0.1437,
+          0.1594
+        ],
+        "coverage": 0.232,
+        "basin": "1068/1982"
+      },
+      {
+        "name": "S gbm prune3 tile4 @ 60000",
+        "dti": 0.1532,
+        "ci95": [
+          0.1467,
+          0.1607
+        ],
+        "coverage": 0.289,
+        "basin": "1287/1982"
+      },
+      {
+        "name": "S gbm prune3 tile5 @ 40000",
+        "dti": 0.1459,
+        "ci95": [
+          0.1395,
+          0.1533
+        ],
+        "coverage": 0.223,
+        "basin": "1130/1982"
+      },
+      {
+        "name": "S gbm prune3 tile5 @ 60000",
+        "dti": 0.1415,
+        "ci95": [
+          0.1343,
+          0.1492
+        ],
+        "coverage": 0.267,
+        "basin": "1316/1982"
+      }
+    ],
+    "score_label": "HOLDOUT-DTI for every row",
+    "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+    "withheld_positive_count": 22641
+  },
+  "leakage_canary": {
+    "logistic_oof_auc": 0.6260513530486728,
+    "gbm_oof_auc": 0.9005424235899474,
+    "threshold_auc": 0.9,
+    "finding": "IR-61-LEAK-01: the gradient-boosted habitat model's out-of-fold canary AUC was 0.901, above the 0.90 line. The leave-one-quadrant-out retest shows why: with no training pixel inside the scored quadrant its AUC falls to 0.518-0.618 and its pooled DTI to the random baseline. The 0.901 was adjacency to the visible traces the model memorised, not skill. The shipped file therefore uses the L2 logistic model, whose canary AUC is 0.626 with no caveat."
+  },
+  "correlation_overlap_vs_registry": {
+    "worst_spearman": {
+      "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+      "value": 0.1961273202768738
+    },
+    "worst_overlap": {
+      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "value": 0.9964,
+      "base_rate": 0.9581822330224662,
+      "gate_rule": "Jaccard (reference is dense: >5x my support)",
+      "gate_value": 0.008139848270246403,
+      "gate_limit": 0.5
+    },
+    "n_compared": 28,
+    "verdict": "DUPLICATE_LANE_DRIFT (supersedes the legacy Jaccard verdict)",
+    "rho_limit": 0.9,
+    "overlap_limit": 0.7,
+    "legacy_policy_verdict": "UNIQUE",
+    "strict_final_dot_status": {
+      "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+      "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+      "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+      "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+      "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "one_sided_overlap_fraction": 0.9964,
+      "one_sided_overlap_limit": 0.7,
+      "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+      "organizer_registry_complete": false,
+      "holdout_reached_after_strict_failure": false,
+      "weekly_slot_used": false
+    }
+  },
+  "raster_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+  "raster_bytes": 130225,
+  "validator_output": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true
+    },
+    "all_passed": true,
+    "n_checks": 19
+  },
+  "submission_name": "gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros",
+  "note": "H61-M: 200m Parker-Oldenburg basement inversion as features in an out-of-fold logistic habitat model; 40000 dots at 3px, 3px prune; UNSCORED",
+  "note_chars": 140,
+  "download": {
+    "tif": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "zip": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.zip",
+    "receipt": "out/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.json",
+    "sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179"
+  },
+  "dots_distance_to_catalogue_px": {
+    "min": 3.1622776601683795,
+    "median": 19.849433241279208,
+    "mean": 28.554769091640384,
+    "frac_within_3px": 0.0
+  },
+  "inversion": {
+    "z0_m": 500.0,
+    "delta_rho": -300.0,
+    "fine_dx_m": 200,
+    "coarse_dx_m": 400,
+    "fraction_deeper_than_1km": 0.1975154132520604,
+    "gp1012_anchor": 0.2,
+    "rank_correlation_fine_vs_coarse": 0.9990145847793543,
+    "cross_check_r_vs_band15": 0.7449860917393396,
+    "corr_depth_vs_gravity": -0.8333186821780683,
+    "footprint_cells_lost_at_200m": 24274,
+    "n_steps_200m": 5579,
+    "n_hgm_maxima_200m": 12572
+  },
+  "lane_reporting_requirements": {
+    "inverted_isostatic_layer": true,
+    "gp1012_calibration_only_for_density_depth_scale": true,
+    "hgm_maxima_of_basement_depth_as_candidates": true,
+    "multi_line_ribbon_tested": true,
+    "ribbon_result": "HOLDOUT-DTI 3x3 ribbon 0.018372 (95% CI [0.016155, 0.021061]; 22,641 withheld positives; evaluator gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all); 256,096 emitted px/draw) versus HOLDOUT-DTI dots 0.040910 (95% CI [0.035859, 0.047073]; same evaluator/count; 39,794 emitted px/draw). The metric charges 0.2 per extra positive pixel, so multi-line character is kept at field scale (many parallel step lines) and the tested emission is dots.",
+    "basin_interior_recovery_vs_random_lines": "351/1999 (X2 @ 40000, previous session) and 353/1982 (this session's M2 @ 40000) versus 215/1999 by random lines",
+    "competing_explanation_tested": true
+  },
+  "experiments_run": 4,
+  "budget_experiments": 3,
+  "organizer_confirmed_score": null,
+  "verdict": "negative",
+  "verdict_reason": "HOLDOUT-DTI 0.0606 (95% CI 0.0494-0.0727; 22,641 withheld positives) beats the same-budget random-lines proxy in the archived experiment, but this does not authorize a weekly slot: spatially blocked LOQO tests sit near the random baseline, and the final TIFF fails the current strict final-dot gate at 99.64% one-sided overlap. The old UNIQUE verdict used a dense-reference/Jaccard exception and is superseded. This remains a historical negative result; no organizer score is claimed.",
+  "current_submission_status": {
+    "status": "DUPLICATE_LANE_DRIFT — NOT CLEARED",
+    "evidence_class": "MEASURED strict final-raster one-sided overlap audit",
+    "candidate_path": "docs/downloads/gems61-h61m-invfeat-habitat-40000dots-20261011T062731Z-314697d7ff1f-zeros.tif",
+    "candidate_sha256": "4e2f60ef6f6287ea71523af9465ea46489a90832a03344eab6494a4b902e8179",
+    "comparator_path": "docs/downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+    "one_sided_overlap_fraction": 0.9964,
+    "one_sided_overlap_limit": 0.7,
+    "audit_receipt": "evidence/local_artifact_strict_dot_audit.json",
+    "organizer_registry_complete": false,
+    "holdout_reached_after_strict_failure": false,
+    "weekly_slot_used": false
+  }
+}
