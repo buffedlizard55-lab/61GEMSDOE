@@ -107,8 +107,20 @@ def main() -> int:
 
     # ------------------------------------------------- 2 uniqueness gate
     log("uniqueness gate (both legs, every family raster)")
-    uniq = uq.check(surface, dots, fp, root=ROOT,
-                    progress=lambda i, n: log(f"    {i}/{n}") if i % 100 == 0 else None)
+    dots_sha = hashlib.sha256(np.packbits(dots).tobytes()).hexdigest()
+    cached_gate = ROOT / "evidence/uniqueness.json"
+    uniq = None
+    if cached_gate.exists():
+        prev = json.loads(cached_gate.read_text())
+        n_reg = len(json.loads((ROOT / "evidence/registry_refreshed.json").read_text())["rasters"])
+        if (prev.get("candidate_dots_sha256") == dots_sha
+                and prev.get("n_registry_rasters") == n_reg):
+            log("    identical candidate and registry: reusing the completed scan")
+            uniq = prev
+    if uniq is None:
+        uniq = uq.check(surface, dots, fp, root=ROOT,
+                        progress=lambda i, n: log(f"    {i}/{n}") if i % 100 == 0 else None)
+        uniq["candidate_dots_sha256"] = dots_sha
     (ROOT / "evidence").mkdir(exist_ok=True)
     uniq["generated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     uniq["candidate"] = dict(arm="demoted_k3_s6", positive_pixels=int(dots.sum()))
@@ -133,8 +145,13 @@ def main() -> int:
                                "candidate", draws=1000, seed=a.seed)
     dti = float(info["dti"])
     ci95 = boot["candidate"]["ci95"]
-    log(f"shipped product HOLDOUT-DTI = {dti:.6f} CI=[{ci95[0]:.6f},{ci95[1]:.6f}] "
-        f"on {int(hidden.sum())} withheld positives")
+    log(f"shipped file, re-measured on the holdout = {dti:.6f} "
+        f"CI=[{ci95[0]:.6f},{ci95[1]:.6f}] on {int(hidden.sum())} withheld positives")
+    log("    (not comparable with the arm number below: the shipped file is additionally "
+        "pruned against the WHOLE mapped catalogue, and the holdout truth is a withheld "
+        "20 % of that same catalogue, so the prune removes exactly the cells the "
+        "instrument rewards. Removing them requires the withheld labels, which is why "
+        "the shipped file cannot be scored by this instrument without leaking.)")
 
     # ------------------------------------------------- 4 write and validate
     stem = f"61gemsdoe-basement-step-ribbon-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}"
@@ -199,8 +216,18 @@ def main() -> int:
             evidence_class="HOLDOUT-DTI",
             evaluator_version=eh.VERSION,
             n_withheld_positives=int(hidden.sum()),
-            shipped_product_dti=dti,
-            shipped_product_ci95=ci95,
+            selected_arm_is_the_headline_number=True,
+            shipped_file_remeasured_dti=dti,
+            shipped_file_remeasured_ci95=ci95,
+            shipped_file_remeasured_note=(
+                "The shipped file is the selected arm with one extra operation: dots "
+                "within 2 px of the WHOLE mapped catalogue are removed and the budget is "
+                "topped back up. The holdout truth is a withheld 20 % of that same "
+                "catalogue, so this removes precisely the cells the instrument rewards "
+                "and the re-measured value is not comparable with the arm value. It is "
+                "reported for completeness only. Under the organiser's rule that mapped "
+                "faults are removed from every metric term, the deleted cells were inert, "
+                "so the shipped product's expected score is the arm's."),
             selected_arm="demoted_k3_s6",
             selected_arm_dti=chosen.get("dti"),
             selected_arm_ci95=chosen.get("ci95"),
@@ -227,6 +254,8 @@ def main() -> int:
         note=note,
         note_chars=len(note),
         verdict=("promote" if beats else "negative"),
+        headline_dti=chosen.get("dti"),
+        headline_ci95=chosen.get("ci95"),
         verdict_reason=("The candidate does not beat a budget- and domain-matched "
                         "random-line null at the pre-registered 95 % level "
                         f"(paired difference {chosen.get('diff')}, 95 % CI "
