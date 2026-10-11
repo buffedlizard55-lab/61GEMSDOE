@@ -1,0 +1,85 @@
+{
+  "hypothesis": "H61-L: buried fault = GP-1012-calibrated basement step (+/-1km corridor) + lidar scarp (1m 3DEP DEM aggregated to 100m) inside it; 1m data supplies the 100m positional accuracy gravity cannot.",
+  "mechanism": "Basement throw -> isostatic residual HGM (Parker/Oldenburg, Blakely-Simpson, throw>=80m) -> corridor -> lidar relief maxima from 1m DEM detect 0.5-5m scarps; corridor removes fan-toe/terrace mimics without basement step.",
+  "named_non_fault_mimic": "Intrabasement density contacts (same gravity step, no scarp) and terrace/incision scarps or fan toes (lidar scarp with no basement step); conjunction is discriminator. Lidar valid only where 3DEP coverage exists (76% of footprint).",
+  "holdout_dti": {
+    "value": 0.04433,
+    "ci95": [
+      0.041405107488824,
+      0.04783192637207127
+    ],
+    "evaluator": "gems61.holdout_segmented v2",
+    "n_withheld_positive_px": 22641,
+    "n_dots_per_draw": 40000,
+    "random_lines_same_budget": 0.03141382104713175,
+    "basin_interior_segments": "340/1999 vs 215/1999 by random lines",
+    "registry_reference_best": {
+      "name": "REGISTRY gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-zeros.tif",
+      "pooled_dti": 0.10106964768349222
+    }
+  },
+  "correlation_overlap_vs_registry": {
+    "worst_spearman": {
+      "file": "gems61-h61g-x2-gravcorridor-sloperidge-40000dots-20261011T022417Z-0f9408427b88-zeros.tif",
+      "value": 0.29322897224367817
+    },
+    "worst_overlap": {
+      "file": "gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif",
+      "value": 0.986375,
+      "base_rate": 0.9581822330224662,
+      "gate_rule": "Jaccard (reference is dense: >5x my support)",
+      "gate_value": 0.007556306951687776,
+      "gate_limit": 0.5
+    },
+    "n_compared": 28,
+    "verdict": "UNIQUE"
+  },
+  "raster_sha256": "685afb7c289412ee6d8b7ada2b1d6aa87143b01ff95e6c371b198bb073c248c9",
+  "validator_output": {
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true
+    },
+    "all_passed": true
+  },
+  "submission_name": "gems61-h61l-relief-any-corr10-40000dots-20261011T051949Z-1e96bd4a26a1-zeros",
+  "note": "H61-L: lidar relief maxima inside GP-1012 corridor (any depth); 40000 dots; UNSCORED",
+  "note_chars": 84,
+  "leakage_canary": true,
+  "leakage_worst_auc": 0.5577,
+  "inversion": {
+    "z0_m": 500.0,
+    "delta_rho": -300.0,
+    "regional_sigma_km": 15.0,
+    "fraction_deeper_than_1km": 0.20323763399360067,
+    "cross_check_r_vs_band15": 0.7382397545865853
+  },
+  "verdict": "negative",
+  "verdict_reason": "DO NOT SPEND A SLOT: file is valid and unique, but the holdout does not put it above the group's best-known file; keep as a negative/diagnostic result",
+  "candidate_selection": {
+    "rule": "max pooled HOLDOUT-DTI",
+    "shipped": "L1 relief maxima inside corridor any depth",
+    "shipped_budget": 40000,
+    "best_by_pooled_dti": "L1 relief maxima inside corridor any depth @ 40000"
+  },
+  "organizer_confirmed_score": null,
+  "experiments_run": 3,
+  "budget_experiments": 3
+}
