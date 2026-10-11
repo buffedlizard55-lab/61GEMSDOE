@@ -1,65 +1,88 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>How to make a submission, exactly</title><style>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>How to make a submission</title><style>
 :root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+main{max-width:940px;margin:0 auto;padding:26px 20px 80px}
 h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
 h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
 h3{font-size:17px;margin:1.4em 0 .35em}
-p,li{color:var(--ink)}
 small,.mut{color:var(--mut)}
-.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
-.ok{background:#eefaf1;border-color:#b6e2c5}
-.warn{background:#fff8ec;border-color:#f2d6a8}
-.bad{background:#fdeeed;border-color:#f3c2bd}
-.banner strong{display:block;font-size:19px;margin-bottom:6px}
-.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
-a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+.banner{border-radius:12px;padding:18px 20px;margin:16px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}.warn{background:#fff8ec;border-color:#f2d6a8}.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:20px;margin-bottom:6px}
+.ok strong{color:var(--ok)}.warn strong{color:var(--warn)}.bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:13px 22px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0;font-size:17px}
 a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
 table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
 nav a{margin-right:14px}
-ul.tight li{margin:.15em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav><h1>How to make a submission, exactly</h1>
-<div class="banner ok"><strong>Two minutes, start to finish.</strong> Download the GeoTIFF at the
-top of the <a href="index.html">home page</a>, then paste the name and the note into the
-submission dialog. Nothing else is needed.</div>
-<h2>1 · Download</h2>
-<p>On the <a href="index.html">home page</a>, click <b>Download the GeoTIFF</b>. The file is
-<code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code>. If the portal prefers a ZIP, use <b>Single-TIFF ZIP</b> instead — it
-contains exactly one GeoTIFF and nothing else. Do not upload the JSON run card, this page, or a
-ZIP of the repository.</p>
-<h2>2 · Check it is the file you think it is (optional, 10 seconds)</h2>
-<p>Re-hash it. On macOS/Linux: <code>shasum -a 256 gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code> — it must print</p>
-<p><code>84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1</code></p>
-<h2>3 · Fill in the dialog</h2>
+.bad-pill{background:#fdeeed;color:var(--bad)}
+ol li,ul li{margin:.3em 0}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="candidate-h62.html">This candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>How to make a submission</h1>
+<div class="banner ok"><strong>How to submit, exactly</strong>
+Everything below is verified against the official submission format on
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">the problem
+page</a> and against the portal's own field text. No step needs judgement.</div>
+
+<h2>Step 1 — download the file</h2>
+<p><a class="btn" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif">↓ Download the submission GeoTIFF (823,776 bytes)</a><a class="btn alt" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.zip">↓ Single-TIFF ZIP (171,680 bytes)</a><a class="btn alt" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.json">Run card (JSON)</a></p>
+<p>Either the <code>.tif</code> or the <code>.zip</code> is accepted. The ZIP contains
+<b>exactly one</b> GeoTIFF and was round-trip verified (its member's sha256 equals the standalone
+file's). Do <b>not</b> upload the JSON run card, a web page, or a ZIP of this repository.</p>
+
+<h2>Step 2 — check it is the right file</h2>
 <table>
-<tr><th>Field</th><th>Value</th></tr>
-<tr><td>Name</td><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros</code></td></tr>
-<tr><td>Note (≤ 140 characters)</td><td>H61-B GP-1012 z0=400m drho=-600 Parker-Oldenburg step ribbons + throw/depth sharpness + VG depth-index; 22000 dots. <span class="pill">115 / 140</span></td></tr>
-<tr><td>File</td><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code> (or the single-TIFF ZIP)</td></tr>
+<tr><th>Expected SHA256</th><td><code>5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591</code></td></tr>
+<tr><th>Expected size</th><td>823,776 bytes</td></tr>
 </table>
-<h2>4 · What happens next, and what does not</h2>
-<ul class="tight">
-<li>Uploading spends one of the three weekly submission slots. <b>This repository has not spent
-    one.</b> Promotion to a slot is your decision.</li>
-<li>When a score comes back, write it down with the date. That number, and only that number, is
-    a competition score; everything on this site is labelled MEASURED, HOLDOUT-DTI or
-    OWNER-REPORTED and none of those is a score.</li>
-<li>If the portal rejects the file, capture the exact error text and add it to
-    <code>evidence/</code> — a rejection is evidence, and the range error reported against an
-    earlier site's download is the reason every value here is checked to be finite and inside
-    [0, 1] before the file is written.</li>
+<p>Verify locally with <code>sha256sum gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code>.</p>
+
+<h2>Step 3 — paste the name and the note</h2>
+<table>
+<tr><th>“Note (optional)”</th><td><code>H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue</code><br>
+    <span class="mut">114 of the 140 characters the portal allows.</span></td></tr>
+<tr><th>File name</th><td><code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif</code><br>
+    <span class="mut">The portal does not ask for a separate name; the file name and this note are
+    what distinguish submissions later.</span></td></tr>
+</table>
+
+<h2>Step 4 — submit, and respect the weekly cap</h2>
+<p>Upload at the
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition page</a>.
+Promotion to a real slot is a separate selector step inside the weekly cap shown on the submission
+page; nothing in this repository spends a slot.</p>
+
+<h2>Why this file cannot trigger “Predicted values must be in range [0, 1]”</h2>
+<p>That portal error has two known causes and both are engineered out. The writer never clips,
+fills or repairs: it validates in memory, writes, then <b>re-reads the bytes from disk</b> and
+aborts unless every one of the 12,279,160 cells is finite and inside [0, 1].</p>
+<ol>
+<li>The feature stack's float32 sentinel (<code>-3.4028234663852886e+38</code>) is stripped at
+cache time and re-checked as <code>no_float32_sentinel</code>.</li>
+<li>A footprint mask derived from a feature band can leave scored pixels NaN. The footprint here is
+taken from the pinned <code>sample_submission.tif</code> itself (5,167,373 finite cells), and cells
+outside it are written as explicit <b>zeros</b>, not NaN — so the whole raster is finite.</li>
+</ol>
+<table><tr><td><code>single_band</code></td><td>✅ PASS</td></tr><tr><td><code>dtype_float32</code></td><td>✅ PASS</td></tr><tr><td><code>dimensions_3730x3292</code></td><td>✅ PASS</td></tr><tr><td><code>crs_epsg_32611</code></td><td>✅ PASS</td></tr><tr><td><code>transform_matches</code></td><td>✅ PASS</td></tr><tr><td><code>in_footprint_all_finite</code></td><td>✅ PASS</td></tr><tr><td><code>in_footprint_range_0_1</code></td><td>✅ PASS</td></tr><tr><td><code>whole_raster_all_finite</code></td><td>✅ PASS</td></tr><tr><td><code>whole_raster_range_0_1</code></td><td>✅ PASS</td></tr><tr><td><code>no_float32_sentinel</code></td><td>✅ PASS</td></tr></table>
+
+<h2>Read this before you spend a slot</h2>
+<div class="banner warn"><strong>The evidence does not support promoting this file.</strong>
+Its surrogate-truth DTI is 0.03949, below all seven registry rasters (0.0493–0.0581) on
+the same ruler, and that ruler reproduces the owner-reported live ordering only at
+ρ = 0.607.
+The run card's verdict is <b>negative</b>. It is a deliverable, including as a
+negative result — not a recommended slot.</div>
+
+<h2>Where the numbers live</h2>
+<ul>
+<li><code>evidence/e2_candidate.json</code> — this candidate's full run card</li>
+<li><code>evidence/e1_habitat_instrument.json</code> — the surrogate-truth calibration and its
+    leave-one-out failure</li>
+<li><code>evidence/verify_grid.json</code>, <code>evidence/data_preparation.json</code> — the eight
+    sha256 pins</li>
+<li><code>evidence/measure.json</code> — the GP-1012 calibration sweep and the divergence trace</li>
 </ul>
-<h2>Why the file is shaped the way it is</h2>
-<p>The competition metric is
-<code>DTI = TP_w / (TP_w + 0.2·FP_w + 0.8·FN_w)</code> with a triangular kernel of radius 300 m,
-and the mapped-fault catalogue is masked out of scoring. Two consequences decide the shape of
-this file: <b>a dot on a mapped trace earns nothing</b> (the pixel is not scored), and
-<b>a dot only pays if it lands within about 280 m of a hidden truth pixel</b> at the scores
-currently on the board. That is why the dots sit in a band a few pixels off the mapped traces
-rather than on them, and why they are dots and ribbons rather than a smooth probability surface.</p>
 </main></body></html>

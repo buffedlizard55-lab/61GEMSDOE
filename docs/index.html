@@ -1,110 +1,137 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>61GEMSDOE — buried structures from gravity inversion</title><style>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>61GEMSDOE — buried basement steps from gravity inversion</title><style>
 :root{--ink:#10202b;--mut:#5a6b78;--line:#d8e0e6;--ok:#0b7a3b;--warn:#b45309;--bad:#b42318;--bg:#fbfcfd}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+main{max-width:940px;margin:0 auto;padding:26px 20px 80px}
 h1{font-size:30px;line-height:1.2;margin:.2em 0 .3em}
 h2{font-size:21px;margin:2em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
 h3{font-size:17px;margin:1.4em 0 .35em}
-p,li{color:var(--ink)}
 small,.mut{color:var(--mut)}
-.banner{border-radius:12px;padding:18px 20px;margin:18px 0;border:1px solid}
-.ok{background:#eefaf1;border-color:#b6e2c5}
-.warn{background:#fff8ec;border-color:#f2d6a8}
-.bad{background:#fdeeed;border-color:#f3c2bd}
-.banner strong{display:block;font-size:19px;margin-bottom:6px}
-.ok strong{color:var(--ok)} .warn strong{color:var(--warn)} .bad strong{color:var(--bad)}
-a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0}
+.banner{border-radius:12px;padding:18px 20px;margin:16px 0;border:1px solid}
+.ok{background:#eefaf1;border-color:#b6e2c5}.warn{background:#fff8ec;border-color:#f2d6a8}.bad{background:#fdeeed;border-color:#f3c2bd}
+.banner strong{display:block;font-size:20px;margin-bottom:6px}
+.ok strong{color:var(--ok)}.warn strong{color:var(--warn)}.bad strong{color:var(--bad)}
+a.btn{display:inline-block;background:#0b5cff;color:#fff;text-decoration:none;padding:13px 22px;border-radius:9px;font-weight:600;margin:6px 8px 6px 0;font-size:17px}
 a.btn.alt{background:#fff;color:#0b5cff;border:1px solid #0b5cff}
 table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
 th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
 th{background:#f1f5f8}
-code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
+code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px;word-break:break-all}
 nav a{margin-right:14px}
-ul.tight li{margin:.15em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav><h1>61GEMSDOE — buried structures from gravity inversion</h1>
-<div class="banner ok"><strong>Download: OK. Submit to competition: OK.</strong>This GeoTIFF passed every local format gate and is <b>unique</b> against all 14 sibling rasters that could be downloaded and compared (worst rank correlation 0.390, worst dot overlap 0.211; thresholds 0.90 and 0.70). No competition slot has been spent and no organizer has scored this file.</div>
-<p><a class="btn" href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif">↓ Download the GeoTIFF (70,787 bytes)</a>
-<a class="btn alt" href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.zip">↓ Single-TIFF ZIP</a>
-<a class="btn alt" href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.json">Run card (JSON)</a></p>
+.bad-pill{background:#fdeeed;color:var(--bad)}
+ol li,ul li{margin:.3em 0}
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="candidate-h62.html">This candidate</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a></nav><h1>61GEMSDOE — buried basement steps from gravity inversion</h1>
+<div class="banner warn"><strong>Download: OK. Submit to the competition: NOT RECOMMENDED — no validated evidence supports promoting it.</strong>This file passes <b>10/10</b> local format checks, is <b>unique</b> against every registry raster that could be downloaded (worst rank correlation 0.0105, worst raw 3-px dot overlap 0.2132; protocol thresholds 0.90 and 0.70), and is safe to upload — it cannot produce the portal's <i>“Predicted values must be in range [0, 1]”</i> error. But its surrogate-truth DTI, <b>0.03949</b>, is <b>below every one of the seven registry rasters</b> (0.0493–0.0581) measured on that same ruler, and that ruler is itself <b>not validated</b> (it reproduces the owner-reported live ordering at ρ = 0.607, p = 0.148). Spending a weekly slot on it is not justified by the evidence in this repository. No slot has been spent and no organizer has scored this file.</div>
+<p><a class="btn" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.tif">↓ Download the submission GeoTIFF (823,776 bytes)</a><a class="btn alt" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.zip">↓ Single-TIFF ZIP (171,680 bytes)</a><a class="btn alt" href="downloads/gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106.json">Run card (JSON)</a></p>
+<p class="mut">Submission name to paste into the portal: <code>gems61-h62-basinstep-habitat-38k-20261011T020659Z-1a9c172f7106</code><br>
+Note to paste (114/140 characters): <code>H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue</code></p>
 
-<h2>What you are downloading</h2>
+<h2>The one-paragraph version</h2>
+<p>Lane: <b>buried structures from gravity inversion</b>. Band 13 (<code>iso_grav_anom</code>) is
+inverted for depth to basement with the Parker (1973) forward series and the Oldenburg (1974)
+iteration, keeping the <b>first iterate</b> because the non-linear correction is measured to
+diverge on an isostatic residual. The depth scale is calibrated <i>only</i> against USGS
+<b>GP-1012</b> (Saltus &amp; Jachens 1995), which is 1:2,500,000 and is a scale anchor, not a truth
+mask. Buried range-front and intrabasin faults are then taken as maxima of the horizontal gradient
+of basement depth that also carry a <b>measured throw ≥ 120 m</b>, and emitted as a hard-core dot
+field of 38,000 pixels, every one of them at least 3 px (300 m) from the mapped
+catalogue — because the official problem page says the test truth is
+<i>“newly identified faults … NOT INCLUDED IN THE EXISTING USGS fault database”</i>.</p>
+
+<h2>Other validated lane candidates on this repo</h2>
+<p>Concurrent sessions built this same lane independently. All are preserved in
+<a href="downloads/"><code>docs/downloads/</code></a>; none has spent a slot.</p>
 <table>
-<tr><th>File</th><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif</code></td></tr>
-<tr><th>SHA256</th><td><code>84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1</code></td></tr>
-<tr><th>Type</th><td>single-band Float32 GeoTIFF, EPSG:32611, 3730 × 3292, 100 m,
-    transform <code>(100, 0, 243350, 0, -100, 4508550)</code></td></tr>
-<tr><th>Values</th><td>0.0 to
-    1.0; every cell finite;
-    0 NaN;
-    0 non-finite;
-    zero positive mass outside the footprint; <b>zero</b> positive pixels on the mapped-fault catalogue</td></tr>
-<tr><th>Emitted</th><td>88,796 positive pixels
-    (22,000 selected dots, then each grown to a 3 × 3 ribbon)</td></tr>
-<tr><th>Suggested name</th><td><code>gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros</code></td></tr>
-<tr><th>Suggested note</th><td>H61-B GP-1012 z0=400m drho=-600 Parker-Oldenburg step ribbons + throw/depth sharpness + VG depth-index; 22000 dots. <span class="pill">115 / 140 characters</span></td></tr>
+<tr><th>candidate</th><th>dots</th><th>positive px</th><th>SHA256 (first 16)</th></tr>
+<tr><td><b>H62</b> (this page)</td><td>38,000</td><td>38,000</td><td><code>5c8e481722c459ae</code></td></tr>
+<tr><td><a href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif"><b>H61-B</b> sharp-step + VG depth-index</a> (PR #6)</td>
+    <td>22,000</td><td>88,796</td><td><code>84864d6e090e9282</code></td></tr>
+<tr><td><a href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif">H61-A basement-step</a> (PR #5)</td>
+    <td>20,000</td><td>25,285</td><td><code>565a581b46878ba2</code></td></tr>
+<tr><td><a href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">buried-basement-step r3 rib2 k40k</a> (PR #3)</td>
+    <td>40,000</td><td>40,000</td><td><code>5dee4c5568eba145</code></td></tr>
+<tr><td><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">lane buried-step HGM k400k</a> (PR #3)</td>
+    <td>311,617</td><td>311,617</td><td><code>a70dee1a390c08e9</code></td></tr>
 </table>
-<p class="mut">OK TO DOWNLOAD. Before submitting, read evidence/final.json: local validity is MEASURED; the placement argument is OWNER-REPORTED statistics; no organizer receipt exists for this file.</p>
-<h2>Other submissions in this repository</h2>
-<p>A parallel session on this repository built the same lane independently and merged first. Its
-artifacts are kept and are <i>not</i> replaced by this page: see
-<a href="instrument.html">the instrument study</a>,
-<a href="downloads/">the E3 candidate in <code>docs/downloads/</code></a>
-(<code>…basement-step-r3-rib2-k40k-2pxprune-zeros.tif</code>) and its receipts in
-<code>evidence/e1_calibration.json</code>, <code>e2b_instrument.json</code>,
-<code>e2c_canary.json</code>, <code>e3_submission.json</code>. Two independent constructions of one
-lane is the intended redundancy; neither file has spent a competition slot.</p>
+<p class="mut">Different rasters, different emission rules, each uniqueness-checked. That is the
+intended redundancy of parallel lanes, not a conflict. Note <b>IR-62-SITE-01</b>: two builders
+(<code>build_site.py</code> and <code>build_site_e2.py</code>) both write this page and
+<code>executive-summary.html</code>; whichever runs last wins.</p>
 
-<h2>Where the dots sit — measured, not claimed</h2>
+<h2>Why the best-known file in this family scored 0.2778</h2>
+<p>Measured directly on the registry bytes (nine rasters fetched by commit-pinned clone, hashes
+checked), not inferred from filenames:</p>
 <table>
-<tr><th>Property of the emitted dots</th><th>This file</th><th>Best-known live file (owner-reported 0.2778)</th></tr>
-<tr><td>number of dots</td><td>22,000</td><td>37,654</td></tr>
-<tr><td>median offset from the mapped catalogue</td><td>12.8 px</td><td>19.6 px</td></tr>
-<tr><td>mean offset from the mapped catalogue</td><td>13.9 px</td><td>29.0 px</td></tr>
-<tr><td>dots within 2 px of the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
-<tr><td>dots on the catalogue</td><td>0.00 %</td><td>0.0 %</td></tr>
+<tr><th>registry raster</th><th>owner-reported live</th><th>dots</th><th>dots on catalogue</th>
+<th>dots &lt;3 px from catalogue</th><th>median band-15 depth at dots</th></tr>
+<tr><td>h33-2-b2</td><td><b>0.2778</b></td><td>37,654</td><td>0</td><td>1,611</td><td>245 m</td></tr>
+<tr><td>h36-1-rung30</td><td>0.2710</td><td>37,660</td><td>0</td><td>3,891</td><td>246 m</td></tr>
+<tr><td>h27-4-r1-solo-d2-8</td><td>0.2708</td><td>40,199</td><td>0</td><td>4,156</td><td>245 m</td></tr>
+<tr><td>dotted-h19-5-d2-8</td><td>0.2600</td><td>44,090</td><td>0</td><td>8,047</td><td>244 m</td></tr>
+<tr><td>topo-gap-closure</td><td>0.2449</td><td>61,328</td><td>0</td><td>11,329</td><td>248 m</td></tr>
+<tr><td>gate_ortho</td><td>0.2376</td><td>40,000</td><td>0</td><td>0</td><td><b>150 m</b></td></tr>
+<tr><td>sgmc-off-catalogue</td><td>0.0512</td><td>44,090</td><td><b>647</b></td><td>4,493</td><td><b>148 m</b></td></tr>
 </table>
-<p class="mut">The right-hand column is <b>OWNER-REPORTED</b>: those numbers come from a sibling
-project's record of its own leaderboard rows. Over its 15 scored rasters the owner reports
-Spearman ρ = −0.81 between dot count and live score and +0.85 between mean offset and live score.
-No number in either column is a score for this file.</p>
-
-<h2>How it was made (short version)</h2>
-<ol class="tight">
-<li>Invert the supplied isostatic residual gravity (band 13) for depth to basement with the
-    Parker–Oldenburg operator, at 400 m, using the first iterate — the low-passed Bouguer slab —
-    because the non-linear correction is measured to diverge here
-    (forward residual 26.31 mGal after one
-    iteration, 1.40 mGal at iteration
-    6).</li>
-<li>Calibrate the reference level and the density contrast against USGS <b>GP-1012</b>
-    (Saltus &amp; Jachens 1995) — the published map on which basin fill is thicker than 1 km
-    over about 20 % of the province. Selected: z<sub>0</sub> = 400.0 m,
-    Δρ = -600.0 kg/m³, giving
-    19.9 % deeper than 1 km.</li>
-<li>Take the automatic maxima of the horizontal gradient of that surface
-    (Blakely &amp; Simpson 1986) and <b>keep only the ones with measured throw</b> ≥
-    80 m across an 800 m (9 × 9 px) baseline and buried-scarp sharpness
-    <code>throw / max(depth, 0.5·z<sub>0</sub>) ≥ 0.08</code> — a lineament is not a fault; a fault has displacement.</li>
-<li>Fuse that evidence with the offset band around the mapped traces and the supplied gravity
-    horizontal/vertical gradient depth-index (<code>|HG| / (|VG| + ε)</code>, bands 18 &amp; 11),
-    and emit dots on a 2 × 2 px decimated ranking where the competition metric's own marginal test says a dot pays.</li>
+<p>Three things follow, and they are the whole story:</p>
+<ol>
+<li><b>The truth is disjoint from the visible catalogue</b> (official page, verbatim). The only
+raster with dots <i>on</i> the catalogue is the only catastrophic score, 0.0512.</li>
+<li><b>The winners are a thinning ladder on one base.</b> 44,090 dots → 0.2600; 40,199 → 0.2708;
+37,660 → 0.2710; 37,654 → 0.2778. Over-emission (61,328) falls back to 0.2449. The metric's own
+marginal rule agrees: a non-redundant dot pays iff <code>k &gt; α·DTI</code> = 0.2 × 0.28 = 0.056,
+i.e. within 2.83 px of truth — so the optimum is a budget, not “more dots”.</li>
+<li><b>Basin habitat separates the well-pruned fields.</b> Among fields that are all pruned and all
+≈37–40 k dots, live score is ordered by the median basement depth under the dots: 243–248 m for
+0.2449–0.2778, versus 148–150 m for 0.0512 and 0.2376. The eligible area's own median is 316 m, so
+<i>every</i> published field under-weights deep basin fill. That is this lane's premise, and it is
+the only lever the registry evidence actually supports.</li>
 </ol>
-<p>Cross-check: the inverted surface correlates <b>r = 0.526</b>
-(slope 0.804) with the competition's own
-<code>depth_to_base_surf</code> band — two independently derived depth surfaces agreeing on the
-broad pattern, not a copy of one another.</p>
+<p><b>Can we beat 0.2778?</b> The lever is real but this file does not pull it successfully:
+pushing the habitat ramp to exponent 1.0 moved the median dot to 717 m of inverted depth, outside
+anything published, and the surrogate DTI fell <i>below</i> every registry raster. The exponent was
+pulled back to 0.25 and the result is reported as measured, not tuned away. Beating 0.2778 needs a
+<b>validated</b> instrument first — see <a href="candidate-h62.html">the run card</a>.</p>
 
-<h2>What this file does NOT claim</h2>
-<ul class="tight">
-<li>It has <b>not</b> been scored. There is no organizer receipt for it. Nothing here is a leaderboard score.</li>
-<li>The catalogue-frame holdout scores it <b>0.0000</b> and a random-line control <b>0.0101</b>
-    (n = 11,318 withheld truth px).
-    That instrument hides mapped traces and rewards dots placed <i>on</i> them; this file is
-    deliberately placed off them, so the instrument cannot rank it. The disagreement is
-    irregularity <code>IR-57-INSTR-01</code>, restated here rather than tuned away.</li>
-<li>The promotion argument therefore rests on the owner-reported statistics in the table above,
-    which are statistics about <i>other people's files</i>, not about this one.</li>
-</ul>
+<h2>What is in the file</h2>
+<table>
+<tr><th>SHA256</th><td><code>5c8e481722c459ae50a1dac173c2edafda2b036ea17aee82aa2032be5e781591</code></td></tr>
+<tr><th>Bands / dtype</th><td>1 band, float32</td></tr>
+<tr><th>CRS</th><td>EPSG:32611 (UTM zone 11 N)</td></tr>
+<tr><th>Shape</th><td>3730 × 3292</td></tr>
+<tr><th>Transform</th><td><code>[100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0]</code></td></tr>
+<tr><th>Positive pixels</th><td>38,000
+    (0.735 % of the 5,167,373-pixel footprint)</td></tr>
+<tr><th>Value range</th><td>0.0 … 1.0 — inside [0, 1]</td></tr>
+<tr><th>Non-finite cells</th><td>0 anywhere in the 12,279,160-cell raster</td></tr>
+<tr><th>Dots on the mapped catalogue</th><td>0</td></tr>
+<tr><th>Validator</th><td><b>10/10 checks passed</b> —
+    PASS (re-read from the bytes on disk, fail-closed)</td></tr>
+</table>
+
+<h2>Evidence classes — no number here is a score</h2>
+<table>
+<tr><th>Label</th><th>Meaning</th></tr>
+<tr><td><b>MEASURED</b></td><td>produced by code in this repository from sha256-pinned inputs;
+    reproducible with <code>scripts/e2_build_candidate.py</code></td></tr>
+<tr><td><b>HOLDOUT-DTI</b></td><td>an evaluator-version index on a surrogate truth. Carries the
+    instrument's own validity verdict. Never a competition score.</td></tr>
+<tr><td><b>OWNER-REPORTED</b></td><td>a sibling project's record of its own leaderboard rows.
+    Describes <i>other</i> files, never this one.</td></tr>
+<tr><td><b>ORGANIZER-CONFIRMED</b></td><td>copied from a submission-page receipt.
+    <b>None exists for this file.</b></td></tr>
+</table>
+
+<h2>Reproduce</h2>
+<pre><code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements-lock.txt
+.venv/bin/python scripts/prepare_data.py --fetch --cache-bands   # 8 pinned files, 19 bands
+bash scripts/fetch_registry.sh /tmp/refs/registry                # 9 scored rasters
+PYTHONPATH=src .venv/bin/python scripts/e1_habitat_instrument.py
+PYTHONPATH=src .venv/bin/python scripts/e2_build_candidate.py</code></pre>
+
+<p class="mut">Live leaderboard read 2026-10-11 from
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">the
+official leaderboard</a>: #1 = 0.4133. Official metric and format from
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">the problem
+page</a>. Both fetched, not recalled.</p>
 </main></body></html>
