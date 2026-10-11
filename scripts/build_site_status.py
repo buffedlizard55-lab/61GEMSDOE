@@ -191,6 +191,9 @@ The first question is whether an artifact is safe to submit. The answer is curre
 {file_link("format receipt", DOWNLOAD_RECEIPT)}. Do not upload these archived bytes. A future submission needs both a passing pre-placement and final-dot gate plus an eligible holdout result.</p>
 <p><b>Download for audit only (H61-W, newest):</b> {file_link(Path(H61W_TIF).name, DOWNLOAD_H61W_TIF, download=True)} · {file_link("ZIP", DOWNLOAD_H61W_ZIP, download=True)} ·
 {file_link("format receipt", DOWNLOAD_H61W_RECEIPT)} · <a href="../evidence/h61w_run_card.json">run card</a>. DO NOT SUBMIT these bytes; the strict gate stops them.</p>
+<p><a class="btn warn" href="{esc(DOWNLOAD_H61W_TIF)}" download>Download the newest H61-W TIFF — DO NOT SUBMIT (strict gate stop)</a>
+<a class="btn sec" href="{esc(DOWNLOAD_H61W_ZIP)}" download>ZIP</a>
+<a class="btn sec" href="../evidence/h61w_run_card.json">H61-W run card</a></p>
 <p><a href="executive-summary.html">Submission safety and upload steps</a> · <a href="analysis.html">Score provenance</a> ·
 <a href="hypotheses.html">Ranked hypotheses</a> · <a href="verify.html">Strict uniqueness evidence</a> ·
 <a href="../evidence/h61l_run_card.json">Current JSON run card</a>.</p>
