@@ -1,74 +1,38 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Next hypotheses · 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css">
-<style>
-.status{border:2px solid #f85149;background:#2a0f0f;padding:16px 20px;border-radius:10px;margin:18px 0}
-.status h2{margin:.15em 0 .5em;border:0;color:#ff7b72}.status p:last-child{margin-bottom:0}
-.btn{display:inline-block;background:#58a6ff;color:#0d1117;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none;margin:6px 8px 6px 0}
-.btn.warn{background:#f2cc60}.btn.sec{background:#161b22;color:#e6edf3;border:1px solid #30363d}
-.tag{display:inline-block;font:700 .72rem/1.4 ui-monospace,monospace;padding:1px 6px;border-radius:4px;border:1px solid #30363d;margin-right:4px}
-.tag.h{color:#58a6ff}.tag.o{color:#3fb950}.tag.p{color:#f2cc60}.tag.bad{color:#ff7b72}
-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:10px 0}th,td{border:1px solid #30363d;padding:6px 8px;text-align:left;vertical-align:top}th{background:#161b22}
-nav{font-size:.9rem;color:#8b949e;margin-bottom:8px}nav a.active{font-weight:700;text-decoration:underline}
-.small{font-size:.85rem;color:#8b949e}.callout{border-left:4px solid #f2cc60;background:#161b22;padding:10px 14px;margin:12px 0}
-code,pre{overflow-wrap:anywhere}
-</style></head><body><div class="wrap"><nav><a href="index.html">Status</a> · <a href="executive-summary.html">Executive summary &amp; how to submit</a> · <a href="analysis.html">Score provenance</a> · <a href="hypotheses.html" class=active>Next hypotheses</a> · <a href="method.html">Method</a> · <a href="holdout.html">Holdout evidence</a> · <a href="irregularities.html">Irregularities</a> · <a href="next-steps.html">Next steps</a> · <a href="verify.html">Verify</a> · <a href="submit.html">Submission instructions</a> · <a href="limitations.html">Limitations</a></nav>
+<title>61GEMSDOE · Hypotheses</title>
+<link rel="stylesheet" href="assets/site.css"></head>
+<body>
+<header class="top"><div class="wrap">
+<div class="sub">DOE GEMS Prize Challenge · DrivenData competition 306 · burried-structure lane</div>
+<h1>61GEMSDOE — basement-depth steps from Parker–Oldenburg gravity inversion</h1>
+<nav class="main"><a href="index.html" class="">Overview</a><a href="executive-summary.html" class="">How to submit</a><a href="method.html" class="">Method</a><a href="hypotheses.html" class="active">Hypotheses</a><a href="results.html" class="">Results</a><a href="run-card.html" class="">Run card</a><a href="data-sources.html" class="">Data</a><a href="sources.html" class="">Sources</a><a href="irregularities.html" class="">Irregularities</a><span class="navsep">Parallel sessions (merged on main):</span><a href="analysis.html">Why 0.2778</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="holdout.html">Holdout</a><a href="methodology.html">Methodology</a><a href="next-steps.html">Next steps</a><a href="limitations.html">Limitations</a><a href="verify.html">Verification</a><a href="candidate-h62.html">H62 candidate</a><a href="submit.html">Submit</a><a href="brief.md">Brief (md)</a></nav>
+</div></header>
+<main class="wrap">
 
-<h1>Ranked novel candidate hypotheses</h1>
-<p>These are 3–5 unimplemented or materially distinct buried-structure hypotheses, ranked by expected gain relative to effort.
-All gain language is a PROJECTION, never a score. The top candidate is screened against the strict registry gate before any holdout or placement.
-</p>
-
-<section><h2>#1 H61-L — 1 m lidar scarp detection restricted to gravity corridors</h2>
-<p class="callout"><b>Measured pre-placement outcome:</b> DUPLICATE_LANE_DRIFT — STOP; 94.6692% one-sided overlap; this current run stopped before holdout/placement and emitted no TIFF. A separate archived main-branch H61-L TIFF exists but fails the strict final-dot gate.</p><table>
-<tr><th>Layers</th><td>USGS 3DEP 1 m DEM (organiser&#x27;s 1m_DEM_links.csv; public domain) → scarp-likelihood raster; this session&#x27;s ±1 km basement-step corridor and basin mask as prior.</td></tr>
-<tr><th>Physical signature</th><td>Metre-scale topographic steps (scarp height 0.5–5 m, slope break, curvature couplet) — the primary evidence the test-set mappers used.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>The 1:24k–1:250k catalogue missed low scarps in Quaternary fans; 1 m data resolves them; the corridor removes fan-toe/terrace mimics that have no basement step.</td></tr>
-<tr><th>Difference from implemented work</th><td>Unlike archived H61-G, which used band-19 slope-ridge dots, this tests 3DEP-derived scarp morphology as multi-line ribbons inside an inverted basement-step corridor. The merged main branch also tested H61-MH, a gravity/inversion-feature out-of-fold habitat model; it did not test this 3DEP scarp-ribbon surface. The terrain raster is a public sibling derivative, not raw DEM/lidar tiles.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Highest expected value by expert prior (PROJECTION, not a score); PRE-PLACEMENT UNIQUENESS STOP: 94.6692% of positive scarp-ribbon surface pixels are within 3 px of the prior near-blanket raster, above the literal 70% threshold. HOLDOUT NOT RUN.</td></tr>
-<tr><th>Cost / data</th><td>High data volume; public sibling-derived 12-band descriptor file already fetched and SHA-256 verified. One candidate surface built; no holdout or submission slot used.</td></tr></table></section>
-
-<section><h2>#2 H61-I — Piedmont belt: basinward of the inverted bedrock–fill contact</h2>
-<table>
-<tr><th>Layers</th><td>Inverted depth = 0 contour (bedrock outcrop boundary) buffered 0–2 km basinward; band 12 detrended elevation curvature; band 19 slope ridges.</td></tr>
-<tr><th>Physical signature</th><td>Range-front normal faults step basinward through time; young splays and antithetic strands sit 0–2 km in front of the mapped range-front trace as low scarps across fans.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>The catalogue holds the main range-front trace; piedmont splays are the commonest unmapped class in Basin-and-Range compilations.</td></tr>
-<tr><th>Difference from implemented work</th><td>H61-MH included a basin indicator and step/corridor features in a learned model, but did not isolate an explicit 0–2 km basinward piedmont belt as its own spatial hypothesis or emit ribbons there.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Moderate. The screen&#x27;s highest prior-only enrichment (1.7× random for pixels inside the gravity corridor, all depths) sits at the range fronts. PROJECTION.</td></tr>
-<tr><th>Cost / data</th><td>Low (all inputs cached). One holdout run.</td></tr></table></section>
-
-<section><h2>#3 H61-H — Gravity-step × magnetic-edge conjunction (intrabasin faults offsetting magnetic basement or flows)</h2>
-<table>
-<tr><th>Layers</th><td>Corridor from the inversion; band 3 TMI horizontal-gradient maxima; band 6 tilt zero-crossings; band 9 vertical gradient.</td></tr>
-<tr><th>Physical signature</th><td>A normal fault that offsets magnetised basement or volcanic flows gives a sharp magnetic edge co-located with the gravity step; GeoDAWN line spacing resolves such edges to ~300 m, unlike regional gravity.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>Concealed under alluvium; surface mapping cannot see them. Co-location rejects intrabasement density contacts that have no magnetic expression (the lane&#x27;s named mimic).</td></tr>
-<tr><th>Difference from implemented work</th><td>H61-MH used the 19 supplied bands in a learned habitat model, but did not implement this explicit gravity-step × magnetic-edge conjunction as a test of the intrabasement-contact mimic; H61-C only proposed magnetic fabric as an oracle.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Low–moderate: precision ×1.5 plausible, recall small (few magnetic basins). PROJECTION.</td></tr>
-<tr><th>Cost / data</th><td>Low.</td></tr></table></section>
-
-<section><h2>#4 H61-J — Source-depth consistency filter (Euler SI = 0) to reject intrabasement contacts</h2>
-<table>
-<tr><th>Layers</th><td>Band 13 gravity, band 5 horizontal gradient, band 11 vertical gradient → contact-depth estimate; compare with inverted basin depth.</td></tr>
-<tr><th>Physical signature</th><td>A basement step has source depth ≈ fill thickness; an intrabasement density contrast has source depth ≫ fill thickness.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>Directly tests the lane&#x27;s competing explanation; improves the purity of X1-type candidates.</td></tr>
-<tr><th>Difference from implemented work</th><td>H61-MH included Euler SI=0 source depth as a weak model feature, but did not implement a hard source-depth-versus-inverted-fill-thickness consistency filter; this decision rule remains untested.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Low: raises precision of a candidate family whose recall is already tiny (X1a 0.023). PROJECTION.</td></tr>
-<tr><th>Cost / data</th><td>Medium.</td></tr></table></section>
-
-<section><h2>#5 H61-K — Scale-persistent paired-flank basement-step ribbons with magnetic corroboration</h2>
-<table>
-<tr><th>Layers</th><td>Supplied isostatic gravity → provisional inverted basement depth and its horizontal gradients at 200/400/800 m; supplied TMI/tilt/vertical-gradient magnetic bands as corroboration only. GP-1012 calibrates the regional depth scale.</td></tr>
-<tr><th>Physical signature</th><td>A candidate step has paired cross-profile gradient flanks of opposite sign, coherent strike, and a persistent location across scales; a co-located magnetic edge supports but is not required for the ribbon.</td></tr>
-<tr><th>Why it may catch catalogue-missing faults</th><td>Buried basin-interior faults can be omitted or fragmented in the mapped catalogue. Pairing, strike continuity, and scale persistence may suppress isolated density contacts/noise while allowing multi-line fault ribbons under alluvium; magnetics provide an independent but imperfect corroborating signature.</td></tr>
-<tr><th>Difference from implemented work</th><td>Distinct from H61-MH, which used supplied bands and inversion-derived variables in a learned habitat model, and from H61-H, which proposed simple gravity/magnetic edge conjunction. This untested rule matches paired flank geometry and scale persistence before ribbon emission; it uses no catalogue-derived candidate features.</td></tr>
-<tr><th>Expected DTI gain (projection, not score)</th><td>Low-to-moderate expected gain, PROJECTION ONLY: paired-flank geometry may improve precision, while requiring magnetic corroboration can lose faults without magnetised offsets. No measured DTI.</td></tr>
-<tr><th>Cost / data</th><td>Medium-high: compute multi-scale derivatives, orientation-aware cross-profile pairs, and pre-placement registry gates; run one holdout only if the surface first clears.</td></tr></table></section>
-
-<h2>Selection rule</h2>
-<p>A hypothesis may proceed to holdout only after its pre-placement surface clears both literal thresholds against every raster in the declared inventory.
-A passing surface would then be tested by the shared spatially blocked hide-and-recover evaluator, with a feature-alone leakage canary and a matched random-line control.
-Weekly promotion is a separate selector decision. The current-run H61-L candidate failed before holdout, so no score or TIFF is imputed for that run. A separate archived main-branch H61-L TIFF is retained as historical, and fails the strict final-dot gate.</p>
-
-<hr><p class="small">61GEMSDOE · evidence is local and hash-checked where stated. HOLDOUT-DTI is a proxy, not a leaderboard score.
-ORGANIZER-CONFIRMED is reserved for an organizer receipt tied to exact artifact bytes. <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">Repository</a> ·
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">Official leaderboard</a>.</p></div></body></html>
+<h2>Candidate hypotheses, ranked by expected DTI gain per unit cost</h2>
+<table><thead><tr><th>ID / layers</th><th>Physical signature</th>
+<th>Why it should catch a fault the catalogue lacks</th><th>Differs from</th>
+<th class="num">Expected gain</th><th class="num">Cost</th></tr></thead>
+<tbody><tr><td><strong>H61-O</strong><br><span class='small'>13 iso_grav_anom (input, isostatic residual)<br>own inversion: 200m decimation, 15km regional removal, Butterworth kc=0.5/(2*700m) + exp(k*z0) downward continuation, variable-density Bouguer solve dg=2πG[I(z0+Δt)-I(z0)]*1e5 with profile 1900/2100/2300/2450 kg/m3 fill, 2670 basement =&gt; Δρ -770/-570/-370/-220<br>derived: depth_fine, hgm, throw, steps, corridor 1km, basin<br>11 iso_grav_anom_vg + 18 iso_grav_anom_hg =&gt; Euler SI=0 source depth<br>03 tmi_hg =&gt; magnetic edge maxima as mimic flag<br>19 det_elev_slope + 16 ieq_n100a15 + 07 geod_shearrate etc as habitat features (30 total)</span></td><td>Basin thickness with realistic compaction: shallow fill low density (-770 contrast) gives large gravity per metre, deep fill high density (-220) gives small gravity per metre. Solving with variable density sharpens the HGM maxima of basement depth because same gravity gradient implies smaller depth gradient at depth and larger at shallow. Throw measured across 800m aperture, Euler depth consistency |log(Euler/depth)|&lt;log2 to reject intrabasement contacts.</td><td>80% Nevada covered by Cenozoic deposits, 20% &gt;1km thick (Blakely &amp; Jachens 1991). Fault under km-scale fill has no surface trace; catalogue from surface mapping blind there. Variable density improves depth accuracy (p50 671m, p90 1379m, frac&gt;1km 23.8% vs GP-1012 anchor 20%, cross r vs band15 0.736, corr depth vs grav -0.816) and thus HGM location.</td><td>All previous sessions used constant Δρ (-300 to -600). This is first variable-density implementation in 61GEMSDOE. Uses Newton solve for Δt from I(z) piecewise integral, not constant slab. Includes Euler consistency and magnetic edge as mimic control, measured not asserted.</td><td class='num'>Moderate: HOLDOUT-DTI 0.0542 CI 0.0440-0.0656 at 40k prune 3px vs random lines 0.0314 (1.7x), basin 463/2915 (15.9%) vs 309/2915 random (10.6%) = 1.5x recovery. Previous best H61-MH 0.0606 CI 0.0494-0.0727 at same budget, statistically tied. LOQO mean 0.0376 range 0.0315-0.0503 AUC 0.51-0.608 = at random baseline, so no spatial generalization — honest negative.</td><td class='num'>Low: one FFT inversion at 200m (2 min) + per-pixel Newton 30 iter (vectorized, 10s) + habitat stack memmap 1.4GB + OOF logistic 8 cells (12 min). Total ~25 min on 4-core.</td></tr><tr><td><strong>H61-N</strong><br><span class='small'>USGS 3DEP 1 m DEM (free public domain, The National Map Downloader https://apps.nationalmap.gov/downloader/ or LidarExplorer https://www.usgs.gov/tools/lidarexplorer) -&gt; scarp-likelihood raster (slope break, crest-toe curvature couplet, local relief model)<br>this session's 200m variable-density basement-step corridor and basin mask as prior<br>19 det_elev_slope at 100m as cross-check</span></td><td>Metre-scale topographic steps: scarp height 0.5-5 m, slope break and curvature couplet along strike. Primary evidence field mapper uses, invisible on 100 m grid. Lidar resolves low scarps in Quaternary fans/bajadas.</td><td>1:24k-1:250k catalogue missed low scarps in young fans; 1 m data resolves them. Corridor removes fan-toe, terrace-riser, incised-channel mimics with no basement step, basin mask removes range-front scarps already in catalogue.</td><td>No session in this repo has used lidar. Sibling lidar files (7GEMSDOE 0.1461, GEMSDOE47 0.0430 live) scanned whole area with no gravity prior and no basin gate.</td><td class='num'>Highest: blocked tests show every 100m locator at random baseline (LOQO 0.014-0.0718, AUC 0.51-0.618), so only remaining lever is resolution not in supplied grid. PROJECTION ONLY — not validated. Could reach 0.15-0.20 DTI if 1m scarps exist under fill.</td><td class='num'>High (data volume): ~500 GB for GeoDAWN footprint at 1m, tiled. Obtainable without sandbox change: fetch tiles on unrestricted machine, mirror into GitHub repo, pin by sha256 in prepare_data.py as feature stack is pinned. usgs.gov, apps.nationalmap.gov, prd-tnm.s3.amazonaws.com outside sandbox egress allow-list (IR-61-NET-01), so named as specific obtainable source rather than claimed.</td></tr><tr><td><strong>H61-C</strong><br><span class='small'>13 iso_grav_anom -&gt; variable-density depth<br>derived: depth gradient direction, HGM maxima<br>own: asymmetry = depth(+2px along gradient) - depth(-2px) and throw<br>11 vg + 18 hg =&gt; Euler depth</span></td><td>Normal fault has asymmetric throw: hanging wall deeper, footwall shallower, with sharp step and broad rollover. Intrabasement lithologic contact or volcanic edge is symmetric or has opposite polarity. Asymmetry measured as depth difference across HGM maxima along gradient direction, normalized by throw.</td><td>Asymmetric basin step under fill indicates growth fault, not depositional ramp; catalogue misses because surface expression is subtle or buried.</td><td>Previous sessions measured throw magnitude but not asymmetry or polarity. This adds directional sampling across step, not just magnitude.</td><td class='num'>Low-moderate: could improve precision 1.2-1.5x by rejecting symmetric ramps, but recall small because many buried faults have low throw (&lt;80m) below gravity resolution.</td><td class='num'>Low: one gradient computation + two samples per maxima, vectorized.</td></tr><tr><td><strong>H61-D</strong><br><span class='small'>13 iso_grav_anom -&gt; variable-density depth at multiple upward continuation heights (0m, 200m, 500m)<br>derived: HGM at each height, Blakely-Simpson maxima, track maxima upward to focus to source<br>11 vg + 18 hg</span></td><td>Upward continuation attenuates shallow sources faster than deep. Basement step (deep) persists to higher continuation, intrabasement contact (shallow) decays. Tracking HGM maxima across continuation heights focuses to source and separates populations.</td><td>Shallow intrabasement contacts mimic basement steps in single-height HGM; multi-scale focusing removes them, leaving true basement offsets which are more likely buried faults.</td><td>All previous HGM used single scale. This implements classic potential-field multi-scale edge detection (Blakely &amp; Simpson 1986 + upward continuation).</td><td class='num'>Low-moderate: could improve precision 1.3x, but requires careful filter tuning and may reduce recall if continuation too high.</td><td class='num'>Low: two extra FFTs at same grid, plus maxima tracking.</td></tr><tr><td><strong>H61-Q</strong><br><span class='small'>04 geod_2ndinv (second invariant, strain-rate magnitude)<br>07 geod_shearrate (shear rate)<br>08 geod_dilaterate (volumetric strain)<br>own: variable-density corridor 1km as prior</span></td><td>Fault accumulating slip has geodetic strain-rate maximum across it; second invariant localizes deformation, dilatation separates opening (normal-fault) from closing.</td><td>Actively slipping fault with no mappable scarp is exactly class catalogue misses; geodesy sees through regolith via GPS/InSAR.</td><td>Every previous locator in this repo is topographic, magnetic or gravity-derived. No session built candidate from geodetic bands alone; logistic weights show band07 +0.81, band04 -0.9, so signal present but naive high-strain=fault wrong (negative weight).</td><td class='num'>Moderate: single-band DTI 0.0288-0.0293 below random lines 0.0314, so alone not skillful; but as weighting inside corridor could add 0.01-0.02 DTI. PROJECTION ONLY, needs holdout validation.</td><td class='num'>Low: cached inputs, one holdout run.</td></tr></tbody></table>
+<p class="small">Each was checked against the repository's existing code before
+being proposed; the "differs from" column records what that check found.</p>
+<h2>External data needed but not obtainable here</h2>
+<p>USGS Geophysical Investigations Map GP‑1012 (Saltus &amp; Jachens, 1995) is
+the prescribed depth-scale reference. It is a folded paper map
+(<a href="https://store.usgs.gov/product/23063">USGS Store product 23063</a>)
+and its host is outside this sandbox's egress allowance
+(github.com, api.github.com, codeload.github.com, registry.npmjs.org,
+pypi.org, files.pythonhosted.org only). It is named here as the source a future
+session must obtain; the band-15 substitution used instead is recorded as an
+irregularity.</p>
+</main>
+<footer><div class="wrap">
+Autonomous research session. Scores labelled HOLDOUT-DTI are local
+hide-and-recover measurements on the mapped catalogue, <strong>not</strong>
+leaderboard scores. Scores labelled ORGANIZER-CONFIRMED come from a submission
+receipt; there are none in this repository yet.
+Repository: <a href="https://github.com/buffedlizard55-lab/61GEMSDOE">buffedlizard55-lab/61GEMSDOE</a>.
+</div></footer>
+</body></html>

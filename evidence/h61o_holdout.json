@@ -1,0 +1,1722 @@
+{
+  "evidence_class": "HOLDOUT-DTI",
+  "evaluator": "gems61.holdout_segmented v2 (whole segments <=12 px, 4 eroded quadrants, seeds 20+21, mode all)",
+  "alpha": 0.2,
+  "beta": 0.8,
+  "kernel_m": 300,
+  "n_withheld_truth_px": 22641,
+  "n_cells": 8,
+  "budgets": [
+    20000,
+    30000,
+    40000,
+    60000
+  ],
+  "prunes_px": [
+    2.0,
+    3.0,
+    4.0
+  ],
+  "tiles_px": [
+    2,
+    3,
+    4
+  ],
+  "feature_names": [
+    "band01",
+    "band02",
+    "band03",
+    "band04",
+    "band05",
+    "band06",
+    "band07",
+    "band08",
+    "band09",
+    "band10",
+    "band11",
+    "band12",
+    "band13",
+    "band14",
+    "band15",
+    "band16",
+    "band17",
+    "band18",
+    "band19",
+    "inv_depth_var",
+    "inv_depth_var_hgm",
+    "step_throw",
+    "step_indicator",
+    "corridor_indicator",
+    "basin_indicator",
+    "euler_depth",
+    "depth_grad_x",
+    "depth_grad_y",
+    "mag_edge_indicator",
+    "euler_consistency"
+  ],
+  "mean_coefficients": {
+    "band01": -0.04494897212134674,
+    "band02": 0.2906228508800268,
+    "band03": -0.06397806387394667,
+    "band04": -0.7256593536585569,
+    "band05": 0.5064457729458809,
+    "band06": -0.8127638399600983,
+    "band07": 0.9936412051320076,
+    "band08": 0.004420858109369874,
+    "band09": -0.16403302922844887,
+    "band10": -0.617327306419611,
+    "band11": 0.1466997256502509,
+    "band12": -0.8094168677926064,
+    "band13": -0.5076661109924316,
+    "band14": -0.09970344137400389,
+    "band15": -0.07707395823672414,
+    "band16": 0.8886718899011612,
+    "band17": 0.07365061156451702,
+    "band18": 0.026926632272079587,
+    "band19": 1.3566648662090302,
+    "inv_depth_var": 0.19285885337740183,
+    "inv_depth_var_hgm": 0.010361719876527786,
+    "step_throw": -0.0016614231863059103,
+    "step_indicator": -0.4851682111620903,
+    "corridor_indicator": -0.10655149165540934,
+    "basin_indicator": 1.5608665943145752,
+    "euler_depth": -0.04834899865090847,
+    "depth_grad_x": -0.007322574034333229,
+    "depth_grad_y": -0.270633852109313,
+    "mag_edge_indicator": 0.0507154050283134,
+    "euler_consistency": -0.589468527585268
+  },
+  "model_receipts": [
+    {
+      "n_pos": 58250,
+      "n_neg": 233672,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 20,
+      "train_auc": 0.6474371264618451,
+      "coefficients": {
+        "band01": -0.012367043644189835,
+        "band02": 0.33950603008270264,
+        "band03": -0.06873750686645508,
+        "band04": -0.7115809917449951,
+        "band05": 0.4786216914653778,
+        "band06": -0.8277875781059265,
+        "band07": 0.8086811900138855,
+        "band08": -0.09461688995361328,
+        "band09": -0.19163116812705994,
+        "band10": -0.6645359992980957,
+        "band11": 0.1625688225030899,
+        "band12": -0.8753122091293335,
+        "band13": -0.5348652601242065,
+        "band14": -0.10627444088459015,
+        "band15": -0.023770615458488464,
+        "band16": 1.0009698867797852,
+        "band17": 0.08592935651540756,
+        "band18": 0.06283329427242279,
+        "band19": 1.3964684009552002,
+        "inv_depth_var": 0.1670512557029724,
+        "inv_depth_var_hgm": -0.010208647698163986,
+        "step_throw": 0.01826716959476471,
+        "step_indicator": -0.44628438353538513,
+        "corridor_indicator": -0.122462697327137,
+        "basin_indicator": 1.5812656879425049,
+        "euler_depth": -0.041841987520456314,
+        "depth_grad_x": 0.018496282398700714,
+        "depth_grad_y": -0.24643798172473907,
+        "mag_edge_indicator": 0.0371137335896492,
+        "euler_consistency": -0.4394482970237732
+      },
+      "cell": "draw20_foldNW_all"
+    },
+    {
+      "n_pos": 57815,
+      "n_neg": 231971,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 20,
+      "train_auc": 0.6523785909559062,
+      "coefficients": {
+        "band01": -0.051123153418302536,
+        "band02": 0.26872625946998596,
+        "band03": -0.05648850277066231,
+        "band04": -0.9557999968528748,
+        "band05": 0.5191451907157898,
+        "band06": -0.7933488488197327,
+        "band07": 1.4568994045257568,
+        "band08": 0.14253370463848114,
+        "band09": -0.146352156996727,
+        "band10": -0.6618562340736389,
+        "band11": 0.12407881766557693,
+        "band12": -0.6985966563224792,
+        "band13": -0.37107589840888977,
+        "band14": -0.10575064271688461,
+        "band15": -0.08293525874614716,
+        "band16": 0.8692525029182434,
+        "band17": 0.07176892459392548,
+        "band18": 0.0184995885938406,
+        "band19": 1.281455159187317,
+        "inv_depth_var": 0.33584606647491455,
+        "inv_depth_var_hgm": -0.014407317154109478,
+        "step_throw": -0.0034232051111757755,
+        "step_indicator": -0.35891392827033997,
+        "corridor_indicator": -0.0661884993314743,
+        "basin_indicator": 1.4447633028030396,
+        "euler_depth": -0.056080374866724014,
+        "depth_grad_x": 0.03818173334002495,
+        "depth_grad_y": -0.29892265796661377,
+        "mag_edge_indicator": 0.04293069988489151,
+        "euler_consistency": -0.534191906452179
+      },
+      "cell": "draw20_foldNE_all"
+    },
+    {
+      "n_pos": 56395,
+      "n_neg": 226330,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 20,
+      "train_auc": 0.6426941142549961,
+      "coefficients": {
+        "band01": -0.05018363520503044,
+        "band02": 0.19781512022018433,
+        "band03": -0.10473953932523727,
+        "band04": -1.1035939455032349,
+        "band05": 0.5226752161979675,
+        "band06": -0.7710745334625244,
+        "band07": 1.0569859743118286,
+        "band08": 0.0473453626036644,
+        "band09": -0.16055913269519806,
+        "band10": -0.645200252532959,
+        "band11": 0.15196870267391205,
+        "band12": -0.885263204574585,
+        "band13": -0.584286630153656,
+        "band14": -0.029618872329592705,
+        "band15": -0.17494821548461914,
+        "band16": 1.0177406072616577,
+        "band17": 0.024600481614470482,
+        "band18": 0.005744250025600195,
+        "band19": 1.4775919914245605,
+        "inv_depth_var": 0.16938184201717377,
+        "inv_depth_var_hgm": 0.09739480167627335,
+        "step_throw": 0.01489802822470665,
+        "step_indicator": -0.4369570016860962,
+        "corridor_indicator": -0.15324656665325165,
+        "basin_indicator": 1.5139045715332031,
+        "euler_depth": -0.04435493052005768,
+        "depth_grad_x": -0.041396498680114746,
+        "depth_grad_y": -0.28331518173217773,
+        "mag_edge_indicator": 0.051366087049245834,
+        "euler_consistency": -0.5301205515861511
+      },
+      "cell": "draw20_foldSW_all"
+    },
+    {
+      "n_pos": 56922,
+      "n_neg": 228450,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 20,
+      "train_auc": 0.6373678161256311,
+      "coefficients": {
+        "band01": -0.07882488518953323,
+        "band02": 0.30640143156051636,
+        "band03": -0.06081659346818924,
+        "band04": -0.13261200487613678,
+        "band05": 0.5063842535018921,
+        "band06": -0.8430582880973816,
+        "band07": 0.7225344181060791,
+        "band08": -0.03637400269508362,
+        "band09": -0.15242710709571838,
+        "band10": -0.5478158593177795,
+        "band11": 0.15040022134780884,
+        "band12": -0.7953400015830994,
+        "band13": -0.4513048231601715,
+        "band14": -0.10999671369791031,
+        "band15": -0.05429888144135475,
+        "band16": 0.6558153629302979,
+        "band17": 0.1127905324101448,
+        "band18": 0.04297375679016113,
+        "band19": 1.2885470390319824,
+        "inv_depth_var": 0.1857437640428543,
+        "inv_depth_var_hgm": -0.03341813385486603,
+        "step_throw": -0.024609824642539024,
+        "step_indicator": -0.5298647880554199,
+        "corridor_indicator": -0.08716771751642227,
+        "basin_indicator": 1.6654084920883179,
+        "euler_depth": -0.04862450063228607,
+        "depth_grad_x": -0.015480964444577694,
+        "depth_grad_y": -0.26252177357673645,
+        "mag_edge_indicator": 0.06638075411319733,
+        "euler_consistency": -0.9703500270843506
+      },
+      "cell": "draw20_foldSE_all"
+    },
+    {
+      "n_pos": 58256,
+      "n_neg": 233686,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 21,
+      "train_auc": 0.6477916266272304,
+      "coefficients": {
+        "band01": 0.006736596580594778,
+        "band02": 0.3250855803489685,
+        "band03": -0.04867761209607124,
+        "band04": -0.74102383852005,
+        "band05": 0.484415203332901,
+        "band06": -0.8638704419136047,
+        "band07": 0.8156875967979431,
+        "band08": -0.12595048546791077,
+        "band09": -0.1769934743642807,
+        "band10": -0.681253969669342,
+        "band11": 0.13558652997016907,
+        "band12": -0.8588718175888062,
+        "band13": -0.5757945775985718,
+        "band14": -0.12368661165237427,
+        "band15": -0.04547762870788574,
+        "band16": 1.0391995906829834,
+        "band17": 0.08699654042720795,
+        "band18": 0.06253474950790405,
+        "band19": 1.3663089275360107,
+        "inv_depth_var": 0.14783093333244324,
+        "inv_depth_var_hgm": -0.011729423888027668,
+        "step_throw": 0.006362768821418285,
+        "step_indicator": -0.5215414762496948,
+        "corridor_indicator": -0.10713133960962296,
+        "basin_indicator": 1.670370101928711,
+        "euler_depth": -0.038818083703517914,
+        "depth_grad_x": 0.022981718182563782,
+        "depth_grad_y": -0.25919684767723083,
+        "mag_edge_indicator": 0.05726398900151253,
+        "euler_consistency": -0.4687758982181549
+      },
+      "cell": "draw21_foldNW_all"
+    },
+    {
+      "n_pos": 57810,
+      "n_neg": 231956,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 21,
+      "train_auc": 0.6513078736496886,
+      "coefficients": {
+        "band01": -0.053027208894491196,
+        "band02": 0.29025787115097046,
+        "band03": -0.03995036706328392,
+        "band04": -0.9010757207870483,
+        "band05": 0.48210805654525757,
+        "band06": -0.796370267868042,
+        "band07": 1.4121861457824707,
+        "band08": 0.12133705615997314,
+        "band09": -0.15284757316112518,
+        "band10": -0.6346333622932434,
+        "band11": 0.15733440220355988,
+        "band12": -0.7148826122283936,
+        "band13": -0.44575732946395874,
+        "band14": -0.12664584815502167,
+        "band15": -0.08667218685150146,
+        "band16": 0.860457181930542,
+        "band17": 0.08973625302314758,
+        "band18": 0.03237726539373398,
+        "band19": 1.2708336114883423,
+        "inv_depth_var": 0.21912549436092377,
+        "inv_depth_var_hgm": 0.0361107774078846,
+        "step_throw": 0.045266080647706985,
+        "step_indicator": -0.5907913446426392,
+        "corridor_indicator": -0.10858059674501419,
+        "basin_indicator": 1.549740195274353,
+        "euler_depth": -0.053749531507492065,
+        "depth_grad_x": 0.011906119994819164,
+        "depth_grad_y": -0.25857147574424744,
+        "mag_edge_indicator": 0.047370925545692444,
+        "euler_consistency": -0.4685552716255188
+      },
+      "cell": "draw21_foldNE_all"
+    },
+    {
+      "n_pos": 56389,
+      "n_neg": 226374,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 21,
+      "train_auc": 0.6436504195248443,
+      "coefficients": {
+        "band01": -0.07811792939901352,
+        "band02": 0.23173265159130096,
+        "band03": -0.08901567757129669,
+        "band04": -1.0351979732513428,
+        "band05": 0.5419152975082397,
+        "band06": -0.8005043864250183,
+        "band07": 0.9570163488388062,
+        "band08": 0.013537777587771416,
+        "band09": -0.17596513032913208,
+        "band10": -0.6240580677986145,
+        "band11": 0.14968986809253693,
+        "band12": -0.9085467457771301,
+        "band13": -0.6298705339431763,
+        "band14": -0.027675220742821693,
+        "band15": -0.1560865193605423,
+        "band16": 0.9995958209037781,
+        "band17": 0.027027221396565437,
+        "band18": -0.012056970968842506,
+        "band19": 1.4809783697128296,
+        "inv_depth_var": 0.10701998323202133,
+        "inv_depth_var_hgm": 0.08380112051963806,
+        "step_throw": -0.061018966138362885,
+        "step_indicator": -0.4059256315231323,
+        "corridor_indicator": -0.11027384549379349,
+        "basin_indicator": 1.4231810569763184,
+        "euler_depth": -0.05697231739759445,
+        "depth_grad_x": -0.05189727619290352,
+        "depth_grad_y": -0.2824867367744446,
+        "mag_edge_indicator": 0.0574321486055851,
+        "euler_consistency": -0.4344751238822937
+      },
+      "cell": "draw21_foldSW_all"
+    },
+    {
+      "n_pos": 56922,
+      "n_neg": 228355,
+      "C": 0.5,
+      "neg_ratio": 4,
+      "seed": 21,
+      "train_auc": 0.6374816608430642,
+      "coefficients": {
+        "band01": -0.04268451780080795,
+        "band02": 0.3654578626155853,
+        "band03": -0.04339871183037758,
+        "band04": -0.22439035773277283,
+        "band05": 0.5163012742996216,
+        "band06": -0.8060963749885559,
+        "band07": 0.7191385626792908,
+        "band08": -0.03244565799832344,
+        "band09": -0.1554884910583496,
+        "band10": -0.4792647063732147,
+        "band11": 0.1419704407453537,
+        "band12": -0.7385216951370239,
+        "band13": -0.4683738350868225,
+        "band14": -0.1679791808128357,
+        "band15": 0.007597640156745911,
+        "band16": 0.666344165802002,
+        "band17": 0.09035558253526688,
+        "band18": 0.002507124561816454,
+        "band19": 1.2911354303359985,
+        "inv_depth_var": 0.21087148785591125,
+        "inv_depth_var_hgm": -0.06464941799640656,
+        "step_throw": -0.009033436886966228,
+        "step_indicator": -0.5910671353340149,
+        "corridor_indicator": -0.09736067056655884,
+        "basin_indicator": 1.6382993459701538,
+        "euler_depth": -0.04635026305913925,
+        "depth_grad_x": -0.04137170687317848,
+        "depth_grad_y": -0.2736181616783142,
+        "mag_edge_indicator": 0.045864902436733246,
+        "euler_consistency": -0.8698311448097229
+      },
+      "cell": "draw21_foldSE_all"
+    }
+  ],
+  "results": [
+    {
+      "name": "CONTROL random lines @ 20000",
+      "kind": "lines",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.022013470475766347,
+      "tp": 576.1138223357751,
+      "fp": 39714.72412109375,
+      "fn": 22064.886177664222,
+      "n_emitted": 40000,
+      "coverage": 0.025445599679156185,
+      "ci95_bootstrap_cells": [
+        0.019278688185631464,
+        0.024996070879165194
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 171,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 160,
+      "basin_recovery_rate": 0.0548885077186964,
+      "basin_recovery_ci95": [
+        0.04719081586621558,
+        0.06375781337284539
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 30000",
+      "kind": "lines",
+      "budget": 30000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.027108505069059933,
+      "tp": 818.5340216453551,
+      "fp": 59591.12158203125,
+      "fn": 21822.465978354645,
+      "n_emitted": 60002,
+      "coverage": 0.036152732725822846,
+      "ci95_bootstrap_cells": [
+        0.024165509085582654,
+        0.02991647596873753
+      ],
+      "n_emitted_per_draw": 30001.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 242,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 229,
+      "basin_recovery_rate": 0.07855917667238423,
+      "basin_recovery_ci95": [
+        0.06933751765438455,
+        0.08889014401820615
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 40000",
+      "kind": "lines",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03141382104713175,
+      "tp": 1074.9378256298837,
+      "fp": 79454.197265625,
+      "fn": 21566.062174370116,
+      "n_emitted": 80000,
+      "coverage": 0.04747748887548623,
+      "ci95_bootstrap_cells": [
+        0.02824302937445006,
+        0.034091835908101865
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 324,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 309,
+      "basin_recovery_rate": 0.10600343053173242,
+      "basin_recovery_ci95": [
+        0.09534205440119561,
+        0.11770187675954544
+      ]
+    },
+    {
+      "name": "CONTROL random lines @ 60000",
+      "kind": "lines",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03993446512051797,
+      "tp": 1688.3262375770669,
+      "fp": 119134.7841796875,
+      "fn": 20952.673762422935,
+      "n_emitted": 120000,
+      "coverage": 0.07456941997160314,
+      "ci95_bootstrap_cells": [
+        0.03511490288615065,
+        0.044428573324515074
+      ],
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 509,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 482,
+      "basin_recovery_rate": 0.1653516295025729,
+      "basin_recovery_ci95": [
+        0.1523076878799944,
+        0.17927642604887187
+      ]
+    },
+    {
+      "name": "CONTROL random dots anywhere @ 40000",
+      "kind": "dots",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.04120343198713449,
+      "tp": 1412.2221892196592,
+      "fp": 79395.6904296875,
+      "fn": 21228.777810780342,
+      "n_emitted": 80000,
+      "coverage": 0.0623745501179126,
+      "ci95_bootstrap_cells": [
+        0.03664661945326507,
+        0.045304727028413753
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 466,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 441,
+      "basin_recovery_rate": 0.15128644939965694,
+      "basin_recovery_ci95": [
+        0.13873788570897658,
+        0.16475289010721259
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 2px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.028274322149185915,
+      "tp": 739.4765792299554,
+      "fp": 39464.74755859375,
+      "fn": 21901.523420770045,
+      "n_emitted": 40000,
+      "coverage": 0.032660950454041576,
+      "ci95_bootstrap_cells": [
+        0.02199252899506308,
+        0.035596679981378436
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 203,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 203,
+      "basin_recovery_rate": 0.06963979416809606,
+      "basin_recovery_ci95": [
+        0.06095467842576139,
+        0.07945769566318042
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 2px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.046240644616422834,
+      "tp": 1211.00677185112,
+      "fp": 39171.1318359375,
+      "fn": 21429.99322814888,
+      "n_emitted": 40000,
+      "coverage": 0.05348733588848196,
+      "ci95_bootstrap_cells": [
+        0.03713430756166954,
+        0.05657168283603744
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 301,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 293,
+      "basin_recovery_rate": 0.10051457975986278,
+      "basin_recovery_ci95": [
+        0.09011944195234131,
+        0.11196123531076965
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 2px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007001776195777521,
+      "tp": 12.74201959101608,
+      "fp": 414.5952835083008,
+      "fn": 22628.257980408984,
+      "n_emitted": 420,
+      "coverage": 0.0005627851946034221,
+      "ci95_bootstrap_cells": [
+        0.00024564597433012224,
+        0.0013130443496166535
+      ],
+      "n_emitted_per_draw": 210.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 7,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 7,
+      "basin_recovery_rate": 0.0024013722126929675,
+      "basin_recovery_ci95": [
+        0.0011637170362476278,
+        0.004948796806725735
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 2px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.031220303010438526,
+      "tp": 932.0865895851355,
+      "fp": 57779.625,
+      "fn": 21708.91341041486,
+      "n_emitted": 58464,
+      "coverage": 0.04116808398856656,
+      "ci95_bootstrap_cells": [
+        0.025270046567614064,
+        0.037959265945281415
+      ],
+      "n_emitted_per_draw": 29232.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 247,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 247,
+      "basin_recovery_rate": 0.08473413379073756,
+      "basin_recovery_ci95": [
+        0.07516299842678852,
+        0.09539832388063597
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 2px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.054611545229094775,
+      "tp": 1650.132980790574,
+      "fp": 58865.0,
+      "fn": 20990.86701920943,
+      "n_emitted": 60002,
+      "coverage": 0.07288251317479677,
+      "ci95_bootstrap_cells": [
+        0.04433399648971928,
+        0.06619759517027173
+      ],
+      "n_emitted_per_draw": 30001.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 415,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 403,
+      "basin_recovery_rate": 0.13825042881646654,
+      "basin_recovery_ci95": [
+        0.1261956804283844,
+        0.15125736738093334
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 2px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007001776195777521,
+      "tp": 12.74201959101608,
+      "fp": 414.5952835083008,
+      "fn": 22628.257980408984,
+      "n_emitted": 420,
+      "coverage": 0.0005627851946034221,
+      "ci95_bootstrap_cells": [
+        0.00024564597433012224,
+        0.0013130443496166535
+      ],
+      "n_emitted_per_draw": 210.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 7,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 7,
+      "basin_recovery_rate": 0.0024013722126929675,
+      "basin_recovery_ci95": [
+        0.0011637170362476278,
+        0.004948796806725735
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 2px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03207464879283294,
+      "tp": 1050.833625722844,
+      "fp": 72195.787109375,
+      "fn": 21590.166374277156,
+      "n_emitted": 72972,
+      "coverage": 0.046412862758837686,
+      "ci95_bootstrap_cells": [
+        0.025945219081951635,
+        0.0392352029200867
+      ],
+      "n_emitted_per_draw": 36486.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 283,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 283,
+      "basin_recovery_rate": 0.09708404802744425,
+      "basin_recovery_ci95": [
+        0.0868603458404909,
+        0.10836829773660125
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 2px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.059963420987307586,
+      "tp": 2053.0537011029082,
+      "fp": 78575.1220703125,
+      "fn": 20587.946298897088,
+      "n_emitted": 80000,
+      "coverage": 0.09067857873339996,
+      "ci95_bootstrap_cells": [
+        0.04864613997021021,
+        0.07271178202083205
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 521,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 507,
+      "basin_recovery_rate": 0.17392795883361922,
+      "basin_recovery_ci95": [
+        0.16059933422540898,
+        0.18811486391850427
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 2px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007001776195777521,
+      "tp": 12.74201959101608,
+      "fp": 414.5952835083008,
+      "fn": 22628.257980408984,
+      "n_emitted": 420,
+      "coverage": 0.0005627851946034221,
+      "ci95_bootstrap_cells": [
+        0.00024564597433012224,
+        0.0013130443496166535
+      ],
+      "n_emitted_per_draw": 210.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 7,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 7,
+      "basin_recovery_rate": 0.0024013722126929675,
+      "basin_recovery_ci95": [
+        0.0011637170362476278,
+        0.004948796806725735
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 2px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03214361926217626,
+      "tp": 1194.132218575594,
+      "fp": 93991.3642578125,
+      "fn": 21446.867781424404,
+      "n_emitted": 94884,
+      "coverage": 0.05274202634934827,
+      "ci95_bootstrap_cells": [
+        0.026958461287821218,
+        0.03837787315793391
+      ],
+      "n_emitted_per_draw": 47442.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 319,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 319,
+      "basin_recovery_rate": 0.10943396226415095,
+      "basin_recovery_ci95": [
+        0.098610964936063,
+        0.12128499991069686
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 2px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.06744930437208198,
+      "tp": 2852.0103483731327,
+      "fp": 118002.80078125,
+      "fn": 19788.989651626867,
+      "n_emitted": 120000,
+      "coverage": 0.12596662463553432,
+      "ci95_bootstrap_cells": [
+        0.05541829883086915,
+        0.08198161522221999
+      ],
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 738,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 715,
+      "basin_recovery_rate": 0.24528301886792453,
+      "basin_recovery_ci95": [
+        0.23000588141122294,
+        0.26123061740188125
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 2px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0007001776195777521,
+      "tp": 12.74201959101608,
+      "fp": 414.5952835083008,
+      "fn": 22628.257980408984,
+      "n_emitted": 420,
+      "coverage": 0.0005627851946034221,
+      "ci95_bootstrap_cells": [
+        0.00024564597433012224,
+        0.0013130443496166535
+      ],
+      "n_emitted_per_draw": 210.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 7,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 7,
+      "basin_recovery_rate": 0.0024013722126929675,
+      "basin_recovery_ci95": [
+        0.0011637170362476278,
+        0.004948796806725735
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 3px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.02499544791444927,
+      "tp": 653.6904174058313,
+      "fp": 39544.20263671875,
+      "fn": 21987.309582594167,
+      "n_emitted": 40000,
+      "coverage": 0.028871976388226285,
+      "ci95_bootstrap_cells": [
+        0.01971309279852484,
+        0.030673199137991807
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 186,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 186,
+      "basin_recovery_rate": 0.06380789022298457,
+      "basin_recovery_ci95": [
+        0.0554966837541587,
+        0.07326723306855115
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 3px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.04070747406488939,
+      "tp": 1065.894891408792,
+      "fp": 39291.38134765625,
+      "fn": 21575.105108591208,
+      "n_emitted": 40000,
+      "coverage": 0.0470780836274366,
+      "ci95_bootstrap_cells": [
+        0.03157327992655075,
+        0.05138383352834068
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 272,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 265,
+      "basin_recovery_rate": 0.09090909090909091,
+      "basin_recovery_ci95": [
+        0.08100442365195056,
+        0.10189055929030778
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 3px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0005517743503029211,
+      "tp": 10.039660333346804,
+      "fp": 402.10237884521484,
+      "fn": 22630.960339666653,
+      "n_emitted": 406,
+      "coverage": 0.0004434283085264257,
+      "ci95_bootstrap_cells": [
+        0.000201288041243846,
+        0.0009467342675255135
+      ],
+      "n_emitted_per_draw": 203.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 5,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 5,
+      "basin_recovery_rate": 0.0017152658662092624,
+      "basin_recovery_ci95": [
+        0.0007328746625582228,
+        0.0040092324432113805
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 3px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.027978997633186134,
+      "tp": 833.3867352013933,
+      "fp": 57533.3837890625,
+      "fn": 21807.613264798605,
+      "n_emitted": 58116,
+      "coverage": 0.03680874233476407,
+      "ci95_bootstrap_cells": [
+        0.02274157761303359,
+        0.0334196833431527
+      ],
+      "n_emitted_per_draw": 29058.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 224,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 224,
+      "basin_recovery_rate": 0.07684391080617496,
+      "basin_recovery_ci95": [
+        0.06772238359949569,
+        0.0870792612300856
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 3px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.04919817680040569,
+      "tp": 1486.5362262392377,
+      "fp": 59025.81689453125,
+      "fn": 21154.463773760763,
+      "n_emitted": 60002,
+      "coverage": 0.0656568272708466,
+      "ci95_bootstrap_cells": [
+        0.039267906698090695,
+        0.060397751089289166
+      ],
+      "n_emitted_per_draw": 30001.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 373,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 363,
+      "basin_recovery_rate": 0.12452830188679245,
+      "basin_recovery_ci95": [
+        0.1130338923773872,
+        0.13701102068785537
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 3px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0005517743503029211,
+      "tp": 10.039660333346804,
+      "fp": 402.10237884521484,
+      "fn": 22630.960339666653,
+      "n_emitted": 406,
+      "coverage": 0.0004434283085264257,
+      "ci95_bootstrap_cells": [
+        0.000201288041243846,
+        0.0009467342675255135
+      ],
+      "n_emitted_per_draw": 203.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 5,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 5,
+      "basin_recovery_rate": 0.0017152658662092624,
+      "basin_recovery_ci95": [
+        0.0007328746625582228,
+        0.0040092324432113805
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 3px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.028130236006433624,
+      "tp": 919.6288651305147,
+      "fp": 71975.51611328125,
+      "fn": 21721.371134869485,
+      "n_emitted": 72624,
+      "coverage": 0.04061785544501191,
+      "ci95_bootstrap_cells": [
+        0.02312889185220979,
+        0.03335214264512125
+      ],
+      "n_emitted_per_draw": 36312.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 255,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 255,
+      "basin_recovery_rate": 0.08747855917667238,
+      "basin_recovery_ci95": [
+        0.0777573108238371,
+        0.09828563843240243
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 3px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.05419253169661684,
+      "tp": 1855.4376356879447,
+      "fp": 78769.984375,
+      "fn": 20785.562364312056,
+      "n_emitted": 80000,
+      "coverage": 0.08195033945885538,
+      "ci95_bootstrap_cells": [
+        0.044000207112936396,
+        0.06564977029187744
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 476,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 463,
+      "basin_recovery_rate": 0.1588336192109777,
+      "basin_recovery_ci95": [
+        0.14601467468464355,
+        0.17255057524078696
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 3px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0005517743503029211,
+      "tp": 10.039660333346804,
+      "fp": 402.10237884521484,
+      "fn": 22630.960339666653,
+      "n_emitted": 406,
+      "coverage": 0.0004434283085264257,
+      "ci95_bootstrap_cells": [
+        0.000201288041243846,
+        0.0009467342675255135
+      ],
+      "n_emitted_per_draw": 203.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 5,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 5,
+      "basin_recovery_rate": 0.0017152658662092624,
+      "basin_recovery_ci95": [
+        0.0007328746625582228,
+        0.0040092324432113805
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 3px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.02826037118834479,
+      "tp": 1039.9372670010198,
+      "fp": 92388.20849609375,
+      "fn": 21601.06273299898,
+      "n_emitted": 93126,
+      "coverage": 0.04593159608679033,
+      "ci95_bootstrap_cells": [
+        0.02391283267907617,
+        0.032765377213243865
+      ],
+      "n_emitted_per_draw": 46563.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 287,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 287,
+      "basin_recovery_rate": 0.09845626072041166,
+      "basin_recovery_ci95": [
+        0.08816350376757408,
+        0.10980595328392563
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 3px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.06091134709418964,
+      "tp": 2575.6681377359487,
+      "fp": 118287.9443359375,
+      "fn": 20065.331862264055,
+      "n_emitted": 120000,
+      "coverage": 0.11376123571114122,
+      "ci95_bootstrap_cells": [
+        0.05012662464084637,
+        0.07318865954280623
+      ],
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 658,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 638,
+      "basin_recovery_rate": 0.2188679245283019,
+      "basin_recovery_ci95": [
+        0.20423318888571235,
+        0.23424265054504717
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 3px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 3.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0005517743503029211,
+      "tp": 10.039660333346804,
+      "fp": 402.10237884521484,
+      "fn": 22630.960339666653,
+      "n_emitted": 406,
+      "coverage": 0.0004434283085264257,
+      "ci95_bootstrap_cells": [
+        0.000201288041243846,
+        0.0009467342675255135
+      ],
+      "n_emitted_per_draw": 203.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 5,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 5,
+      "basin_recovery_rate": 0.0017152658662092624,
+      "basin_recovery_ci95": [
+        0.0007328746625582228,
+        0.0040092324432113805
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 4px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.02044894871445968,
+      "tp": 534.6504431017638,
+      "fp": 39629.44970703125,
+      "fn": 22106.349556898236,
+      "n_emitted": 40000,
+      "coverage": 0.023614259224493787,
+      "ci95_bootstrap_cells": [
+        0.016482986541763275,
+        0.02479623981584439
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 149,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 149,
+      "basin_recovery_rate": 0.05111492281303602,
+      "basin_recovery_ci95": [
+        0.043694312333412505,
+        0.05971707985102778
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 4px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.034748311174258376,
+      "tp": 909.4953896268426,
+      "fp": 39395.5107421875,
+      "fn": 21731.50461037316,
+      "n_emitted": 40000,
+      "coverage": 0.04017028353989853,
+      "ci95_bootstrap_cells": [
+        0.02559869158305801,
+        0.04499214741928165
+      ],
+      "n_emitted_per_draw": 20000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 231,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 224,
+      "basin_recovery_rate": 0.07684391080617496,
+      "basin_recovery_ci95": [
+        0.06772238359949569,
+        0.0870792612300856
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 4px) @ 20000",
+      "kind": "candidate",
+      "budget": 20000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0003852993396231213,
+      "tp": 7.009080982965738,
+      "fp": 385.2976417541504,
+      "fn": 22633.990919017037,
+      "n_emitted": 388,
+      "coverage": 0.00030957470884526906,
+      "ci95_bootstrap_cells": [
+        1.2087454207992484e-05,
+        0.0008191717592815954
+      ],
+      "n_emitted_per_draw": 194.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 2,
+      "basin_recovery_rate": 0.0006861063464837049,
+      "basin_recovery_ci95": [
+        0.00018817527595067318,
+        0.0024983217240132907
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 4px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.022427715696064856,
+      "tp": 666.6444016396565,
+      "fp": 57390.02001953125,
+      "fn": 21974.355598360344,
+      "n_emitted": 57853,
+      "coverage": 0.02944412356519838,
+      "ci95_bootstrap_cells": [
+        0.018786907305803506,
+        0.026349930074683343
+      ],
+      "n_emitted_per_draw": 28926.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 183,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 183,
+      "basin_recovery_rate": 0.06277873070325901,
+      "basin_recovery_ci95": [
+        0.054535613046329395,
+        0.07217269367057483
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 4px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.04183388661097829,
+      "tp": 1263.381559447033,
+      "fp": 59172.4013671875,
+      "fn": 21377.618440552968,
+      "n_emitted": 60002,
+      "coverage": 0.055800607722584376,
+      "ci95_bootstrap_cells": [
+        0.03246773496272583,
+        0.05220289456344603
+      ],
+      "n_emitted_per_draw": 30001.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 322,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 312,
+      "basin_recovery_rate": 0.10703259005145797,
+      "basin_recovery_ci95": [
+        0.09632235206386966,
+        0.11877718920267702
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 4px) @ 30000",
+      "kind": "candidate",
+      "budget": 30000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0003852993396231213,
+      "tp": 7.009080982965738,
+      "fp": 385.2976417541504,
+      "fn": 22633.990919017037,
+      "n_emitted": 388,
+      "coverage": 0.00030957470884526906,
+      "ci95_bootstrap_cells": [
+        1.2087454207992484e-05,
+        0.0008191717592815954
+      ],
+      "n_emitted_per_draw": 194.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 2,
+      "basin_recovery_rate": 0.0006861063464837049,
+      "basin_recovery_ci95": [
+        0.00018817527595067318,
+        0.0024983217240132907
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 4px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.022399478013507924,
+      "tp": 730.855952218397,
+      "fp": 71846.43505859375,
+      "fn": 21910.144047781603,
+      "n_emitted": 72361,
+      "coverage": 0.03228019752742357,
+      "ci95_bootstrap_cells": [
+        0.019091479396453694,
+        0.02585274754720413
+      ],
+      "n_emitted_per_draw": 36180.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 202,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 202,
+      "basin_recovery_rate": 0.06929674099485421,
+      "basin_recovery_ci95": [
+        0.060633083600550364,
+        0.07909408711978957
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 4px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.04686163883230524,
+      "tp": 1603.699787425388,
+      "fp": 78942.3837890625,
+      "fn": 21037.300212574613,
+      "n_emitted": 80000,
+      "coverage": 0.07083166765714359,
+      "ci95_bootstrap_cells": [
+        0.03705507569024938,
+        0.05754694469188691
+      ],
+      "n_emitted_per_draw": 40000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 415,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 403,
+      "basin_recovery_rate": 0.13825042881646654,
+      "basin_recovery_ci95": [
+        0.1261956804283844,
+        0.15125736738093334
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 4px) @ 40000",
+      "kind": "candidate",
+      "budget": 40000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0003852993396231213,
+      "tp": 7.009080982965738,
+      "fp": 385.2976417541504,
+      "fn": 22633.990919017037,
+      "n_emitted": 388,
+      "coverage": 0.00030957470884526906,
+      "ci95_bootstrap_cells": [
+        1.2087454207992484e-05,
+        0.0008191717592815954
+      ],
+      "n_emitted_per_draw": 194.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 2,
+      "basin_recovery_rate": 0.0006861063464837049,
+      "basin_recovery_ci95": [
+        0.00018817527595067318,
+        0.0024983217240132907
+      ]
+    },
+    {
+      "name": "O1 habitat x corridor (prune 4px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.02273579820466529,
+      "tp": 829.5355709164444,
+      "fp": 91035.85693359375,
+      "fn": 21811.464429083557,
+      "n_emitted": 91620,
+      "coverage": 0.03663864541833154,
+      "ci95_bootstrap_cells": [
+        0.01958192961000486,
+        0.02596722253906948
+      ],
+      "n_emitted_per_draw": 45810.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 235,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 235,
+      "basin_recovery_rate": 0.08061749571183534,
+      "basin_recovery_ci95": [
+        0.07127747266836743,
+        0.09106140921583453
+      ]
+    },
+    {
+      "name": "O2 habitat no gate (prune 4px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.05159369271984536,
+      "tp": 2180.3770560125613,
+      "fp": 118558.2978515625,
+      "fn": 20460.622943987437,
+      "n_emitted": 120000,
+      "coverage": 0.09630215343900717,
+      "ci95_bootstrap_cells": [
+        0.04255888162175222,
+        0.06172984232430091
+      ],
+      "n_emitted_per_draw": 60000.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 560,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 542,
+      "basin_recovery_rate": 0.18593481989708405,
+      "basin_recovery_ci95": [
+        0.1722280198752513,
+        0.20046829616972775
+      ]
+    },
+    {
+      "name": "O3 habitat x corridor + euler_cons (prune 4px) @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 4.0,
+      "tile_px": 3,
+      "pooled_dti": 0.0003852993396231213,
+      "tp": 7.009080982965738,
+      "fp": 385.2976417541504,
+      "fn": 22633.990919017037,
+      "n_emitted": 388,
+      "coverage": 0.00030957470884526906,
+      "ci95_bootstrap_cells": [
+        1.2087454207992484e-05,
+        0.0008191717592815954
+      ],
+      "n_emitted_per_draw": 194.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 2,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 2,
+      "basin_recovery_rate": 0.0006861063464837049,
+      "basin_recovery_ci95": [
+        0.00018817527595067318,
+        0.0024983217240132907
+      ]
+    },
+    {
+      "name": "O4 habitat x corridor tile 2px @ 60000 prune 2.0",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 2,
+      "pooled_dti": 0.02734030526386402,
+      "tp": 1140.4169868903778,
+      "fp": 116855.2490234375,
+      "fn": 21500.583013109623,
+      "n_emitted": 118126,
+      "coverage": 0.050369550235871995,
+      "ci95_bootstrap_cells": [
+        0.021935373085224637,
+        0.03346659359923166
+      ],
+      "n_emitted_per_draw": 59063.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 265,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 265,
+      "basin_recovery_rate": 0.09090909090909091,
+      "basin_recovery_ci95": [
+        0.08100442365195056,
+        0.10189055929030778
+      ]
+    },
+    {
+      "name": "O4 habitat x corridor tile 3px @ 60000 prune 2.0",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03214361926217626,
+      "tp": 1194.132218575594,
+      "fp": 93991.3642578125,
+      "fn": 21446.867781424404,
+      "n_emitted": 94884,
+      "coverage": 0.05274202634934827,
+      "ci95_bootstrap_cells": [
+        0.026958461287821218,
+        0.03837787315793391
+      ],
+      "n_emitted_per_draw": 47442.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 319,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 319,
+      "basin_recovery_rate": 0.10943396226415095,
+      "basin_recovery_ci95": [
+        0.098610964936063,
+        0.12128499991069686
+      ]
+    },
+    {
+      "name": "O4 habitat x corridor tile 4px @ 60000 prune 2.0",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 4,
+      "pooled_dti": 0.03328403590482127,
+      "tp": 1000.2075443045902,
+      "fp": 58689.13720703125,
+      "fn": 21640.792455695413,
+      "n_emitted": 59290,
+      "coverage": 0.044176827185397734,
+      "ci95_bootstrap_cells": [
+        0.026996318059629838,
+        0.04002754838591955
+      ],
+      "n_emitted_per_draw": 29645.0,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 322,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 322,
+      "basin_recovery_rate": 0.1104631217838765,
+      "basin_recovery_ci95": [
+        0.09959232585804972,
+        0.12235924909451576
+      ]
+    },
+    {
+      "name": "O5 habitat x corridor 3x3 ribbon @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.013314889406830123,
+      "tp": 1881.0572421357037,
+      "fp": 613928.53125,
+      "fn": 20759.942757864294,
+      "n_emitted": 618807,
+      "coverage": 0.08308189753702151,
+      "ci95_bootstrap_cells": [
+        0.011152273273442054,
+        0.01607024208239273
+      ],
+      "n_emitted_per_draw": 309403.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 358,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 358,
+      "basin_recovery_rate": 0.12281303602058319,
+      "basin_recovery_ci95": [
+        0.111391863567984,
+        0.13522703265424915
+      ]
+    },
+    {
+      "name": "O6 habitat x corridor NOT mag edge @ 60000",
+      "kind": "candidate",
+      "budget": 60000,
+      "prune_px": 2.0,
+      "tile_px": 3,
+      "pooled_dti": 0.03210530847778575,
+      "tp": 1189.5493544753822,
+      "fp": 93503.87548828125,
+      "fn": 21451.45064552462,
+      "n_emitted": 94393,
+      "coverage": 0.0525396119639319,
+      "ci95_bootstrap_cells": [
+        0.026914885329503504,
+        0.038158652744728454
+      ],
+      "n_emitted_per_draw": 47196.5,
+      "segments_withheld_total": 3084,
+      "segments_recovered_total": 319,
+      "segments_withheld_basin_interior": 2915,
+      "segments_recovered_basin_interior": 319,
+      "basin_recovery_rate": 0.10943396226415095,
+      "basin_recovery_ci95": [
+        0.098610964936063,
+        0.12128499991069686
+      ]
+    }
+  ],
+  "best_candidate": "O2 habitat no gate (prune 2px) @ 60000",
+  "leakage_canary": {
+    "threshold_auc": 0.9,
+    "worst_auc": 0.6269256597544278,
+    "passed": true,
+    "per_feature": {
+      "habitat OOF prob": {
+        "auc": 0.6269256597544278,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "var-depth": {
+        "auc": 0.5117866485303211,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "var-depth HGM": {
+        "auc": 0.5160479060388233,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "throw": {
+        "auc": 0.4999777748332671,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "corridor": {
+        "auc": 0.49960302741707524,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "euler": {
+        "auc": 0.4929085828806148,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "euler_cons": {
+        "auc": 0.4998593824532927,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "mag_edge": {
+        "auc": 0.5029250288470032,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band13 grav": {
+        "auc": 0.4776175523662824,
+        "n_pos": 22641,
+        "n_neg": 160000
+      },
+      "band19 slope": {
+        "auc": 0.5576993057395875,
+        "n_pos": 22641,
+        "n_neg": 160000
+      }
+    }
+  },
+  "elapsed_s": 703.4
+}
