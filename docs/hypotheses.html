@@ -1,0 +1,127 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hypotheses &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
+<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
+<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
+<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
+<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+
+<div class="card hero">
+<h2 style="margin-top:0">Five candidate hypotheses not yet implemented in this repository</h2>
+<p>Each names its layers (competition band numbers, read from the GeoTIFF band
+descriptions), the physical signature targeted, why it should find a fault the
+USGS/INGENIOUS catalogue lacks, and how it differs from anything already in this repo.
+Ranked by expected DTI improvement per unit of implementation cost. Every one of them
+is validatable on data already hash-pinned here &mdash; no new external download is
+required, which matters because this sandbox's egress allow-list admits only
+github.com, api.github.com, codeload.github.com, pypi.org and files.pythonhosted.org.</p>
+</div>
+<div class="card">
+<h3>1. Basement-throw ranking with a polarity test &mdash; cost: low &mdash; <span class="warn">partially tested, negative</span></h3>
+<p><strong>Layers:</strong> band 13 (isostatic gravity anomaly) inverted by
+Parker&ndash;Oldenburg; band 15 (depth to basement) for calibration.<br>
+<strong>Signature:</strong> rank the step ridge by the depth <em>difference</em> over a
+fixed 600&nbsp;m baseline along the local gradient direction (the apparent throw),
+instead of by |&nabla;D|, which grows without bound as the smoothing scale shrinks.<br>
+<strong>Why it should work:</strong> a range-front fault has hundreds of metres of
+basement offset; an intrabasement density contact has a small apparent throw. Throw is
+the scale-invariant quantity.<br>
+<strong>Tested here:</strong> Spearman(throw, |&nabla;D|) on the ribbon mask =
+<strong>+0.9986</strong>. The two rankings are numerically equivalent on this grid, so
+throw cannot re-rank the emission and cannot be used to differentiate this lane from a
+sibling. <span class="warn">Recorded as a negative result; no submission slot
+spent.</span></p>
+</div>
+<div class="card">
+<h3>2. Cover-thickness &times; step-concordance gate &mdash; cost: low &mdash; rank 1</h3>
+<p><strong>Layers:</strong> band 15 (depth to basement surface, the regional
+Saltus&nbsp;&amp;&nbsp;Jachens product), band 12/19 (detrended elevation and its slope),
+band 13 inverted.<br>
+<strong>Signature:</strong> emit only where the basement step is <em>concordant with a
+thick, flat sedimentary section</em> &mdash; i.e. where band 15 exceeds its local median
+and band 19 falls below its local median, so the step is buried under alluvium rather
+than expressed as a range front.<br>
+<strong>Why it should catch an unmapped fault:</strong> the catalogue is built by eye
+from surficial expression; a step under 300&nbsp;m of fill has none. This is the only
+candidate whose selection criterion is the <em>absence</em> of what the catalogue
+keys on.<br>
+<strong>How it differs:</strong> the parallel session's field is emitted over the whole
+footprint with no cover term; this repo's E2 sweep used cover gates on the broken
+instrument and never re-tested them geometrically.<br>
+<strong>Validation:</strong> segment recovery in basin interiors, candidate vs random
+lines &mdash; the statistic already implemented in
+<code>scripts/e3_build_submission.py</code>.</p>
+</div>
+<div class="card">
+<h3>3. Gravity&ndash;conductivity step concordance &mdash; cost: medium &mdash; rank 2</h3>
+<p><strong>Layers:</strong> band 13 inverted (basement relief) and band 17 (conductivity
+surface, log<sub>10</sub> S/m, measured range 0.19&ndash;4.97).<br>
+<strong>Signature:</strong> require the basement-depth step and a conductivity step to
+coincide within 300&nbsp;m <em>and</em> to run parallel, using the second-order
+orientation order parameter R&nbsp;=&nbsp;|&Sigma;w&nbsp;e<sup>2i&theta;</sup>|/&Sigma;w
+over both fields.<br>
+<strong>Why it should catch an unmapped fault:</strong> a fault that displaces basement
+also breaks the conductive cover sequence; two independent physics agreeing on a line
+and a strike is the criterion an expert mapper uses before adding a fault under cover.
+Neither field alone is in the catalogue's evidence base.<br>
+<strong>How it differs:</strong> nothing in this repository combines gravity-derived
+structure with the MT layer; band 17 currently enters only as a scalar.<br>
+<strong>Risk:</strong> this is the natural home of a different lane
+(magnetotelluric). Check the 3-px overlap and rank correlation against that lane's
+registry raster before emitting.</p>
+</div>
+<div class="card">
+<h3>4. Step-polarity asymmetry: which side is down &mdash; cost: medium &mdash; rank 3</h3>
+<p><strong>Layers:</strong> band 13 inverted, band 12 (detrended elevation), band 4/7/8
+(geodetic strain).<br>
+<strong>Signature:</strong> classify each basement step as basin-side-down or
+range-side-down and keep only basin-side-down steps whose surface expression in
+band&nbsp;12 is absent or reversed. Basin-and-Range range fronts are listric normal
+faults with a characteristic hanging-wall tilt; a density contact has no such
+asymmetry.<br>
+<strong>Why it should catch an unmapped fault:</strong> it is the direct test of this
+lane's named competing explanation (density contrasts inside basement), so it converts
+the run card's weakest point into a discriminator.<br>
+<strong>How it differs:</strong> the current emission is polarity-blind; it cannot tell
+a fault step from a pluton margin.</p>
+</div>
+<div class="card">
+<h3>5. Along-strike persistence of the basement step &mdash; cost: medium &mdash; rank 4</h3>
+<p><strong>Layers:</strong> band 13 inverted.<br>
+<strong>Signature:</strong> integrate the step amplitude <em>along</em> the ridge
+(a 15-pixel collinearity vote on the ridge skeleton) rather than pointwise. Faults are
+kilometre-scale linear objects; noise ridges are not.<br>
+<strong>Why it should catch an unmapped fault:</strong> an expert accepts a fault under
+cover when collinear segments persist across several kilometres; pointwise gradient
+maxima accept any local bump.<br>
+<strong>How it differs:</strong> every operator in this repository is local
+(3&ndash;5&nbsp;px). Nothing aggregates evidence along a candidate line.<br>
+<strong>Note:</strong> the same idea appears in another lane's hypothesis list as
+&ldquo;aligned drainage-valley chains&rdquo;. If implemented, re-run the uniqueness
+check against that lane's raster before promoting.</p>
+</div>
+<div class="card">
+<h3>Data that would unlock more, and whether it is obtainable here</h3>
+<table>
+<tr><th>source</th><th>what it adds</th><th>obtainable from this sandbox?</th></tr>
+<tr><td>USGS GP-1012, Saltus &amp; Jachens (1995) basin-depth, 1:2.5&nbsp;M</td>
+<td>the original of band 15, at its native scale</td>
+<td class="warn">No &mdash; usgs.gov returns HTTP 000. Band 15 is the hash-pinned stand-in.</td></tr>
+<tr><td>USGS FDSN earthquake catalogue (nodal planes)</td>
+<td>sub-kilometre seismic lineaments; the supplied seismic bands are 100&nbsp;km-radius
+and carry no fault-scale information</td>
+<td class="warn">No &mdash; earthquake.usgs.gov is outside the allow-list</td></tr>
+<tr><td>Competition data tab (drivendata.org)</td><td>the authoritative rasters</td>
+<td class="warn">No &mdash; HTTP 000; obtained instead from hash-pinned GitHub mirrors
+with sha256 verified against the mirror manifest</td></tr>
+</table>
+</div>
+
+<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
+<code>evidence/*.json</code>. Every figure on this page is read from those files at
+build time. Hash-pinned inputs and the official links for manual review are on
+<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
+</div></body></html>

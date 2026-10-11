@@ -1,41 +1,95 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Executive summary - 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<title>Executive summary &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
 <body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
-<span class="dim"> &middot; DOE GEMS Prize, buried-structure lane</span>
-<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a><a href="submit.html">How to submit</a><a href="methodology.html">Method</a><a href="evidence.html">Evidence</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
-<h1>Executive summary</h1>
-<div class="card">
-<h2>The 60-second version</h2>
+<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
+<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
+<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
+<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
+<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+
+<div class="card hero">
+<h2 style="margin-top:0">Executive summary &mdash; how to make a submission</h2>
 <ol>
-<li><strong>What is being scored.</strong> The DOE GEMS Prize scores fault predictions
-with a distance-weighted Tversky index (alpha 0.2, beta 0.8, 300&nbsp;m triangular
-kernel). Phase 1 is scored against faults <em>withheld</em> from the data you are given.</li>
-<li><strong>What that means operationally.</strong> Copying <code>existing_faults.tif</code>
-cannot work, and the measured evidence says it actively hurts: the best-scoring raster in
-the group's registry contains <em>zero</em> pixels on the visible catalogue.</li>
-<li><strong>What this repository does.</strong> It inverts the isostatic gravity band for
-basement relief, turns the relief's horizontal-gradient ridges into multi-pixel
-ribbons, removes everything within a tuned radius of the previous catalogue, and emits
-a binary all-finite GeoTIFF on the competition grid.</li>
-<li><strong>What to do with it.</strong> Open <a href="index.html">the home page</a>,
-click the download button, and submit that file with the supplied note. Full
-walkthrough: <a href="submit.html">How to submit</a>.</li>
+<li><strong>Download the file.</strong>
+<a class="btn" href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">&#11015; gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif</a>
+<span class="dim">(0.25 MB, sha256 <code class="mono-sm">5dee4c5568eba145&hellip;</code>)</span></li>
+<li><strong>Open the submission form</strong> on the competition page:
+<code>https://www.drivendata.org/competitions/306/competition-doe-gems/</code> &rarr;
+<em>Submissions</em> &rarr; <em>New submission</em>. (Login required; this sandbox
+cannot reach drivendata.org, so this step is necessarily yours.)</li>
+<li><strong>&ldquo;File to submit&rdquo;:</strong> choose the <code>.tif</code> you just
+downloaded. A single-band GeoTIFF is accepted directly; a <code>.zip</code> holding one
+GeoTIFF is also accepted. Do not re-save, re-project or re-compress it in a GIS &mdash;
+that changes the geotransform and the file will be rejected.</li>
+<li><strong>&ldquo;Note (optional)&rdquo;:</strong> paste
+<pre>61GEMSDOE Parker-Oldenburg basement-step ribbons, 40k px, 2px catalogue prune, binary zeros-outside</pre>
+<span class="dim">99 of 140 characters.</span></li>
+<li><strong>Submit.</strong> The weekly cap shown on the submission page applies; this
+repository does not spend slots.</li>
 </ol>
 </div>
+
 <div class="card">
-<h2>Verified facts behind the method</h2>
-<table><thead><tr><th>Fact</th><th>Value</th><th>How it was verified</th></tr></thead><tbody><tr><td>Grid</td><td>3292 x 3730, EPSG:32611, 100 m, origin (243350, 4508550)</td><td>read from the official rasters with rasterio</td></tr><tr><td>Valid footprint</td><td>5167373 px</td><td>counted from <code>labels.tif</code>, where the value is not -1</td></tr><tr><td>Visible catalogue</td><td>60988 px (0.011803 of valid)</td><td>counted from <code>labels.tif</code></td></tr><tr><td>Metric identity</td><td>DTI == F2; TP_w + FN_w == |G|</td><td>13/13 tests in <code>src/gems_metric.py</code> against a brute-force transcription</td></tr><tr><td>Inversion check</td><td>Pearson r = -0.1822 vs band 15</td><td>inverted relief compared with the competition's own depth-to-basement band</td></tr><tr><td>Leakage canary</td><td>clean (all AUC &lt; 0.55)</td><td>single-band rank AUC, <a href='evidence.html'>Evidence</a></td></tr></tbody></table>
+<h2>Why this file cannot produce &ldquo;Predicted values must be in range [0,&nbsp;1]&rdquo;</h2>
+<p>Two mechanisms in the competition's own inputs cause that error, and both are
+engineered out:</p>
+<table>
+<tr><th>check</th><th>measured on the shipped bytes</th></tr>
+<tr><td>single band</td><td>1</td></tr>
+<tr><td>dtype float32</td><td>float32</td></tr>
+<tr><td>CRS EPSG:32611</td><td>EPSG:32611</td></tr>
+<tr><td>shape (h&times;w)</td><td>3730 &times; 3292</td></tr>
+<tr><td>transform</td><td class="mono-sm">(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)</td></tr>
+<tr><td>NaN anywhere in the 12,279,160 cells</td><td>0 &mdash; every cell finite</td></tr>
+<tr><td>float32 sentinel (&minus;3.4e38) leaking from the feature bands</td><td>0</td></tr>
+<tr><td>in-footprint min / max</td><td>0.0 / 1.0</td></tr>
+<tr><td>scoring-footprint pixels</td><td>5,167,373 finite; the other
+7,111,787 cells are exactly 0.0 rather than NaN</td></tr>
+<tr><td>positive pixels</td><td>40,000</td></tr>
+<tr><td>all validator checks</td><td>PASS</td></tr>
+</table>
+<p><strong>Mechanism 1.</strong> <code>training_features.tif</code> declares its nodata
+as <code>-3.4028234663852886e+38</code> (the float32 minimum), not NaN, and
+<strong>3,061 of those sentinel pixels sit inside the scoring footprint</strong>. Any
+pipeline that reads the bands without replacing the sentinel ships values near
+&minus;3.4&times;10<sup>38</sup>, which is not in [0,&nbsp;1].</p>
+<p><strong>Mechanism 2.</strong> The feature raster's valid region is
+<strong>smaller</strong> than the submission template's. A footprint mask taken from a
+feature band (5,165,852 px) instead of from <code>example_submission.tif</code>
+(5,167,373 px) strands exactly <strong>3,061 scored pixels</strong> as NaN. NaN fails
+any <code>((v &gt;= 0) &amp; (v &lt;= 1)).all()</code> check.</p>
+<p>This writer takes its footprint from the template, writes zeros (not NaN) outside
+it, and re-reads the file from disk before declaring success.</p>
 </div>
-<h2>How to make a submission (short form)</h2>
-<ol>
-<li>Download the GeoTIFF from the home page.</li>
-<li>On the competition submission page, choose that file, paste the note, submit.</li>
-<li>Confirm the receipt shows a score, and record it (an organizer receipt is the only
-thing this project treats as a confirmed number).</li>
-</ol>
-<p>Full detail, including what to do if the form complains: <a href="submit.html">How to submit</a>.</p>
-<footer>Generated 2026-10-11 00:40 UTC by <code>scripts/build_site.py</code> from
-<code>reports/*.json</code>. Every number on this site is machine-written from a run
-that is in this repository. Nothing is estimated.</footer>
+
+<div class="card">
+<h2>Is this file worth a weekly slot?</h2>
+<p><strong>Honest answer: unknown, and no local instrument can answer it.</strong> The
+holdout this repository can compute returns exactly 0.0 for this file, because the file
+is pruned 2&nbsp;px from the catalogue and the holdout's truth <em>is</em> the catalogue.
+The same-catalogue holdout is measured to be anti-correlated with the live board
+(&rho;&nbsp;=&nbsp;-0.857,
+p&nbsp;=&nbsp;0.0065) across eight hash-pinned
+artifacts, so a low value there is not evidence against the file. What the local
+evidence does support:</p>
+<ul>
+<li>the emission budget (40,000 px) sits inside the 37,654&ndash;44,090 px band that
+every 0.26&ndash;0.28 artifact in the group ledger occupies;</li>
+<li>the ribbons recover 36.6% of withheld fault
+segments within 300&nbsp;m against 2.6% for random
+lines &mdash; a 13.9&times;
+enrichment, rising to
+45&times;
+for basin-interior segments, which is the lane's actual claim;</li>
+<li>the file is unique against every cross-lane registry raster.</li>
+</ul>
+<p>No projection is written as a score anywhere on this site.</p>
+</div>
+
+<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
+<code>evidence/*.json</code>. Every figure on this page is read from those files at
+build time. Hash-pinned inputs and the official links for manual review are on
+<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
 </div></body></html>

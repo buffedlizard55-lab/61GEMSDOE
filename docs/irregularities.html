@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Irregularities &middot; 61GEMSDOE</title><link rel="stylesheet" href="assets/site.css"></head>
+<body><div class="wrap"><a href="index.html"><strong>61GEMSDOE</strong></a>
+<span class="dim"> &middot; DOE GEMS Prize &middot; buried-structure lane &middot; session arena/c463a286</span>
+<div style="margin:10px 0 22px"><nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary</a>
+<a href="submit.html">How to submit</a><a href="instrument.html">Instrument study</a>
+<a href="hypotheses.html">Hypotheses</a><a href="methodology.html">Method</a>
+<a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a>
+<a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav></div>
+
+<div class="card hero">
+<h2 style="margin-top:0">Irregularities flagged for review</h2>
+<p>Everything below was measured or read in this session. Nothing here is speculation;
+where a claim could not be checked it says so.</p>
+</div>
+<div class="card">
+<table>
+<tr><th>ID</th><th>finding</th><th>evidence</th><th>action</th></tr>
+<tr><td>IR-1</td><td><strong>The parallel session's basement inversion is sign-flipped
+relative to the independent depth-to-basement band.</strong> Its own report records
+Pearson&nbsp;=&nbsp;&minus;0.1822 against band 15 at
+&Delta;&rho;&nbsp;=&nbsp;&minus;420&nbsp;kg/m<sup>3</sup>,
+z<sub>0</sub>&nbsp;=&nbsp;1200&nbsp;m. A density contrast entered as a negative number
+inverts the relief.</td>
+<td class="mono-sm">docs/data/registry.json (that session's own output)</td>
+<td>Re-derive &Delta;&rho; from the band-13/band-15 regression
+(-0.009329&nbsp;mGal/m &rArr;
++222&nbsp;kg/m<sup>3</sup>) and require a positive agreement
+with band 15 before emitting. This session's inversion:
+Spearman&nbsp;=&nbsp;+0.6949.</td></tr>
+
+<tr><td>IR-2</td><td><strong>That run card contradicts itself.</strong> It asserts
+<code>random_beats_lane_on_holdout: true</code> while its own numbers give lane
+0.08875 vs random 0.05429 (and 0.0855 quoted in the verdict text) &mdash; the lane
+value is the larger.</td><td class="mono-sm">reports/run_card.json</td>
+<td>Flagged, not silently rewritten. Either the flag or the numbers are wrong; the
+frame is degenerate anyway (IR-3), so neither should be used to promote.</td></tr>
+
+<tr><td>IR-3</td><td><strong>Unequal-budget control.</strong> The lane emission is
+311,617 px; the random-line control is recorded at 45,000 px
+(<code>emission_count: 45000</code>) yet described as an &ldquo;identical pixel
+budget&rdquo;.</td><td class="mono-sm">reports/run_card.json</td>
+<td>A control at a different budget cannot support a &ldquo;does not beat random&rdquo;
+claim. This session's control uses the identical 40,000-px budget.</td></tr>
+
+<tr><td>IR-4</td><td><strong>Score-to-file attribution for the 0.2778 artifact is
+unresolved.</strong> Its own audit says &ldquo;projected live 0.2747; UNSCORED&rdquo;,
+while the group ledger assigns it 0.2778.</td>
+<td class="mono-sm">data/registry/audit-h33-2-b2.json</td>
+<td>All live numbers on this site are labelled OWNER-REPORTED. No file here claims an
+organiser-confirmed score.</td></tr>
+
+<tr><td>IR-5</td><td><strong>The brief quotes two different leaderboards.</strong> The
+top of the brief says the GEMSDOE high score is 0.3774; the body says 0.3195 is the
+highest score right now.</td><td class="mono-sm">the task prompt</td>
+<td>Unverifiable here: drivendata.org returns HTTP 000 from this sandbox. Both are
+treated as owner-reported. Confirm on the leaderboard page before using either as a
+target.</td></tr>
+
+<tr><td>IR-6</td><td><strong>Egress is restricted to github.com, api.github.com,
+codeload.github.com, pypi.org, files.pythonhosted.org.</strong> drivendata.org,
+docs.nlr.gov, usgs.gov, earthquake.usgs.gov and raw.githubusercontent.com all fail
+(SSL_ERROR_SYSCALL, HTTP 000).</td><td class="mono-sm">curl exit 35, measured</td>
+<td>Competition rasters came from the pinned mirror
+<code>buffedlizard55-lab/6GEMSDOE@main:data/bridge/</code>; all seven sha256 digests
+were re-verified locally and match the mirror manifest.</td></tr>
+
+<tr><td>IR-7</td><td><strong>The published marginal-credit threshold is wrong.</strong>
+An earlier session states that a dot pays iff k&nbsp;&gt;&nbsp;0.2s/(1&nbsp;&minus;&nbsp;0.2s)
+= 0.0683 at s&nbsp;=&nbsp;0.3195. With
+DTI&nbsp;=&nbsp;TP/(TP&nbsp;+&nbsp;&alpha;FP&nbsp;+&nbsp;&beta;FN) and
+&alpha;&nbsp;+&nbsp;&beta;&nbsp;=&nbsp;1, the denominator rises by exactly &alpha; and
+the condition is k&nbsp;&gt;&nbsp;&alpha;s&nbsp;=&nbsp;0.0639.</td>
+<td class="mono-sm">algebra, re-derived here</td>
+<td>The distance implied changes from ~280&nbsp;m to ~281&nbsp;m, so no decision turns
+on it, but the formula on the record is wrong and should be corrected wherever it is
+quoted.</td></tr>
+
+<tr><td>IR-8</td><td><strong>3,061 float32 sentinel pixels sit inside the scoring
+footprint</strong> and the feature raster's valid region is 3,061 px smaller than the
+submission template's. These are the two mechanisms behind the portal's
+&ldquo;Predicted values must be in range [0,&nbsp;1]&rdquo; error.</td>
+<td class="mono-sm">measured: template finite 5,167,373 vs band-valid 5,165,852</td>
+<td>The writer takes its footprint from the template and writes zeros outside it.</td></tr>
+
+<tr><td>IR-9</td><td><strong>GitHub API rate limit exhausted mid-session</strong>
+(HTTP 403, <code>x-ratelimit-remaining: 0</code>), so the provenance README of the
+SGMC-derived fault raster could not be read.</td>
+<td class="mono-sm">api.github.com response headers</td>
+<td>That raster was therefore <em>not</em> used as evaluation truth. It remains in the
+registry only as a uniqueness comparator.</td></tr>
+
+<tr><td>IR-10</td><td><strong>Band 18 is not a gradient magnitude.</strong> Its range is
+&minus;15.44 to +12.86 with mean 0.001, i.e. a signed single-direction derivative
+despite being described as &ldquo;horizontal rate of change&rdquo;.</td>
+<td class="mono-sm">measured band statistics</td>
+<td>Any operator needing the horizontal-gradient <em>magnitude</em> must compute it;
+using band 18 as a magnitude silently halves the signal.</td></tr>
+</table>
+</div>
+
+<hr><p class="dim">Generated by <code>scripts/build_site_e3.py</code> from
+<code>evidence/*.json</code>. Every figure on this page is read from those files at
+build time. Hash-pinned inputs and the official links for manual review are on
+<a href="evidence.html">Evidence</a> and in <code>README.md</code>.</p>
+</div></body></html>
