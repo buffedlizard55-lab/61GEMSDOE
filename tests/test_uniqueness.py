@@ -6,7 +6,7 @@ import pytest
 import rasterio
 from affine import Affine
 
-from gems57.uniqueness import (JACCARD_LIMIT, OVERLAP_LIMIT, RHO_LIMIT,
+from gems61.uniqueness import (JACCARD_LIMIT, OVERLAP_LIMIT, RHO_LIMIT,
                                compare_array_to_registry, dot_overlap, surface_rho)
 
 SHAPE = (400, 400)

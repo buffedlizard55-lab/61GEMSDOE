@@ -39,6 +39,26 @@ field of 38,000 pixels, every one of them at least 3 px (300 m) from the mapped
 catalogue — because the official problem page says the test truth is
 <i>“newly identified faults … NOT INCLUDED IN THE EXISTING USGS fault database”</i>.</p>
 
+<h2>Other validated lane candidates on this repo</h2>
+<p>Concurrent sessions built this same lane independently. All are preserved in
+<a href="downloads/"><code>docs/downloads/</code></a>; none has spent a slot.</p>
+<table>
+<tr><th>candidate</th><th>dots</th><th>positive px</th><th>SHA256 (first 16)</th></tr>
+<tr><td><b>H62</b> (this page)</td><td>38,000</td><td>38,000</td><td><code>5c8e481722c459ae</code></td></tr>
+<tr><td><a href="downloads/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif"><b>H61-B</b> sharp-step + VG depth-index</a> (PR #6)</td>
+    <td>22,000</td><td>88,796</td><td><code>84864d6e090e9282</code></td></tr>
+<tr><td><a href="downloads/gems61-h61a-basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros.tif">H61-A basement-step</a> (PR #5)</td>
+    <td>20,000</td><td>25,285</td><td><code>565a581b46878ba2</code></td></tr>
+<tr><td><a href="downloads/gems61-buried-basement-step-r3-rib2-k40k-2pxprune-zeros.tif">buried-basement-step r3 rib2 k40k</a> (PR #3)</td>
+    <td>40,000</td><td>40,000</td><td><code>5dee4c5568eba145</code></td></tr>
+<tr><td><a href="downloads/gems61-lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros.tif">lane buried-step HGM k400k</a> (PR #3)</td>
+    <td>311,617</td><td>311,617</td><td><code>a70dee1a390c08e9</code></td></tr>
+</table>
+<p class="mut">Different rasters, different emission rules, each uniqueness-checked. That is the
+intended redundancy of parallel lanes, not a conflict. Note <b>IR-62-SITE-01</b>: two builders
+(<code>build_site.py</code> and <code>build_site_e2.py</code>) both write this page and
+<code>executive-summary.html</code>; whichever runs last wins.</p>
+
 <h2>Why the best-known file in this family scored 0.2778</h2>
 <p>Measured directly on the registry bytes (nine rasters fetched by commit-pinned clone, hashes
 checked), not inferred from filenames:</p>

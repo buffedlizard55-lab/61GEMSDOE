@@ -237,6 +237,24 @@ def main() -> int:
     a = ap.parse_args()
     t0 = time.time()
 
+    # IR-62-REPRO-01: the shared lane61 module now carries the H61-B session's
+    # tuning (throw 80 m, sigma 10 px, offset band 4-28 px, plus a sharpness gate),
+    # merged to main concurrently with this work.  H62 was built and measured with
+    # the constants below, so they are pinned here explicitly.  Without this the
+    # published sha256 would not be reproducible from HEAD -- a silent break that
+    # would make every number on the site unverifiable.  The shared module is NOT
+    # forked or edited: these are this candidate's declared operating point.
+    L.BLAKELY_MIN_THROW_M = 120.0
+    L.RIBBON_DENSITY_SIGMA_PX = 12.0
+    L.OFFSET_NEAR_PX = 5.0
+    L.OFFSET_FAR_PX = 30.0
+    pinned = dict(BLAKELY_MIN_THROW_M=L.BLAKELY_MIN_THROW_M,
+                  RIBBON_DENSITY_SIGMA_PX=L.RIBBON_DENSITY_SIGMA_PX,
+                  OFFSET_NEAR_PX=L.OFFSET_NEAR_PX, OFFSET_FAR_PX=L.OFFSET_FAR_PX,
+                  INVERSION_Z0_M=L.INVERSION_Z0_M,
+                  INVERSION_KC_SCALE=L.INVERSION_KC_SCALE,
+                  INVERSION_DELTA_RHO=L.INVERSION_DELTA_RHO)
+
     grid = G.load_grid()
     foot, cat = grid.footprint, grid.catalogue
     dcat = distance_transform_edt(~cat)
@@ -488,7 +506,10 @@ def main() -> int:
                                     "separate them, and neither can the supplied depth_to_base_surf "
                                     "band it is cross-checked against.",
         declared_design=dict(prune_px=PRUNE_PX, k_dots=a.k, separation_px=SEPARATION_PX,
-                             habitat_exponent=HABITAT_EXPONENT, seed=SEED),
+                             habitat_exponent=HABITAT_EXPONENT, seed=SEED,
+                             lane61_constants_pinned=pinned,
+                             repro_note="IR-62-REPRO-01: pinned because the shared lane61 "
+                                        "module now carries the concurrently merged H61-B tuning"),
         inversion=dict(z0_m=inv["z0_m"], delta_rho=inv["delta_rho"], filter=inv["filter"],
                        stage=inv["stage"], rms_residual_mgal=inv["rms_residual_mgal"],
                        sign_guard_corr_depth_vs_band13=round(corr, 4),

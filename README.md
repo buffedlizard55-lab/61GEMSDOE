@@ -41,9 +41,25 @@ Note to paste (125 / 140 characters):
 
 > H62 Parker-Oldenburg basement-step ribbons x declared basin-floor habitat; 38k hard-core dots, >=3px off catalogue
 
-Two earlier candidates from concurrent sessions on this repo are **kept** in
-[`docs/downloads/`](docs/downloads/) and are not overwritten — see
-[Concurrent work](#concurrent-work-already-on-main-do-not-lose-it).
+### Other validated lane candidates on this repo (kept, not overwritten)
+
+Concurrent sessions on this repository built the same lane independently. All are preserved in
+[`docs/downloads/`](docs/downloads/); none has spent a slot:
+
+| candidate | session | dots | positive px | SHA256 (first 16) | status |
+|---|---|---|---|---|---|
+| **H62** `…basinstep-habitat-38k-20261011T020659Z-1a9c172f7106` | this one | 38,000 | 38,000 | `5c8e481722c459ae` | valid + unique; **promotion not supported** |
+| **H61-B** `…sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros` | PR #6 | 22,000 | 88,796 | `84864d6e090e9282` | valid + unique; owner says "Submit: OK" |
+| **H61-A** `…basement-step-20000dots-20261011T012029Z-eb2ae4bb024b-zeros` | PR #5 | 20,000 | 25,285 | `565a581b46878ba2` | valid + unique |
+| `…buried-basement-step-r3-rib2-k40k-2pxprune-zeros` | PR #3 | 40,000 | 40,000 | `5dee4c5568eba145` | valid + unique |
+| `…lane-buried-step-gravinversion-hgm-r3-k400k-b2zeros` | PR #3 | 311,617 | 311,617 | `a70dee1a390c08e9` | valid + unique |
+
+H61-B is the most recent independent construction: GP-1012-calibrated sharp-step ribbons with a
+throw/depth sharpness gate and a vertical-gradient depth index, 22,000 dots grown to 3 × 3 ribbons,
+median offset from the catalogue 12.8 px. Its own README section and run card are on `main` at
+[`out/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.json`](out/).
+It is a **different raster with a different emission rule** from H62 — which is the intended
+redundancy of parallel lanes, not a conflict.
 
 ---
 
@@ -258,11 +274,25 @@ New this session:
   which is **not** the GP-1012-calibrated optimum recorded in `evidence/measure.json`
   (`z₀ = 400, Δρ = −600, kc_scale = 0.25`, penalty 0.00441). The published calibration and the code
   that used it disagreed. **Fixed once in the shared module.**
-- **IR-62-TEST-01** — all three modules in `tests/` import `gems57` (`gems57.metric`, `gems57.grid`,
+- **IR-62-TEST-01** — *resolved by PR #6 while this session was running.* All three modules in
+  `tests/` imported `gems57` (`gems57.metric`, `gems57.grid`,
   `gems57.validate`, `gems57.uniqueness`), a package that does not exist in this repository.
   `pytest` collects **0** tests and errors on all three. This is **pre-existing on `main`** —
-  `tests/` is untouched by this session (`git diff HEAD -- tests/` is empty). The suite therefore
-  provides no regression cover; the metric self-test in `src/gems_metric.py` (13/13) is what does.
+  `tests/` was untouched by this session. PR #6 (merged concurrently) retargeted them at `gems61`;
+  after the merge the suite must be re-run to confirm it collects. Until then the authoritative
+  regression cover is the metric self-test in `src/gems_metric.py` (**13/13 PASS**, verified this
+  session against brute force).
+- **IR-62-REPRO-01** — PR #6 merged concurrently and retuned the shared `lane61.py`
+  (throw 120 → 80 m, σ 12 → 10 px, offset band 5–30 → 4–28 px, plus a new
+  `sharpness ≥ 0.08` gate). H62 was built and measured with the *earlier* constants, so rebuilding
+  from `HEAD` would silently produce a different file and make every number on the site
+  unverifiable. Fixed by **pinning H62's declared constants inside its own build script** and
+  recording them in the run card. The shared module is neither forked nor re-edited — PR #6's
+  candidate keeps its tuning and H62 keeps its own.
+- **IR-62-SITE-01** — two site builders now write the same two pages: `scripts/build_site.py`
+  (PR #3/#6) and `scripts/build_site_e2.py` (this session) both emit `docs/index.html` and
+  `docs/executive-summary.html`. Whichever runs last wins. This session's builder is the one that
+  produced the committed pages; running the other will replace them. Needs a single owner.
 - **IR-62-SCALE-01** — dot depth was first reported on the *inverted* scale (median 689 m) and
   compared to registry dots measured on *band 15* (median 316 m). Two different calibrated scales.
   The run card now reports both and states that only the band-15 figure is comparable.
@@ -308,7 +338,8 @@ Carried forward:
    horizontal-gradient ridge as a fault step.
 6. **GPU training is out of scope here.** The metric, losses and validation all run on CPU; a
    learned model would need a GPU.
-7. **`tests/` provides no cover** (IR-62-TEST-01).
+7. **Two site builders own the same pages** (IR-62-SITE-01) and **H62's constants must stay
+   pinned** (IR-62-REPRO-01) or the published sha256 stops being reproducible.
 
 ## What would actually be needed to beat 0.2778
 
