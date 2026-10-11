@@ -23,7 +23,7 @@ code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
 nav a{margin-right:14px}
 ul.tight li{margin:.15em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Method</h1>
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav><h1>Method</h1>
 <h2>The method, and why each choice was forced</h2>
 <h3>1 · Invert the gravity for depth to basement</h3>
 <p>Input is band 13, <code>iso_grav_anom</code>, of the pinned
@@ -56,11 +56,13 @@ of the province deeper than 1 km ("about 20 %", Blakely &amp; Jachens 1991). A s
 The high apparent contrast is expected for an isostatic residual: the topographic and isostatic
 masses are already removed, so the residual sees a larger effective contrast than a raw Bouguer
 slab.</p>
-<h3>4 · Steps, not lineaments</h3>
+<h3>4 · Steps, not lineaments (H61-B sharpness + VG depth-index)</h3>
 <p>Maxima of the horizontal gradient magnitude of the depth surface, accepted on the
 Blakely &amp; Simpson (1986) "greater than at least two neighbours" rule. Each accepted maximum then
-has its <b>throw</b> measured — the depth range across the ridge in a 5 × 5 window — and only the
-ones above 120 m survive. The DrivenData problem statement's own ledger row DD-ABOUT is
+has its <b>throw</b> measured — the depth range across the ridge in a 9 × 9 window (800 m baseline = ±1 inversion cell) — and only the
+ones with throw ≥ 80 m and sharpness <code>throw / max(depth, 0.5·z<sub>0</sub>) ≥ 0.08</code> survive,
+weighted by the horizontal-to-vertical gravity gradient depth-index <code>|HG| / (|VG| + ε)</code> (bands 18 and 11).
+The DrivenData problem statement's own ledger row DD-ABOUT is
 explicit that a lineament is not a fault and that a fault is a structure with displacement; this
 step is where that is enforced rather than asserted.</p>
 <h3>5 · Emission under the metric, not by eye</h3>
@@ -91,18 +93,18 @@ support.</p>
 <table>
 <tr><th>Gate</th><th>Result</th></tr>
 <tr><td>Grid pins (CRS, shape, transform)</td>
-<td>FAIL — —,
-<code>—</code>, footprint
-0 px, catalogue 0 px</td></tr>
+<td>PASS — [3730, 3292],
+<code>EPSG:32611</code>, footprint
+5,167,373 px, catalogue 60,988 px</td></tr>
 <tr><td>On-disk format, range, finiteness, masked catalogue</td>
 <td>PASS (the writer refuses to emit a file that fails any of these)</td></tr>
-<tr><td>Uniqueness vs the 34 comparable sibling rasters</td>
+<tr><td>Uniqueness vs the 14 comparable sibling rasters</td>
 <td>UNIQUE — worst rank correlation
-0.050, worst dot overlap
-0.030, byte-identical to none</td></tr>
+0.390, worst dot overlap
+0.211, byte-identical to none</td></tr>
 <tr><td>Catalogue-frame holdout (structural fidelity)</td>
 <td>0.0000 vs control
-0.0089 — <b>the instrument cannot rank this
+0.0101 — <b>the instrument cannot rank this
 file</b>; see IR-57-INSTR-01</td></tr>
 </table>
 </main></body></html>

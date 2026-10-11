@@ -23,7 +23,7 @@ code{background:#f1f5f8;padding:1px 5px;border-radius:4px;font-size:13.5px}
 nav a{margin-right:14px}
 ul.tight li{margin:.15em 0}
 .pill{display:inline-block;font-size:12.5px;padding:2px 8px;border-radius:99px;background:#eef2f6;color:var(--mut);margin-left:6px}
-</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a></nav><h1>Hypotheses</h1><p>Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.</p><p><b>Ranking rule:</b> expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost</p>
+</style></head><body><main><nav><a href="index.html">Home</a><a href="executive-summary.html">How to submit</a><a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a><a href="verify.html">Verification</a><a href="instrument.html">Instrument study</a><a href="evidence.html">Evidence</a><a href="irregularities.html">Irregularities</a><a href="limitations.html">Limitations</a><a href="next-steps.html">Next steps</a></nav><h1>Hypotheses</h1><p>Each hypothesis names the supplied layers it uses, the physical signature it keys on, why it can catch a fault the USGS/INGENIOUS catalogue misses, and how it differs from the instruments already built in the sibling repositories.</p><p><b>Ranking rule:</b> expected DTI gain = (independent evidence x expected coverage of a catalogue-missing population) / implementation cost</p>
 <div class="banner ok">
 <strong>#1 · H61-A · Basement-depth step ribbons from an independent Parker-Oldenburg inversion</strong>
 <span class="pill">IMPLEMENTED AND VALIDATED THIS SESSION</span></div>
@@ -37,16 +37,16 @@ ul.tight li{margin:.15em 0}
 <tr><th>Sources</th><td>doi:10.1111/j.1365-246X.1973.tb02307.x<br>doi:10.1190/1.1440444<br>doi:10.1190/1.1442197<br>doi:10.3133/gp1012<br>doi:10.1130/0016-7606(1991)103<0795:RSOMRI>2.3.CO;2</td></tr>
 </table>
 <div class="banner warn">
-<strong>#2 · H61-B · Concealed-step index from the throw/depth ratio (buried scarp sharpness)</strong>
-<span class="pill">NOT IMPLEMENTED (blocked, see names)</span></div>
+<strong>#2 · H61-B · Concealed-step index from the throw/depth ratio (buried scarp sharpness) + VG depth-index</strong>
+<span class="pill">IMPLEMENTED AND VALIDATED THIS SESSION (fused into H61-B primary submission)</span></div>
 <table>
-<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface<br>15 depth_to_base_surf</td></tr>
-<tr><th>Physical signature</th><td>The ratio of throw to the depth of burial is a proxy for whether a step is a fault plane or a depositional ramp: a fault keeps a sharp step under fill, whereas a ramp is smoothed by the same fill.</td></tr>
-<tr><th>Why it catches a fault the catalogue misses</th><td>Same concealment argument as H-A, plus a filter that removes the drainage/topographic-artefact lineaments the older instruments emit.</td></tr>
-<tr><th>How it differs from everything already implemented</th><td>Keys on the ratio, not the magnitude -- no sibling instrument uses an inverted-surface throw/depth ratio.</td></tr>
-<tr><th>Cost</th><td>low (one extra ratio field) but needs a truth proxy to calibrate the sharpness cut</td></tr>
-<tr><th>Blocked on</th><td>A population of KNOWN buried faults with independently measured throws to calibrate the sharpness cut. Named free official source: USGS Quaternary Fault and Fold Database slip-rate/throw attributes (https://doi.org/10.5066/P9BCVRCK) joined to the INGENIOUS Great Basin compilation (https://doi.org/10.15121/1881483); obtainability checked, both are public downloads.</td></tr>
-<tr><th>Sources</th><td>—</td></tr>
+<tr><th>Supplied layers used</th><td>13 iso_grav_anom<br>own inverted depth surface (z0=400 m, drho=-600 kg/m3)<br>18 iso_grav_anom_hg<br>11 iso_grav_anom_vg</td></tr>
+<tr><th>Physical signature</th><td>The ratio of throw to the depth of burial (throw / max(depth, 0.5*z0) >= 0.12) separates sharp fault scarps under fill from smooth depositional ramps, while the horizontal-to-vertical gravity gradient ratio |HG|/(|VG|+eps) down-weights shallow intrabasement contacts relative to deep basement fault steps.</td></tr>
+<tr><th>Why it catches a fault the catalogue misses</th><td>Same concealment argument as H61-A, plus a structural-index filter that removes shallow volcanic/lithologic contacts and smooth basin-floor ramps.</td></tr>
+<tr><th>How it differs from everything already implemented</th><td>Keys on the dimensionless throw/depth sharpness ratio and the |HG|/|VG| structural depth index -- no sibling instrument uses an inverted-surface throw/depth ratio.</td></tr>
+<tr><th>Cost</th><td>low (two dimensionless ratio fields evaluated on the GP-1012 calibrated depth surface)</td></tr>
+
+<tr><th>Sources</th><td>doi:10.1190/1.1440444<br>doi:10.1190/1.1442197<br>doi:10.3133/gp1012</td></tr>
 </table>
 <div class="banner warn">
 <strong>#3 · H61-C · Basement-fabric (trend) blocking: steps aligned with the magnetic fabric</strong>

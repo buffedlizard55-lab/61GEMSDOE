@@ -13,12 +13,12 @@ import numpy as np
 import rasterio
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-RAW = ROOT / "data" / "raw"
+RAW = ROOT / "data" / "raw" if (ROOT / "data" / "raw").exists() else ROOT / "data" / "official"
 CACHE = ROOT / "data" / "cache"
 
 FEATURES_TIF = RAW / "training_features.tif"
 LABELS_TIF = RAW / "existing_faults.tif"
-TEMPLATE_TIF = RAW / "example_submission.tif"
+TEMPLATE_TIF = RAW / "example_submission.tif" if (RAW / "example_submission.tif").exists() else RAW / "sample_submission.tif"
 
 PINS = {
     "training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",

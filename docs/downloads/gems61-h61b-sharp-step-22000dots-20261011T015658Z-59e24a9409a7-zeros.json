@@ -1,0 +1,152 @@
+{
+  "file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+  "sha256": "84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1",
+  "bytes": 70787,
+  "submission_name": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros",
+  "note": "H61-B GP-1012 z0=400m drho=-600 Parker-Oldenburg step ribbons + throw/depth sharpness + VG depth-index; 22000 dots.",
+  "note_chars": 115,
+  "validator": {
+    "path": "/home/user/61GEMSDOE/out/.gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.ghli14px.tif",
+    "file": "/home/user/61GEMSDOE/out/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+    "bytes": 70787,
+    "sha256": "84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1",
+    "grid": {
+      "width": 3292,
+      "height": 3730,
+      "crs": "EPSG:32611",
+      "count": 1,
+      "dtype": "float32",
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "nodata": null
+    },
+    "meta": {
+      "crs": "EPSG:32611",
+      "shape": [
+        3730,
+        3292
+      ],
+      "dtype": "float32",
+      "count": 1,
+      "nodata": null,
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ],
+      "profile_compress": "deflate"
+    },
+    "n_finite": 12279160,
+    "n_nan": 0,
+    "n_infinite": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.007231439463794231,
+    "emitted_positive_pixels": 88796,
+    "on_catalogue_positive_pixels": 0,
+    "in_footprint_positive_pixels": 88796,
+    "in_footprint_pixels": 5167373,
+    "positive_pixels": 88796,
+    "footprint_fraction": 0.017183973365189623,
+    "in_footprint_min": 0.0,
+    "in_footprint_max": 1.0,
+    "checks": {
+      "single_band": true,
+      "dtype_float32": true,
+      "dimensions_3730x3292": true,
+      "crs_epsg_32611": true,
+      "transform_matches": true,
+      "transform_matches_sample_submission": true,
+      "no_nan_anywhere": true,
+      "no_inf_anywhere": true,
+      "no_sentinel_values": true,
+      "range_0_1_guaranteed": true,
+      "min_ge_0": true,
+      "max_le_1": true,
+      "in_footprint_all_finite": true,
+      "in_footprint_range_0_1": true,
+      "outside_footprint_zero": true,
+      "zero_dots_on_mapped_catalogue": true,
+      "whole_raster_all_finite": true,
+      "whole_raster_range_0_1": true,
+      "no_float32_sentinel": true
+    },
+    "all_checks_passed": true,
+    "validation_class": "local format/range preflight; not organizer acceptance or uniqueness clearance"
+  },
+  "template_report": {
+    "path": "/home/user/61GEMSDOE/out/gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.tif",
+    "bytes": 70787,
+    "sha256": "84864d6e090e928245937810d037534a5dd05fe9828eb277426203968aae46b1",
+    "bands": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "bounds": [
+      243350.0,
+      4135550.0,
+      572550.0,
+      4508550.0
+    ],
+    "ref_bounds": [
+      243350.0,
+      4135550.0,
+      572550.0,
+      4508550.0
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0
+    ],
+    "nodata": null,
+    "blocksize": [
+      256,
+      256
+    ],
+    "fixture_grid": false,
+    "has_validity_mask": false,
+    "nan_pixels": 0,
+    "infinity_pixels": 0,
+    "n_nan": 0,
+    "min": 0.0,
+    "max": 1.0,
+    "mean": 0.007231439463794231,
+    "n_nonzero": 88796,
+    "mass": 88796.0,
+    "mass_outside_footprint": 0,
+    "problems": [],
+    "ok": true,
+    "validation_class": "local on-disk template/range check; not organizer upload acceptance"
+  },
+  "zip_file": "gems61-h61b-sharp-step-22000dots-20261011T015658Z-59e24a9409a7-zeros.zip",
+  "zip_sha256": "d5570b0b1bfb97e8f96be391f374563aeea8077e3671f7faf5d1369a15335391",
+  "approved_for_weekly_slot": false,
+  "promoted": false,
+  "submission_slots_used": 0,
+  "status": "locally validated within separately recorded inventory scope; not organizer acceptance or slot approval",
+  "metadata": {
+    "method": "Parker-Oldenburg inversion -> HGM maxima -> throw/depth sharpness + VG depth-index -> ribbons",
+    "lane": "buried structures from gravity inversion",
+    "density_contrast_kg_m3": -600.0,
+    "z0_m": 400.0,
+    "inversion_stage": "first iterate (low-passed Bouguer slab); non-linear correction rejected because it diverges on an isostatic residual",
+    "inversion_rms_residual_mgal": 4.28319214212109,
+    "n_dots": 22000,
+    "budget": 22000,
+    "no_prior_submission_raster_used": true
+  }
+}

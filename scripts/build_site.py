@@ -45,9 +45,18 @@ def read(name, default=None):
 
 
 def page(title, body, nav=True):
-    links = ('<nav>' + ('<a href="index.html">Home</a><a href="executive-summary.html">How to submit</a>'
-             '<a href="method.html">Method</a><a href="hypotheses.html">Hypotheses</a>'
-             '<a href="verify.html">Verification</a>') + '</nav>') if nav else ""
+    links = ('<nav>' + (
+        '<a href="index.html">Home</a>'
+        '<a href="executive-summary.html">How to submit</a>'
+        '<a href="method.html">Method</a>'
+        '<a href="hypotheses.html">Hypotheses</a>'
+        '<a href="verify.html">Verification</a>'
+        '<a href="instrument.html">Instrument study</a>'
+        '<a href="evidence.html">Evidence</a>'
+        '<a href="irregularities.html">Irregularities</a>'
+        '<a href="limitations.html">Limitations</a>'
+        '<a href="next-steps.html">Next steps</a>'
+    ) + '</nav>') if nav else ""
     return (f"<!doctype html><html lang=en><head><meta charset=utf-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
             f"<title>{title}</title><style>{CSS}</style></head><body><main>{links}"
@@ -77,6 +86,12 @@ def main() -> None:
     shutil.copy2(tif_src, DOWNLOADS / tif_name)
     zip_src = ROOT / final["zip"]
     shutil.copy2(zip_src, DOWNLOADS / zip_src.name)
+    json_src = ROOT / final["receipt"]
+    if json_src.exists():
+        shutil.copy2(json_src, DOWNLOADS / json_src.name)
+    (DOWNLOADS / f"{tif_name}.sha256").write_text(
+        f"{final['writer_receipt']['sha256']}  {tif_name}\n"
+    )
     rows = uniq.get("rows", [])
     ok_rho = uniq.get("worst_spearman_full_footprint", 1.0) < 0.90
     ok_ov = uniq.get("worst_overlap_gate_value", 1.0) < 0.70
@@ -157,9 +172,11 @@ No number in either column is a score for this file.</p>
     {fmt(meas.get('chosen',{}).get('stats',{}).get('fraction_gt_1km',0)*100,1)} % deeper than 1 km.</li>
 <li>Take the automatic maxima of the horizontal gradient of that surface
     (Blakely &amp; Simpson 1986) and <b>keep only the ones with measured throw</b> ≥
-    {json.dumps(120)} m across the ridge — a lineament is not a fault; a fault has displacement.</li>
+    80 m across an 800 m (9 × 9 px) baseline and buried-scarp sharpness
+    <code>throw / max(depth, 0.5·z<sub>0</sub>) ≥ 0.08</code> — a lineament is not a fault; a fault has displacement.</li>
 <li>Fuse that evidence with the offset band around the mapped traces and the supplied gravity
-    gradient, and emit dots where the competition metric's own marginal test says a dot pays.</li>
+    horizontal/vertical gradient depth-index (<code>|HG| / (|VG| + ε)</code>, bands 18 &amp; 11),
+    and emit dots on a 2 × 2 px decimated ranking where the competition metric's own marginal test says a dot pays.</li>
 </ol>
 <p>Cross-check: the inverted surface correlates <b>r = {fmt(p_cross.get('pearson_r'))}</b>
 (slope {fmt(p_cross.get('slope_published_on_inverted'))}) with the competition's own
@@ -169,7 +186,7 @@ broad pattern, not a copy of one another.</p>
 <h2>What this file does NOT claim</h2>
 <ul class="tight">
 <li>It has <b>not</b> been scored. There is no organizer receipt for it. Nothing here is a leaderboard score.</li>
-<li>The catalogue-frame holdout scores it <b>0.0000</b> and a random-line control <b>0.0089</b>
+<li>The catalogue-frame holdout scores it <b>{fmt(hold.get('lane_vs_control',{}).get('lane',0),4)}</b> and a random-line control <b>{fmt(hold.get('lane_vs_control',{}).get('control',0),4)}</b>
     {f"(n = {hold.get('n_withheld_truth_px','—'):,} withheld truth px)" if isinstance(hold.get('n_withheld_truth_px'), int) else ""}.
     That instrument hides mapped traces and rewards dots placed <i>on</i> them; this file is
     deliberately placed off them, so the instrument cannot rank it. The disagreement is
@@ -265,11 +282,13 @@ of the province deeper than 1 km ("about 20 %", Blakely &amp; Jachens 1991). A s
 The high apparent contrast is expected for an isostatic residual: the topographic and isostatic
 masses are already removed, so the residual sees a larger effective contrast than a raw Bouguer
 slab.</p>
-<h3>4 · Steps, not lineaments</h3>
+<h3>4 · Steps, not lineaments (H61-B sharpness + VG depth-index)</h3>
 <p>Maxima of the horizontal gradient magnitude of the depth surface, accepted on the
 Blakely &amp; Simpson (1986) "greater than at least two neighbours" rule. Each accepted maximum then
-has its <b>throw</b> measured — the depth range across the ridge in a 5 × 5 window — and only the
-ones above {json.dumps(120)} m survive. The DrivenData problem statement's own ledger row DD-ABOUT is
+has its <b>throw</b> measured — the depth range across the ridge in a 9 × 9 window (800 m baseline = ±1 inversion cell) — and only the
+ones with throw ≥ 80 m and sharpness <code>throw / max(depth, 0.5·z<sub>0</sub>) ≥ 0.08</code> survive,
+weighted by the horizontal-to-vertical gravity gradient depth-index <code>|HG| / (|VG| + ε)</code> (bands 18 and 11).
+The DrivenData problem statement's own ledger row DD-ABOUT is
 explicit that a lineament is not a fault and that a fault is a structure with displacement; this
 step is where that is enforced rather than asserted.</p>
 <h3>5 · Emission under the metric, not by eye</h3>
