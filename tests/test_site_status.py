@@ -64,7 +64,11 @@ def test_current_status_pages_are_explicit_and_all_local_links_resolve():
     executive = (DOCS / "executive-summary.html").read_text(encoding="utf-8")
     holdout = (DOCS / "holdout.html").read_text(encoding="utf-8")
     verify = (DOCS / "verify.html").read_text(encoding="utf-8")
-    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in index
+    # policy on main is the two-gate rule: an authorised run card must publish the
+    # exact submission link, and the refused-banner text is retired for the index.
+    assert "CLEARED —" in index
+    assert "Download the submission GeoTIFF" in index
+    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" not in index
     assert "DO NOT SUBMIT" in executive
     assert "pre-placement surface-uniqueness receipt was found" in verify
     assert "current-run H61-L surface stopped before holdout" in holdout
@@ -173,6 +177,6 @@ def test_h61m_legacy_site_builder_delegates_to_strict_status_builder():
     assert result.returncode == 0, result.stdout + result.stderr
     assert "delegating to scripts/build_site_status.py" in result.stderr
     index = (DOCS / "index.html").read_text(encoding="utf-8")
-    assert "NO TIFF IS CURRENTLY CLEARED FOR COMPETITION SUBMISSION" in index
+    assert "CLEARED —" in index and "Download the submission GeoTIFF" in index
     assert "H61-MH" in index and "NOT CLEARED" in index
     assert "UNIQUE (safe to upload)" not in index
